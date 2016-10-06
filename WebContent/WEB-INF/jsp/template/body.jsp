@@ -1,5 +1,5 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%> 
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

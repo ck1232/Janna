@@ -9,11 +9,11 @@
       
         <table>  
         <tr>  
-            <td><form:label path="firstname">First Name</form:label></td>  
+            <td><form:label path="firstname">First Name1</form:label></td>  
             <td><form:input path="firstname" /></td>   
         </tr>  
         <tr>  
-            <td><form:label path="lastname">Last Name</form:label></td>  
+            <td><form:label path="lastname">Last Name1</form:label></td>  
             <td><form:input path="lastname" /></td>  
         </tr>  
         <tr>  
