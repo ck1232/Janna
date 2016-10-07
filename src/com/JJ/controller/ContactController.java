@@ -1,5 +1,6 @@
 package com.JJ.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,10 +10,16 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.JJ.form.Contact;
+import com.JJ.service.TestingService;
 
 @Controller  
 @SessionAttributes  
 public class ContactController {  
+	private TestingService testingService;
+	@Autowired
+	public ContactController(TestingService testingService){
+		this.testingService = testingService;
+	}
     @RequestMapping(value = "/addContact", method = RequestMethod.POST)  
     public String addContact(@ModelAttribute("contact") Contact contact, BindingResult result) {  
         //write the code here to add contact
@@ -22,6 +29,7 @@ public class ContactController {
       
     @RequestMapping("/contact")  
     public ModelAndView showContacts() {  
+    	testingService.testing();
         return new ModelAndView("contact", "command", new Contact());  
     }  
 }  
