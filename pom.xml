@@ -102,10 +102,5 @@
   		<artifactId>spring-jdbc</artifactId>
   		<version>4.3.3.RELEASE</version>
   	</dependency>
-  	<dependency>
-  		<groupId>com.JJ</groupId>
-  		<artifactId>mybatis-generator</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
   </dependencies>
 </project>

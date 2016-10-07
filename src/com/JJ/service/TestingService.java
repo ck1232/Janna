@@ -16,7 +16,6 @@ import com.JJ.model.AdminmoduleExample;
 public class TestingService {
 	private AdminmoduleMapper adminModuleMapper;
 	
-	@Autowired
 	public TestingService (AdminmoduleMapper adminModuleMapper){
 		this.adminModuleMapper = adminModuleMapper;
 		
