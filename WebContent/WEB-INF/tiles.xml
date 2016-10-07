@@ -30,5 +30,24 @@
         </put-attribute>
           
     </definition> 
+    
+    <!-- Common Module START -->
+    <definition name="dashboard" extends="main_template">  
+        <put-attribute name="title" value="Dashboard" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp"> 
+        		<put-attribute name="content" value="/WEB-INF/jsp/dashboard/dashboard.jsp" />
+        	</definition>
+        </put-attribute>       
+    </definition>  
+    <!-- Common Module END -->
+    
+    <!-- User Management Module START -->
+    <definition name="listUser" extends="main_template">  
+        <put-attribute name="title" value="User Listing" /> 
+        <put-attribute name="body" value="/WEB-INF/jsp/usermanagement/listUser.jsp" />
+    </definition>
+    
+    <!-- User Management Module END -->  
   
 </tiles-definitions>  

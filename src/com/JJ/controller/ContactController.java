@@ -11,7 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.JJ.form.Contact;
 
 @Controller  
-@SessionAttributes  
+@SessionAttributes
+@RequestMapping(value = "/")
 public class ContactController {  
     @RequestMapping(value = "/addContact", method = RequestMethod.POST)  
     public String addContact(@ModelAttribute("contact") Contact contact, BindingResult result) {  
@@ -22,6 +23,7 @@ public class ContactController {
       
     @RequestMapping("/contact")  
     public ModelAndView showContacts() {  
+    	System.out.println("contacts");
         return new ModelAndView("contact", "command", new Contact());  
     }  
 }  

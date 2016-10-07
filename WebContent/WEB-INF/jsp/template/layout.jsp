@@ -53,6 +53,25 @@
 		<script src="development/bootstrap/js/bootstrap.min.js"></script>
 		<!-- AdminLTE App -->
 		<script src="development/dist/js/app.min.js"></script>
+		
+		<!-- DataTables -->
+		<script type="text/javascript" src="development/plugins/datatables/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="development/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		
+		<script>
+  $(function () {
+    $("#datatablefull").DataTable();
+    $('#datatable1').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+</script>
+		  
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">

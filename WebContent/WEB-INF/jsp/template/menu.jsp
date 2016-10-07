@@ -32,8 +32,8 @@
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+        <li class="active"><a href="/JJ/listUser.html"><i class="fa fa-heart"></i> <span>User Management</span></a></li>
+        <li><a href="/JJ/contact.html"><i class="fa fa-link"></i> <span>Contact</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
             <span class="pull-right-container">
@@ -41,8 +41,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Link in level 2</a></li>
-            <li><a href="#">Link in level 2</a></li>
+            <li><a href="/JJ/hello.html">hello</a></li>
+            <li><a href="/JJ/contact.html">contact 2</a></li>
           </ul>
         </li>
       </ul>
