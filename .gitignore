@@ -1,3 +1,5 @@
-/.settings
-/build
-/target
+/mybatis-generator/target
+/mybatis-generator/*.classpath
+/mybatis-generator/*.project
+/mybatis-generator/bin
+/mybatis-generator/.settings

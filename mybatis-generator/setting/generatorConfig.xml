@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <context id="context1">
+    <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/janna?serverTimezone=Asia/Singapore" driverClass="com.mysql.jdbc.Driver" password="root" userId="root" />
+    <javaModelGenerator targetPackage="com.JJ.model" targetProject="mybatis-generator\src" />
+    <sqlMapGenerator targetPackage="com.JJ.sql" targetProject="mybatis-generator\src" />
+    <javaClientGenerator targetPackage="com.JJ.dao" targetProject="mybatis-generator\src" type="XMLMAPPER" />
+    <table schema="janna" tableName="adminmodule">
+      <!-- <columnOverride column="useActualColumnNames" property="true" />  -->
+    </table>
+  </context>
+</generatorConfiguration>
