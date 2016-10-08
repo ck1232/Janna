@@ -45,7 +45,22 @@
     <!-- User Management Module START -->
     <definition name="listUser" extends="main_template">  
         <put-attribute name="title" value="User Listing" /> 
-        <put-attribute name="body" value="/WEB-INF/jsp/usermanagement/listUser.jsp" />
+        
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/usermanagement/listUser.jsp">
+        		<put-attribute name="datatable">
+        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+        				<put-attribute name="datatable-script">
+        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
+        						<put-attribute name="data-list" value="/JJ/getUserList" />
+        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/usermanagement/column-mapping.jsp" />
+        					</definition>
+        				</put-attribute>
+        				<put-attribute name="column-header" value="/WEB-INF/jsp/usermanagement/column-header.jsp"></put-attribute>
+        			</definition>
+        		</put-attribute>
+        	</definition>
+        </put-attribute>
     </definition>
     
     <!-- User Management Module END -->  

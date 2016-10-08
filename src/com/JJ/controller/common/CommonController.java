@@ -13,10 +13,10 @@ import com.JJ.form.Contact;
 @RequestMapping(value = "/")
 public class CommonController {
 	
-	@RequestMapping("/**")
+	/*@RequestMapping("/**")
 	public ModelAndView index(){
 		return new ModelAndView("contact", "command", new Contact());
-	}
+	}*/
 	
 	@RequestMapping("/dashboard")  
     public String loadDashboard() {  
