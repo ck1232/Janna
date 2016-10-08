@@ -63,6 +63,11 @@
         </put-attribute>
     </definition>
     
+    <definition name="createUser" extends="main_template">
+    	<put-attribute name="title" value="Add New User" />
+    	<put-attribute name="body" value="/WEB-INF/jsp/usermanagement/createUser.jsp" />
+    </definition>
+    
     <!-- User Management Module END -->  
   
 </tiles-definitions>  
