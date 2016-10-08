@@ -2,6 +2,7 @@ package com.JJ.controller.usermanagement;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.AppUser;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 
 
 @Controller  
@@ -38,9 +42,7 @@ public class UserManagementController {
 	public @ResponseBody String getUserList() {
 		System.out.println("getting user list");
 		List<AppUser> userList = userManagementService.getAllUsers();
-		String jsonStr = new Gson().toJson(userList);
-		
-		return "{\"data\": "+jsonStr +" }";
+		return GeneralUtils.convertListToJSONString(userList);
 	}
 	
 	

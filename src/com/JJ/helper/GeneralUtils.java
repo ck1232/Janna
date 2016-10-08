@@ -1,0 +1,26 @@
+package com.JJ.helper;
+
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import com.JJ.model.AppUser;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
+
+public class GeneralUtils {
+	public static <T> String convertListToJSONString(List<T> list){
+		return  convertListToJSONObject(list).toJSONString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> JSONObject convertListToJSONObject(List<T> list){
+		JsonArray result = (JsonArray) new Gson().toJsonTree(list,
+	            new TypeToken<List<AppUser>>() {}.getType());
+		JSONObject obj = new JSONObject();
+		obj.put("data", result);
+		return obj;
+		
+	}
+}
