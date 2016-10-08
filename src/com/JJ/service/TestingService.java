@@ -25,7 +25,7 @@ public class TestingService {
 		example.createCriteria();
 		List<Adminmodule> objList = adminModuleMapper.selectByExample(example);
 		for(Adminmodule module : objList){
-			System.out.println(module.getName());
+			System.out.println(module.getId());
 		}
 	}
 }
