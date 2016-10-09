@@ -58,6 +58,7 @@
         <put-attribute name="title" value="User Listing" /> 
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="User Listing" />
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/usermanagement/listUser.jsp">
         				<put-attribute name="datatable">
