@@ -12,5 +12,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button class="btn btn-default btn-primary" type="button"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button class="btn btn-info btn-edit" type="button"><i class="fa fa-pencil"></i> Edit</button>'
 },

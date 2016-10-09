@@ -61,7 +61,7 @@ public class UserManagementController {
     public String showAddUserForm(Model model) {  
     	System.out.println("loading showAddUserForm");
     	AppUser user = new AppUser();
-    	user.setFirstname("JJ");
+    	user.setFirstname("");
     	user.setLastname("Lee");
     	user.setName("jj");
     	user.setEmail("jj@hotmail.com");

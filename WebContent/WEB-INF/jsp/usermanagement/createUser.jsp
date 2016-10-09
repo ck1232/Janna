@@ -25,17 +25,14 @@
                     <!--FORM-->
                     <form:form method="post" modelAttribute="userForm" action="/JJ/createUser">
 		              <div class="box-body">
-		              	<spring:bind path="firstname">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">First Name</label>
 							<div class="col-sm-10">
 								<form:input path="firstname" type="text" class="form-control"
 				                                id="firstname" placeholder="Enter first name" />
-								<form:errors path="firstname" class="control-label" />
+								<form:errors path="firstname" class="text-danger" />
 							</div>
 						  </div>
-						</spring:bind>
-						<spring:bind path="lastname">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Last Name</label>
 							<div class="col-sm-10">
@@ -44,8 +41,6 @@
 								<form:errors path="lastname" class="control-label" />
 							</div>
 						  </div>
-						</spring:bind>
-		                <spring:bind path="email">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Email Address</label>
 							<div class="col-sm-10">
@@ -54,8 +49,6 @@
 								<form:errors path="email" class="control-label" />
 							</div>
 						  </div>
-						</spring:bind>
-		                <spring:bind path="name">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Username</label>
 							<div class="col-sm-10">
@@ -64,8 +57,6 @@
 								<form:errors path="name" class="control-label" />
 							</div>
 						  </div>
-						</spring:bind>
-						<spring:bind path="password">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Password</label>
 							<div class="col-sm-10">
@@ -74,8 +65,6 @@
 								<form:errors path="password" class="control-label" />
 							</div>
 						  </div>
-						</spring:bind>
-						<spring:bind path="enabled">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Active</label>
 							<div class="col-sm-10">
@@ -87,18 +76,16 @@
 								</div>
 							</div>
 						  </div>
-						</spring:bind>
+						<br/>
 						<div class="form-group">
-						  <div class="col-sm-offset-2 col-sm-10">
-						     <button type="submit" class="btn-lg btn-primary pull-right">Add
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<button type="submit" class="btn btn-info btn-add">Add
 			                  </button>
+							</div>
 						  </div>
-						</div>
 		              </div>
 		              <!-- /.box-body -->
-		              <div class="box-footer">
-		                lala
-		              </div>
 		            </form:form>
 		            <!--/.FORM-->
                 </div>
