@@ -1,4 +1,6 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
@@ -16,6 +18,16 @@
         This page is under development. For viewing user listing.
       </div>
     </div>
+    
+    <c:if test="${not empty msg}">
+		<div class="alert alert-${css} alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert"
+                                aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+			<strong>${msg}</strong>
+		</div>
+	</c:if>
     
     <section class="content">
     	<tiles:insertAttribute name = "datatable" />

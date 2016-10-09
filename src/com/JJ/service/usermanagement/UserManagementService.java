@@ -28,6 +28,9 @@ public class UserManagementService {
 		return userList;
 	}
 	
+	public void saveOrUpdate(AppUser user) {
+		appUserMapper.insert(user);
+	}
 	
 	
 	

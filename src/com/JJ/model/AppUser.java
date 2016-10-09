@@ -271,4 +271,11 @@ public class AppUser implements Serializable {
     public void setProfileimage(String profileimage) {
         this.profileimage = profileimage;
     }
+    
+    @Override
+    public String toString(){
+		return "AppUser [ firstname = " + firstname + ", lastname = " + lastname + ", email = " + email
+				+ ", name = " + name + ", password = " + password + ", enabled = " + enabled + " ]";
+    	
+    }
 }
