@@ -1,5 +1,6 @@
 package com.JJ.controller.usermanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -12,8 +13,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -92,6 +95,17 @@ public class UserManagementController {
 		
         return "redirect:listUser";  
     }  
+	
+	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
+	public String delete(@RequestParam("id") List<String> ids) {
+		List<Long> idList = new ArrayList<>();
+
+		for (String id : ids) {
+			idList.add(new Long(id));
+			System.out.println(id);
+		}
+		return "redirect:listUser";
+	}
 	
 	
 	
