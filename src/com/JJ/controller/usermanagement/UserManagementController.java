@@ -107,6 +107,12 @@ public class UserManagementController {
 		return "redirect:listUser";
 	}
 	
-	
+	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
+	public String delete(@RequestParam("id") String id) {
+		List<Long> idList = new ArrayList<>();
+		System.out.println(id);
+		
+		return "redirect:listUser";
+	}
 	
 }
