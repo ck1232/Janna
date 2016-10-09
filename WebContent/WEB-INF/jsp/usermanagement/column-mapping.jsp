@@ -12,5 +12,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="editBtn" class="btn btn-default btn-primary" type="submit" form="datatableForm" formaction="/JJ/editUser" name="editBtn"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="editBtn" class="btn btn-info btn-edit" type="submit" form="datatableForm" formaction="/JJ/editUser" name="editBtn"><i class="fa fa-pencil"></i> Edit</button>'
 },
