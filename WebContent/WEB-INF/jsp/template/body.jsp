@@ -16,6 +16,7 @@
 
     <!-- Main content -->
     <section class="content">
+    <tiles:insertAttribute name="message" />
 	<tiles:insertAttribute name="content" />
       <!-- Your Page Content Here -->
 

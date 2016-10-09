@@ -3,7 +3,6 @@ package com.JJ.controller.usermanagement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +23,6 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.AppUser;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.reflect.TypeToken;
 
 
 @Controller  
@@ -108,7 +103,7 @@ public class UserManagementController {
 	}
 	
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String delete(@RequestParam("id") String id) {
+	public String delete(@RequestParam("editBtn") String id) {
 		List<Long> idList = new ArrayList<>();
 		System.out.println(id);
 		
