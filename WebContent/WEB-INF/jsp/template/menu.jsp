@@ -32,7 +32,7 @@
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="/JJ/listUser.html"><i class="fa fa-heart"></i> <span>User Management</span></a></li>
+        <li class="active"><a href="/JJ/listUser.html"><i class="fa fa-users"></i> <span>User Management</span></a></li>
         <li><a href="/JJ/getUserList.html"><i class="fa fa-link"></i> <span>Get User</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>

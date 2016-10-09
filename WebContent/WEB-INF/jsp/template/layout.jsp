@@ -5,7 +5,7 @@
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
 <title><tiles:insertAttribute name="title" ignore="true" /></title>  
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>        
         <script type="text/javascript" src="development/x-tag-core.min.js"></script>
         <script type="text/javascript" src="development/primeui-3.0.0-min.js"></script>

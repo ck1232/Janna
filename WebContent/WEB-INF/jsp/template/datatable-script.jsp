@@ -3,6 +3,7 @@
 $(function () {
     $('#datatable1').DataTable({
       "paging": true,
+      "responsive" : true,
       "lengthChange": false,
       "searching": false,
       "ordering": true,
@@ -12,7 +13,7 @@ $(function () {
 	  "columns": [
 	              <tiles:insertAttribute name="column-mapping" />
 	            ],
-      'order': [1, 'asc']
+      "order": [1, 'asc']
     });
 });
 </script>
