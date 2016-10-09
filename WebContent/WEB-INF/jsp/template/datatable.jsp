@@ -1,5 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!-- DataTables -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 <link type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/> 
@@ -18,6 +18,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            <form:form id="datatableForm" method="post">
               <table id="datatable1" class="table table-bordered table-hover">
                 <thead>
                 	<tiles:insertAttribute name="column-header" />
@@ -29,6 +30,7 @@
                 </tr>
                 </tfoot>
               </table>
+              </form:form>
             </div>
             <!-- /.box-body -->
           </div>

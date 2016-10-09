@@ -1,8 +1,8 @@
 {
     "className":      '',
     "orderable":      false,
-    "data":           null,
-    "defaultContent": '<div style="text-align:center;"><input type="checkbox"/></div>'
+    "data":           "",
+    "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="id"/></div>'
 },
 {"data": "name"},
 {"data": "firstname"},

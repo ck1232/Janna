@@ -1,6 +1,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 $(function () {
+	var rows_selected = [];
     $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
@@ -13,7 +14,12 @@ $(function () {
 	  "columns": [
 	              <tiles:insertAttribute name="column-mapping" />
 	            ],
-      "order": [1, 'asc']
+      "order": [1, 'asc'],
+      'rowCallback': function(row, data, dataIndex){
+          // Get row ID
+          var rowId = data[0];
+          $(row).find('input[type="checkbox"]').prop('value', data.id);
+       }
     });
 });
 </script>
