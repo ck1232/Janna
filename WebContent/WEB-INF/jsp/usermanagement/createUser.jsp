@@ -28,33 +28,25 @@
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">First Name</label>
 							<div class="col-sm-10">
-								<form:input path="firstname" type="text" class="form-control"
-				                                id="firstname" placeholder="Enter first name" />
-								<form:errors path="firstname" class="text-danger" />
-							</div>
-						  </div>
-						  <div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Last Name</label>
-							<div class="col-sm-10">
-								<form:input path="lastname" type="text" class="form-control"
-				                                id="lastname" placeholder="Enter last name" />
-								<form:errors path="lastname" class="control-label" />
+								<form:input path="name" type="text" class="form-control"
+				                                id="name" placeholder="Enter name" />
+								<form:errors path="name" class="text-danger" />
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Email Address</label>
 							<div class="col-sm-10">
-								<form:input path="email" class="form-control"
-				                                id="email" placeholder="Enter email" />
-								<form:errors path="email" class="control-label" />
+								<form:input path="emailaddress" class="form-control"
+				                                id="emailaddress" placeholder="Enter email" />
+								<form:errors path="emailaddress" class="control-label" />
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Username</label>
 							<div class="col-sm-10">
-								<form:input path="name" type="text" class="form-control"
-				                                id="name" placeholder="Enter username" />
-								<form:errors path="name" class="control-label" />
+								<form:input path="userid" type="text" class="form-control"
+				                                id="userid" placeholder="Enter username" />
+								<form:errors path="userid" class="control-label" />
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">

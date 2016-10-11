@@ -4,10 +4,9 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="id"/></div>'
 },
+{"data": "userid"},
 {"data": "name"},
-{"data": "firstname"},
-{"data": "lastname"},
-{"data": "email"},
+{"data": "emailaddress"},
 {
     "className":      '',
     "orderable":      false,

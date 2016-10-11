@@ -1,8 +1,7 @@
 <tr>
   <th></th>
   <th>UserName</th>
-  <th>First Name</th>
-  <th>Last Name</th>
-  <th>Email</th>
+  <th>Name</th>
+  <th>Email Address</th>
   <th>Action</th>
 </tr>

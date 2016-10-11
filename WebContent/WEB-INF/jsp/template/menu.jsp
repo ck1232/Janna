@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -7,7 +8,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="/JJ/development/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>Alexander Pierce</p>
@@ -32,9 +33,9 @@
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="/JJ/listUser.html"><i class="fa fa-users"></i> <span>User Management</span></a></li>
-        <li><a href="/JJ/getUserList.html"><i class="fa fa-link"></i> <span>Get User</span></a></li>
-        <li><a href="/JJ/createUser.html"><i class="fa fa-plus-square"></i> <span>Create User</span></a></li>
+        <li class="active"><a href="<c:url value="/listUser"/>"><i class="fa fa-users"></i> <span>User Management</span></a></li>
+        <li><a href="<c:url value="/getUserList"/>"><i class="fa fa-link"></i> <span>Get User</span></a></li>
+        <li><a href="<c:url value="/createUser"/>"><i class="fa fa-plus-square"></i> <span>Create User</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
             <span class="pull-right-container">
@@ -42,8 +43,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/JJ/hello.html">hello</a></li>
-            <li><a href="/JJ/contact.html">contact 2</a></li>
+            <li><a href="<c:url value="/hello"/>">hello</a></li>
+            <li><a href="<c:url value="/contact"/>">contact 2</a></li>
           </ul>
         </li>
       </ul>

@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.AppUser;
+import com.JJ.model.User;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
 
@@ -42,7 +42,7 @@ public class UserManagementController {
 	}
 	
 	
-	@RequestMapping("/listUser")  
+	@RequestMapping(value = "/listUser", method = RequestMethod.GET)  
     public String listUser() {  
     	System.out.println("loading listUser");
         return "listUser";  
@@ -51,18 +51,17 @@ public class UserManagementController {
 	@RequestMapping(value = "/getUserList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getUserList() {
 		System.out.println("getting user list");
-		List<AppUser> userList = userManagementService.getAllUsers();
+		List<User> userList = userManagementService.getAllUsers();
 		return GeneralUtils.convertListToJSONString(userList);
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.GET)
     public String showAddUserForm(Model model) {  
     	System.out.println("loading showAddUserForm");
-    	AppUser user = new AppUser();
-    	user.setFirstname("");
-    	user.setLastname("Lee");
+    	User user = new User();
+    	user.setName(" Janice Lee");
     	user.setName("jj");
-    	user.setEmail("jj@hotmail.com");
+    	user.setEmailaddress("jj@hotmail.com");
     	user.setPassword("12345");
     	user.setEnabled(true);
     	model.addAttribute("userForm", user);
@@ -75,10 +74,10 @@ public class UserManagementController {
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String saveOrUpdateUser(@ModelAttribute("userForm") @Validated AppUser appUser, 
+    public String saveOrUpdateUser(@ModelAttribute("userForm") @Validated User user, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		System.out.println("saveOrUpdateUser() : " + appUser.toString());
+		System.out.println("saveOrUpdateUser() : " + user.toString());
 		if (result.hasErrors()) {
 			return "createUser";
 		} else {
@@ -86,7 +85,7 @@ public class UserManagementController {
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User added successfully!");
 		}
-		userManagementService.saveOrUpdate(appUser);
+		userManagementService.saveOrUpdate(user);
 		
         return "redirect:listUser";  
     }  
