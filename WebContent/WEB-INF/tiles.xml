@@ -11,37 +11,6 @@
         <put-attribute name="footer" value="/WEB-INF/jsp/template/footer.jsp" />  
     </definition>  
     
-    <definition name="body_template" extends="main_template">
-    	<put-attribute name="body">
-        	<definition template="/WEB-INF/jsp/template/body.jsp">
-        		<put-attribute name="content" value="/WEB-INF/jsp/template/message.jsp" />
-        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />  
-        	</definition>
-        </put-attribute> 
-    </definition>
-  
-    <definition name="contact" extends="main_template">  
-        <put-attribute name="title" value="Contact Manager" />
-        <put-attribute name="body">
-        	<definition template="/WEB-INF/jsp/template/body.jsp">
-        		<put-attribute name="content" value="/WEB-INF/jsp/contact.jsp" />
-        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
-        	</definition>
-        </put-attribute>
-          
-    </definition>  
-  
-    <definition name="hello" extends="main_template">  
-        <put-attribute name="title" value="Hello Spring MVC" />  
-        <put-attribute name="body">
-        	<definition template="/WEB-INF/jsp/template/body.jsp">
-        		<put-attribute name="content" value="/WEB-INF/jsp/hello.jsp" />
-        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
-        	</definition>
-        </put-attribute>
-          
-    </definition> 
-    
     <!-- Common Module START -->
     <definition name="dashboard" extends="main_template">  
         <put-attribute name="title" value="Dashboard" /> 
@@ -85,6 +54,71 @@
     	<put-attribute name="body" value="/WEB-INF/jsp/usermanagement/createUser.jsp" />
     </definition>
     
+    <definition name="updateUser" extends="main_template">  
+        <put-attribute name="title" value="Update User" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update User" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/usermanagement/updateUser.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
     <!-- User Management Module END -->  
+    
+  	<!-- Role Management Module START -->
+    <definition name="listRole" extends="main_template">  
+        <put-attribute name="title" value="Role Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Role Listing" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/rolemanagement/listRole.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="options" value="/WEB-INF/jsp/rolemanagement/options.jsp" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/getRoleList" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/rolemanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/rolemanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createRole" extends="main_template">
+    	<put-attribute name="title" value="Add New Role" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Role" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/rolemanagement/createRole.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updateRole" extends="main_template">  
+        <put-attribute name="title" value="Update Role" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Role" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/rolemanagement/updateRole.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+  	<!-- Role Management Module END --> 
+  
+  
+  
   
 </tiles-definitions>  

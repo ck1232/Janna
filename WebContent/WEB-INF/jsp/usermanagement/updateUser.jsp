@@ -3,29 +3,18 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-	<!-- Content Header (Page header) -->
-	<section class="content-header">
-		<h1>Add New User</h1>
-		<ol class="breadcrumb">
-			<li><a href="/JJ/dashboard.html"><i class="fa fa-dashboard"> Home</i></a></li>
-			<li><a href="/JJ/listUser.html">Add New User</a></li>
-		</ol>
-	</section>
-    
-    <section class="content">
-    	<div class="row">
-    		<div class="col-md-12">
-    			<!--BOX-->
+
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
-                    	<h3 class="box-title">Basic Information</h3>
+                    	<h3 class="box-title">User Information</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="get" action="/JJ/listUser"></form:form>
-                    <form:form id="createUserForm" method="post" modelAttribute="userForm" action="/JJ/createUser">
+                    
 		              <div class="box-body">
+		              <form:form id="backToListButton" method="get" action="/JJ/listUser"></form:form>
+		              <form:form id="updateUserToDbForm" method="post" modelAttribute="userForm" action="/JJ/updateUserToDb">
+		              		<form:input path="id" type="hidden" id="id"/>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">User id</label>
 							<div class="col-sm-10">
@@ -68,22 +57,23 @@
 								</div>
 							</div>
 						  </div>
+						  </div>
 						<br/>
-						</form:form>
-		            	<!--/.FORM-->
-						<div class="form-group">
+						
+						  </form:form>
+						  <!--/.FORM-->
+						  
+						  <div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-info btn-add" form ="createUserForm">Add
+								<button type="submit" class="btn btn-info btn-edit" form="updateUserToDbForm">Update
 			                  </button>
 			                  <button type="submit" class="btn btn-info btn-edit" form="backToListButton"><i class="fa fa-remove"></i> Cancel
 			            </button>
-							</div>
+			                </div>
 						  </div>
 		              </div>
 		              <!-- /.box-body -->
+		            
                 </div>
-    		</div>
-    	</div>
-    </section>
-</div>
+    		

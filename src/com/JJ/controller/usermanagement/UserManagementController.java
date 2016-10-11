@@ -1,6 +1,5 @@
 package com.JJ.controller.usermanagement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.AppUser;
+import com.JJ.model.User;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
 
@@ -51,19 +50,19 @@ public class UserManagementController {
 	@RequestMapping(value = "/getUserList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getUserList() {
 		System.out.println("getting user list");
-		List<AppUser> userList = userManagementService.getAllUsers();
+		List<User> userList = userManagementService.getAllUsers();
 		return GeneralUtils.convertListToJSONString(userList);
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.GET)
     public String showAddUserForm(Model model) {  
     	System.out.println("loading showAddUserForm");
-    	AppUser user = new AppUser();
-    	user.setFirstname("");
-    	user.setLastname("Lee");
-    	user.setName("jj");
-    	user.setEmail("jj@hotmail.com");
+    	User user = new User();
+    	
+    	user.setUserid("jj");
     	user.setPassword("12345");
+    	user.setName("Janice Lee");
+    	user.setEmailaddress("jj@hotmail.com");
     	user.setEnabled(true);
     	model.addAttribute("userForm", user);
         return "createUser";  
@@ -75,10 +74,9 @@ public class UserManagementController {
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String saveOrUpdateUser(@ModelAttribute("userForm") @Validated AppUser appUser, 
+    public String saveUser(@ModelAttribute("userForm") @Validated User User, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
-    	
-		System.out.println("saveOrUpdateUser() : " + appUser.toString());
+		System.out.println("saveUser() : " + User.toString());
 		if (result.hasErrors()) {
 			return "createUser";
 		} else {
@@ -86,26 +84,47 @@ public class UserManagementController {
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User added successfully!");
 		}
-		userManagementService.saveOrUpdate(appUser);
+		userManagementService.saveUser(User);
 		
         return "redirect:listUser";  
     }  
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String delete(@RequestParam("id") List<String> ids) {
-		List<Long> idList = new ArrayList<>();
-
+	public String deleteUser(@RequestParam("id") List<String> ids) {
+		
 		for (String id : ids) {
-			idList.add(new Long(id));
-			System.out.println(id);
+			userManagementService.deleteUser(new Integer(id));
+			System.out.println("deleted "+ id);
+			
 		}
 		return "redirect:listUser";
 	}
 	
-	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String delete(@RequestParam("editBtn") String id) {
-		List<Long> idList = new ArrayList<>();
-		System.out.println(id);
+	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+	public String getUserToUpdate(@RequestParam("editBtn") String id, Model model) {
+		
+		User user = userManagementService.findById(new Integer(id));
+		System.out.println("Loading update user page for " + user.toString());
+		
+		model.addAttribute("userForm", user);
+		
+		return "updateUser";
+	}
+	
+	@RequestMapping(value = "/updateUserToDb", method = RequestMethod.POST)
+	public String updateUser(@ModelAttribute("userForm") @Validated User user,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		System.out.println("updateUser() : " + user.toString());
+		
+		if (result.hasErrors()) {
+			return "updateUser";
+		} else {
+			// Add message to flash scope
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "User updated successfully!");
+		}
+		userManagementService.updateUser(user);
 		
 		return "redirect:listUser";
 	}

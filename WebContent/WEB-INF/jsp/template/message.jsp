@@ -1,4 +1,4 @@
- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
  <c:if test="${not empty msg}">
 	<div class="alert alert-${css} alert-dismissible" role="alert">
 		<button type="button" class="close" data-dismiss="alert"

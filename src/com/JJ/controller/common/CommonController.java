@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.JJ.form.Contact;
-
 
 @Controller  
 @SessionAttributes
