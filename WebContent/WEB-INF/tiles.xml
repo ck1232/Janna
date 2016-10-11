@@ -16,6 +16,8 @@
         <put-attribute name="title" value="Dashboard" /> 
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp"> 
+        		<put-attribute name="heading" value="Home" />
+        		<put-attribute name="heading-description" value="" />
         		<put-attribute name="content" value="/WEB-INF/jsp/dashboard/dashboard.jsp" />
         	</definition>
         </put-attribute>       
@@ -28,6 +30,7 @@
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="User Listing" />
+        		<put-attribute name="heading-description" value="To view all the users." />
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/usermanagement/listUser.jsp">
         				<put-attribute name="datatable">
@@ -51,7 +54,14 @@
     
     <definition name="createUser" extends="main_template">
     	<put-attribute name="title" value="Add New User" />
-    	<put-attribute name="body" value="/WEB-INF/jsp/usermanagement/createUser.jsp" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Add New User" />
+        		<put-attribute name="heading-description" value="To create user." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/usermanagement/createUser.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
     </definition>
     
     <definition name="updateUser" extends="main_template">  
@@ -59,6 +69,7 @@
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Update User" />
+        		<put-attribute name="heading-description" value="To update user." />
         		<put-attribute name="content" value="/WEB-INF/jsp/usermanagement/updateUser.jsp" />
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
@@ -73,6 +84,7 @@
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Role Listing" />
+        		<put-attribute name="heading-description" value="To view all the roles" />
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/rolemanagement/listRole.jsp">
         				<put-attribute name="datatable">
@@ -99,6 +111,7 @@
     	<put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Create New Role" />
+        		<put-attribute name="heading-description" value="" />
         		<put-attribute name="content" value="/WEB-INF/jsp/rolemanagement/createRole.jsp" />
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
@@ -110,6 +123,7 @@
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Update Role" />
+        		<put-attribute name="heading-description" value="" />
         		<put-attribute name="content" value="/WEB-INF/jsp/rolemanagement/updateRole.jsp" />
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>

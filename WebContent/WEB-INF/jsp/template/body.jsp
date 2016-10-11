@@ -6,12 +6,8 @@
     <section class="content-header">
       <h1>
         <tiles:getAsString name="heading" />
-        <small>Optional description</small>
+        <small><tiles:getAsString name="heading-description" /></small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>
     </section>
 
     <!-- Main content -->

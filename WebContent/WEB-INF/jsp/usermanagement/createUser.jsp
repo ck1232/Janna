@@ -3,16 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-	<!-- Content Header (Page header) -->
-	<section class="content-header">
-		<h1>Add New User</h1>
-		<ol class="breadcrumb">
-			<li><a href="/JJ/dashboard.html"><i class="fa fa-dashboard"> Home</i></a></li>
-			<li><a href="/JJ/listUser.html">Add New User</a></li>
-		</ol>
-	</section>
-    
     <section class="content">
     	<div class="row">
     		<div class="col-md-12">
@@ -86,4 +76,3 @@
     		</div>
     	</div>
     </section>
-</div>

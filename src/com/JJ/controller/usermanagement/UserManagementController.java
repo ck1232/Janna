@@ -76,6 +76,7 @@ public class UserManagementController {
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public String saveUser(@ModelAttribute("userForm") @Validated User User, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
+    	
 		System.out.println("saveUser() : " + User.toString());
 		if (result.hasErrors()) {
 			return "createUser";
