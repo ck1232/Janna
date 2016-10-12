@@ -13,7 +13,8 @@ import com.JJ.form.Contact;
 import com.JJ.service.TestingService;
 
 @Controller  
-@SessionAttributes  
+@SessionAttributes
+@RequestMapping(value = "/")
 public class ContactController {  
 	private TestingService testingService;
 	@Autowired
@@ -29,7 +30,7 @@ public class ContactController {
       
     @RequestMapping("/contact")  
     public ModelAndView showContacts() {  
-    	testingService.testing();
+    	System.out.println("contacts");
         return new ModelAndView("contact", "command", new Contact());  
     }  
 }  

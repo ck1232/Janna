@@ -11,24 +11,81 @@
         <put-attribute name="footer" value="/WEB-INF/jsp/template/footer.jsp" />  
     </definition>  
   
+  	<definition name="accessDenied" template="/WEB-INF/jsp/common/accessDenied.jsp">
+  	</definition>
+  	
+  	<definition name="login" template="/WEB-INF/jsp/common/login.jsp">
+  	</definition>
+  	
     <definition name="contact" extends="main_template">  
-        <put-attribute name="title" value="Contact Manager" /> 
+        <put-attribute name="title" value="Contact Manager" />
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
-        		<put-attribute name="content" value="/WEB-INF/jsp/contact.jsp" />  
+        		<put-attribute name="heading" value="Contact" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/contact.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
-        </put-attribute> 
-        
+        </put-attribute>
+          
     </definition>  
   
     <definition name="hello" extends="main_template">  
         <put-attribute name="title" value="Hello Spring MVC" />  
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Hello" />
         		<put-attribute name="content" value="/WEB-INF/jsp/hello.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>
           
     </definition> 
+    
+    <!-- Common Module START -->
+    <definition name="dashboard" extends="main_template">  
+        <put-attribute name="title" value="Dashboard" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Welcome to JJ" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/dashboard/dashboard.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>       
+    </definition>  
+    <!-- Common Module END -->
+    
+    <!-- User Management Module START -->
+    <definition name="listUser" extends="main_template">  
+        <put-attribute name="title" value="User Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="User Listing" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/usermanagement/listUser.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="options" value="/WEB-INF/jsp/usermanagement/options.jsp" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/getUserList" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/usermanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/usermanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createUser" extends="main_template">
+    	<put-attribute name="title" value="Add New User" />
+    	<put-attribute name="body" value="/WEB-INF/jsp/usermanagement/createUser.jsp" />
+    </definition>
+    
+    <!-- User Management Module END -->  
   
 </tiles-definitions>  

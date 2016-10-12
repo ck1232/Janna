@@ -58,4 +58,9 @@
 	<mvc:resources mapping="/development/**" location="/development/"/>
     <mvc:annotation-driven />
     
+	
+    <bean id="messageSource"
+      class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    	<property name="basename" value="/WEB-INF/message" />
+	</bean>
 </beans>

@@ -5,7 +5,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Page Header
+        <tiles:getAsString name="heading" />
         <small>Optional description</small>
       </h1>
       <ol class="breadcrumb">
@@ -16,6 +16,7 @@
 
     <!-- Main content -->
     <section class="content">
+    <tiles:insertAttribute name="message" />
 	<tiles:insertAttribute name="content" />
       <!-- Your Page Content Here -->
 
