@@ -1,8 +1,9 @@
 package com.JJ.controller.usermanagement;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,15 @@ import com.JJ.validator.UserFormValidator;
 @Controller  
 @EnableWebMvc
 @RequestMapping(value = "/")
-public class UserManagementController {
+public class UserManagementController implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private Integer selectedUserId;
+	private static final Logger logger = Logger.getLogger(UserManagementController.class);
 	@Autowired
 	UserManagementService userManagementService;
 	
@@ -45,6 +53,7 @@ public class UserManagementController {
 	@RequestMapping(value = "/listUser", method = RequestMethod.GET)  
     public String listUser() {  
     	System.out.println("loading listUser");
+    	logger.debug("id:"+selectedUserId);
         return "listUser";  
     }  
 	
@@ -91,22 +100,23 @@ public class UserManagementController {
     }  
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String delete(@RequestParam("id") List<String> ids) {
-		List<Long> idList = new ArrayList<>();
-
-		for (String id : ids) {
-			idList.add(new Long(id));
-			System.out.println(id);
+	public String delete(@RequestParam(value = "id", required=false) List<String> ids, RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listUser";
 		}
 		return "redirect:listUser";
 	}
-	
+
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String delete(@RequestParam("editBtn") String id) {
-		List<Long> idList = new ArrayList<>();
-		System.out.println(id);
+	public String delete(@RequestParam("editBtn") Integer id) {
+		selectedUserId = id;
 		
 		return "redirect:listUser";
 	}
+	
+	
+	
 	
 }
