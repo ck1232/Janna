@@ -4,6 +4,7 @@
 
 <form:form id="createUserForm" method="get" action="/JJ/createUser"></form:form>
 <form:form id="updateUserForm" method="post" action="/JJ/updateUser"></form:form>
+<form:form id="viewUserForm" method="post" action="/JJ/viewUser"></form:form>
 
 <div class="margin">
 	<div class="btn-grp">

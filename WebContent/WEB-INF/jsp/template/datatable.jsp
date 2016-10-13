@@ -13,7 +13,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">All Users</h3>
+              <h3 class="box-title"><tiles:insertAttribute name = "table-title" /></h3>
               <tiles:insertAttribute name = "options" />
             </div>
             <!-- /.box-header -->
@@ -30,6 +30,7 @@
                 </tr>
                 </tfoot>
               </table>
+              <tiles:insertAttribute name = "datatable-options" />
               </form:form>
             </div>
             <!-- /.box-body -->

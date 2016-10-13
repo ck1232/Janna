@@ -43,7 +43,12 @@ public class UserManagementService {
 	public void updateUser(User user) {
 		userMapper.updateByPrimaryKeySelective(user);
 	}
-	 
 	
+	/*public List<User> getAllUsersById(List<Integer> idList) {
+		UserExample userExample = new UserExample();
+		userExample.createCriteria().andIdIn(idList);
+		List<User> userList = userMapper.selectByExample(userExample);
+		return userList;
+	}*/
 	
 }

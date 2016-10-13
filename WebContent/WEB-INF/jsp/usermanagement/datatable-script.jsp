@@ -26,6 +26,7 @@ $(function () {
           $(row).find('input[type="checkbox"]').prop('value', data.id);
           $(row).find('button[name="editBtn"]').prop('value', data.id);
           $(row).find('button[name="viewBtn"]').prop('value', data.id);
+          $(row).find('button[name="assignRoleBtn"]').prop('value', data.id);
        }
     });
 });

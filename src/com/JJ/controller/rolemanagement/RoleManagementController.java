@@ -87,7 +87,7 @@ public class RoleManagementController {
     }  
 	
 	@RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
-	public String deleteRole(@RequestParam("id") List<String> ids) {
+	public String deleteRole(@RequestParam("checkboxId") List<String> ids) {
 		
 		for (String id : ids) {
 			roleManagementService.deleteRole(new Integer(id));

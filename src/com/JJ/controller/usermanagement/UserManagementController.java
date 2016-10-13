@@ -1,5 +1,6 @@
 package com.JJ.controller.usermanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.User;
+import com.JJ.service.rolemanagement.RoleManagementService;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
 
@@ -33,11 +35,15 @@ public class UserManagementController {
 	UserManagementService userManagementService;
 	
 	@Autowired
+	RoleManagementService roleManagementService;
+	
+	@Autowired
 	UserFormValidator userFormValidator;
 	
 	@Autowired
-	public UserManagementController(UserManagementService userManagementService) {
+	public UserManagementController(UserManagementService userManagementService, RoleManagementService roleManagementService) {
 		this.userManagementService = userManagementService;
+		this.roleManagementService = roleManagementService;
 	}
 	
 	
@@ -91,7 +97,7 @@ public class UserManagementController {
     }  
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String deleteUser(@RequestParam("id") List<String> ids) {
+	public String deleteUser(@RequestParam("checkboxId") List<String> ids) {
 		
 		for (String id : ids) {
 			userManagementService.deleteUser(new Integer(id));
@@ -128,6 +134,20 @@ public class UserManagementController {
 		userManagementService.updateUser(user);
 		
 		return "redirect:listUser";
+	}
+	
+	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
+	public String viewUser(@RequestParam("viewBtn") String id, Model model) {
+		System.out.println("id = " + id);
+		User user = userManagementService.findById(new Integer(id));
+		if (user == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "User not found");
+		}
+		model.addAttribute("user", user);
+
+		return "viewUser";
+
 	}
 	
 }

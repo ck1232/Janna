@@ -35,10 +35,13 @@
         			<definition template="/WEB-INF/jsp/usermanagement/listUser.jsp">
         				<put-attribute name="datatable">
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Users" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/usermanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
-		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
+		        					<definition template="/WEB-INF/jsp/usermanagement/datatable-script.jsp" >
 		        						<put-attribute name="data-list" value="/JJ/getUserList" />
+		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/usermanagement/column-mapping.jsp" />
 		        					</definition>
 		        				</put-attribute>
@@ -76,6 +79,18 @@
         </put-attribute>
     </definition>
     
+    <definition name="viewUser" extends="main_template">  
+        <put-attribute name="title" value="View User" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View User" />
+        		<put-attribute name="heading-description" value="To view user." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/usermanagement/viewUser.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
     <!-- User Management Module END -->  
     
   	<!-- Role Management Module START -->
@@ -89,10 +104,13 @@
         			<definition template="/WEB-INF/jsp/rolemanagement/listRole.jsp">
         				<put-attribute name="datatable">
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Roles" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/rolemanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
 		        						<put-attribute name="data-list" value="/JJ/getRoleList" />
+		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/rolemanagement/column-mapping.jsp" />
 		        					</definition>
 		        				</put-attribute>
@@ -133,6 +151,38 @@
   	<!-- Role Management Module END --> 
   
   
+  	<!-- Role Assignment Module START -->
+  	<definition name="assignRole" extends="main_template">  
+        <put-attribute name="title" value="Assign Role To User" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Assign Role To User" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/roleassignment/assignRole.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Roles" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/roleassignment/options.jsp" />
+		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/roleassignment/datatable-option.jsp" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/roleassignment/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/getRolesToAssignList" />
+		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/roleassignment/datatable-data.jsp" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/roleassignment/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/roleassignment/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    <!-- Role Assignment Module END -->
+  	
   
   
 </tiles-definitions>  
