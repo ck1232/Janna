@@ -87,13 +87,21 @@ public class RoleManagementController {
     }  
 	
 	@RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
-	public String deleteRole(@RequestParam("checkboxId") List<String> ids) {
+	public String deleteRole(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes) {
 		
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listRole";
+		}
 		for (String id : ids) {
 			roleManagementService.deleteRole(new Integer(id));
 			System.out.println("deleted "+ id);
 			
 		}
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Role(s) deleted successfully!");
 		return "redirect:listRole";
 	}
 	
