@@ -12,9 +12,9 @@
         <script type="text/javascript" src="development/primeelements-3.0.0.js"></script>
 
         <link type="text/css" href="development/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>        
-        <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
-        <link type="text/css" href="development/primeui-3.0.0-min.css" rel="stylesheet">
-		<link type="text/css" href="development/themes/cruze/theme.css" rel="stylesheet"/>
+        <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+        <link type="text/css" href="development/primeui-3.0.0-min.css" rel="stylesheet" >
+		<link type="text/css" href="development/themes/cruze/theme.css" rel="stylesheet" >
 		
 			<!-- Admin LTE -->
 			<!-- Tell the browser to be responsive to screen width -->

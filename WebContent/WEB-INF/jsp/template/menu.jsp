@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -7,7 +8,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="/JJ/development/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>Alexander Pierce</p>
@@ -41,8 +42,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/JJ/hello.html">hello</a></li>
-            <li><a href="/JJ/contact.html">contact 2</a></li>
+            <li><a href="<c:url value="/hello"/>">hello</a></li>
+            <li><a href="<c:url value="/contact"/>">contact 2</a></li>
           </ul>
         </li>
       </ul>

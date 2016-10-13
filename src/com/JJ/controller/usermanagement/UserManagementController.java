@@ -47,7 +47,7 @@ public class UserManagementController {
 	}
 	
 	
-	@RequestMapping("/listUser")  
+	@RequestMapping(value = "/listUser", method = RequestMethod.GET)  
     public String listUser() {  
     	System.out.println("loading listUser");
         return "listUser";  
@@ -97,13 +97,19 @@ public class UserManagementController {
     }  
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String deleteUser(@RequestParam("checkboxId") List<String> ids) {
-		
+	public String deleteUser(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listUser";
+		}
 		for (String id : ids) {
 			userManagementService.deleteUser(new Integer(id));
 			System.out.println("deleted "+ id);
-			
 		}
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "User(s) deleted successfully!");
 		return "redirect:listUser";
 	}
 	

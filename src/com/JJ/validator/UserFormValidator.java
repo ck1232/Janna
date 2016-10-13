@@ -19,12 +19,16 @@ public class UserFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		User user = (User) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userid", "NotEmpty.userForm.userid");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.userForm.password");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.userForm.name");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailaddress", "NotEmpty.userForm.emailaddress");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "username.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailaddress", "username.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userid", "username.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "username.required");
+//		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.userForm.name");
+//		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailaddress", "NotEmpty.userForm.emailaddress");
 		
-		
+//		if(user.getId() <=0){
+//			errors.rejectValue("id", "negativeValue", new Object[]{"'id'"}, "id can't be negative");
+//		}
 		
 	}
 	
