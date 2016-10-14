@@ -1,8 +1,8 @@
 package com.JJ.controller.usermanagement;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.roleassignment.RoleAssignmentController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.User;
 import com.JJ.service.rolemanagement.RoleManagementService;
@@ -30,6 +31,7 @@ import com.JJ.validator.UserFormValidator;
 @EnableWebMvc
 @RequestMapping(value = "/")
 public class UserManagementController {
+	private static final Logger logger = Logger.getLogger(UserManagementController.class);
 	
 	@Autowired
 	UserManagementService userManagementService;
@@ -49,20 +51,20 @@ public class UserManagementController {
 	
 	@RequestMapping(value = "/listUser", method = RequestMethod.GET)  
     public String listUser() {  
-    	System.out.println("loading listUser");
+    	logger.debug("loading listUser");
         return "listUser";  
     }  
 	
 	@RequestMapping(value = "/getUserList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getUserList() {
-		System.out.println("getting user list");
+		logger.debug("getting user list");
 		List<User> userList = userManagementService.getAllUsers();
 		return GeneralUtils.convertListToJSONString(userList);
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.GET)
     public String showAddUserForm(Model model) {  
-    	System.out.println("loading showAddUserForm");
+    	logger.debug("loading showAddUserForm");
     	User user = new User();
     	
     	user.setUserid("jj");
@@ -83,7 +85,7 @@ public class UserManagementController {
     public String saveUser(@ModelAttribute("userForm") @Validated User User, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		System.out.println("saveUser() : " + User.toString());
+		logger.debug("saveUser() : " + User.toString());
 		if (result.hasErrors()) {
 			return "createUser";
 		} else {
@@ -106,7 +108,7 @@ public class UserManagementController {
 		}
 		for (String id : ids) {
 			userManagementService.deleteUser(new Integer(id));
-			System.out.println("deleted "+ id);
+			logger.debug("deleted "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "User(s) deleted successfully!");
@@ -117,7 +119,7 @@ public class UserManagementController {
 	public String getUserToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
 		User user = userManagementService.findById(new Integer(id));
-		System.out.println("Loading update user page for " + user.toString());
+		logger.debug("Loading update user page for " + user.toString());
 		
 		model.addAttribute("userForm", user);
 		
@@ -128,7 +130,7 @@ public class UserManagementController {
 	public String updateUser(@ModelAttribute("userForm") @Validated User user,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		System.out.println("updateUser() : " + user.toString());
+		logger.debug("updateUser() : " + user.toString());
 		
 		if (result.hasErrors()) {
 			return "updateUser";
@@ -144,7 +146,7 @@ public class UserManagementController {
 	
 	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
 	public String viewUser(@RequestParam("viewBtn") String id, Model model) {
-		System.out.println("id = " + id);
+		logger.debug("id = " + id);
 		User user = userManagementService.findById(new Integer(id));
 		if (user == null) {
 			model.addAttribute("css", "danger");

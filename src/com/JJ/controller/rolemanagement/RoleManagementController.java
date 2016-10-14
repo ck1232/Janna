@@ -2,6 +2,7 @@ package com.JJ.controller.rolemanagement;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ import com.JJ.validator.RoleFormValidator;
 @EnableWebMvc
 @RequestMapping(value = "/")
 public class RoleManagementController {
+	private static final Logger logger = Logger.getLogger(RoleManagementController.class);
 	
 	@Autowired
 	RoleManagementService roleManagementService;
@@ -43,20 +45,20 @@ public class RoleManagementController {
 	
 	@RequestMapping("/listRole")  
     public String listRole() {  
-    	System.out.println("loading listRole");
+    	logger.debug("loading listRole");
         return "listRole";  
     }  
 	
 	@RequestMapping(value = "/getRoleList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getRoleList() {
-		System.out.println("getting role list");
+		logger.debug("getting role list");
 		List<Role> roleList = roleManagementService.getAllRoles();
 		return GeneralUtils.convertListToJSONString(roleList);
 	}
 	
 	@RequestMapping(value = "/createRole", method = RequestMethod.GET)
     public String showAddRoleForm(Model model) {  
-    	System.out.println("loading showAddRoleForm");
+    	logger.debug("loading showAddRoleForm");
     	Role role = new Role();
     	
     	role.setName("Product Manager");
@@ -73,7 +75,7 @@ public class RoleManagementController {
     public String saveRole(@ModelAttribute("roleForm") @Validated Role role, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		System.out.println("saveRole() : " + role.toString());
+		logger.debug("saveRole() : " + role.toString());
 		if (result.hasErrors()) {
 			return "createRole";
 		} else {
@@ -97,7 +99,7 @@ public class RoleManagementController {
 		}
 		for (String id : ids) {
 			roleManagementService.deleteRole(new Integer(id));
-			System.out.println("deleted "+ id);
+			logger.debug("deleted "+ id);
 			
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
@@ -109,7 +111,7 @@ public class RoleManagementController {
 	public String getRoleToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
 		Role role = roleManagementService.findById(new Integer(id));
-		System.out.println("Loading update role page for " + role.toString());
+		logger.debug("Loading update role page for " + role.toString());
 		
 		model.addAttribute("roleForm", role);
 		
@@ -120,7 +122,7 @@ public class RoleManagementController {
 	public String updateRole(@ModelAttribute("roleForm") @Validated Role role,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		System.out.println("updateRole() : " + role.toString());
+		logger.debug("updateRole() : " + role.toString());
 		
 		if (result.hasErrors()) {
 			return "updateRole";

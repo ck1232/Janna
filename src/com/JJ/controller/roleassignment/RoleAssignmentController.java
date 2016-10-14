@@ -1,8 +1,8 @@
 package com.JJ.controller.roleassignment;
 
-import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Role;
 import com.JJ.model.RolesToAssign;
 import com.JJ.model.User;
 import com.JJ.model.UserRole;
@@ -32,6 +31,7 @@ import com.JJ.validator.UserFormValidator;
 @EnableWebMvc
 @RequestMapping(value = "/")
 public class RoleAssignmentController {
+	private static final Logger logger = Logger.getLogger(RoleAssignmentController.class);
 	
 	@Autowired
 	UserManagementService userManagementService;
@@ -61,7 +61,7 @@ public class RoleAssignmentController {
 	
 	@RequestMapping(value = "/getRolesToAssignList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getRoleList(@RequestParam("userid") String id) {
-		System.out.println("getting roles to assign list");
+		logger.debug("getting roles to assign list");
 		List<RolesToAssign> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
 		return GeneralUtils.convertListToJSONString(rolesToAssign);
 	}
@@ -71,11 +71,11 @@ public class RoleAssignmentController {
 			@RequestParam("checkboxId") List<String> ids,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		System.out.println("saveRoleToUser() : user = " + user.getId());
+		logger.debug("saveRoleToUser() : user = " + user.getId());
 		
 		roleAssignmentService.deleteRoleListByUserId(user.getId());
 		for(String roleId: ids){
-			System.out.println("saveRoleToUser() : role id = " + roleId);
+			logger.debug("saveRoleToUser() : role id = " + roleId);
 			UserRole userRole = new UserRole();
 			userRole.setUserid(user.getId());
 			userRole.setRoleid(new Integer(roleId));

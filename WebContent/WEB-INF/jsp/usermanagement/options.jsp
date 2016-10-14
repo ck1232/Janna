@@ -8,7 +8,7 @@
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-info btn-edit pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteUser"><i class="fa fa-user-times"></i> Delete User</button>
-		<button class="btn btn-info btn-edit pull-right" type="submit" form="createUserForm"><i class="fa fa-user-plus"></i> Add User</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteUser"><i class="fa fa-user-times"></i> Delete User</button>
+		<button class="btn btn-primary pull-right" type="submit" form="createUserForm"><i class="fa fa-user-plus"></i> Add User</button>
 	</div>
 </div>

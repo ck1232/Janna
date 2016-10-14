@@ -9,5 +9,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="editBtn" class="btn btn-info btn-edit" type="submit" form="updateRoleForm"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="updateRoleForm"><i class="fa fa-pencil"></i> Edit</button>'
 },

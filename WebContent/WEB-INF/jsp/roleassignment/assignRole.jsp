@@ -26,8 +26,8 @@
 		            	<!--/.FORM-->
 		            		<div class="col-sm-2"></div>
 							<div class="col-sm-10">
-							  <button name="saveRoleBtn" class="btn btn-info btn-edit" type="submit" form="saveRoleToUserForm">Save</button>
-			                  <button class="btn btn-info btn-edit" type="submit" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+							  <button name="saveRoleBtn" class="btn btn-primary" type="submit" form="saveRoleToUserForm">Save</button>
+			                  <button class="btn btn-default" type="submit" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
 							</div>
 						</div>
 						</form:form>

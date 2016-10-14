@@ -7,7 +7,7 @@
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-info btn-edit pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteRole"><i class="fa fa-user-times"></i> Delete Role</button>
-		<button class="btn btn-info btn-edit pull-right" type="submit" form="createRoleForm"><i class="fa fa-user-plus"></i> Add Role</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteRole"><i class="fa fa-user-times"></i> Delete Role</button>
+		<button class="btn btn-primary pull-right" type="submit" form="createRoleForm"><i class="fa fa-user-plus"></i> Add Role</button>
 	</div>
 </div>

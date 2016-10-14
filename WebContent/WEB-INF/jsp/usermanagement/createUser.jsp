@@ -64,9 +64,9 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-info btn-add" form ="createUserForm">Add
+								<button type="submit" class="btn btn-primary" form ="createUserForm">Add
 			                  </button>
-			                  <button type="submit" class="btn btn-info btn-edit" form="backToListButton"><i class="fa fa-remove"></i> Cancel
+			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
 			            </button>
 							</div>
 						  </div>

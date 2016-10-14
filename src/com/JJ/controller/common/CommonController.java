@@ -40,6 +40,7 @@ public class CommonController {
 	
 	@RequestMapping(value = "/Access_Denied", method = RequestMethod.GET)
     public String accessDeniedPage(ModelMap model) {
+		logger.debug("access denied!");
         model.addAttribute("user", getPrincipal());
         return "accessDenied";
     }
