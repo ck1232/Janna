@@ -221,14 +221,26 @@
         </put-attribute>
     </definition>
     
-    <definition name="viewModule" extends="main_template">  
-        <put-attribute name="title" value="View Module" /> 
+    <definition name="createModule" extends="main_template">
+    	<put-attribute name="title" value="Add New Module" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Module" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/modulemanagement/createModule.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updateModule" extends="main_template">  
+        <put-attribute name="title" value="Update Module" /> 
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
-        		<put-attribute name="heading" value="View Module" />
-        		<put-attribute name="heading-description" value="To view module." />
+        		<put-attribute name="heading" value="Update Module" />
+        		<put-attribute name="heading-description" value="To update module and its submodule." />
         		<put-attribute name="content" >
-        			<definition template="/WEB-INF/jsp/modulemanagement/viewModule.jsp" >
+        			<definition template="/WEB-INF/jsp/modulemanagement/updateModule.jsp" >
 	        			<put-attribute name="datatable">
 		        			<definition template="/WEB-INF/jsp/template/datatable.jsp">
 		        				<put-attribute name="table-title" value="All Sub Module" />

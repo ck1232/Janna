@@ -3,7 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!-- Content Wrapper. Contains page content -->
-
+    <section class="content">
+    	<div class="row">
+    		<div class="col-md-12">
+    			<!--BOX-->
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
@@ -11,32 +14,29 @@
                     </div>
                     <!--FORM-->
                     <form:form id="backToListButton" method="get" action="/JJ/listModule"></form:form>
-                    <form:form id="updateModuleToDbForm" method="post" modelAttribute="moduleForm" action="/JJ/updateModuleToDb">
+                    <form:form id="updateModuleToDbForm" method="post" modelAttribute="module" action="/JJ/updateModuleToDb">
 		              <div class="box-body">
 		              		<form:input path="id" type="hidden" id="id"/>
-						  <div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Module Name</label>
+							<div class="col-sm-2">Name</div>
+							<div class="col-sm-10">${module.name}</div>
+							
+						    <div class="col-sm-2">Icon</div>
+						    <div class="col-sm-10">${module.icon} <i class="fa ${module.icon}"></i></div>
+						<br/><br/>
+						<tiles:insertAttribute name = "datatable" />
+		            	<!--/.FORM-->
+		            		<div class="col-sm-2"></div>
 							<div class="col-sm-10">
-								<form:input path="name" type="text" class="form-control"
-				                                id="name" placeholder="Enter module name" />
-								<form:errors path="name" class="text-danger" />
-							</div>
-						  </div>
-						  
-						<br/>
-						<br/>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"></label>
-							<div class="col-sm-10">
-			                  <button type="submit" class="btn btn-primary" form="updateModuleToDbForm">Update
+								<button type="submit" class="btn btn-primary" form ="updateModuleToDbForm">Save
 			                  </button>
 			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
-			            </button>
+			            	</button>
 							</div>
-						  </div>
+						</div>
 		              </div>
 		              <!-- /.box-body -->
 		            </form:form>
 		            <!--/.FORM-->
                 </div>
-    		
+    	</div>
+    </section>

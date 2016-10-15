@@ -5,21 +5,23 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.JJ.model.Module;
 import com.JJ.model.Role;
 
 @Component
-public class RoleFormValidator implements Validator {
+public class ModuleFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Role.class.equals(clazz);
+		return Module.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Role role = (Role) target;
+		Module module = (Module) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.roleform.name");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.moduleform.name");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "icon", "error.notempty.moduleform.icon");
 
 		
 	}

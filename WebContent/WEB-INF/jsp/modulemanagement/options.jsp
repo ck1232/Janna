@@ -4,7 +4,6 @@
 
 <form:form id="createModuleForm" method="get" action="/JJ/createModule"></form:form>
 <form:form id="updateModuleForm" method="post" action="/JJ/updateModule"></form:form>
-<form:form id="viewModuleForm" method="post" action="/JJ/viewModule"></form:form>
 
 <div class="margin">
 	<div class="btn-grp">
