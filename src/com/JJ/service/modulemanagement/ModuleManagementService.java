@@ -38,11 +38,16 @@ public class ModuleManagementService {
 	}
 	
 	public void deleteModule(Integer id) {
-		moduleMapper.deleteByPrimaryKey(id);
+		Module module = findById(id);
+		if(module.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
+			module.setDeleteind(GeneralUtils.DELETED);
+			moduleMapper.updateByPrimaryKey(module);
+		}
 	}
 	
 	public void updateModule(Module module) {
-		moduleMapper.updateByPrimaryKeySelective(module);
+		if(module.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+			moduleMapper.updateByPrimaryKeySelective(module);
 	}
 	 
 	

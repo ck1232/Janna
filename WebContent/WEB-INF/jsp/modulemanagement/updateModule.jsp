@@ -32,7 +32,6 @@
 			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
 			            	</button>
 							</div>
-						</div>
 		              </div>
 		              <!-- /.box-body -->
 		            </form:form>
