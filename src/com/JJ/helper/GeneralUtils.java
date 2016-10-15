@@ -9,6 +9,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 public class GeneralUtils {
+	public static final String DELETED = "Y";
+	public static final String NOT_DELETED = "N";
 	public static <T> String convertListToJSONString(List<T> list){
 		return  convertListToJSONObject(list).toJSONString();
 	}

@@ -35,6 +35,7 @@
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="/JJ/listUser.html"><i class="fa fa-users"></i> <span>User Management</span></a></li>
         <li><a href="/JJ/listRole.html"><i class="fa fa-plus-square"></i> <span>Role Management</span></a></li>
+        <li><a href="/JJ/listModule"><i class="fa fa-plus-square"></i> <span>Module Management</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
             <span class="pull-right-container">

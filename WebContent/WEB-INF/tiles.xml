@@ -190,6 +190,67 @@
     </definition>
     <!-- Role Assignment Module END -->
   	
+  	<!-- Module Assignment Module START -->
+  	<definition name="listModule" extends="main_template">  
+        <put-attribute name="title" value="Module Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Module Listing" />
+        		<put-attribute name="heading-description" value="To view all the module" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/modulemanagement/listModule.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Module" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/modulemanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/modulemanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/getModuleList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/modulemanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/modulemanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="viewModule" extends="main_template">  
+        <put-attribute name="title" value="View Module" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Module" />
+        		<put-attribute name="heading-description" value="To view module." />
+        		<put-attribute name="content" >
+        			<definition template="/WEB-INF/jsp/modulemanagement/viewModule.jsp" >
+	        			<put-attribute name="datatable">
+		        			<definition template="/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Sub Module" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/modulemanagement/submodule-options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/modulemanagement/submodule-datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/viewSubmodule" />
+		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/modulemanagement/submodule-datatable-data.jsp" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/modulemanagement/submodule-column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/modulemanagement/column-header.jsp"></put-attribute>
+				        	</definition>
+		        		</put-attribute>
+		        	</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+  	<!-- Module Assignment Module END -->
   
   
 </tiles-definitions>  
