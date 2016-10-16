@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.Module;
 import com.JJ.model.Submodule;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
@@ -45,7 +46,7 @@ public class SubmoduleManagementController {
 		this.submoduleManagementService = submoduleManagementService;
 	}
 	
-	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/getSubmoduleList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getSubmoduleToUpdate(@RequestParam("moduleid") String id, Model model) {
 		logger.debug("getting submodules list");
 		List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
@@ -102,5 +103,22 @@ public class SubmoduleManagementController {
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Submodule(s) deleted successfully!");
 		return "redirect:listModule";
+	}
+	
+	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.POST)
+	public String viewSubmodule(@RequestParam("viewBtn") String id, Model model) {
+		logger.debug("id = " + id);
+		Submodule submodule = submoduleManagementService.findById(new Integer(id));
+		if (submodule == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Submodule not found");
+		}
+		
+		Module module = moduleManagementService.findById(submodule.getParentid());
+		submodule.setParentModuleName(module.getName());
+		model.addAttribute("submodule", submodule);
+
+		return "viewSubmodule";
+
 	}
 }

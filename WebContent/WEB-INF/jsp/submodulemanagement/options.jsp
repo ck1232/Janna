@@ -4,9 +4,6 @@
 
 
 <form id="updateSubmoduleForm" method="post" action="/JJ/updateSubmodule"></form>
-<form id="viewSubmoduleForm" method="post" action="/JJ/viewSubmodule"></form>
-
-
 <div class="margin">
 	<div class="btn-grp">
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteSubmodule"><i class="fa fa-user-times"></i> Delete</button>
