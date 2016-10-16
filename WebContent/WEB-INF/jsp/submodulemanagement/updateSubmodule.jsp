@@ -3,10 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!-- Content Wrapper. Contains page content -->
-    <section class="content">
-    	<div class="row">
-    		<div class="col-md-12">
-    			<!--BOX-->
+
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
@@ -16,15 +13,19 @@
                     <form:form id="backToListButton" method="post" action="/JJ/updateModule">
                     	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
                     </form:form>
-                    <form:form id="createSubmoduleForm" method="post" modelAttribute="submodule" action="/JJ/createSubmoduleToDb">
+                    <form:form id="updateSubmoduleToDbForm" method="post" modelAttribute="submodule" action="/JJ/updateSubmoduleToDb">
 		              <div class="box-body">
+		              		<form:input path="id" type="hidden" id="id"/>
+		              		<form:input path="parentid" type="hidden" id="parentid"/>
+		              		<form:input path="deleteind" type="hidden" id="deleteind"/>
+		              		
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Submodule Name</label>
 							<div class="col-sm-10">
 								<form:input path="name" type="text" class="form-control"
-				                                id="name" placeholder="Enter Submodule Name" />
+				                                id="name" placeholder="Enter submodule name" />
 								<form:errors path="name" class="text-danger" />
-						  </div>
+							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Icon</label>
@@ -38,18 +39,16 @@
 							<label class="col-sm-2 control-label">Url</label>
 							<div class="col-sm-10">
 								<form:input path="url" type="text" class="form-control"
-				                                id="url" placeholder="Enter Url" />
+				                                id="url" placeholder="Enter submodule name" />
 								<form:errors path="url" class="text-danger" />
 							</div>
 						  </div>
-						  <form:input path="parentid" type="hidden" id="parentid"/>
-						  <form:input path="deleteind" type="hidden" id="deleteind"/>
 						<br/>
 						<br/>
 						<div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-primary" form ="createSubmoduleForm">Add
+			                  <button type="submit" class="btn btn-primary" form="updateSubmoduleToDbForm">Update
 			                  </button>
 			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
 			            </button>
@@ -60,6 +59,4 @@
 		            </form:form>
 		            <!--/.FORM-->
                 </div>
-    		</div>
-    	</div>
-    </section>
+    		

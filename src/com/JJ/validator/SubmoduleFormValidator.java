@@ -21,7 +21,7 @@ public class SubmoduleFormValidator implements Validator {
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.submoduleform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "icon", "error.notempty.submoduleform.icon");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "icon", "error.notempty.submoduleform.url");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "url", "error.notempty.submoduleform.url");
 
 		
 	}

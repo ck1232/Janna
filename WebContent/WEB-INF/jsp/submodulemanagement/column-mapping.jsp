@@ -15,5 +15,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="/JJ/viewSubmodule"><i class="fa fa-eye"></i> View</button>   <button name="editBtn" class="btn btn-primary" type="submit" form="updateSubmoduleForm"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="/JJ/viewSubmodule"><i class="fa fa-eye"></i> View</button>   <button name="editBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="/JJ/updateSubmodule"><i class="fa fa-pencil"></i> Edit</button>'
 },

@@ -8,6 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.modulemanagement.ModuleManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
 import com.JJ.model.Submodule;
@@ -29,25 +33,25 @@ import com.JJ.validator.SubmoduleFormValidator;
 public class SubmoduleManagementController {
 	private static final Logger logger = Logger.getLogger(SubmoduleManagementController.class);
 	
-	@Autowired
 	private ModuleManagementService moduleManagementService;
-	
-	@Autowired
+
 	private SubModuleManagementService submoduleManagementService;
-	
-	@Autowired
-	SubmoduleFormValidator submoduleFormValidator;
+	private ModuleManagementController moduleManagementController;
+	private SubmoduleFormValidator submoduleFormValidator;
 /*	@Autowired
 	ModuleFormValidator moduleFormValidator;*/
 	
 	@Autowired
-	public SubmoduleManagementController(ModuleManagementService moduleManagementService, SubModuleManagementService submoduleManagementService){
+	public SubmoduleManagementController(ModuleManagementService moduleManagementService, SubModuleManagementService submoduleManagementService, ModuleManagementController moduleManagementController,
+			SubmoduleFormValidator submoduleFormValidator){
 		this.moduleManagementService = moduleManagementService;
 		this.submoduleManagementService = submoduleManagementService;
+		this.moduleManagementController = moduleManagementController;
+		this.submoduleFormValidator = submoduleFormValidator;
 	}
 	
 	@RequestMapping(value = "/getSubmoduleList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getSubmoduleToUpdate(@RequestParam("moduleid") String id, Model model) {
+	public @ResponseBody String getSubmoduleList(@RequestParam("moduleid") String id, Model model) {
 		logger.debug("getting submodules list");
 		List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
 		return GeneralUtils.convertListToJSONString(submoduleList);
@@ -66,13 +70,13 @@ public class SubmoduleManagementController {
         return "createSubmodule";  
     }  
 	
-/*	@InitBinder
+	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(submoduleFormValidator);
-	}*/
-	
+	}
+
 	@RequestMapping(value = "/createSubmoduleToDb", method = RequestMethod.POST)
-    public String saveSubmodule(@ModelAttribute("submodule") /*@Validated*/ Submodule submodule, 
+    public String saveSubmodule(@ModelAttribute("submodule") @Validated Submodule submodule, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveSubmodule() : " + submodule.toString());
@@ -103,6 +107,34 @@ public class SubmoduleManagementController {
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Submodule(s) deleted successfully!");
 		return "redirect:listModule";
+	}
+	
+	@RequestMapping(value = "/updateSubmodule", method = RequestMethod.POST)
+	public String getSubmoduleToUpdate(@RequestParam("editBtn") String id, Model model) {
+		
+		Submodule submodule = submoduleManagementService.findById(new Integer(id));
+		logger.debug("Loading update submodule page for " + submodule.toString());
+		
+		model.addAttribute("submodule", submodule);
+		
+		return "updateSubmodule";
+	}
+	
+	@RequestMapping(value = "/updateSubmoduleToDb", method = RequestMethod.POST)
+	public String updateSubmodule(@ModelAttribute("submodule") @Validated Submodule submodule,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		logger.debug("updateSubmodule() : " + submodule.toString());
+		
+		if (result.hasErrors()) {
+			return "updateSubmodule";
+		} else {
+			// Add message to flash scope
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Submodule updated successfully!");
+		}
+		submoduleManagementService.updateSubmodule(submodule);
+		return moduleManagementController.getModuleToUpdate(submodule.getParentid().toString(), model);
 	}
 	
 	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.POST)

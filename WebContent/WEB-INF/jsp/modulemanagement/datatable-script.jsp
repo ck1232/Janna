@@ -78,7 +78,7 @@ function subdatatable(){
 		  "columns": [
 		              <tiles:insertAttribute name="subcolumn-mapping" />
 		            ],
-	      "order": [2, 'asc'],
+	      "order": [1, 'asc'],
 	      'rowCallback': function(row, data, dataIndex){
 	          $(row).find('input[type="checkbox"]').prop('value', data.id);
 	          if(data.checked == "Y"){
@@ -86,9 +86,7 @@ function subdatatable(){
 	          }else{
 	        	  $(row).find('input[type="checkbox"]').prop('checked', false);
 	          }
-	          $(row).find('button[name="editBtn"]').prop('value', data.id);
-	          $(row).find('button[name="viewBtn"]').prop('value', data.id);
-	          $(row).find('div[name="iconDiv"]').html(data.icon+" <i class='fa "+data.icon+"'></i>");
+	          $(row).find('div[name="iconSubDiv"]').html(data.icon+" <i class='fa "+data.icon+"'></i>");
 	          
 	       }
 	    });

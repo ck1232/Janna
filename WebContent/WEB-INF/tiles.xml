@@ -282,6 +282,18 @@
         </put-attribute>
     </definition>
     
+    <definition name="updateSubmodule" extends="main_template">  
+        <put-attribute name="title" value="Update Submodule" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Submodule" />
+        		<put-attribute name="heading-description" value="To update submodule" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/submodulemanagement/updateSubmodule.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
     <definition name="viewSubmodule" extends="main_template">  
         <put-attribute name="title" value="View Submodule" /> 
         <put-attribute name="body">
