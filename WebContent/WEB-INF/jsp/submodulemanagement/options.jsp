@@ -9,7 +9,7 @@
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteSubmodule"><i class="fa fa-user-times"></i> Delete Sub Module</button>
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/createSubmodule"><i class="fa fa-user-plus"></i> Add Sub Module</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteSubmodule"><i class="fa fa-user-times"></i> Delete</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/createSubmodule"><i class="fa fa-user-plus"></i> Add</button>
 	</div>
 </div>

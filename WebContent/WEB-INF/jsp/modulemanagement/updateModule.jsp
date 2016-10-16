@@ -27,7 +27,7 @@
 		            	<!--/.FORM-->
 		            		<div class="col-sm-2"></div>
 							<div class="col-sm-10">
-			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Done
+			                  <button type="submit" class="btn btn-primary" form="backToListButton"><i class="fa fa-remove"></i> Done
 			            	</button>
 							</div>
 		              </div>
