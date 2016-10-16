@@ -15,7 +15,7 @@
                     <!--FORM-->
                     <form:form id="backToListButton" method="get" action="/JJ/listModule">
                     </form:form>
-                    <form:form id="createSubmoduleForm" method="post" modelAttribute="submodule" action="/JJ/createSubmodule">
+                    <form:form id="createSubmoduleForm" method="post" modelAttribute="submodule" action="/JJ/createSubmoduleToDb">
 		              <div class="box-body">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Submodule Name</label>

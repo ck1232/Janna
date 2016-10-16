@@ -245,7 +245,7 @@
 		        			<definition template="/WEB-INF/jsp/template/datatable.jsp">
 		        				<put-attribute name="table-title" value="All Sub Module" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/modulemanagement/submodule-options.jsp" />
-		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/modulemanagement/submodule-datatable-options.jsp" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/modulemanagement/submodule-datatable-script.jsp" >
 		        						<put-attribute name="data-list" value="/JJ/viewSubmodule" />

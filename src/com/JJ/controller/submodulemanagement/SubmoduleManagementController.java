@@ -57,7 +57,7 @@ public class SubmoduleManagementController {
 		return GeneralUtils.convertListToJSONString(submoduleList);
 	}
 	
-	@RequestMapping(value = "/createSubmodule", method = RequestMethod.GET)
+	@RequestMapping(value = "/createSubmodule", method = RequestMethod.POST)
     public String showAddSubmoduleForm(@RequestParam("moduleid") String id, Model model) {  
     	logger.debug("loading showAddSubmoduleForm");
     	Submodule submodule = new Submodule();
@@ -75,7 +75,7 @@ public class SubmoduleManagementController {
 		binder.setValidator(submoduleFormValidator);
 	}*/
 	
-	@RequestMapping(value = "/createSubmodule", method = RequestMethod.POST)
+	@RequestMapping(value = "/createSubmoduleToDb", method = RequestMethod.POST)
     public String saveSubmodule(@ModelAttribute("submodule") /*@Validated*/ Submodule submodule, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
