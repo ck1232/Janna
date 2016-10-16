@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.usersByUsernameQuery(
 			"select userid,password, enabled from user where userid=?")
 		.authoritiesByUsernameQuery(
-			"select u.userid, r.name from user_roles ur join user u on u.userid = ur.roleid join roles r on ur.roleid= r.roleid where username=?");
+			"select u.userid, r.name from janna.user_role ur join janna.user u on u.id = ur.userid join janna.role r on ur.roleid= r.id where u.userid=?");
 //        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
 //        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
 //        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");//dba have two roles.
@@ -36,8 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 	  http.authorizeRequests()
-	  	.antMatchers("/**").permitAll()
-	  	.antMatchers("/dashboard").access("hasRole('ROLE_ADMIN')")
+	  	.antMatchers("/login").permitAll()
+//	  	.antMatchers("/**").hasAnyRole("ROLE_ADMIN")
+	  	.antMatchers("/","/dashboard").access("hasRole('ROLE_ADMIN')")
 		.antMatchers("/listUser").access("hasRole('ROLE_ADMIN')")
 		.and().formLogin().loginPage("/login")
 		.usernameParameter("username").passwordParameter("password")

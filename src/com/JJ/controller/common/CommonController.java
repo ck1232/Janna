@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class CommonController {
 	private static final Logger logger = Logger.getLogger(CommonController.class);
 	
-	@RequestMapping("/dashboard")  
+	@RequestMapping(value={"/","/dashboard"})  
     public String loadDashboard() {  
     	logger.debug("dashboard is executed!");
         return "dashboard";  
     }
 	
-	@RequestMapping(value={"/","/login"},method = RequestMethod.GET)  
+	@RequestMapping(value={"/login"},method = RequestMethod.GET)  
     public String login() {  
         return "login";  
     }

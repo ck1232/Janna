@@ -34,7 +34,7 @@
   <div class="login-box-body">
     <p class="login-box-msg">Sign in</p>
 
-    <form action="<c:url value="j_spring_security_check" />" method="post">
+    <form action="<c:url value="/login" />" method="post">
       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       <div class="form-group has-feedback">
         <input type="text" name="username" class="form-control" placeholder="Username">
