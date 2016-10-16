@@ -33,22 +33,12 @@ import com.JJ.validator.UserFormValidator;
 public class RoleAssignmentController {
 	private static final Logger logger = Logger.getLogger(RoleAssignmentController.class);
 	
-	@Autowired
-	UserManagementService userManagementService;
+	private UserManagementService userManagementService;
+	private RoleAssignmentService roleAssignmentService;
 	
 	@Autowired
-	RoleManagementService roleManagementService;
-	
-	@Autowired
-	RoleAssignmentService roleAssignmentService;
-	
-	@Autowired
-	UserFormValidator userFormValidator;
-	
-	@Autowired
-	public RoleAssignmentController(UserManagementService userManagementService, RoleManagementService roleManagementService, RoleAssignmentService roleAssignmentService) {
+	public RoleAssignmentController(UserManagementService userManagementService, RoleAssignmentService roleAssignmentService) {
 		this.userManagementService = userManagementService;
-		this.roleManagementService = roleManagementService;
 		this.roleAssignmentService = roleAssignmentService;
 	}
 	
@@ -67,7 +57,7 @@ public class RoleAssignmentController {
 	}
 	
 	@RequestMapping(value = "/saveRoleToUser", method = RequestMethod.POST)
-	public String saveRoleToUser(@ModelAttribute("user") @Validated User user, 
+	public String saveRoleToUser(@ModelAttribute("user") User user, 
 			@RequestParam("checkboxId") List<String> ids,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		

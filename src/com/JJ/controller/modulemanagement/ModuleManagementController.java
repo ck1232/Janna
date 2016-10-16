@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,15 +31,14 @@ import com.JJ.validator.ModuleFormValidator;
 public class ModuleManagementController {
 	private static final Logger logger = Logger.getLogger(ModuleManagementController.class);
 	
-	@Autowired
 	private ModuleManagementService moduleManagementService;
-	
+	private ModuleFormValidator moduleFormValidator;
+
 	@Autowired
-	ModuleFormValidator moduleFormValidator;
-	
-	@Autowired
-	public ModuleManagementController(ModuleManagementService moduleManagementService){
+	public ModuleManagementController(ModuleManagementService moduleManagementService,
+			ModuleFormValidator moduleFormValidator){
 		this.moduleManagementService = moduleManagementService;
+		this.moduleFormValidator = moduleFormValidator;
 	}
 	
 	@RequestMapping("/listModule")  
@@ -66,7 +66,7 @@ public class ModuleManagementController {
         return "createModule";  
     }  
 	
-	@InitBinder
+	@InitBinder("module")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(moduleFormValidator);
 	}
@@ -132,8 +132,18 @@ public class ModuleManagementController {
 			model.addAttribute("msg", "Module not found");
 		}
 		model.addAttribute("module", module);
-
 		return "updateModule";
-
+	}
+	
+	@RequestMapping(value = "/updateModule/{id}", method = RequestMethod.GET)
+	public String getModuleToUpdateForRedirect(@PathVariable String id, Model model) {
+		logger.debug("id = " + id);
+		Module module = moduleManagementService.findById(new Integer(id));
+		if (module == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Module not found");
+		}
+		model.addAttribute("module", module);
+		return "updateModule";
 	}
 }

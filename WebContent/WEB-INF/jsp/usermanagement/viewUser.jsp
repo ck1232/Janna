@@ -14,7 +14,9 @@
                     </div>
                     <!--FORM-->
                     <form:form id="backToListButton" method="get" action="/JJ/listUser"></form:form>
-                    <form:form id="updateUserForm" method="post" action="/JJ/updateUser"></form:form>
+                    <form:form id="updateUserForm" method="post" action="/JJ/updateUser">
+                    	<input type="hidden" name="editBtn" value="${user.id}"/>
+                    </form:form>
 		              <div class="box-body">
 							<div class="col-sm-2">User id</div>
 							<div class="col-sm-10">${user.userid}</div>

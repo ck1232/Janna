@@ -17,6 +17,7 @@
                     	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
                     </form:form>
                     <form:form id="updateSubmoduleForm" method="post" action="/JJ/updateSubmodule">
+                    	<input type="hidden" name="editBtn" value="${submodule.id}"/>
                     </form:form>
 		              <div class="box-body">
 							<div class="col-sm-2">Submodule name</div>
