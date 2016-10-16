@@ -6,7 +6,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.JJ.model.Module;
-import com.JJ.model.Role;
 
 @Component
 public class ModuleFormValidator implements Validator {

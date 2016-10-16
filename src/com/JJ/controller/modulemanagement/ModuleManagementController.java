@@ -21,9 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
-import com.JJ.model.Submodule;
 import com.JJ.service.modulemanagement.ModuleManagementService;
-import com.JJ.service.submodulemanagement.SubModuleManagementService;
 import com.JJ.validator.ModuleFormValidator;
 
 @Controller  
@@ -36,15 +34,11 @@ public class ModuleManagementController {
 	private ModuleManagementService moduleManagementService;
 	
 	@Autowired
-	private SubModuleManagementService submoduleManagementService;
-	
-	@Autowired
 	ModuleFormValidator moduleFormValidator;
 	
 	@Autowired
-	public ModuleManagementController(ModuleManagementService moduleManagementService, SubModuleManagementService submoduleManagementService){
+	public ModuleManagementController(ModuleManagementService moduleManagementService){
 		this.moduleManagementService = moduleManagementService;
-		this.submoduleManagementService = submoduleManagementService;
 	}
 	
 	@RequestMapping("/listModule")  
@@ -109,20 +103,6 @@ public class ModuleManagementController {
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Module(s) deleted successfully!");
 		return "redirect:listModule";
-	}
-	
-	/*@RequestMapping(value = "/updateModule", method = RequestMethod.POST)
-	public String getModuleToUpdate(@RequestParam("editBtn") String id, Model model) {
-		Module module = moduleManagementService.findById(new Integer(id));
-		model.addAttribute("module", module);
-		return "updateModule";
-	}*/
-	
-	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getSubmoduleToUpdate(@RequestParam("moduleid") String id, Model model) {
-		logger.debug("getting submodules list");
-		List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
-		return GeneralUtils.convertListToJSONString(submoduleList);
 	}
 	
 	@RequestMapping(value = "/updateModuleToDb", method = RequestMethod.POST)
