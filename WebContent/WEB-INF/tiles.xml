@@ -203,12 +203,17 @@
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
 		        				<put-attribute name="table-title" value="All Module" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/modulemanagement/options.jsp" />
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/modulemanagement/column-header.jsp" />
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/modulemanagement/datatable-script.jsp" >
 		        						<put-attribute name="data-list" value="/JJ/getModuleList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/modulemanagement/column-mapping.jsp" />
+		        						<put-attribute name="subdatatable" value="/WEB-INF/jsp/modulemanagement/subdatatable/subdatatable.jsp" />
+		        						<put-attribute name="subdata-list" value="/JJ/viewSubmodule" />
+		        						<put-attribute name="subdatatable-data" value="/WEB-INF/jsp/modulemanagement/subdatatable/submodule-datatable-data.jsp"/>	
+		        						<put-attribute name="subcolumn-mapping" value="/WEB-INF/jsp/modulemanagement/subdatatable/column-mapping.jsp"></put-attribute>
 		        					</definition>
 		        				</put-attribute>
 		        				<put-attribute name="column-header" value="/WEB-INF/jsp/modulemanagement/column-header.jsp"></put-attribute>

@@ -42,7 +42,10 @@
 		  <link rel="stylesheet" href="development/plugins/daterangepicker/daterangepicker.css">
 		  <!-- bootstrap wysihtml5 - text editor -->
 		  <link rel="stylesheet" href="development/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+		  <!-- datatable -->
+		  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 		  
+		  <link rel="stylesheet" href="development/css/custom.css">
 		  <!-- REQUIRED JS SCRIPTS -->
 
 		<!-- REQUIRED JS SCRIPTS -->
