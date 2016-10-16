@@ -2,8 +2,8 @@
 '<div class="col-xs-12">'+
 '<div class="box">'+
 '<div class="box-header">'+
-'<form id="createSubModuleForm" method="get" action="/JJ/createSubModule"></form>'+
-'<form id="updateSubModuleForm" method="post" action="/JJ/updateSubModule"></form>'+
+'<form id="createSubModuleForm" method="post" action="/JJ/createSubmodule"><input type="hidden" value="'+data.id+'" name="moduleid"></form>'+
+'<form id="updateSubModuleForm" method="post" action="/JJ/updateSubmodule"></form>'+
 
 '<div class="margin">'+
 	'<div class="btn-grp">'+
