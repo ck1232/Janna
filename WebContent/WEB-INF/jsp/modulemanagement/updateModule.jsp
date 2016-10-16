@@ -27,9 +27,7 @@
 		            	<!--/.FORM-->
 		            		<div class="col-sm-2"></div>
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-primary" form ="updateModuleToDbForm">Save
-			                  </button>
-			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
+			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Done
 			            	</button>
 							</div>
 		              </div>
@@ -37,5 +35,6 @@
 		            </form:form>
 		            <!--/.FORM-->
                 </div>
+             </div>
     	</div>
     </section>
