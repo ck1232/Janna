@@ -11,7 +11,7 @@
           <img src="/JJ/development/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p>${user.username}</p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -47,6 +47,21 @@
             <li><a href="<c:url value="/contact"/>">contact 2</a></li>
           </ul>
         </li>
+        <c:forEach items="${menu.moduleList}" var="module">
+        	<c:if test="${module.subModuleList != null && module.subModuleList.size() > 0}">
+        		<li class="treeview">
+          			<a href="#"><i class="fa ${module.icon}"></i> <span>${module.name}</span>
+            		<span class="pull-right-container">
+              			<i class="fa fa-angle-left pull-right"></i>
+            		</span>
+          			</a>
+          		<ul class="treeview-menu">
+          			<c:forEach items="${module.subModuleList}" var="submodule">
+          				 <li><a href="<c:url value="${submodule.url}"/>">${submodule.name}</a></li>
+          			</c:forEach>
+          		</ul>
+        	</c:if>
+        </c:forEach>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

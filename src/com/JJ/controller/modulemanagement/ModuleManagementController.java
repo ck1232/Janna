@@ -2,9 +2,12 @@ package com.JJ.controller.modulemanagement;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,20 +33,21 @@ import com.JJ.validator.ModuleFormValidator;
 public class ModuleManagementController {
 	private static final Logger logger = Logger.getLogger(ModuleManagementController.class);
 	
-	@Autowired
 	private ModuleManagementService moduleManagementService;
 	
 	@Autowired
-	ModuleFormValidator moduleFormValidator;
+	private ModuleFormValidator moduleFormValidator;
 	
 	@Autowired
-	public ModuleManagementController(ModuleManagementService moduleManagementService){
+	public ModuleManagementController(ModuleManagementService moduleManagementService, ModuleFormValidator moduleFormValidator){
 		this.moduleManagementService = moduleManagementService;
+		this.moduleFormValidator = moduleFormValidator;
 	}
 	
 	@RequestMapping("/listModule")  
-    public String listModule() {  
+    public String listModule(HttpSession session) {  
     	logger.debug("loading listModule");
+    	logger.debug(((UserDetails)session.getAttribute("user")).getUsername());
         return "listModule";  
     } 
 	
