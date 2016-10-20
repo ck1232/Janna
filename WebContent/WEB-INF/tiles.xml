@@ -211,7 +211,7 @@
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/modulemanagement/column-mapping.jsp" />
 		        						<put-attribute name="subdatatable" value="/WEB-INF/jsp/modulemanagement/subdatatable/datatable.jsp" />
-		        						<put-attribute name="subdata-list" value="/JJ/getSubmoduleList" />
+		        						<put-attribute name="subdata-list" value="/JJ/getSubmoduleListByModule" />
 		        						<put-attribute name="subdatatable-data" value="/WEB-INF/jsp/modulemanagement/subdatatable/datatable-data.jsp"/>	
 		        						<put-attribute name="subcolumn-mapping" value="/WEB-INF/jsp/modulemanagement/subdatatable/column-mapping.jsp"></put-attribute>
 		        					</definition>
@@ -253,7 +253,7 @@
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/submodulemanagement/datatable-options.jsp" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/submodulemanagement/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getSubmoduleList" />
+		        						<put-attribute name="data-list" value="/JJ/getSubmoduleListByModule" />
 		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/submodulemanagement/datatable-data.jsp" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/submodulemanagement/column-mapping.jsp" />
 		        					</definition>
@@ -308,6 +308,71 @@
   	
   	
   	<!-- Submodule Management Module END -->
+  	
+  	<!-- Permission Management Module START -->
+  	
+  	<definition name="listPermissionModule" extends="main_template">  
+        <put-attribute name="title" value="Submodule Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Submodule Listing" />
+        		<put-attribute name="heading-description" value="To grant permission to module" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/permissionmanagement/module/listPermissionModule.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Submodules" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/permissionmanagement/module/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/permissionmanagement/module/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/getSubmoduleListOrderByModule" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/permissionmanagement/module/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/permissionmanagement/module/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updateSubmodulePermission" extends="main_template">  
+        <put-attribute name="title" value="Edit Submodule Permission" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Edit Submodule Permission" />
+        		<put-attribute name="heading-description" value="To edit permission for submodule." />
+        		<put-attribute name="content" >
+        			<definition template="/WEB-INF/jsp/permissionmanagement/role/updateSubmodulePermission.jsp" >
+	        			<put-attribute name="datatable">
+		        			<definition template="/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Roles" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/permissionmanagement/role/options.jsp" />
+		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/permissionmanagement/role/datatable-options.jsp" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/permissionmanagement/role/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/getRoleToPermission" />
+		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/permissionmanagement/role/datatable-data.jsp" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/permissionmanagement/role/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/permissionmanagement/role/column-header.jsp"></put-attribute>
+				        	</definition>
+		        		</put-attribute>
+		        	</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+  	
+  	<!-- Permission Management Module END -->
   
   
 </tiles-definitions>  

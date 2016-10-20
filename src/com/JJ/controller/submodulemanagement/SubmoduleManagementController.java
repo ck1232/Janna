@@ -23,6 +23,7 @@ import com.JJ.controller.modulemanagement.ModuleManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
 import com.JJ.model.Submodule;
+import com.JJ.model.User;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
 import com.JJ.validator.SubmoduleFormValidator;
@@ -47,10 +48,21 @@ public class SubmoduleManagementController {
 		this.submoduleFormValidator = submoduleFormValidator;
 	}
 	
-	@RequestMapping(value = "/getSubmoduleList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getSubmoduleList(@RequestParam("moduleid") String id, Model model) {
-		logger.debug("getting submodules list");
+	@RequestMapping(value = "/getSubmoduleListByModule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String getSubmoduleListByModule(@RequestParam("moduleid") String id, Model model) {
+		logger.debug("getting submodules list by module");
 		List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
+		return GeneralUtils.convertListToJSONString(submoduleList);
+	}
+	
+	@RequestMapping(value = "/getSubmoduleListOrderByModule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String getSubmoduleListOrderByParentId() {
+		logger.debug("getting all submodules list order by module");
+		List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parentId, name");
+		for(Submodule submodule: submoduleList){
+			Module module = moduleManagementService.findById(submodule.getParentid());
+			submodule.setParentModuleName(module.getName());
+		}
 		return GeneralUtils.convertListToJSONString(submoduleList);
 	}
 	
