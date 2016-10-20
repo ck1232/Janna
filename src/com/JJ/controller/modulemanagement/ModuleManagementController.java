@@ -47,7 +47,6 @@ public class ModuleManagementController {
 	@RequestMapping("/listModule")  
     public String listModule(HttpSession session) {  
     	logger.debug("loading listModule");
-    	logger.debug(((UserDetails)session.getAttribute("user")).getUsername());
         return "listModule";  
     } 
 	

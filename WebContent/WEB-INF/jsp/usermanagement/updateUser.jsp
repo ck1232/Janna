@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- Content Wrapper. Contains page content -->
 
                 <div class="box">
@@ -24,14 +24,6 @@
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Password</label>
-							<div class="col-sm-10">
-								<form:password path="password" class="form-control"
-				                                id="password" placeholder="Enter password" />
-								<form:errors path="password" class="control-label" />
-							</div>
-						  </div>
-						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Name</label>
 							<div class="col-sm-10">
 								<form:input path="name" type="text" class="form-control"
@@ -45,7 +37,15 @@
 								<form:input path="emailaddress" class="form-control"
 				                                id="emailaddress" placeholder="Enter email address" />
 								<form:errors path="emailaddress" class="control-label" />
-							</div>						  
+							</div>	
+							</div>	
+							
+							<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Password</label>
+							<div class="col-sm-10">
+								<button type="button" class="btn btn-primary" onclick="$('#passwordModal').modal('show');">Reset Password</button>
+							</div>	
+							</div>				  
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Enabled</label>
 							<div class="col-sm-10">
@@ -57,7 +57,7 @@
 								</div>
 							</div>
 						  </div>
-						  </div>
+
 						<br/>
 						
 						  </form:form>
@@ -76,4 +76,35 @@
 		              <!-- /.box-body -->
 		            
                 </div>
-    		
+<div id="passwordModal" class="modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Reset Password</h4>
+			</div>
+			<div class="modal-body">
+			<form action="/JJ/resetpassword" id="resetPasswordForm" name="resetPasswordForm" method="post">
+				<input type="hidden" value="${userForm.userid}" name="userid" />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				<div class="row form-group ${status.error ? 'has-error' : ''}">
+				<label class="col-sm-2 control-label">Password</label>
+							<div class="col-sm-10">
+								<input name="password" class="form-control" type="password"
+				                    id="password" placeholder="Reset Password" />
+							</div>
+				</div>
+			</form>
+				<p></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default pull-left"
+					data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#resetPasswordForm').submit();">Reset</button>
+			</div>
+		</div>
+	</div>
+</div>

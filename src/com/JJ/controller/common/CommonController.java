@@ -51,7 +51,7 @@ public class CommonController {
     	session.setAttribute("menu", this.populateMenu(principal));
         return "dashboard";  
     }
-	private Menu populateMenu(UserDetails user){
+	public Menu populateMenu(UserDetails user){
 		Menu menu = new Menu();
 		List<Module> moduleList = moduleManagementService.getAllModules();
 		List<Submodule> submoduleList = subModuleManagementService.getAllSubmodules();
@@ -93,6 +93,8 @@ public class CommonController {
        if (auth != null){    
           new SecurityContextLogoutHandler().logout(request, response, auth);
        }
+       request.getSession().setAttribute("user", null);
+       request.getSession().setAttribute("menu", null);
        return "redirect:/login?logout";
     }
 	

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.roleassignment.RoleAssignmentController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.User;
 import com.JJ.service.rolemanagement.RoleManagementService;
@@ -124,6 +124,22 @@ public class UserManagementController {
 		model.addAttribute("userForm", user);
 		
 		return "updateUser";
+	}
+	
+	@RequestMapping(value = "/updateUserById/{userid}", method = RequestMethod.GET)
+	public String getUserToUpdateByUserId(@PathVariable String userid, RedirectAttributes redirectAttributes) {
+		User user = userManagementService.findByUserId(userid);
+		logger.debug("Loading update user page for " + user.toString());
+		redirectAttributes.addFlashAttribute("userForm", user);
+		return "updateUser";
+	}
+	
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
+	public String resetPassword(@RequestParam(value="userid", required=false) String userid, @RequestParam(value="password", required=false) String password, RedirectAttributes redirectAttributes) {
+		userManagementService.resetPassword(userid, password);
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Password reset!");
+		return "redirect:updateUserById/"+userid;
 	}
 	
 	@RequestMapping(value = "/updateUserToDb", method = RequestMethod.POST)

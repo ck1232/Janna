@@ -33,33 +33,31 @@
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="/JJ/listUser.html"><i class="fa fa-users"></i> <span>User Management</span></a></li>
-        <li><a href="/JJ/listRole.html"><i class="fa fa-plus-square"></i> <span>Role Management</span></a></li>
-        <li><a href="/JJ/listModule"><i class="fa fa-plus-square"></i> <span>Module Management</span></a></li>
-        <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<c:url value="/hello"/>">hello</a></li>
-            <li><a href="<c:url value="/contact"/>">contact 2</a></li>
-          </ul>
-        </li>
+        
         <c:forEach items="${menu.moduleList}" var="module">
-        	<c:if test="${module.subModuleList != null && module.subModuleList.size() > 0}">
-        		<li class="treeview">
-          			<a href="#"><i class="fa ${module.icon}"></i> <span>${module.name}</span>
-            		<span class="pull-right-container">
-              			<i class="fa fa-angle-left pull-right"></i>
-            		</span>
-          			</a>
-          		<ul class="treeview-menu">
-          			<c:forEach items="${module.subModuleList}" var="submodule">
-          				 <li><a href="<c:url value="${submodule.url}"/>">${submodule.name}</a></li>
-          			</c:forEach>
-          		</ul>
+        	<c:if test="${module.subModuleList != null}">
+        		<c:choose>
+        			<c:when test="${module.subModuleList.size() == 0}">
+        			</c:when>
+        			<c:when test="${module.subModuleList.size() == 1}">
+					    <li class="active"><a href="<c:url value="${module.subModuleList.get(0).url}"/>"><i class="fa ${module.subModuleList.get(0).icon}"></i> <span>${module.subModuleList.get(0).name}</span></a></li>
+					</c:when>
+					<c:otherwise>
+						<li class="treeview">
+	          				<a href="#"><i class="fa ${module.icon}"></i> <span>${module.name}</span>
+		            			<span class="pull-right-container">
+		              				<i class="fa fa-angle-left pull-right"></i>
+		            			</span>
+	          				</a>
+	          				<ul class="treeview-menu">
+			          			<c:forEach items="${module.subModuleList}" var="submodule">
+			          				 <li><a href="<c:url value="${submodule.url}"/>">${submodule.name}</a></li>
+			          			</c:forEach>
+	          				</ul>
+          				</li>
+					</c:otherwise>
+        		</c:choose>
+        		
         	</c:if>
         </c:forEach>
       </ul>
