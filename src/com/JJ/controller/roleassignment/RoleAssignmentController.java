@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,33 +21,21 @@ import com.JJ.model.RolesToAssign;
 import com.JJ.model.User;
 import com.JJ.model.UserRole;
 import com.JJ.service.roleassignment.RoleAssignmentService;
-import com.JJ.service.rolemanagement.RoleManagementService;
 import com.JJ.service.usermanagement.UserManagementService;
-import com.JJ.validator.UserFormValidator;
 
 
 @Controller  
 @EnableWebMvc
-@RequestMapping(value = "/")
+@RequestMapping(value = "/admin")
 public class RoleAssignmentController {
 	private static final Logger logger = Logger.getLogger(RoleAssignmentController.class);
 	
-	@Autowired
-	UserManagementService userManagementService;
+	private UserManagementService userManagementService;
+	private RoleAssignmentService roleAssignmentService;
 	
 	@Autowired
-	RoleManagementService roleManagementService;
-	
-	@Autowired
-	RoleAssignmentService roleAssignmentService;
-	
-	@Autowired
-	UserFormValidator userFormValidator;
-	
-	@Autowired
-	public RoleAssignmentController(UserManagementService userManagementService, RoleManagementService roleManagementService, RoleAssignmentService roleAssignmentService) {
+	public RoleAssignmentController(UserManagementService userManagementService, RoleAssignmentService roleAssignmentService) {
 		this.userManagementService = userManagementService;
-		this.roleManagementService = roleManagementService;
 		this.roleAssignmentService = roleAssignmentService;
 	}
 	
@@ -67,7 +54,7 @@ public class RoleAssignmentController {
 	}
 	
 	@RequestMapping(value = "/saveRoleToUser", method = RequestMethod.POST)
-	public String saveRoleToUser(@ModelAttribute("user") @Validated User user, 
+	public String saveRoleToUser(@ModelAttribute("user") User user, 
 			@RequestParam("checkboxId") List<String> ids,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		

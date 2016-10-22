@@ -1,7 +1,6 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 $(function () {
-	var rows_selected = [];
     $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,

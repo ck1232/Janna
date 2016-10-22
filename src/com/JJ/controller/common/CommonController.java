@@ -47,7 +47,7 @@ public class CommonController {
     public String loadDashboard(HttpSession session) {  
     	logger.debug("dashboard is executed!");
     	UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	session.setAttribute("user", principal);
+    	session.setAttribute("userAccount", principal);
     	session.setAttribute("menu", this.populateMenu(principal));
         return "dashboard";  
     }

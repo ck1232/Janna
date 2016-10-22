@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Content Wrapper. Contains page content -->
     <section class="content">
     	<div class="row">
@@ -13,8 +13,10 @@
                     	<h3 class="box-title">Basic Information</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="get" action="/JJ/listUser"></form:form>
-                    <form:form id="createUserForm" method="post" modelAttribute="userForm" action="/JJ/createUser">
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listUser" />"></form>
+                    <c:url var="post_url" value="/admin/createUser" />
+                    <form:form id="createUserForm" method="post" modelAttribute="userForm" action="${post_url }">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">User id</label>

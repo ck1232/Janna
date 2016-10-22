@@ -29,23 +29,20 @@ import com.JJ.validator.UserFormValidator;
 
 @Controller  
 @EnableWebMvc
-@RequestMapping(value = "/")
+@RequestMapping(value = "/admin")
 public class UserManagementController {
 	private static final Logger logger = Logger.getLogger(UserManagementController.class);
 	
-	@Autowired
-	UserManagementService userManagementService;
+	private UserManagementService userManagementService;
+	private RoleManagementService roleManagementService;
+	private UserFormValidator userFormValidator;
 	
 	@Autowired
-	RoleManagementService roleManagementService;
-	
-	@Autowired
-	UserFormValidator userFormValidator;
-	
-	@Autowired
-	public UserManagementController(UserManagementService userManagementService, RoleManagementService roleManagementService) {
+	public UserManagementController(UserManagementService userManagementService, RoleManagementService roleManagementService,
+			UserFormValidator userFormValidator) {
 		this.userManagementService = userManagementService;
 		this.roleManagementService = roleManagementService;
+		this.userFormValidator = userFormValidator;
 	}
 	
 	
@@ -76,16 +73,16 @@ public class UserManagementController {
         return "createUser";  
     }  
 	
-	@InitBinder
+	@InitBinder("user")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(userFormValidator);
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("userForm") @Validated User User, 
+    public String saveUser(@ModelAttribute("userForm") @Validated User user, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveUser() : " + User.toString());
+		logger.debug("saveUser() : " + user.toString());
 		if (result.hasErrors()) {
 			return "createUser";
 		} else {
@@ -93,7 +90,7 @@ public class UserManagementController {
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User added successfully!");
 		}
-		userManagementService.saveUser(User);
+		userManagementService.saveUser(user);
 		
         return "redirect:listUser";  
     }  

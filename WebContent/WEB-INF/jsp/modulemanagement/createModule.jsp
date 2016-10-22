@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -13,8 +14,10 @@
                     	<h3 class="box-title">Module Information</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="get" action="/JJ/listModule"></form:form>
-                    <form:form id="createModuleForm" method="post" modelAttribute="module" action="/JJ/createModule">
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listModule" />"></form>
+                    <c:url var = "post_url" value="/admin/createModule" />
+                    <form:form id="createModuleForm" method="post" modelAttribute="module" action="${post_url}">
+		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Module Name</label>

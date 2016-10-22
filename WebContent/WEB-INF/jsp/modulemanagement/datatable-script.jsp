@@ -1,6 +1,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 var selectedModuleId = 0;
+var selectedModuleName = "";
 $(function () {
     var table = $('#datatable1').DataTable({
       "paging": true,
@@ -47,7 +48,7 @@ $(function () {
         else {
             // Open this row
             row.child( format(row.data())).show();
-            subdatatable();
+            subdatatable(selectedModuleName);
             tr.addClass('shown');
         }
     } );
@@ -57,17 +58,18 @@ $(function () {
 function format ( data ) {
     // `d` is the original data object for the row
     selectedModuleId = data.id;
+    selectedModuleName = data.name.replace(" ","");
     return <tiles:insertAttribute name="subdatatable" />;
 }
 
-function subdatatable(){
-	var subdatatable = $('#subdatatable').DataTable({
-	      "paging": true,
+function subdatatable(datatableid){
+	$('#subdatatable'+datatableid).DataTable({
+	      "paging": false,
 	      "responsive" : true,
 	      "lengthChange": false,
 	      "searching": false,
 	      "ordering": true,
-	      "info": true,
+	      "info": false,
 	      "autoWidth": false,
 	      "ajax":{
 	          "url":'<tiles:getAsString name="subdata-list" />',

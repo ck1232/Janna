@@ -3,10 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<form id="updateSubmoduleForm" method="post" action="/JJ/updateSubmodule"></form>
+<form id="updateSubmoduleForm" method="post" action="<c:url value="/admin/updateSubmodule" />">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteSubmodule"><i class="fa fa-user-times"></i> Delete</button>
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/createSubmodule"><i class="fa fa-user-plus"></i> Add</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/admin/deleteSubmodule" />"><i class="fa fa-user-times"></i> Delete</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/admin/createSubmodule" />"><i class="fa fa-user-plus"></i> Add</button>
 	</div>
 </div>

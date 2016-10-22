@@ -1,5 +1,29 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Left side column. contains the logo and sidebar -->
+<script>
+function setNavigation() {
+    var path = window.location.pathname;
+    path = path.replace(/\/$/, "");
+    path = decodeURIComponent(path);
+
+    $(".sidebar-menu > li > a").each(function () {
+        var href = $(this).attr('href');
+        href = "/JJ/"+href;
+        if (path.substring(0, href.length) === href) {
+            $(this).closest('li').addClass('active');
+        }
+    });
+
+    $(".sidebar-menu > .treeview > .treeview-menu > li > a").each(function () {
+        var href = $(this).attr('href');
+        href = "/JJ/"+href;
+        if (path.substring(0, href.length) === href) {
+            $(this).closest('.treeview').addClass('active');
+        }
+    });
+}
+
+</script>
   <aside class="main-sidebar">
 
     <!-- sidebar: style can be found in sidebar.less -->
@@ -8,10 +32,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="/JJ/development/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src='<c:url value="/development/dist/img/user2-160x160.jpg" />' class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>${user.username}</p>
+          <p>${userAccount.username}</p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -40,7 +64,7 @@
         			<c:when test="${module.subModuleList.size() == 0}">
         			</c:when>
         			<c:when test="${module.subModuleList.size() == 1}">
-					    <li class="active"><a href="<c:url value="${module.subModuleList.get(0).url}"/>"><i class="fa ${module.subModuleList.get(0).icon}"></i> <span>${module.subModuleList.get(0).name}</span></a></li>
+					    <li><a href='<c:url value="${module.subModuleList.get(0).url}"/>'><i class="fa ${module.subModuleList.get(0).icon}"></i> <span>${module.subModuleList.get(0).name}</span></a></li>
 					</c:when>
 					<c:otherwise>
 						<li class="treeview">
@@ -51,7 +75,7 @@
 	          				</a>
 	          				<ul class="treeview-menu">
 			          			<c:forEach items="${module.subModuleList}" var="submodule">
-			          				 <li><a href="<c:url value="${submodule.url}"/>">${submodule.name}</a></li>
+			          				 <li><a href='<c:url value="${submodule.url}"/>'>${submodule.name}</a></li>
 			          			</c:forEach>
 	          				</ul>
           				</li>

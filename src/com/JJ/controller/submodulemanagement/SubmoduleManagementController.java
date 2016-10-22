@@ -29,17 +29,14 @@ import com.JJ.validator.SubmoduleFormValidator;
 
 @Controller  
 @EnableWebMvc
-@RequestMapping(value = "/")
+@RequestMapping(value = "/admin")
 public class SubmoduleManagementController {
 	private static final Logger logger = Logger.getLogger(SubmoduleManagementController.class);
 	
 	private ModuleManagementService moduleManagementService;
-
 	private SubModuleManagementService submoduleManagementService;
 	private ModuleManagementController moduleManagementController;
 	private SubmoduleFormValidator submoduleFormValidator;
-/*	@Autowired
-	ModuleFormValidator moduleFormValidator;*/
 	
 	@Autowired
 	public SubmoduleManagementController(ModuleManagementService moduleManagementService, SubModuleManagementService submoduleManagementService, ModuleManagementController moduleManagementController,
@@ -70,14 +67,14 @@ public class SubmoduleManagementController {
         return "createSubmodule";  
     }  
 	
-	@InitBinder
+	@InitBinder("submodule")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(submoduleFormValidator);
 	}
 
 	@RequestMapping(value = "/createSubmoduleToDb", method = RequestMethod.POST)
     public String saveSubmodule(@ModelAttribute("submodule") @Validated Submodule submodule, 
-    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
+    		BindingResult result, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveSubmodule() : " + submodule.toString());
 		if (result.hasErrors()) {
@@ -88,25 +85,26 @@ public class SubmoduleManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Submodule added successfully!");
 		}
 		submoduleManagementService.saveSubmodule(submodule);
-		
-        return "redirect:listModule";  
+		return "redirect:updateModule/"+submodule.getParentid();
     }  
 	
 	@RequestMapping(value = "/deleteSubmodule", method = RequestMethod.POST)
 	public String deleteSubmodule(@RequestParam(value = "checkboxId", required=false) List<String> ids,
-			final RedirectAttributes redirectAttributes) {
+			@RequestParam("moduleid") String moduleid, 
+			Model model, final RedirectAttributes redirectAttributes) {
 		if(ids == null || ids.size() < 1){
 			redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
-			return "redirect:listModule";
+			return "redirect:updateModule/"+moduleid;
 		}
+		
 		for (String id : ids) {
 			submoduleManagementService.deleteSubmodule(new Integer(id));
 			logger.debug("deleted "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Submodule(s) deleted successfully!");
-		return "redirect:listModule";
+		return "redirect:updateModule/"+moduleid;
 	}
 	
 	@RequestMapping(value = "/updateSubmodule", method = RequestMethod.POST)
@@ -134,7 +132,7 @@ public class SubmoduleManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Submodule updated successfully!");
 		}
 		submoduleManagementService.updateSubmodule(submodule);
-		return moduleManagementController.getModuleToUpdate(submodule.getParentid().toString(), model);
+		return "redirect:updateModule/"+submodule.getParentid();
 	}
 	
 	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.POST)

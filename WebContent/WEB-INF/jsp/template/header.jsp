@@ -1,4 +1,5 @@
   <!-- Main Header -->
+  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
   <header class="main-header">
 
     <!-- Logo -->
@@ -34,7 +35,7 @@
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img src="/JJ/development/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="<c:url value='/development/dist/img/user2-160x160.jpg' />" class="img-circle" alt="User Image">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -118,14 +119,14 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="/JJ/development/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<c:url value='/development/dist/img/user2-160x160.jpg' />" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">${user.username}</span>
+              <span class="hidden-xs">${userAccount.username}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="/JJ/development/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<c:url value='/development/dist/img/user2-160x160.jpg' />" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- Content Wrapper. Contains page content -->
     <section class="content">
     	<div class="row">
@@ -13,10 +13,13 @@
                     	<h3 class="box-title">Submodule Information</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="post" action="/JJ/updateModule">
+                    <form id="backToListButton" method="post" action="<c:url value="/admin/updateModule" />">
+                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
-                    </form:form>
-                    <form:form id="createSubmoduleForm" method="post" modelAttribute="submodule" action="/JJ/createSubmoduleToDb">
+                    </form>
+                    <c:url var = "post_url" value="/admin/createSubmoduleToDb" />
+                    <form:form id="createSubmoduleForm" method="post" modelAttribute="submodule" action="${post_url}">
+                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Submodule Name</label>

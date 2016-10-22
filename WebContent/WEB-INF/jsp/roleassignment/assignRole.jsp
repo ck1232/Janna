@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Content Wrapper. Contains page content -->
 	<section class="content">
     	<div class="row">
@@ -14,8 +14,10 @@
                     	<h3 class="box-title">Selected User</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="get" action="/JJ/listUser"></form:form>
-                    <form:form id="saveRoleToUserForm" method="post" modelAttribute="user" action="/JJ/saveRoleToUser">
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listUser" />"></form>
+                    <c:url var="post_url" value="/admin/saveRoleToUser" />
+                    <form:form id="saveRoleToUserForm" method="post" modelAttribute="user" action="${post_url }">
+                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
 		              		<form:input path="id" type="hidden" id="id"/>
 							<div class="col-sm-2">User id</div>

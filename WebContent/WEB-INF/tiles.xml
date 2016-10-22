@@ -47,7 +47,7 @@
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/usermanagement/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getUserList" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getUserList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/usermanagement/column-mapping.jsp" />
 		        					</definition>
@@ -116,7 +116,7 @@
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getRoleList" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getRoleList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/rolemanagement/column-mapping.jsp" />
 		        					</definition>
@@ -174,7 +174,7 @@
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/roleassignment/datatable-option.jsp" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/roleassignment/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getRolesToAssignList" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getRolesToAssignList" />
 		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/roleassignment/datatable-data.jsp" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/roleassignment/column-mapping.jsp" />
 		        					</definition>
@@ -207,11 +207,11 @@
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/modulemanagement/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getModuleList" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getModuleList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/modulemanagement/column-mapping.jsp" />
 		        						<put-attribute name="subdatatable" value="/WEB-INF/jsp/modulemanagement/subdatatable/datatable.jsp" />
-		        						<put-attribute name="subdata-list" value="/JJ/getSubmoduleList" />
+		        						<put-attribute name="subdata-list" value="/JJ/admin/getSubmoduleList" />
 		        						<put-attribute name="subdatatable-data" value="/WEB-INF/jsp/modulemanagement/subdatatable/datatable-data.jsp"/>	
 		        						<put-attribute name="subcolumn-mapping" value="/WEB-INF/jsp/modulemanagement/subdatatable/column-mapping.jsp"></put-attribute>
 		        					</definition>
@@ -253,7 +253,7 @@
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/submodulemanagement/datatable-options.jsp" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/submodulemanagement/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getSubmoduleList" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getSubmoduleList" />
 		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/submodulemanagement/datatable-data.jsp" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/submodulemanagement/column-mapping.jsp" />
 		        					</definition>

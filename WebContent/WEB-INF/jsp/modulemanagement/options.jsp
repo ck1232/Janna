@@ -2,11 +2,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<form:form id="createModuleForm" method="get" action="/JJ/createModule"></form:form>
+<form id="createModuleForm" method="get" action="<c:url value="/admin/createModule" />"></form>
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deleteModule"><i class="fa fa-user-times"></i> Delete Module</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction='<c:url value="/admin/deleteModule" />'><i class="fa fa-user-times"></i> Delete Module</button>
 		<button class="btn btn-primary pull-right" type="submit" form="createModuleForm"><i class="fa fa-user-plus"></i> Add Module</button>
 	</div>
 </div>

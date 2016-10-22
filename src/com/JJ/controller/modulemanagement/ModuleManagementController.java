@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,17 +29,16 @@ import com.JJ.validator.ModuleFormValidator;
 
 @Controller  
 @EnableWebMvc
-@RequestMapping(value = "/")
+@RequestMapping(value = "/admin")
 public class ModuleManagementController {
 	private static final Logger logger = Logger.getLogger(ModuleManagementController.class);
 	
 	private ModuleManagementService moduleManagementService;
-	
-	@Autowired
 	private ModuleFormValidator moduleFormValidator;
-	
+
 	@Autowired
-	public ModuleManagementController(ModuleManagementService moduleManagementService, ModuleFormValidator moduleFormValidator){
+	public ModuleManagementController(ModuleManagementService moduleManagementService,
+			ModuleFormValidator moduleFormValidator){
 		this.moduleManagementService = moduleManagementService;
 		this.moduleFormValidator = moduleFormValidator;
 	}
@@ -69,7 +68,7 @@ public class ModuleManagementController {
         return "createModule";  
     }  
 	
-	@InitBinder
+	@InitBinder("module")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(moduleFormValidator);
 	}
@@ -135,8 +134,18 @@ public class ModuleManagementController {
 			model.addAttribute("msg", "Module not found");
 		}
 		model.addAttribute("module", module);
-
 		return "updateModule";
-
+	}
+	
+	@RequestMapping(value = "/updateModule/{id}", method = RequestMethod.GET)
+	public String getModuleToUpdateForRedirect(@PathVariable String id, Model model) {
+		logger.debug("id = " + id);
+		Module module = moduleManagementService.findById(new Integer(id));
+		if (module == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Module not found");
+		}
+		model.addAttribute("module", module);
+		return "updateModule";
 	}
 }

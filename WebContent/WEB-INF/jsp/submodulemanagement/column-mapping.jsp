@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 {
     "className":      '',
     "orderable":      false,
@@ -15,5 +16,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="/JJ/viewSubmodule"><i class="fa fa-eye"></i> View</button>   <button name="editBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="/JJ/updateSubmodule"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/admin/viewSubmodule" />"><i class="fa fa-eye"></i> View</button>   <button name="editBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/admin/updateSubmodule" />"><i class="fa fa-pencil"></i> Edit</button>'
 },

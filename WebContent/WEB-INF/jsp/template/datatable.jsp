@@ -19,6 +19,7 @@
             <!-- /.box-header -->
             <div class="box-body">
             <form:form id="datatableForm" method="post">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
               <table id="datatable1" class="table table-bordered table-hover">
                 <thead>
                 	<tiles:insertAttribute name="column-header" />

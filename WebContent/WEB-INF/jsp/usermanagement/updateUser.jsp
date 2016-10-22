@@ -12,8 +12,10 @@
                     <!--FORM-->
                     
 		              <div class="box-body">
-		              <form:form id="backToListButton" method="get" action="/JJ/listUser"></form:form>
-		              <form:form id="updateUserToDbForm" method="post" modelAttribute="userForm" action="/JJ/updateUserToDb">
+		              <form id="backToListButton" method="get" action="<c:url value="/admin/listUser" />"></form>
+		              <c:url var="post_url" value="/admin/updateUserToDb" />
+		              <form:form id="updateUserToDbForm" method="post" modelAttribute="userForm" action="${post_url }">
+		              		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              		<form:input path="id" type="hidden" id="id"/>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">User id</label>

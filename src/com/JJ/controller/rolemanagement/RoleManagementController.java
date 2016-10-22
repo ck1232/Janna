@@ -27,19 +27,17 @@ import com.JJ.validator.RoleFormValidator;
 
 @Controller  
 @EnableWebMvc
-@RequestMapping(value = "/")
+@RequestMapping(value = "/admin")
 public class RoleManagementController {
 	private static final Logger logger = Logger.getLogger(RoleManagementController.class);
 	
-	@Autowired
-	RoleManagementService roleManagementService;
+	private RoleManagementService roleManagementService;
+	private RoleFormValidator roleFormValidator;
 	
 	@Autowired
-	RoleFormValidator roleFormValidator;
-	
-	@Autowired
-	public RoleManagementController(RoleManagementService roleManagementService) {
+	public RoleManagementController(RoleManagementService roleManagementService, RoleFormValidator roleFormValidator) {
 		this.roleManagementService = roleManagementService;
+		this.roleFormValidator = roleFormValidator;
 	}
 	
 	
@@ -66,7 +64,7 @@ public class RoleManagementController {
         return "createRole";  
     }  
 	
-	@InitBinder
+	@InitBinder("role")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(roleFormValidator);
 	}

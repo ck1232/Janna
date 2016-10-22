@@ -8,7 +8,7 @@
 '</div>'+
 '</div>'+
 '<div class="box-body">'+
-'<table id="subdatatable" class="table table-bordered table-hover">'+
+'<table id="subdatatable'+selectedModuleName+'" class="table table-bordered table-hover">'+
 '<thead>'+
 '<tr>'+
   '<th>Name</th>'+
