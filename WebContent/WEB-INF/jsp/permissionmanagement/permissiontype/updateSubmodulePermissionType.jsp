@@ -11,7 +11,7 @@
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
-                    	<h3 class="box-title">Module Information</h3>
+                    	<h3 class="box-title">Submodule Information</h3>
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="/JJ/listPermissionModule"></form>
@@ -35,41 +35,33 @@
     	</div>
     </section>
     
-    
-<div id="editModal" class="modal">
+    <div id="editModal" class="modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title">Edit Permission</h3>
+				<h3 class="modal-title">Edit Permission Type Sequence</h3>
 			</div>
-			<form id="updatePermissionToDbForm" method="post" action="/JJ/saveSubmodulePermissionToDb">
-			<input type="hidden" id="submoduleid" name="submoduleid" value="${submodule.id}"/>
-			<input type="hidden" id="roleid" name="roleid"/>
+			<form id="updatePermissionTypeSeqToDbForm" method="post" action="/JJ/savePermissionTypeSeqToDb">
+			<input type="hidden" id="permissionTypeid" name="permissionTypeid"/>
 			<div class="modal-body">
 				<div class="row">
 					<div class="form-group">
-						<label class="col-sm-2 control-label">Role name</label>
-						<div class="col-sm-10" id="rolenameDiv"></div>
+						<label class="col-sm-3 control-label">Permission type</label>
+						<div class="col-sm-9" id="permissionTypeDiv"></div>
 					  </div>
 				</div>
 				<div class="row">
 					<div class="form-group">
-						<label class="col-sm-2 control-label">Permission</label>
-						<div class="col-sm-10">
-							<select class="selectpicker" multiple id='submodulePermission' name ='submodulePermission'>
-								<c:forEach items="${permissionList}" var="permission">
-							    	<option value = "${permission.id}">
-							    		${permission.permissiontype}
-							    	</option>
-							    </c:forEach>
-							</select>
+						<label class="col-sm-3 control-label">Sequence</label>
+						<div class="col-sm-9">
+							<input id="seqno" name="seqno" type="text" class="form-control"  />
 						</div>
 					  </div>
 				</div>
 			</div>
 			</form>
 			<div class="modal-footer">
-				<button id="savePermissionBtn" class="btn btn-primary" type="button" data-dismiss="modal" onclick="$('#updatePermissionToDbForm').submit();">Save changes</button>
+				<button id="saveTypeSeqBtn" class="btn btn-primary" type="button" data-dismiss="modal" onclick="$('#updatePermissionTypeSeqToDbForm').submit();">Save changes</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>

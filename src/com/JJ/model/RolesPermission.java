@@ -1,14 +1,14 @@
 package com.JJ.model;
 
-public class RolesToPermission {
-	
+import java.util.List;
+
+public class RolesPermission {
 	private String roleid;
 	private String rolename;
 	private String submoduleId;
 	private String submoduleName;
+	private List<String> permissionList;
 	private String permission;
-	private String permissionId;
-
 	public String getRoleid() {
 		return roleid;
 	}
@@ -33,17 +33,18 @@ public class RolesToPermission {
 	public void setSubmoduleName(String submoduleName) {
 		this.submoduleName = submoduleName;
 	}
+	public List<String> getPermissionList() {
+		return permissionList;
+	}
+	public void setPermissionList(List<String> permissionList) {
+		this.permissionList = permissionList;
+	}
+	
 	public String getPermission() {
 		return permission;
 	}
 	public void setPermission(String permission) {
 		this.permission = permission;
-	}
-	public String getPermissionId() {
-		return permissionId;
-	}
-	public void setPermissionId(String permissionId) {
-		this.permissionId = permissionId;
 	}
 	
 }

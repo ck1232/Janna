@@ -25,6 +25,7 @@ $(function () {
           var rowId = data[0];
           $(row).find('button[name="editBtn"]').prop('value', data.id);
           $(row).find('button[name="viewBtn"]').prop('value', data.id);
+          $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.id);
        }
     });
 });

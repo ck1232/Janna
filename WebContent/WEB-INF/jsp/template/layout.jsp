@@ -56,6 +56,10 @@
 		<script src="<c:url value="/development/bootstrap/js/bootstrap.min.js"/>"></script>
 		<!-- AdminLTE App -->
 		<script src="<c:url value="/development/dist/js/app.min.js"/>"></script>
+		<!-- Bootstrap select -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/i18n/defaults-*.min.js"></script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">

@@ -21,29 +21,26 @@ $(function () {
 	  "columns": [
 	              <tiles:insertAttribute name="column-mapping" />
 	            ],
-      "order": [0, 'asc'],
+      "order": [1, 'asc'],
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('button[name="editBtn"]').prop('value', data.roleid);
-          $(row).find('button[name="editPermissionBtn"]').click(function(){editPermission(data)});
+          $(row).find('button[name="editBtn"]').prop('value', data.id);
+          $(row).find('button[name="editTypeSeqBtn"]').click(function(){editPermissionTypeSeq(data)});
+          $(row).find('input[type="checkbox"]').prop('value', data.id);
        }
     });
 
-    $('#savePermissionBtn').on('click', function() {
-       	$('#savePermissionForm').submit();
+    $('#saveTypeSeqBtn').on('click', function() {
+       	$('#saveTypeSeqBtn').submit();
     });
 });
 
-function editPermission(data) {
-	$('#roleid').prop('value', data.roleid);
-	$('#rolenameDiv').html(data.rolename);
+function editPermissionTypeSeq(data) {
+	$('#permissionTypeid').prop('value', data.id);
+	$('#permissionTypeDiv').html(data.permissiontype);
+	$("#seqno").prop('value', data.seqno);
     $('#editModal').modal('show');
-    var permissionArr = "";
-    if(data.permissionId != null){
-    	permissionArr = data.permissionId.split(",");
-    }
-    $('#submodulePermission').selectpicker('val', permissionArr);
 
 }
 

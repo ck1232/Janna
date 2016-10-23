@@ -30,14 +30,11 @@ public class PermissionManagementService {
 	}
 	
 	//Submodulepermission functions START
-	public Submodulepermission findById(SubmodulepermissionKey key) {
-		return submodulepermissionMapper.selectByPrimaryKey(key);
-	}
 
-	public List<Submodulepermission> getAllSubmodulepermission() {
+	public List<SubmodulepermissionKey> getAllSubmodulepermission() {
 		SubmodulepermissionExample submodulepermissionExample = new SubmodulepermissionExample();
 		submodulepermissionExample.createCriteria();
-		List<Submodulepermission> submodulepermissionList = submodulepermissionMapper.selectByExample(submodulepermissionExample);
+		List<SubmodulepermissionKey> submodulepermissionList = submodulepermissionMapper.selectByExample(submodulepermissionExample);
 		return submodulepermissionList;
 	}
 	
@@ -51,12 +48,10 @@ public class PermissionManagementService {
 	}
 	
 	
-	public void deleteSubmodulepermission(SubmodulepermissionKey key) {
-		submodulepermissionMapper.deleteByPrimaryKey(key);
-	}
-	
-	public void updateSubmodulepermission(Submodulepermission submodulepermission) {
-		submodulepermissionMapper.updateByPrimaryKeySelective(submodulepermission);
+	public void deleteSubmodulepermission(String roleid, String submoduleid) {
+		SubmodulepermissionExample submodulepermissionExample = new SubmodulepermissionExample();
+		submodulepermissionExample.createCriteria().andSubmoduleidEqualTo(new Integer(submoduleid)).andRoleidEqualTo(new Integer(roleid));
+		submodulepermissionMapper.deleteByExample(submodulepermissionExample);
 	}
 	//Submodulepermission functions END
 	
@@ -70,6 +65,23 @@ public class PermissionManagementService {
 		List<Submodulepermissiontype> submodulepermissiontypeList = submodulepermissiontypeMapper.selectByExample(submodulepermissiontypeExample);
 		return submodulepermissiontypeList;
 	}
+	
+	public Submodulepermissiontype findById(Integer id) {
+		return submodulepermissiontypeMapper.selectByPrimaryKey(id);
+	}
+	
+	public void saveSubmodulepermissiontype(Submodulepermissiontype submodulepermissiontype) {
+		submodulepermissiontypeMapper.insert(submodulepermissiontype);
+	}
+	
+	public void deleteSubmodulepermissiontype(Integer id){
+		submodulepermissiontypeMapper.deleteByPrimaryKey(id);
+	}
+	
+	public void updateSubmodulepermissiontype(Submodulepermissiontype submodulepermissiontype) {
+		submodulepermissiontypeMapper.updateByPrimaryKeySelective(submodulepermissiontype);
+	}
+
 	//Submodulepermissiontype functions END
 	
 }
