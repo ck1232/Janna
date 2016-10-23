@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -67,8 +68,15 @@ public class SubmoduleManagementController {
 	}
 	
 	@RequestMapping(value = "/createSubmodule", method = RequestMethod.POST)
-    public String showAddSubmoduleForm(@RequestParam("moduleid") String id, Model model) {  
+    public String showAddSubmoduleForm(@RequestParam("moduleid") String id, Model model, final RedirectAttributes redirectAttributes) {  
     	logger.debug("loading showAddSubmoduleForm");
+    	
+    	List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
+    	if(submoduleList.size() >= 10){
+    		redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Only 10 submodules are allowed in each module!");
+			return "redirect:updateModule/"+id;
+    	}
     	Submodule submodule = new Submodule();
     	submodule.setDeleteind(GeneralUtils.NOT_DELETED);
     	submodule.setParentid(new Integer(id));
@@ -89,11 +97,30 @@ public class SubmoduleManagementController {
 		if (result.hasErrors()) {
 			return "createSubmodule";
 		} else {
-			// Add message to flash scope
+			boolean pass = true;
+			List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(submodule.getParentid());
+			for(Submodule sm: submoduleList){
+				if(submodule.getName().equals(sm.getName())) { //if exist name
+					result.rejectValue("name", "error.exist.submoduleform.name");;
+					pass = false;
+					break;
+				}
+			}
+			for(Submodule sm: submoduleList){
+				if(submodule.getUrl().equals(sm.getUrl())) { //if exist url
+					result.rejectValue("url", "error.exist.submoduleform.url");;
+					pass = false;
+					break;
+				}
+			}
+			if(!pass){
+				return "createSubmodule";
+			}
+			submoduleManagementService.saveSubmodule(submodule);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Submodule added successfully!");
+			
 		}
-		submoduleManagementService.saveSubmodule(submodule);
 		return "redirect:updateModule/"+submodule.getParentid();
     }  
 	
@@ -136,7 +163,27 @@ public class SubmoduleManagementController {
 		if (result.hasErrors()) {
 			return "updateSubmodule";
 		} else {
-			// Add message to flash scope
+			boolean pass = true;
+			List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesByModule(submodule.getParentid());
+			Submodule currentSm = submoduleManagementService.findById(submodule.getId());
+			for(Submodule sm: submoduleList){
+				if(!currentSm.getName().equals(sm.getName()) && submodule.getName().equals(sm.getName())) { //if exist name
+					result.rejectValue("name", "error.exist.submoduleform.name");;
+					pass = false;
+					break;
+				}
+			}
+			for(Submodule sm: submoduleList){
+				if(!currentSm.getUrl().equals(sm.getUrl()) && submodule.getUrl().equals(sm.getUrl())) { //if exist url
+					result.rejectValue("url", "error.exist.submoduleform.url");;
+					pass = false;
+					break;
+				}
+			}
+			if(!pass){
+				return "createSubmodule";
+			}
+			
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Submodule updated successfully!");
 		}

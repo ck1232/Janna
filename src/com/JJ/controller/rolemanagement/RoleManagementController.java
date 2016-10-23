@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Role;
+import com.JJ.model.Submodule;
 import com.JJ.service.rolemanagement.RoleManagementService;
 import com.JJ.validator.RoleFormValidator;
 
@@ -58,13 +59,11 @@ public class RoleManagementController {
     public String showAddRoleForm(Model model) {  
     	logger.debug("loading showAddRoleForm");
     	Role role = new Role();
-    	
-    	role.setName("Product Manager");
     	model.addAttribute("roleForm", role);
         return "createRole";  
     }  
 	
-	@InitBinder("role")
+	@InitBinder("roleForm")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(roleFormValidator);
 	}
@@ -77,7 +76,13 @@ public class RoleManagementController {
 		if (result.hasErrors()) {
 			return "createRole";
 		} else {
-			// Add message to flash scope
+			List<Role> roleList = roleManagementService.getAllRoles();
+			for(Role r: roleList){
+				if(role.getName().equals(r.getName())) { //if exist name
+					result.rejectValue("name", "error.exist.roleform.name");
+					return "createRole";
+				}
+			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Role added successfully!");
 		}
@@ -125,7 +130,14 @@ public class RoleManagementController {
 		if (result.hasErrors()) {
 			return "updateRole";
 		} else {
-			// Add message to flash scope
+			List<Role> roleList = roleManagementService.getAllRoles();
+			Role currentRole = roleManagementService.findById(role.getId());
+			for(Role r: roleList){
+				if(!currentRole.getName().equals(r.getName()) && role.getName().equals(r.getName())) { //if exist name
+					result.rejectValue("name", "error.exist.roleform.name");
+					return "updateRole";
+				}
+			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Role updated successfully!");
 		}

@@ -15,9 +15,9 @@
                     </div>
                     <!--FORM-->
                     
-                    <form id="backToListButton" method="get" action="<c:url value="/admin/updateSubmodulePermission/${submodule.id}" />/"></form>
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/updatePermissionType/${submodule.id}" />/"></form>
                     <c:url var="post_url" value="/admin/savePermissionTypeToDb" />
-                    <form:form id="createPermissionTypeForm" method="post" modelAttribute="submodulepermissiontype" action="${post_url }">
+                    <form:form id="createPermissionTypeForm" method="post" modelAttribute="submodulepermissiontypeForm" action="${post_url }">
 		              <div class="box-body">
 		              <form:input path="submoduleid" type="hidden" id="submoduleid"/>
 		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
