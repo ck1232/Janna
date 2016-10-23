@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.SubmodulepermissionMapper;
+//import com.JJ.dao.SubmodulepermissionMapper;
 import com.JJ.dao.SubmodulepermissiontypeMapper;
 import com.JJ.model.RolesToPermission;
 import com.JJ.model.Submodulepermission;
@@ -19,13 +19,13 @@ import com.JJ.model.SubmodulepermissiontypeExample;
 @Transactional
 public class PermissionManagementService {
 	
-	private SubmodulepermissionMapper submodulepermissionMapper;
+//	private SubmodulepermissionMapper submodulepermissionMapper;
 	private SubmodulepermissiontypeMapper submodulepermissiontypeMapper;
 	
 	@Autowired
-	public PermissionManagementService(SubmodulepermissionMapper submodulepermissionMapper,
+	public PermissionManagementService(//SubmodulepermissionMapper submodulepermissionMapper,
 			SubmodulepermissiontypeMapper submodulepermissiontypeMapper) {
-		this.submodulepermissionMapper = submodulepermissionMapper;
+//		this.submodulepermissionMapper = submodulepermissionMapper;
 		this.submodulepermissiontypeMapper = submodulepermissiontypeMapper;
 	}
 	
@@ -34,24 +34,26 @@ public class PermissionManagementService {
 	public List<SubmodulepermissionKey> getAllSubmodulepermission() {
 		SubmodulepermissionExample submodulepermissionExample = new SubmodulepermissionExample();
 		submodulepermissionExample.createCriteria();
-		List<SubmodulepermissionKey> submodulepermissionList = submodulepermissionMapper.selectByExample(submodulepermissionExample);
-		return submodulepermissionList;
+//		List<SubmodulepermissionKey> submodulepermissionList = submodulepermissionMapper.selectByExample(submodulepermissionExample);
+//		return submodulepermissionList;
+		return null;
 	}
 	
 	public List<RolesToPermission> getRolesToPermission(String submoduleid) {
-		return submodulepermissionMapper.getRolesToPermission(submoduleid);
+//		return submodulepermissionMapper.getRolesToPermission(submoduleid);
+		return null;
 	}
 	
 	
 	public void saveSubmodulepermission(Submodulepermission submodulepermission) {
-		submodulepermissionMapper.insert(submodulepermission);
+//		submodulepermissionMapper.insert(submodulepermission);
 	}
 	
 	
 	public void deleteSubmodulepermission(String roleid, String submoduleid) {
 		SubmodulepermissionExample submodulepermissionExample = new SubmodulepermissionExample();
 		submodulepermissionExample.createCriteria().andSubmoduleidEqualTo(new Integer(submoduleid)).andRoleidEqualTo(new Integer(roleid));
-		submodulepermissionMapper.deleteByExample(submodulepermissionExample);
+//		submodulepermissionMapper.deleteByExample(submodulepermissionExample);
 	}
 	//Submodulepermission functions END
 	
