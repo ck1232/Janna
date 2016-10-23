@@ -89,7 +89,7 @@
 				<h4 class="modal-title">Reset Password</h4>
 			</div>
 			<div class="modal-body">
-			<form action="/JJ/resetpassword" id="resetPasswordForm" name="resetPasswordForm" method="post">
+			<form action="<c:url value="/admin/resetpassword" />" id="resetPasswordForm" name="resetPasswordForm" method="post">
 				<input type="hidden" value="${userForm.userid}" name="userid" />
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<div class="row form-group ${status.error ? 'has-error' : ''}">
