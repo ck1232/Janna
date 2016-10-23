@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `janna` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `janna`;
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: janna
@@ -565,7 +563,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N');
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Management','fa-users','N'),(3,'Test Module','fa-users','N');
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1019,7 +1017,7 @@ CREATE TABLE `submodule` (
   `url` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1028,7 +1026,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','listUser','N'),(2,1,'Module Management','fa-users','listModule','N');
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','listUser','N'),(2,1,'Module Management','fa-users','listModule','N'),(4,3,'Permissions Management','fa-users','listModule','N'),(5,2,'Receipt Management','fa-users','listModule','N'),(12,2,'ck 43Management','fa-users','listModule','N'),(14,1,'ckManagement','fa-users','listModule','N'),(15,1,'janice Management','fa-users','listModule','N'),(16,1,'ck123 Management','fa-users','listModule','N'),(17,1,'123Management','fa-users','listModule','N'),(18,1,'1234 Management','fa-users','listModule','N'),(19,1,'gdfgd Management','fa-users','listModule','N'),(20,1,'12345Management','fa-users','listModule','N');
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1042,8 +1040,8 @@ DROP TABLE IF EXISTS `submodulepermission`;
 CREATE TABLE `submodulepermission` (
   `roleId` int(11) NOT NULL,
   `submoduleId` int(11) NOT NULL,
-  `permission` varchar(255) NOT NULL DEFAULT 'VIEW',
-  PRIMARY KEY (`roleId`,`submoduleId`)
+  `permission` varchar(255) NOT NULL,
+  PRIMARY KEY (`roleId`,`submoduleId`,`permission`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1053,7 +1051,36 @@ CREATE TABLE `submodulepermission` (
 
 LOCK TABLES `submodulepermission` WRITE;
 /*!40000 ALTER TABLE `submodulepermission` DISABLE KEYS */;
+INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(2,18,'1'),(2,18,'2'),(5,18,'10'),(5,18,'3');
 /*!40000 ALTER TABLE `submodulepermission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `submodulepermissiontype`
+--
+
+DROP TABLE IF EXISTS `submodulepermissiontype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submodulepermissiontype` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `submoduleid` varchar(45) DEFAULT NULL,
+  `permissiontype` varchar(45) DEFAULT NULL,
+  `seqNo` varchar(45) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url_UNIQUE` (`url`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submodulepermissiontype`
+--
+
+LOCK TABLES `submodulepermissiontype` WRITE;
+/*!40000 ALTER TABLE `submodulepermissiontype` DISABLE KEYS */;
+INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???');
+/*!40000 ALTER TABLE `submodulepermissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1066,7 +1093,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(60) NOT NULL,
   `status` varchar(50) DEFAULT NULL,
   `name` varchar(50) NOT NULL,
   `emailaddress` varchar(50) DEFAULT NULL,
@@ -1089,7 +1116,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ck1232','1232ck1232',NULL,'choon keat','ck1232@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(2,'euphona','12345',NULL,'Janice Lee','euphona@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(5,'jj','12345',NULL,'Janice Lee','jj@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `user` VALUES (1,'ck1232','$2a$10$fF7SimwO74sU2hSa8u0/u.s5tYGbPMorm6i17w2zdIcbb7mURlb6G',NULL,'choon keat','ck1232@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(2,'euphona','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','euphona@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(5,'jannie','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','jj@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1165,4 +1192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-15 19:20:49
+-- Dump completed on 2016-10-23 10:19:38

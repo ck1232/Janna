@@ -41,6 +41,14 @@ public class SubModuleManagementService {
 		return submoduleList;
 	}
 	
+	public List<Submodule> getAllSubmodulesOrderByClause(String orderByClause) {
+		SubmoduleExample submoduleExample = new SubmoduleExample();
+		submoduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		submoduleExample.setOrderByClause(orderByClause);
+		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
+		return submoduleList;
+	}
+	
 	public void saveSubmodule(Submodule submodule) {
 		submoduleMapper.insert(submodule);
 	}

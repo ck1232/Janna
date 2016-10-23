@@ -10,8 +10,8 @@
 <tiles:insertAttribute name="datatable-script"/>
 
 <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
+	<div class="col-xs-12">
+    	<div class="box">
             <div class="box-header">
               <h3 class="box-title"><tiles:insertAttribute name = "table-title" /></h3>
               <tiles:insertAttribute name = "options" />
@@ -35,9 +35,10 @@
               </form:form>
             </div>
             <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-          </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
+	    </div>
+	    <!-- /.box -->
+	</div>
+	<!-- /.col -->
+</div>
+<!-- /.row -->
+      
