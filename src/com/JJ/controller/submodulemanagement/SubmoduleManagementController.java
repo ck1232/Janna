@@ -70,9 +70,6 @@ public class SubmoduleManagementController {
     public String showAddSubmoduleForm(@RequestParam("moduleid") String id, Model model) {  
     	logger.debug("loading showAddSubmoduleForm");
     	Submodule submodule = new Submodule();
-    	submodule.setName("Receipt Management");
-    	submodule.setIcon("fa-users");
-    	submodule.setUrl("listModule");
     	submodule.setDeleteind(GeneralUtils.NOT_DELETED);
     	submodule.setParentid(new Integer(id));
     	model.addAttribute("submodule", submodule);

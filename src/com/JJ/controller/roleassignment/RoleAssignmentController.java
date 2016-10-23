@@ -55,26 +55,25 @@ public class RoleAssignmentController {
 	
 	@RequestMapping(value = "/saveRoleToUser", method = RequestMethod.POST)
 	public String saveRoleToUser(@ModelAttribute("user") User user, 
-			@RequestParam("checkboxId") List<String> ids,
-			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+			@RequestParam(value="checkboxId", required=false) List<String> ids,
+			Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("saveRoleToUser() : user = " + user.getId());
 		
 		roleAssignmentService.deleteRoleListByUserId(user.getId());
-		for(String roleId: ids){
-			logger.debug("saveRoleToUser() : role id = " + roleId);
-			UserRole userRole = new UserRole();
-			userRole.setUserid(user.getId());
-			userRole.setRoleid(new Integer(roleId));
-			roleAssignmentService.saveUserRole(userRole);
+		if(ids != null && ids.size() > 0){
+			for(String roleId: ids){
+				logger.debug("saveRoleToUser() : role id = " + roleId);
+				UserRole userRole = new UserRole();
+				userRole.setUserid(user.getId());
+				userRole.setRoleid(new Integer(roleId));
+				roleAssignmentService.saveUserRole(userRole);
+			}
 		}
-		if (result.hasErrors()) {
-			return "assignRole";
-		} else {
-			// Add message to flash scope
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Role saved to user successfully!");
-		}		
+	
+		// Add message to flash scope
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Role saved to user successfully!");
 		
 		return "redirect:listUser";
 	}

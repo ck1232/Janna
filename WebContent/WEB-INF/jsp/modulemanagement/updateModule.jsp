@@ -26,7 +26,9 @@
 						    <div class="col-sm-2">Icon</div>
 						    <div class="col-sm-10">${module.icon} <i class="fa ${module.icon}"></i></div>
 						<br/><br/>
+						
 						<tiles:insertAttribute name = "datatable" />
+						
 		            	<!--/.FORM-->
 		            		<div class="col-sm-2"></div>
 							<div class="col-sm-10">

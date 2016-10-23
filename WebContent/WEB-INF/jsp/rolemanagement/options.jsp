@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<formid="createRoleForm" method="get" action="<c:url value="/admin/createRole" />"></form>
+<form id="createRoleForm" method="get" action="<c:url value="/admin/createRole" />"></form>
 <form id="updateRoleForm" method="post" action="<c:url value="/admin/updateRole" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>

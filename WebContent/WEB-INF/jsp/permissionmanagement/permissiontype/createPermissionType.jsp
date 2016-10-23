@@ -1,6 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!-- Content Wrapper. Contains page content -->
     <section class="content">
@@ -13,10 +14,13 @@
                     	<h3 class="box-title">Permission Type Information</h3>
                     </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="get" action="/JJ/updateSubmodulePermission/${submodule.id}"></form>
-                    <form:form id="createPermissionTypeForm" method="post" modelAttribute="submodulepermissiontype" action="/JJ/savePermissionTypeToDb">
+                    
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/updateSubmodulePermission/${submodule.id}" />/"></form>
+                    <c:url var="post_url" value="/admin/savePermissionTypeToDb" />
+                    <form:form id="createPermissionTypeForm" method="post" modelAttribute="submodulepermissiontype" action="${post_url }">
 		              <div class="box-body">
 		              <form:input path="submoduleid" type="hidden" id="submoduleid"/>
+		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              	<div class="row">
 							<label class="col-sm-2">Submodule</label>
 							<div class="col-sm-10">${submodule.name}</div>

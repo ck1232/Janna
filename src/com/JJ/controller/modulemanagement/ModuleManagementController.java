@@ -60,8 +60,6 @@ public class ModuleManagementController {
     public String showAddModuleForm(Model model) {  
     	logger.debug("loading showAddModuleForm");
     	Module module = new Module();
-    	module.setName("Project Management");
-    	module.setIcon("fa-users");
     	module.setDeleteind(GeneralUtils.NOT_DELETED);
     	
     	model.addAttribute("module", module);

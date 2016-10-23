@@ -21,11 +21,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.RolesPermission;
 import com.JJ.model.RolesToPermission;
 import com.JJ.model.Submodule;
 import com.JJ.model.Submodulepermission;
-import com.JJ.model.SubmodulepermissionKey;
 import com.JJ.model.Submodulepermissiontype;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
 import com.JJ.service.rolemanagement.RoleManagementService;
@@ -33,7 +31,7 @@ import com.JJ.service.submodulemanagement.SubModuleManagementService;
 
 @Controller  
 @EnableWebMvc
-@RequestMapping(value = "/")
+@RequestMapping(value = "/admin")
 public class PermissionManagementController {
 	private static final Logger logger = Logger.getLogger(PermissionManagementController.class);
 	

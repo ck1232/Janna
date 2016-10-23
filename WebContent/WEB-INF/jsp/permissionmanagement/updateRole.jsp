@@ -1,6 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!-- Content Wrapper. Contains page content -->
 
@@ -10,9 +11,11 @@
                     	<h3 class="box-title">Role Information</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="get" action="/JJ/listRole"></form:form>
-                    <form:form id="updateRoleToDbForm" method="post" modelAttribute="roleForm" action="/JJ/updateRoleToDb">
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listRole"/>"></form>
+                    <c:url var="post_url" value="/admin/updateRoleToDb" />
+                    <form:form id="updateRoleToDbForm" method="post" modelAttribute="roleForm" action="${post_url }">
 		              <div class="box-body">
+		              		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              		<form:input path="id" type="hidden" id="id"/>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Role Name</label>

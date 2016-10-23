@@ -32,12 +32,13 @@
 							<div class="col-sm-2">Url</div>
 							<div class="col-sm-10">${submodule.url}</div>
 							
-						    <div class="col-sm-2">Parent Id</div>
-						    <div class="col-sm-10">${submodule.parentid}</div>
+						    <div class="col-sm-2" style="display: none">Parent Id</div>
+						    <div class="col-sm-10" style="display: none">${submodule.parentid}</div>
 						    
 						    <div class="col-sm-2">Parent Module Name</div>
 						    <div class="col-sm-10">${submodule.parentModuleName}</div>
 						<br/><br/>
+						
 		            	<!--/.FORM-->
 		            		<div class="col-sm-2"></div>
 							<div class="col-sm-10">

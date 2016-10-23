@@ -247,7 +247,7 @@
         		<put-attribute name="content" >
         			<definition template="/WEB-INF/jsp/modulemanagement/updateModule.jsp" >
 	        			<put-attribute name="datatable">
-		        			<definition template="/WEB-INF/jsp/template/datatable.jsp">
+		        			<definition template="/WEB-INF/jsp/template/datatable_submodule.jsp">
 		        				<put-attribute name="table-title" value="All Sub Module" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/submodulemanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/submodulemanagement/datatable-options.jsp" />
@@ -312,10 +312,10 @@
   	<!-- Permission Management Module START -->
   	
   	<definition name="listPermissionModule" extends="main_template">  
-        <put-attribute name="title" value="Submodule Listing" /> 
+        <put-attribute name="title" value="Grant Permission" /> 
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
-        		<put-attribute name="heading" value="Submodule Listing" />
+        		<put-attribute name="heading" value="Grant Permission" />
         		<put-attribute name="heading-description" value="To grant permission to module" />
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/permissionmanagement/module/listPermissionModule.jsp">
@@ -326,7 +326,7 @@
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/permissionmanagement/module/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getSubmoduleListOrderByModule" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getSubmoduleListOrderByModule" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/permissionmanagement/module/column-mapping.jsp" />
 		        					</definition>
@@ -356,7 +356,7 @@
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/permissionmanagement/role/datatable-options.jsp" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/permissionmanagement/role/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getRoleToPermission" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getRoleToPermission" />
 		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/permissionmanagement/role/datatable-data.jsp" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/permissionmanagement/role/column-mapping.jsp" />
 		        					</definition>
@@ -386,7 +386,7 @@
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/permissionmanagement/permissiontype/datatable-options.jsp" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/permissionmanagement/permissiontype/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/getPermissionTypeList" />
+		        						<put-attribute name="data-list" value="/JJ/admin/getPermissionTypeList" />
 		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/permissionmanagement/permissiontype/datatable-data.jsp" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/permissionmanagement/permissiontype/column-mapping.jsp" />
 		        					</definition>

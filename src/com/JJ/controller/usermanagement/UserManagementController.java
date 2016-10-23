@@ -64,10 +64,6 @@ public class UserManagementController {
     	logger.debug("loading showAddUserForm");
     	User user = new User();
     	
-    	user.setUserid("jj");
-    	user.setPassword("12345");
-    	user.setName("Janice Lee");
-    	user.setEmailaddress("jj@hotmail.com");
     	user.setEnabled(true);
     	model.addAttribute("userForm", user);
         return "createUser";  
@@ -119,15 +115,14 @@ public class UserManagementController {
 		logger.debug("Loading update user page for " + user.toString());
 		
 		model.addAttribute("userForm", user);
-		
 		return "updateUser";
 	}
 	
 	@RequestMapping(value = "/updateUserById/{userid}", method = RequestMethod.GET)
-	public String getUserToUpdateByUserId(@PathVariable String userid, RedirectAttributes redirectAttributes) {
+	public String getUserToUpdateByUserId(@PathVariable String userid, Model model) {
 		User user = userManagementService.findByUserId(userid);
 		logger.debug("Loading update user page for " + user.toString());
-		redirectAttributes.addFlashAttribute("userForm", user);
+		model.addAttribute("userForm", user);
 		return "updateUser";
 	}
 	

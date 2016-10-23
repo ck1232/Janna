@@ -14,7 +14,7 @@
                     	<h3 class="box-title">Submodule Information</h3>
                     </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="get" action="/JJ/listPermissionModule"></form>
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listPermissionModule" />"></form>
 		              <div class="box-body">
 		              		<input type="hidden" id="id" value="${submodule.id}"/>
 							<div class="col-sm-2">Name</div>
@@ -41,8 +41,9 @@
 			<div class="modal-header">
 				<h3 class="modal-title">Edit Permission Type Sequence</h3>
 			</div>
-			<form id="updatePermissionTypeSeqToDbForm" method="post" action="/JJ/savePermissionTypeSeqToDb">
+			<form id="updatePermissionTypeSeqToDbForm" method="post" action="<c:url value="/admin/savePermissionTypeSeqToDb" />">
 			<input type="hidden" id="permissionTypeid" name="permissionTypeid"/>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="modal-body">
 				<div class="row">
 					<div class="form-group">

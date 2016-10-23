@@ -13,7 +13,7 @@
                     	<h3 class="box-title">Role Information</h3>
                     </div>
                     <!--FORM-->
-                    <form:form id="backToListButton" method="get" action="<c:url value="/admin/listRole" />"></form:form>
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listRole" />"></form>
                     <c:url var="post_url" value="/admin/createRole" />
                     <form:form id="createRoleForm" method="post" modelAttribute="roleForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

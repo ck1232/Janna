@@ -4,7 +4,7 @@
 
 <div class="margin">
 	<div class="btn-grp">
-	<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/deletePermissionType"><i class="fa fa-user-times"></i> Delete</button>
-	<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="/JJ/createPermissionType"><i class="fa fa-user-plus"></i> Add</button>
+	<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value= "/admin/deletePermissionType" />"><i class="fa fa-user-times"></i> Delete</button>
+	<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value= "/admin/createPermissionType" />"><i class="fa fa-user-plus"></i> Add</button>
 	</div>
 </div>

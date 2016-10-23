@@ -49,7 +49,7 @@
 				                                id="emailaddress" placeholder="Enter email address" />
 								<form:errors path="emailaddress" class="control-label" />
 							</div>	
-						</div>					  
+						  </div>					  
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Enabled</label>
 							<div class="col-sm-10">
@@ -61,21 +61,21 @@
 								</div>
 							</div>
 						  </div>
-						  </div>
 						<br/>
-						</form:form>
+						
 		            	<!--/.FORM-->
 						<div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-primary" form ="createUserForm">Add
-			                  </button>
-			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
-			            </button>
+								<button type="submit" class="btn btn-primary" form ="createUserForm">Add</button>
+			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
 							</div>
-						  </div>
+						 </div>
+						
 		              </div>
+		              </form:form>
 		              <!-- /.box-body -->
                 </div>
+    		</div>
     		</div>
     </section>
