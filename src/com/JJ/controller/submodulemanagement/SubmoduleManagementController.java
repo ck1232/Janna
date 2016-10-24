@@ -1,6 +1,9 @@
 package com.JJ.controller.submodulemanagement;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.modulemanagement.ModuleManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
 import com.JJ.model.Submodule;
-import com.JJ.model.User;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
 import com.JJ.validator.SubmoduleFormValidator;
@@ -36,15 +37,13 @@ public class SubmoduleManagementController {
 	
 	private ModuleManagementService moduleManagementService;
 	private SubModuleManagementService submoduleManagementService;
-	private ModuleManagementController moduleManagementController;
 	private SubmoduleFormValidator submoduleFormValidator;
 	
 	@Autowired
-	public SubmoduleManagementController(ModuleManagementService moduleManagementService, SubModuleManagementService submoduleManagementService, ModuleManagementController moduleManagementController,
+	public SubmoduleManagementController(ModuleManagementService moduleManagementService, SubModuleManagementService submoduleManagementService,
 			SubmoduleFormValidator submoduleFormValidator){
 		this.moduleManagementService = moduleManagementService;
 		this.submoduleManagementService = submoduleManagementService;
-		this.moduleManagementController = moduleManagementController;
 		this.submoduleFormValidator = submoduleFormValidator;
 	}
 	
@@ -59,10 +58,28 @@ public class SubmoduleManagementController {
 	public @ResponseBody String getSubmoduleListOrderByParentId() {
 		logger.debug("getting all submodules list order by module");
 		List<Submodule> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parentId, name");
-		for(Submodule submodule: submoduleList){
-			Module module = moduleManagementService.findById(submodule.getParentid());
-			submodule.setParentModuleName(module.getName());
+		Iterator<Submodule> i = submoduleList.iterator();
+		List<Module> allModuleList = moduleManagementService.getAllModules();
+		Map<Integer, Module> moduleMap = new HashMap<Integer, Module>();
+		for(Module module : allModuleList){
+			moduleMap.put(module.getId(), module);
 		}
+//		moduleMap = GeneralUtils.convertListToIntegerMap(allModuleList, "id");
+		
+		while (i.hasNext()){
+			Submodule submodule = i.next();
+			Module module = moduleMap.get(submodule.getParentid());
+			if(module == null){
+				i.remove();
+			}
+			else{
+				submodule.setParentModuleName(module.getName());
+			}
+		}
+//		for(Submodule submodule: submoduleList){
+//			Module module = moduleManagementService.findById(submodule.getParentid());
+//			submodule.setParentModuleName(module.getName());
+//		}
 		return GeneralUtils.convertListToJSONString(submoduleList);
 	}
 	

@@ -1,5 +1,6 @@
 package com.JJ.service.permissionmanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,15 @@ public class PermissionManagementService {
 	
 	public void saveSubmodulepermission(Submodulepermission submodulepermission) {
 		submodulepermissionMapper.insert(submodulepermission);
+	}
+	
+	public List<SubmodulepermissionKey> getSubmoduleByRole(List<Integer> roleIdList){
+		if(roleIdList == null || roleIdList.size() == 0){
+			return new ArrayList<SubmodulepermissionKey>();
+		}
+		SubmodulepermissionExample example = new SubmodulepermissionExample();
+		example.createCriteria().andRoleidIn(roleIdList);
+		return submodulepermissionMapper.selectByExample(example);
 	}
 	
 	

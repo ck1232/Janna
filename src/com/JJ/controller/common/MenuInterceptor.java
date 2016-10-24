@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -18,7 +19,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 	@Override
     public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		Menu menu  = (Menu) request.getSession().getAttribute("menu");
-		UserDetails user = (UserDetails) request.getSession().getAttribute("user");
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		if(user != null){
 			DateTime now = new DateTime();
@@ -31,6 +32,9 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 				request.getSession().setAttribute("menu", menu);
 			}
 			
+		}else{
+//			response.sendRedirect("/JJ/login");
+//			return false;
 		}
 		return super.preHandle(request, response, handler);
 	}

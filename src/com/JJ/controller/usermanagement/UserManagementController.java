@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.User;
-import com.JJ.service.rolemanagement.RoleManagementService;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
 
@@ -34,14 +33,12 @@ public class UserManagementController {
 	private static final Logger logger = Logger.getLogger(UserManagementController.class);
 	
 	private UserManagementService userManagementService;
-	private RoleManagementService roleManagementService;
 	private UserFormValidator userFormValidator;
 	
 	@Autowired
-	public UserManagementController(UserManagementService userManagementService, RoleManagementService roleManagementService,
+	public UserManagementController(UserManagementService userManagementService,
 			UserFormValidator userFormValidator) {
 		this.userManagementService = userManagementService;
-		this.roleManagementService = roleManagementService;
 		this.userFormValidator = userFormValidator;
 	}
 	

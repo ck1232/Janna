@@ -1,5 +1,6 @@
 package com.JJ.service.submodulemanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,15 @@ public class SubModuleManagementService {
 	public List<Submodule> getAllSubmodules() {
 		SubmoduleExample submoduleExample = new SubmoduleExample();
 		submoduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
+		return submoduleList;
+	}
+	public List<Submodule> getSubmodulesById(List<Integer> subModuleList) {
+		if(subModuleList == null || subModuleList.size() == 0){
+			return new ArrayList<Submodule>();
+		}
+		SubmoduleExample submoduleExample = new SubmoduleExample();
+		submoduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andIdIn(subModuleList);
 		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
 		return submoduleList;
 	}

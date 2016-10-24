@@ -5,20 +5,19 @@ function setNavigation() {
     var path = window.location.pathname;
     path = path.replace(/\/$/, "");
     path = decodeURIComponent(path);
-
-    $(".sidebar-menu > li > a").each(function () {
-        var href = $(this).attr('href');
-        href = "/JJ/"+href;
-        if (path.substring(0, href.length) === href) {
-            $(this).closest('li').addClass('active');
+	path = path.split("/")[2];
+	path = path.toLocaleLowerCase();
+    $(".sidebar-menu > li > a > span").each(function () {
+        var href = $(this).text().toLowerCase();
+        if(href.indexOf(path) !== -1){
+        	$(this).closest('li').addClass('active');
         }
     });
 
-    $(".sidebar-menu > .treeview > .treeview-menu > li > a").each(function () {
-        var href = $(this).attr('href');
-        href = "/JJ/"+href;
-        if (path.substring(0, href.length) === href) {
-            $(this).closest('.treeview').addClass('active');
+    $(".sidebar-menu > .treeview > a > span").each(function () {
+    	var href = $(this).text().toLowerCase();
+        if(href.indexOf(path) !== -1){
+        	$(this).closest('.treeview').addClass('active');
         }
     });
 }

@@ -25,7 +25,7 @@ public class ModuleManagementService {
 	public Module findById(Integer id) {
 		return moduleMapper.selectByPrimaryKey(id);
 	}
-
+	
 	public List<Module> getAllModules() {
 		ModuleExample moduleExample = new ModuleExample();
 		moduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);

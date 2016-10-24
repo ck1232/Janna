@@ -26,7 +26,6 @@ import com.JJ.model.Submodule;
 import com.JJ.model.Submodulepermission;
 import com.JJ.model.Submodulepermissiontype;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
-import com.JJ.service.rolemanagement.RoleManagementService;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
 
 @Controller  
@@ -37,14 +36,11 @@ public class PermissionManagementController {
 	
 	private PermissionManagementService permissionManagementService;
 	private SubModuleManagementService subModuleManagementService;
-	private RoleManagementService roleManagementService;
 	
 	@Autowired
-	public PermissionManagementController(PermissionManagementService permissionManagementService, SubModuleManagementService subModuleManagementService,
-			RoleManagementService roleManagementService){
+	public PermissionManagementController(PermissionManagementService permissionManagementService, SubModuleManagementService subModuleManagementService){
 		this.permissionManagementService = permissionManagementService;
 		this.subModuleManagementService = subModuleManagementService;
-		this.roleManagementService = roleManagementService;
 	}
 	
 	@RequestMapping("/listPermissionModule")  
