@@ -66,7 +66,7 @@ public class UserManagementController {
         return "createUser";  
     }  
 	
-	@InitBinder("user")
+	@InitBinder("userForm")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(userFormValidator);
 	}

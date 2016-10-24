@@ -25,12 +25,6 @@
 								<div class="col-sm-10">${user.userid}</div>
 							</div>
 		              	</div>
-					  	<div class="row">
-					  		<div class="form-group">
-						  		<div class="col-sm-2">Password</div>
-								<div class="col-sm-10">${user.password}</div>
-							</div>
-						</div>
 						<div class="row">
 					  		<div class="form-group">
 								<div class="col-sm-2">Name</div>

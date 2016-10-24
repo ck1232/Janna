@@ -5,12 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +33,7 @@ import com.JJ.model.Submodulepermission;
 import com.JJ.model.Submodulepermissiontype;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
+import com.JJ.validator.PermissionTypeFormValidator;
 
 @Controller  
 @EnableWebMvc
@@ -36,11 +43,14 @@ public class PermissionManagementController {
 	
 	private PermissionManagementService permissionManagementService;
 	private SubModuleManagementService subModuleManagementService;
+	private PermissionTypeFormValidator permissionTypeFormValidator;
 	
 	@Autowired
-	public PermissionManagementController(PermissionManagementService permissionManagementService, SubModuleManagementService subModuleManagementService){
+	public PermissionManagementController(PermissionManagementService permissionManagementService, SubModuleManagementService subModuleManagementService,
+			RoleManagementService roleManagementService, PermissionTypeFormValidator permissionTypeFormValidator){
 		this.permissionManagementService = permissionManagementService;
 		this.subModuleManagementService = subModuleManagementService;
+		this.permissionTypeFormValidator = permissionTypeFormValidator;
 	}
 	
 	@RequestMapping("/listPermissionModule")  
@@ -146,29 +156,59 @@ public class PermissionManagementController {
     	Submodulepermissiontype submodulepermissiontype = new Submodulepermissiontype();
     	submodulepermissiontype.setSubmoduleid(submoduleid);
     	Submodule submodule = subModuleManagementService.findById(new Integer(submoduleid));
-    	model.addAttribute("submodulepermissiontype", submodulepermissiontype);
+    	model.addAttribute("submodulepermissiontypeForm", submodulepermissiontype);
     	model.addAttribute("submodule", submodule);
         return "createPermissionType";  
     }
 	
+	@InitBinder("submodulepermissiontypeForm")
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(permissionTypeFormValidator);
+	}
 	
 	
 	@RequestMapping(value = "/savePermissionTypeToDb", method = RequestMethod.POST)
-    public String savePermissionTypeToDb(@ModelAttribute("submodulepermissiontype") Submodulepermissiontype type, 
+    public String savePermissionTypeToDb(@ModelAttribute("submodulepermissiontypeForm") @Validated Submodulepermissiontype permissionType, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("savePermissionTypeToDb() : " + type.getPermissiontype());
+		logger.debug("savePermissionTypeToDb() : " + permissionType.getPermissiontype());
+		
 		if (result.hasErrors()) {
+			Submodule submodule = subModuleManagementService.findById(new Integer(permissionType.getSubmoduleid()));
+			model.addAttribute("submodule", submodule);
 			return "createPermissionType";
 		} else {
-			// Add message to flash scope
+			boolean pass = true;
+			List<Submodulepermissiontype> permissiontypeList = permissionManagementService.getSubmodulepermissiontype(permissionType.getSubmoduleid());
+			for(Submodulepermissiontype smpt: permissiontypeList){
+				if(permissionType.getPermissiontype().equals(smpt.getPermissiontype())) { //if exist name
+					result.rejectValue("permissiontype", "error.exist.permissiontypeform.permissiontype");;
+					pass = false;
+					break;
+				}
+			}
+			for(Submodulepermissiontype smpt: permissiontypeList){
+				if(permissionType.getUrl().equals(smpt.getUrl())) { //if exist url
+					result.rejectValue("url", "error.exist.permissiontypeform.url");;
+					pass = false;
+					break;
+				}
+			}
+			if(!NumberUtils.isNumber(permissionType.getSeqno())){
+				result.rejectValue("seqno", "error.numeric.permissiontypeform.seqno");;
+				pass = false;
+			}
+			if(!pass){
+				Submodule submodule = subModuleManagementService.findById(new Integer(permissionType.getSubmoduleid()));
+				model.addAttribute("submodule", submodule);
+				return "createPermissionType";
+			}
+			permissionManagementService.saveSubmodulepermissiontype(permissionType);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Permission type added successfully!");
 		}
-		
-		permissionManagementService.saveSubmodulepermissiontype(type);
-		
-        return "redirect:updatePermissionType/" + type.getSubmoduleid();  
+
+        return "redirect:updatePermissionType/" + permissionType.getSubmoduleid();  
     }  
 	
 	@RequestMapping(value = "/deletePermissionType", method = RequestMethod.POST)

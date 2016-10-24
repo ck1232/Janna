@@ -30,7 +30,7 @@
 							<div class="col-sm-10">
 								<form:input path="name" type="text" class="form-control"
 				                                id="name" placeholder="Enter name" />
-								<form:errors path="name" class="control-label" />
+								<form:errors path="name" class="text-danger" />
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -38,7 +38,7 @@
 							<div class="col-sm-10">
 								<form:input path="emailaddress" class="form-control"
 				                                id="emailaddress" placeholder="Enter email address" />
-								<form:errors path="emailaddress" class="control-label" />
+								<form:errors path="emailaddress" class="text-danger" />
 							</div>	
 							</div>	
 							
@@ -55,7 +55,7 @@
 								  <label>
 				                       <form:checkbox path="enabled" id="enabled" />
 								  </label>
-								     <form:errors path="enabled" class="control-label" />
+								     <form:errors path="enabled" class="text-danger" />
 								</div>
 							</div>
 						  </div>
