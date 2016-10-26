@@ -23,7 +23,6 @@ public class UserFormValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.userform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailaddress", "error.notempty.userform.email");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userid", "error.notempty.userform.username");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "error.notempty.userform.password");
 		if(StringUtils.isNotEmpty(user.getEmailaddress())){
 			if(!isValidEmailAddress(user.getEmailaddress()))
 				errors.rejectValue("emailaddress", "error.notvalid.userform.email");

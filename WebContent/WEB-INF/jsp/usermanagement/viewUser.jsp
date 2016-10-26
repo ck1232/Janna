@@ -18,45 +18,48 @@
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     	<input type="hidden" name="editBtn" value="${user.id}"/>
                     </form>
+                    <!--/.FORM-->
 		             	<div class="box-body">
-		              	<div class="row">
-		              		<div class="form-group">
-			              		<div class="col-sm-2 control-label">User id</div>
-								<div class="col-sm-10">${user.userid}</div>
-							</div>
-		              	</div>
-						<div class="row">
-					  		<div class="form-group">
-								<div class="col-sm-2">Name</div>
-								<div class="col-sm-10">${user.name}</div>
-							</div>
-						</div>
-						<div class="row">
-					  		<div class="form-group">
-							    <div class="col-sm-2">Email Address</div>
-							    <div class="col-sm-10">${user.emailaddress}</div>
-							</div>
-						</div>			
-						<div class="row">
-					  		<div class="form-group">	  
-								<div class="col-sm-2">Enabled</div>
-								<div class="col-sm-10">${user.enabled}</div>
-							</div>
-						</div>	
-						<br/><br/>
-		            	<!--/.FORM-->
-		            	<div class="row">
-		            		<div class="form-group">
-			            		<div class="col-sm-2"></div>
-								<div class="col-sm-10">
-									<button type="submit" class="btn btn-primary" form ="updateUserForm">Edit</button>
-				                  	<button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+			              	<div class="row">
+			              		<div class="form-group">
+				              		<div class="col-sm-2 control-label">User id</div>
+									<div class="col-sm-10">${user.userid}</div>
+								</div>
+			              	</div>
+							<div class="row">
+						  		<div class="form-group">
+									<div class="col-sm-2">Name</div>
+									<div class="col-sm-10">${user.name}</div>
 								</div>
 							</div>
-						</div>	
+							<div class="row">
+						  		<div class="form-group">
+								    <div class="col-sm-2">Email Address</div>
+								    <div class="col-sm-10">${user.emailaddress}</div>
+								</div>
+							</div>			
+							<div class="row">
+						  		<div class="form-group">	  
+									<div class="col-sm-2">Enabled</div>
+									<div class="col-sm-10">${user.enabled}</div>
+								</div>
+							</div>	
+							<br/>
+							<br/>
+		            	
+			            	<div class="row">
+			            		<div class="form-group">
+				            		<div class="col-sm-2"></div>
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-primary" form ="updateUserForm">Edit</button>
+					                  	<button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+									</div>
+								</div>
+							</div>	
 						</div>
+						<!-- /.box-body -->
 		      		</div>
-		            <!-- /.box-body -->
+		      		<!-- /.BOX -->
               </div>
     	</div>
     </section>
