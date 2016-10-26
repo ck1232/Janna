@@ -19,7 +19,13 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 	@Override
     public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		Menu menu  = (Menu) request.getSession().getAttribute("menu");
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails user = null;
+		Object userObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(userObj instanceof UserDetails){
+			user = (UserDetails)userObj ;
+		}else{
+			return super.preHandle(request, response, handler);
+		}
 		
 		if(user != null){
 			DateTime now = new DateTime();

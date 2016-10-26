@@ -12,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -47,7 +45,7 @@ public class PermissionManagementController {
 	
 	@Autowired
 	public PermissionManagementController(PermissionManagementService permissionManagementService, SubModuleManagementService subModuleManagementService,
-			RoleManagementService roleManagementService, PermissionTypeFormValidator permissionTypeFormValidator){
+			PermissionTypeFormValidator permissionTypeFormValidator){
 		this.permissionManagementService = permissionManagementService;
 		this.subModuleManagementService = subModuleManagementService;
 		this.permissionTypeFormValidator = permissionTypeFormValidator;
