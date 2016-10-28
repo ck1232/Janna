@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.usersByUsernameQuery(
 			"select userid,password, enabled from user where userid=?")
 		.authoritiesByUsernameQuery(
-			"select u.userid, r.name from janna.user_role ur join janna.user u on u.id = ur.userid join janna.role r on ur.roleid= r.id where u.userid=?");
+			"select u.userid, r.name from jj.user_role ur join jj.user u on u.id = ur.userid join jj.role r on ur.roleid= r.id where u.userid=?");
 //        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
 //        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
 //        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");//dba have two roles.
@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public DriverManagerDataSource securityDataSource() {
 	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
 	    driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/janna");
+	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/jj");
 	    driverManagerDataSource.setUsername("root");
 	    driverManagerDataSource.setPassword("root");
 	    return driverManagerDataSource;
