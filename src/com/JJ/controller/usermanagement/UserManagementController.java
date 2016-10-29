@@ -79,11 +79,12 @@ public class UserManagementController {
 		if (result.hasErrors()) {
 			return "createUser";
 		} else {
-			// Add message to flash scope
+			
+			userManagementService.saveUser(user);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User added successfully!");
 		}
-		userManagementService.saveUser(user);
+		
 		
         return "redirect:listUser";  
     }  
@@ -140,11 +141,10 @@ public class UserManagementController {
 		if (result.hasErrors()) {
 			return "updateUser";
 		} else {
-			// Add message to flash scope
+			userManagementService.updateUser(user);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User updated successfully!");
 		}
-		userManagementService.updateUser(user);
 		
 		return "redirect:listUser";
 	}

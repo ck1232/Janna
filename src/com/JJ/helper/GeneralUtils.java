@@ -17,6 +17,11 @@ import com.google.gson.reflect.TypeToken;
 public class GeneralUtils {
 	public static final String DELETED = "Y";
 	public static final String NOT_DELETED = "N";
+	public static final String IS_PARENT = "Y";
+	public static final String IS_NOT_PARENT = "N";
+	public static final String ALLOW_DISPLAY = "Y";
+	public static final String NOT_ALLOW_DISPLAY = "N";
+	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);
 	public static <T> String convertListToJSONString(List<T> list){
 		return  convertListToJSONObject(list).toJSONString();
