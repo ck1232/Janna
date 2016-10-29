@@ -61,7 +61,6 @@ public class ProductCategoryManagementController {
 			}
 		}
 		
-		
 		return GeneralUtils.convertListToJSONString(productCategoryList);
 	}
 	
@@ -159,4 +158,5 @@ public class ProductCategoryManagementController {
 		model.addAttribute("module", module);
 		return "updateModule";
 	}*/
+	
 }

@@ -6,6 +6,12 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
+{
+    "className":      'details-control',
+    "orderable":      false,
+    "data":           null,
+    "defaultContent": ''
+},
 {"data": "name"},
 {"data": "isparentString"},
 {"data": "displayindString"},

@@ -434,6 +434,10 @@
 		        						<put-attribute name="data-list" value="/JJ/product/category/getProductCategoryList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productcategorymanagement/column-mapping.jsp" />
+		        						<put-attribute name="subdatatable" value="/WEB-INF/jsp/productcategorymanagement/subdatatable/datatable.jsp" />
+		        						<put-attribute name="subdata-list" value="/JJ/product/subcategory/getProductSubCategoryListByCategory" />
+		        						<put-attribute name="subdatatable-data" value="/WEB-INF/jsp/productcategorymanagement/subdatatable/datatable-data.jsp"/>	
+		        						<put-attribute name="subcolumn-mapping" value="/WEB-INF/jsp/productcategorymanagement/subdatatable/column-mapping.jsp"></put-attribute>
 		        					</definition>
 		        				</put-attribute>
 		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productcategorymanagement/column-header.jsp"></put-attribute>
