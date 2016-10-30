@@ -198,7 +198,7 @@ public class SubmoduleManagementController {
 				}
 			}
 			if(!pass){
-				return "createSubmodule";
+				return "updateSubmodule";
 			}
 			
 			redirectAttributes.addFlashAttribute("css", "success");

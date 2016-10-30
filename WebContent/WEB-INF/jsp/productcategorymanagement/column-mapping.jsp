@@ -19,5 +19,6 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="updateCategoryForm"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="updateCategoryForm"><i class="fa fa-pencil"></i> Edit</button>'+
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/product/subcategory/listSubCategory" />"><i class="fa fa-pencil"></i> Manage SubCategory</button>'
 },

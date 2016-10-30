@@ -475,5 +475,64 @@
     </definition>
     
  	<!-- Product Category Management Module END -->
+ 	
+ 	<!-- Product SubCategory Management Module START -->
+ 	
+ 	<definition name="listSubCategory" extends="main_template">  
+        <put-attribute name="title" value="Manage SubCategory" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Manage SubCategory" />
+        		<put-attribute name="heading-description" value="To manage subcategories." />
+        		<put-attribute name="content" >
+        			<definition template="/WEB-INF/jsp/productsubcategorymanagement/listSubCategory.jsp" >
+	        			<put-attribute name="datatable">
+		        			<definition template="/WEB-INF/jsp/template/datatable_subcategory.jsp">
+		        				<put-attribute name="table-title" value="All Sub Module" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/productsubcategorymanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/productsubcategorymanagement/datatable-options.jsp" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/productsubcategorymanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/product/subcategory/getProductSubCategoryListByCategory" />
+		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/productsubcategorymanagement/datatable-data.jsp" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productsubcategorymanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productsubcategorymanagement/column-header.jsp"></put-attribute>
+				        	</definition>
+		        		</put-attribute>
+		        	</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createSubCategory" extends="main_template">
+    	<put-attribute name="title" value="Add New SubCategory" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New SubCategory" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/productsubcategorymanagement/createSubCategory.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+ 	
+ 	<definition name="updateSubCategory" extends="main_template">  
+        <put-attribute name="title" value="Update SubCategory" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update SubCategory" />
+        		<put-attribute name="heading-description" value="To update subcategory." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/productsubcategorymanagement/updateSubCategory.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+ 	
+ 	<!-- Product SubCategory Management Module END -->
+ 	
   
 </tiles-definitions>  
