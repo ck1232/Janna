@@ -76,6 +76,17 @@ public class PermissionManagementService {
 		return submodulepermissiontypeList;
 	}
 	
+	public Submodulepermissiontype getSubmodulepermissiontypeByUrl(String url){
+		SubmodulepermissiontypeExample example = new SubmodulepermissiontypeExample();
+		example.createCriteria().andUrlEqualTo(url);
+		List<Submodulepermissiontype> resultList = submodulepermissiontypeMapper.selectByExample(example);
+		if(resultList != null && resultList.size() > 0){
+			return resultList.get(0);
+		}else{
+			return null;
+		}
+	}
+	
 	public Submodulepermissiontype findById(Integer id) {
 		return submodulepermissiontypeMapper.selectByPrimaryKey(id);
 	}
