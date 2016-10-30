@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,6 +85,30 @@ public class SubmoduleManagementController {
 		return GeneralUtils.convertListToJSONString(submoduleList);
 	}
 	
+	@RequestMapping(value = "/listSubmodule", method = RequestMethod.POST)
+	public String listSubmodule(@RequestParam("editBtn") String id, Model model) {
+		logger.debug("id = " + id);
+		Module module = moduleManagementService.findById(new Integer(id));
+		if (module == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Module not found");
+		}
+		model.addAttribute("module", module);
+		return "listSubmodule";
+	}
+	
+	@RequestMapping(value = "/listSubmodule/{id}", method = RequestMethod.GET)
+	public String listSubmoduleForRedirect(@PathVariable String id, Model model) {
+		logger.debug("id = " + id);
+		Module module = moduleManagementService.findById(new Integer(id));
+		if (module == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Module not found");
+		}
+		model.addAttribute("module", module);
+		return "listSubmodule";
+	}
+	
 	@RequestMapping(value = "/createSubmodule", method = RequestMethod.POST)
     public String showAddSubmoduleForm(@RequestParam("moduleid") String id, Model model, final RedirectAttributes redirectAttributes) {  
     	logger.debug("loading showAddSubmoduleForm");
@@ -92,7 +117,7 @@ public class SubmoduleManagementController {
     	if(submoduleList.size() >= 10){
     		redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Only 10 submodules are allowed in each module!");
-			return "redirect:updateModule/"+id;
+			return "redirect:listSubmodule/"+id;
     	}
     	Submodule submodule = new Submodule();
     	submodule.setDeleteind(GeneralUtils.NOT_DELETED);
@@ -138,7 +163,7 @@ public class SubmoduleManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Submodule added successfully!");
 			
 		}
-		return "redirect:updateModule/"+submodule.getParentid();
+		return "redirect:listSubmodule/"+submodule.getParentid();
     }  
 	
 	@RequestMapping(value = "/deleteSubmodule", method = RequestMethod.POST)
@@ -148,7 +173,7 @@ public class SubmoduleManagementController {
 		if(ids == null || ids.size() < 1){
 			redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
-			return "redirect:updateModule/"+moduleid;
+			return "redirect:listSubmodule/"+moduleid;
 		}
 		
 		for (String id : ids) {
@@ -157,7 +182,7 @@ public class SubmoduleManagementController {
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Submodule(s) deleted successfully!");
-		return "redirect:updateModule/"+moduleid;
+		return "redirect:listSubmodule/"+moduleid;
 	}
 	
 	@RequestMapping(value = "/updateSubmodule", method = RequestMethod.POST)
@@ -205,7 +230,7 @@ public class SubmoduleManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Submodule updated successfully!");
 		}
 		submoduleManagementService.updateSubmodule(submodule);
-		return "redirect:updateModule/"+submodule.getParentid();
+		return "redirect:listSubmodule/"+submodule.getParentid();
 	}
 	
 	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.POST)

@@ -146,17 +146,4 @@ public class ProductCategoryManagementController {
 		return "redirect:listProductCategory";
 	}
 	
-	/*
-	@RequestMapping(value = "/updateModule/{id}", method = RequestMethod.GET)
-	public String getModuleToUpdateForRedirect(@PathVariable String id, Model model) {
-		logger.debug("id = " + id);
-		Module module = moduleManagementService.findById(new Integer(id));
-		if (module == null) {
-			model.addAttribute("css", "danger");
-			model.addAttribute("msg", "Module not found");
-		}
-		model.addAttribute("module", module);
-		return "updateModule";
-	}*/
-	
 }

@@ -243,9 +243,25 @@
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Update Module" />
-        		<put-attribute name="heading-description" value="To update module and its submodule." />
+        		<put-attribute name="heading-description" value="To update module" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/modulemanagement/updateModule.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+  	<!-- Module Management Module END -->
+  	
+  	<!-- Submodule Management Module START -->
+  	
+  	<definition name="listSubmodule" extends="main_template">  
+        <put-attribute name="title" value="Update Submodule" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Submodule" />
+        		<put-attribute name="heading-description" value="To update submodule." />
         		<put-attribute name="content" >
-        			<definition template="/WEB-INF/jsp/modulemanagement/updateModule.jsp" >
+        			<definition template="/WEB-INF/jsp/submodulemanagement/listSubmodule.jsp" >
 	        			<put-attribute name="datatable">
 		        			<definition template="/WEB-INF/jsp/template/datatable_submodule.jsp">
 		        				<put-attribute name="table-title" value="All Sub Module" />
@@ -267,9 +283,7 @@
         	</definition>
         </put-attribute>
     </definition>
-  	<!-- Module Management Module END -->
   	
-  	<!-- Submodule Management Module START -->
   	<definition name="createSubmodule" extends="main_template">
     	<put-attribute name="title" value="Add New Submodule" />
     	<put-attribute name="body">
@@ -488,7 +502,7 @@
         			<definition template="/WEB-INF/jsp/productsubcategorymanagement/listSubCategory.jsp" >
 	        			<put-attribute name="datatable">
 		        			<definition template="/WEB-INF/jsp/template/datatable_subcategory.jsp">
-		        				<put-attribute name="table-title" value="All Sub Module" />
+		        				<put-attribute name="table-title" value="All SubCategory" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/productsubcategorymanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/productsubcategorymanagement/datatable-options.jsp" />
 		        				<put-attribute name="datatable-script">

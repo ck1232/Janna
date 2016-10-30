@@ -10,7 +10,7 @@
                     	<h3 class="box-title">Submodule Information</h3>
                     </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="post" action="<c:url value="/admin/updateModule" />">
+                    <form id="backToListButton" method="post" action="<c:url value="/admin/listSubmodule" />">
                     	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>

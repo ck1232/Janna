@@ -16,7 +16,7 @@
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/admin/listModule" />"></form>
                     <c:url var = "post_url" value="/admin/createModule" />
-                    <form:form id="createModuleForm" method="post" modelAttribute="module" action="${post_url}">
+                    <form:form id="createModuleForm" method="post" modelAttribute="moduleForm" action="${post_url}">
 		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <form:input path="deleteind" type="hidden" id="deleteind"/>
 		              <div class="box-body">
