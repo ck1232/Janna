@@ -59,13 +59,6 @@
 		<!-- Bootstrap select -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
-		<script>
-		$(function (){
-			try{
-				setNavigation();
-			}catch(e){}
-		})
-		</script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
