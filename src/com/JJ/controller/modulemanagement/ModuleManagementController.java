@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
+import com.JJ.model.Productcategory;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.validator.ModuleFormValidator;
 
@@ -62,17 +63,17 @@ public class ModuleManagementController {
     	Module module = new Module();
     	module.setDeleteind(GeneralUtils.NOT_DELETED);
     	
-    	model.addAttribute("module", module);
+    	model.addAttribute("moduleForm", module);
         return "createModule";  
     }  
 	
-	@InitBinder("module")
+	@InitBinder("moduleForm")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(moduleFormValidator);
 	}
 	
 	@RequestMapping(value = "/createModule", method = RequestMethod.POST)
-    public String saveModule(@ModelAttribute("module") @Validated Module module, 
+    public String saveModule(@ModelAttribute("moduleForm") @Validated Module module, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveModule() : " + module.toString());
@@ -105,6 +106,18 @@ public class ModuleManagementController {
 		return "redirect:listModule";
 	}
 	
+	@RequestMapping(value = "/updateModule", method = RequestMethod.POST)
+	public String getModuleToUpdate(@RequestParam("editBtn") String id, Model model) {
+		logger.debug("id = " + id);
+		Module module = moduleManagementService.findById(new Integer(id));
+		if (module == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Module not found");
+		}
+		model.addAttribute("moduleForm", module);
+		return "updateModule";
+	}
+	
 	@RequestMapping(value = "/updateModuleToDb", method = RequestMethod.POST)
 	public String updateModule(@ModelAttribute("moduleForm") @Validated Module module,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
@@ -114,36 +127,12 @@ public class ModuleManagementController {
 		if (result.hasErrors()) {
 			return "updateModule";
 		} else {
-			// Add message to flash scope
+			moduleManagementService.updateModule(module);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Module updated successfully!");
 		}
-		moduleManagementService.updateModule(module);
 		
 		return "redirect:listModule";
 	}
 	
-	@RequestMapping(value = "/updateModule", method = RequestMethod.POST)
-	public String getModuleToUpdate(@RequestParam("editBtn") String id, Model model) {
-		logger.debug("id = " + id);
-		Module module = moduleManagementService.findById(new Integer(id));
-		if (module == null) {
-			model.addAttribute("css", "danger");
-			model.addAttribute("msg", "Module not found");
-		}
-		model.addAttribute("module", module);
-		return "updateModule";
-	}
-	
-	@RequestMapping(value = "/updateModule/{id}", method = RequestMethod.GET)
-	public String getModuleToUpdateForRedirect(@PathVariable String id, Model model) {
-		logger.debug("id = " + id);
-		Module module = moduleManagementService.findById(new Integer(id));
-		if (module == null) {
-			model.addAttribute("css", "danger");
-			model.addAttribute("msg", "Module not found");
-		}
-		model.addAttribute("module", module);
-		return "updateModule";
-	}
 }

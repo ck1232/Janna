@@ -22,5 +22,6 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/admin/updateModule" />"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="updateModuleForm"><i class="fa fa-pencil"></i> Edit</button>'+
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/admin/listSubmodule" />"><i class="fa fa-pencil"></i> Manage Submodules</button>'
 },

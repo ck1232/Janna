@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `jj` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `jj`;
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
--- Host: localhost    Database: jj
+-- Host: 127.0.0.1    Database: jj
 -- ------------------------------------------------------
--- Server version	5.6.21
+-- Server version	5.5.5-10.1.9-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +28,7 @@ CREATE TABLE `module` (
   `icon` varchar(45) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +37,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Management','fa-users','Y'),(3,'Test Module','fa-users','Y'),(4,'test Management','fa-users','Y');
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Management','fa-users','Y'),(3,'Test Module','fa-users','Y'),(4,'test Management','fa-users','Y'),(5,'Product management','fa-users','N');
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,9 +51,11 @@ DROP TABLE IF EXISTS `productcategory`;
 CREATE TABLE `productcategory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
+  `isParent` bit(1) NOT NULL DEFAULT b'0',
+  `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,6 +64,7 @@ CREATE TABLE `productcategory` (
 
 LOCK TABLES `productcategory` WRITE;
 /*!40000 ALTER TABLE `productcategory` DISABLE KEYS */;
+INSERT INTO `productcategory` VALUES (1,'light bulbs','\0','','N'),(2,'hel','\0','','Y');
 /*!40000 ALTER TABLE `productcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,7 +78,8 @@ DROP TABLE IF EXISTS `productsubcategory`;
 CREATE TABLE `productsubcategory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
-  `categoryId` int(11) NOT NULL,
+  `productCategoryId` int(11) NOT NULL,
+  `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -110,7 +112,7 @@ CREATE TABLE `role` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +121,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'ADMIN',NULL,NULL,NULL,NULL,0),(2,'MODULE_MGR',NULL,NULL,NULL,NULL,0),(5,'ROLE_ADMIN',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `role` VALUES (1,'ADMIN',NULL,NULL,NULL,NULL,0),(2,'MODULE_MGR',NULL,NULL,NULL,NULL,0),(5,'ROLE_ADMIN',NULL,NULL,NULL,NULL,NULL),(6,'PRODUCT_MGR',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +140,7 @@ CREATE TABLE `submodule` (
   `url` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +149,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N');
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N'),(24,5,'Category Management','fa-users','/product/category/listProductCategory','N');
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,7 +174,7 @@ CREATE TABLE `submodulepermission` (
 
 LOCK TABLES `submodulepermission` WRITE;
 /*!40000 ALTER TABLE `submodulepermission` DISABLE KEYS */;
-INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12');
+INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(1,24,'16'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12'),(6,24,'16');
 /*!40000 ALTER TABLE `submodulepermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +193,7 @@ CREATE TABLE `submodulepermissiontype` (
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url_UNIQUE` (`url`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +202,7 @@ CREATE TABLE `submodulepermissiontype` (
 
 LOCK TABLES `submodulepermissiontype` WRITE;
 /*!40000 ALTER TABLE `submodulepermissiontype` DISABLE KEYS */;
-INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser');
+INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser'),(16,'24','View','1','/admin/listUser1');
 /*!40000 ALTER TABLE `submodulepermissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +239,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ck1232','$2a$10$fF7SimwO74sU2hSa8u0/u.s5tYGbPMorm6i17w2zdIcbb7mURlb6G',NULL,'choon keat','ck1232@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(2,'euphona','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','euphona@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(5,'jannie','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','jj@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `user` VALUES (1,'ck1232','$2a$10$fF7SimwO74sU2hSa8u0/u.s5tYGbPMorm6i17w2zdIcbb7mURlb6G',NULL,'choon keat','ck1232@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(2,'euphona','$2a$10$bbH4SEDcWxKoOFuu8RKi0ec1V20XR7UtiaoEpnesBVtuaT3SvX7gm',NULL,'Janice Lee','euphona@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(5,'jannie','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','jj@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,14 +274,6 @@ LOCK TABLES `user_role` WRITE;
 INSERT INTO `user_role` VALUES (1,1,NULL,NULL,NULL,NULL,NULL),(1,2,NULL,NULL,NULL,NULL,NULL),(1,5,NULL,NULL,NULL,NULL,NULL),(2,1,NULL,NULL,NULL,NULL,NULL),(2,2,NULL,NULL,NULL,NULL,NULL),(2,5,NULL,NULL,NULL,NULL,NULL),(5,1,NULL,NULL,NULL,NULL,NULL),(5,2,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'jj'
---
-
---
--- Dumping routines for database 'jj'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -290,4 +284,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-28 21:39:09
+-- Dump completed on 2016-10-29 23:53:00
