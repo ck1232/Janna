@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -28,6 +29,7 @@ import com.JJ.model.Submodule;
 import com.JJ.model.SubmodulepermissionKey;
 import com.JJ.model.User;
 import com.JJ.model.UserRole;
+import com.JJ.service.common.CommonService;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
 import com.JJ.service.roleassignment.RoleAssignmentService;
@@ -45,15 +47,17 @@ public class CommonController {
 	private RoleAssignmentService roleAssignmentService;
 	private UserManagementService userManagementService;
 	private PermissionManagementService permissionManagementService;
+	private CommonService commonService;
 	@Autowired
 	public CommonController(SubModuleManagementService subModuleManagementService, ModuleManagementService moduleManagementService,
 			RoleAssignmentService roleAssignmentService, UserManagementService userManagementService,
-			PermissionManagementService permissionManagementService){
+			PermissionManagementService permissionManagementService, CommonService commonService){
 		this.subModuleManagementService = subModuleManagementService;
 		this.moduleManagementService = moduleManagementService;
 		this.roleAssignmentService = roleAssignmentService;
 		this.userManagementService = userManagementService;
 		this.permissionManagementService = permissionManagementService;
+		this.commonService = commonService;
 	}
 	
 	@RequestMapping(value={"/","/dashboard"})  
@@ -62,6 +66,12 @@ public class CommonController {
     	UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	session.setAttribute("userAccount", principal);
     	session.setAttribute("menu", this.populateMenu(principal));
+    	List<String> roleList = new ArrayList<String>();
+    	for(GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+    		roleList.add(authority.getAuthority());
+    	}
+    	List<String> urlList = commonService.getAllowedUrlByRoleName(roleList);
+    	session.setAttribute("allowedUrl", urlList);
         return "dashboard";  
     }
 	
