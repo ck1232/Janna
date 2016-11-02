@@ -16,6 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `discount`
+--
+
+DROP TABLE IF EXISTS `discount`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `discount` (
+  `discountId` int(11) NOT NULL AUTO_INCREMENT,
+  `promoId` int(11) DEFAULT NULL,
+  `discountName` varchar(255) DEFAULT NULL,
+  `discountType` varchar(100) DEFAULT NULL,
+  `discountValue` varchar(45) DEFAULT NULL,
+  `deleteInd` char(1) DEFAULT 'N',
+  PRIMARY KEY (`discountId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `discount`
+--
+
+LOCK TABLES `discount` WRITE;
+/*!40000 ALTER TABLE `discount` DISABLE KEYS */;
+/*!40000 ALTER TABLE `discount` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `module`
 --
 
@@ -42,6 +69,33 @@ INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Ma
 UNLOCK TABLES;
 
 --
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product` (
+  `productId` int(11) NOT NULL,
+  `productName` varchar(255) NOT NULL,
+  `unitPrice` decimal(7,2) NOT NULL,
+  `subcategoryId` int(11) DEFAULT NULL,
+  `desciption` varchar(1000) DEFAULT NULL,
+  `deleteInd` char(1) DEFAULT 'N',
+  PRIMARY KEY (`productId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `productcategory`
 --
 
@@ -64,8 +118,110 @@ CREATE TABLE `productcategory` (
 
 LOCK TABLES `productcategory` WRITE;
 /*!40000 ALTER TABLE `productcategory` DISABLE KEYS */;
-INSERT INTO `productcategory` VALUES (1,'light bulbs','\0','','N'),(2,'hel','\0','','Y');
+INSERT INTO `productcategory` VALUES (1,'light bulb','\0','','N'),(2,'hel','\0','','Y');
 /*!40000 ALTER TABLE `productcategory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productdiscount_rs`
+--
+
+DROP TABLE IF EXISTS `productdiscount_rs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productdiscount_rs` (
+  `productId` int(11) NOT NULL,
+  `discountId` int(11) NOT NULL,
+  `discountPrice` decimal(7,2) NOT NULL,
+  PRIMARY KEY (`productId`,`discountId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productdiscount_rs`
+--
+
+LOCK TABLES `productdiscount_rs` WRITE;
+/*!40000 ALTER TABLE `productdiscount_rs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productdiscount_rs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productimage`
+--
+
+DROP TABLE IF EXISTS `productimage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productimage` (
+  `imageId` int(11) NOT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `imageName` varchar(255) DEFAULT NULL,
+  `image` mediumblob,
+  `sequence` int(11) DEFAULT NULL,
+  `thumbnailImage` mediumblob,
+  `displayInd` bit(1) NOT NULL DEFAULT b'1',
+  PRIMARY KEY (`imageId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productimage`
+--
+
+LOCK TABLES `productimage` WRITE;
+/*!40000 ALTER TABLE `productimage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productimage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productoption`
+--
+
+DROP TABLE IF EXISTS `productoption`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productoption` (
+  `productoptionId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `displayInd` bit(1) NOT NULL DEFAULT b'1',
+  `sequence` int(11) DEFAULT NULL,
+  PRIMARY KEY (`productoptionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productoption`
+--
+
+LOCK TABLES `productoption` WRITE;
+/*!40000 ALTER TABLE `productoption` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productoption` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productspecification`
+--
+
+DROP TABLE IF EXISTS `productspecification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productspecification` (
+  `productSpecificationId` int(11) NOT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `content` longtext,
+  `deleteInd` char(1) DEFAULT 'Y',
+  PRIMARY KEY (`productSpecificationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productspecification`
+--
+
+LOCK TABLES `productspecification` WRITE;
+/*!40000 ALTER TABLE `productspecification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productspecification` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -82,7 +238,7 @@ CREATE TABLE `productsubcategory` (
   `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +247,64 @@ CREATE TABLE `productsubcategory` (
 
 LOCK TABLES `productsubcategory` WRITE;
 /*!40000 ALTER TABLE `productsubcategory` DISABLE KEYS */;
+INSERT INTO `productsubcategory` VALUES (1,'Light Bulbs',1,'','Y'),(2,'Light Bulbs',1,'','N');
 /*!40000 ALTER TABLE `productsubcategory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productsuboption`
+--
+
+DROP TABLE IF EXISTS `productsuboption`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productsuboption` (
+  `productSubOptionId` int(11) NOT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `productoptionId` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `sequence` int(11) DEFAULT NULL,
+  `displayInd` bit(1) DEFAULT b'1',
+  PRIMARY KEY (`productSubOptionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productsuboption`
+--
+
+LOCK TABLES `productsuboption` WRITE;
+/*!40000 ALTER TABLE `productsuboption` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productsuboption` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promotion`
+--
+
+DROP TABLE IF EXISTS `promotion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promotion` (
+  `promotionId` int(11) NOT NULL AUTO_INCREMENT,
+  `promotionName` varchar(255) DEFAULT NULL,
+  `promotionMessage` varchar(1000) DEFAULT NULL,
+  `promotionStartDate` datetime(6) DEFAULT NULL,
+  `promotionEndDate` datetime(6) DEFAULT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`promotionId`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `promotion`
+--
+
+LOCK TABLES `promotion` WRITE;
+/*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
+INSERT INTO `promotion` VALUES (1,'name','message','2016-05-10 00:00:00.000000','2016-12-10 00:00:00.000000','','N'),(2,'name','message','2016-10-04 00:00:00.000000','2016-10-06 00:00:00.000000','','N'),(3,'c','k','2016-10-31 00:00:00.000000','2016-10-31 00:00:00.000000','','N'),(4,'name','message',NULL,NULL,'','Y'),(5,'ck','ck','2016-11-09 19:29:00.000000','2016-11-12 22:16:00.000000','','N'),(6,'csdfs','c','2016-11-01 05:00:00.000000','2016-11-30 06:00:00.000000','\0','N');
+/*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -140,7 +353,7 @@ CREATE TABLE `submodule` (
   `url` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +362,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N'),(24,5,'Category Management','fa-users','/product/category/listProductCategory','N');
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N'),(24,5,'Category Management','fa-users','product/category/listProductCategory','N'),(25,5,'Promotion Management','fa-users','product/promotion/listPromotion','N');
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +387,7 @@ CREATE TABLE `submodulepermission` (
 
 LOCK TABLES `submodulepermission` WRITE;
 /*!40000 ALTER TABLE `submodulepermission` DISABLE KEYS */;
-INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(1,24,'16'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12'),(6,24,'16');
+INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(1,24,'16'),(1,25,'18'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12'),(6,24,'16'),(6,25,'18');
 /*!40000 ALTER TABLE `submodulepermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,7 +406,7 @@ CREATE TABLE `submodulepermissiontype` (
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url_UNIQUE` (`url`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,7 +415,7 @@ CREATE TABLE `submodulepermissiontype` (
 
 LOCK TABLES `submodulepermissiontype` WRITE;
 /*!40000 ALTER TABLE `submodulepermissiontype` DISABLE KEYS */;
-INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser'),(16,'24','View','1','/admin/listUser1');
+INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser'),(16,'24','View','1','/product/category/listProductCategory'),(18,'25','View','1','/product/promotion/listPromotion');
 /*!40000 ALTER TABLE `submodulepermissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,4 +497,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-29 23:53:00
+-- Dump completed on 2016-11-02 22:03:55
