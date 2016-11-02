@@ -233,4 +233,17 @@ public class Promotion {
     public void setDeleteind(String deleteind) {
         this.deleteind = deleteind;
     }
+    
+   
+    //non db fields
+	private String promotionperiod;
+	
+	public String getPromotionperiod() {
+		return promotionperiod;
+	}
+
+	public void setPromotionperiod(String promotionperiod) {
+		this.promotionperiod = promotionperiod;
+	}
+    
 }

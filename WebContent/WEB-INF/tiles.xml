@@ -565,7 +565,7 @@
 		        				<put-attribute name="options" value="/WEB-INF/jsp/promotionmanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
-		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
+		        					<definition template="/WEB-INF/jsp/promotionmanagement/datatable-script.jsp" >
 		        						<put-attribute name="data-list" value="/JJ/product/promotion/getPromotionList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/promotionmanagement/column-mapping.jsp" />
@@ -576,6 +576,42 @@
         				</put-attribute>
         			</definition>
         		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createPromotion" extends="main_template">
+    	<put-attribute name="title" value="Add New Promotion" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Promotion" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/promotionmanagement/createPromotion.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updatePromotion" extends="main_template">  
+        <put-attribute name="title" value="Update Promotion" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Promotion" />
+        		<put-attribute name="heading-description" value="To update promotion." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/promotionmanagement/updatePromotion.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="viewPromotion" extends="main_template">  
+        <put-attribute name="title" value="View Promotion" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Promotion" />
+        		<put-attribute name="heading-description" value="To view promotion." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/promotionmanagement/viewPromotion.jsp" />
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>

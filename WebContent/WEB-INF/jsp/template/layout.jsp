@@ -40,6 +40,8 @@
 		  <link rel="stylesheet" href="<c:url value="/development/plugins/datepicker/datepicker3.css"/>">
 		  <!-- Daterange picker -->
 		  <link rel="stylesheet" href="<c:url value="/development/plugins/daterangepicker/daterangepicker.css"/>">
+		   <!-- Bootstrap time Picker -->
+ 		  <link rel="stylesheet" href="<c:url value="/development/plugins/timepicker/bootstrap-timepicker.min.css"/>">
 		  <!-- bootstrap wysihtml5 - text editor -->
 		  <link rel="stylesheet" href="<c:url value="/development/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"/>">
 		  <!-- datatable -->
@@ -59,6 +61,23 @@
 		<!-- Bootstrap select -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+		<!-- bootstrap datepicker -->
+		<script src="<c:url value="/development/plugins/datepicker/bootstrap-datepicker.js"/>"></script>
+		<!-- Select2 -->
+		<script src="<c:url value="/development/plugins/select2/select2.full.min.js" />"></script>
+		<!-- InputMask -->
+		<script src="<c:url value="/development/plugins/input-mask/jquery.inputmask.js" />"></script>
+		<script src="<c:url value="/development/plugins/input-mask/jquery.inputmask.date.extensions.js" />"></script>
+		<script src="<c:url value="/development/plugins/input-mask/jquery.inputmask.extensions.js" />"></script>
+		<!-- date-range-picker -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+		<script src="<c:url value="/development/plugins/daterangepicker/daterangepicker.js" />"></script>
+		<!-- bootstrap datepicker -->
+		<script src="<c:url value="/development/plugins/datepicker/bootstrap-datepicker.js" />"></script>
+		<!-- bootstrap color picker -->
+		<script src="<c:url value="/development/plugins/colorpicker/bootstrap-colorpicker.min.js" />"></script>
+		<!-- bootstrap time picker -->
+		<script src="<c:url value="/development//timepicker/bootstrap-timepicker.min.js" />"></script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
