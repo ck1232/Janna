@@ -1,5 +1,7 @@
 package com.JJ.controller.common;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,15 +42,27 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 			else{
 				menu = commonController.populateMenu(user);
 				request.getSession().setAttribute("menu", menu);
+				List<Submodulepermissiontype> urlList = permissionManagementService.getSubmodulepermissiontypeByUrl();
+				request.getSession().setAttribute("urlList", urlList);
 			}
 
 			String urlPrefix = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath());
 			String mappedUrl = request.getRequestURI().toString().replace(urlPrefix, "").replace(request.getContextPath(), "");
 			if(!mappedUrl.contains("development")){
-				Submodulepermissiontype submodule = permissionManagementService.getSubmodulepermissiontypeByUrl(mappedUrl);
-				if(submodule != null){
-					request.getSession().setAttribute("menuSubmodule", submodule);
+				@SuppressWarnings("unchecked")
+				List<Submodulepermissiontype> urlList = (List<Submodulepermissiontype>) request.getSession().getAttribute("urlList");
+				if(urlList == null){
+					urlList = permissionManagementService.getSubmodulepermissiontypeByUrl();
+					request.getSession().setAttribute("urlList", urlList);
 				}
+				if(urlList != null && urlList.size() > 0){
+					for(Submodulepermissiontype obj : urlList){
+						if(obj != null && obj.getUrl().compareTo(mappedUrl) == 0){
+							request.getSession().setAttribute("menuSubmodule", obj);
+						}
+					}
+				}
+				
 //				System.out.println(mappedUrl);
 			}
 			

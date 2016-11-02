@@ -75,7 +75,7 @@ function setNavigation() {
 	          				</a>
 	          				<ul class="treeview-menu">
 			          			<c:forEach items="${module.subModuleList}" var="submodule">
-			          				 <li><a href='<c:url context="/JJ" value="/${submodule.url}"/>'>${submodule.name}</a></li>
+			          				 <li <c:if test="${menuSubmodule != null and fn:containsIgnoreCase(menuSubmodule.url,submodule.url)}">class="active"</c:if>><a href='<c:url context="/JJ" value="/${submodule.url}"/>'>${submodule.name}</a></li>
 			          			</c:forEach>
 	          				</ul>
           				</li>

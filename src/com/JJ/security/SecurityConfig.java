@@ -1,18 +1,31 @@
 package com.JJ.security;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	ApplicationContext context;
 	
 	@Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	  http.csrf().and()
 	  	.authorizeRequests()
+	  	.accessDecisionManager(accessDecisionManager())
 	  	.antMatchers("/","/dashboard").authenticated()
 		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
 //		.antMatchers("/development/**").authenticated()
@@ -55,5 +69,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder(){
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder;
+	}
+	
+	@Bean
+	public AccessDecisionManager accessDecisionManager() {
+	    List<AccessDecisionVoter<? extends Object>> decisionVoters 
+	      = Arrays.asList(
+	        new WebExpressionVoter(),
+	        new RoleVoter(),
+	        new AuthenticatedVoter(),
+	        new UrlVoter());
+	    return new UnanimousBased(decisionVoters);
 	}
 }
