@@ -57,7 +57,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 				}
 				if(urlList != null && urlList.size() > 0){
 					for(Submodulepermissiontype obj : urlList){
-						if(obj != null && obj.getUrl().compareTo(mappedUrl) == 0){
+						if(obj != null && (obj.getUrl().contains(mappedUrl) || mappedUrl.contains(obj.getUrl()))){
 							request.getSession().setAttribute("menuSubmodule", obj);
 						}
 					}

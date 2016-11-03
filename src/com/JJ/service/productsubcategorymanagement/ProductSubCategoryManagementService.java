@@ -25,7 +25,7 @@ public class ProductSubCategoryManagementService {
 		return productSubCategoryMapper.selectByPrimaryKey(id);
 	}
 	
-	public List<Productsubcategory> getAllCategories() {
+	public List<Productsubcategory> getAllSubCategories() {
 		ProductsubcategoryExample subcategoryExample = new ProductsubcategoryExample();
 		subcategoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Productsubcategory> subcategoryList = productSubCategoryMapper.selectByExample(subcategoryExample);

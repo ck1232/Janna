@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.dao.PromotionMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Module;
 import com.JJ.model.Promotion;
 import com.JJ.model.PromotionExample;
 
