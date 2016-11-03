@@ -426,6 +426,18 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+    <definition name="updatePermissionTypeDetail" extends="main_template">
+    	<put-attribute name="title" value="Update Permission Type" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Permission Type" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/permissionmanagement/permissiontype/updateSubmodulePermissionTypeDetail.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
   	
   	<!-- Permission Management Module END -->
   
@@ -618,6 +630,77 @@
     </definition>
     
     <!-- Promotion Management Module END -->
+    
+    <!-- Discount Management Module START -->
+ 	
+ 	<definition name="listDiscount" extends="main_template">  
+        <put-attribute name="title" value="Discount Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Discount Listing" />
+        		<put-attribute name="heading-description" value="To view all the discounts" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/discountmanagement/listDiscount.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Discounts" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/discountmanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/discountmanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/product/discount/getDiscountList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/discountmanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/discountmanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createDiscount" extends="main_template">
+    	<put-attribute name="title" value="Add New Discount" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Discount" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/discountmanagement/createDiscount.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updateDiscount" extends="main_template">  
+        <put-attribute name="title" value="Update Discount" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Discount" />
+        		<put-attribute name="heading-description" value="To update discount." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/discountmanagement/updateDiscount.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="viewDiscount" extends="main_template">  
+        <put-attribute name="title" value="View Discount" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Discount" />
+        		<put-attribute name="heading-description" value="To view discount." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/discountmanagement/viewDiscount.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <!-- Discount Management Module END -->
+  
   	<!-- Product Management Module START -->
   	<definition name="listProduct" extends="main_template">  
         <put-attribute name="title" value="Product Listing" /> 

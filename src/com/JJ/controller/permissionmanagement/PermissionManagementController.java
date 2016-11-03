@@ -25,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.Module;
 import com.JJ.model.RolesToPermission;
 import com.JJ.model.Submodule;
 import com.JJ.model.Submodulepermission;
@@ -208,6 +209,37 @@ public class PermissionManagementController {
 
         return "redirect:updatePermissionType/" + permissionType.getSubmoduleid();  
     }  
+	
+	
+	@RequestMapping(value = "/updatePermissionTypeDetail", method = RequestMethod.POST)
+	public String getPermissionTypeDetailToUpdate(@RequestParam("editBtn") String id, Model model) {
+		logger.debug("id = " + id);
+		Submodulepermissiontype submodulepermissiontype = permissionManagementService.findById(new Integer(id));
+		if (submodulepermissiontype == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Permission type not found");
+		}
+		model.addAttribute("submodulepermissiontypeForm", submodulepermissiontype);
+		return "updatePermissionTypeDetail";
+	}
+	
+	@RequestMapping(value = "/updatePermissionTypeDetailToDb", method = RequestMethod.POST)
+	public String updateSubmodulepermissiontypeDetail(@ModelAttribute("submodulepermissiontypeForm") @Validated Submodulepermissiontype submodulepermissiontype,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		logger.debug("updateSubmodulepermissiontypeDetail() : " + submodulepermissiontype.toString());
+		
+		if (result.hasErrors()) {
+			return "updatePermissionTypeDetail";
+		} else {
+			permissionManagementService.updateSubmodulepermissiontype(submodulepermissiontype);
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Permission type updated successfully!");
+		}
+		
+		return "redirect:updatePermissionType/" + submodulepermissiontype.getSubmoduleid();
+	}
+	
 	
 	@RequestMapping(value = "/deletePermissionType", method = RequestMethod.POST)
 	public String deletePermissionType(@RequestParam(value = "checkboxId", required=false) List<String> ids,
