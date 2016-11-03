@@ -18,8 +18,8 @@ public class ModuleManagementService {
 	private ModuleMapper moduleMapper;
 	
 	@Autowired
-	public ModuleManagementService(ModuleMapper roleMapper) {
-		this.moduleMapper = roleMapper;
+	public ModuleManagementService(ModuleMapper moduleMapper) {
+		this.moduleMapper = moduleMapper;
 	}
 	
 	public Module findById(Integer id) {
