@@ -15,7 +15,7 @@
                     <!--FORM-->
                     <form id="backToListButton" method="post" action="<c:url value="/product/subcategory/listSubCategory" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${subcategoryForm.productcategoryid}"/>
+                    	<input type="hidden" name="manageSubCategoryBtn" value="${subcategoryForm.productcategoryid}"/>
                     </form>
                     <c:url var = "post_url" value="/product/subcategory/createSubCategoryToDb" />
                     <form:form id="createSubCategoryForm" method="post" modelAttribute="subcategoryForm" action="${post_url}">

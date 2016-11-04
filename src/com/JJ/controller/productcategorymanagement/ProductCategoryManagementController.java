@@ -23,8 +23,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.Product;
 import com.JJ.model.Productcategory;
+import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
+import com.JJ.service.productmanagement.ProductManagementService;
+import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.validator.ProductCategoryFormValidator;
 
 @Controller  
@@ -34,13 +38,19 @@ public class ProductCategoryManagementController {
 	private static final Logger logger = Logger.getLogger(ProductCategoryManagementController.class);
 	
 	private ProductCategoryManagementService productCategoryManagementService;
+	private ProductSubCategoryManagementService productSubCategoryManagementService;
+	private ProductManagementService productManagementService;
 	private ProductCategoryFormValidator productCategoryFormValidator;
 	
 
 	@Autowired
 	public ProductCategoryManagementController(ProductCategoryManagementService productCategoryManagementService, 
+			ProductSubCategoryManagementService productSubCategoryManagementService,
+			ProductManagementService productManagementService,
 			ProductCategoryFormValidator productCategoryFormValidator){
 		this.productCategoryManagementService = productCategoryManagementService;
+		this.productSubCategoryManagementService = productSubCategoryManagementService;
+		this.productManagementService = productManagementService;
 		this.productCategoryFormValidator = productCategoryFormValidator;
 	}
 	
@@ -68,8 +78,8 @@ public class ProductCategoryManagementController {
     public String showAddProductCategoryForm(Model model) {  
     	logger.debug("loading showAddProductCategoryForm");
     	Productcategory productcategory = new Productcategory();
+    	productcategory.setIsparent(true);
     	productcategory.setDisplayind(true);
-    	
     	
     	model.addAttribute("categoryForm", productcategory);
         return "createProductCategory";  
@@ -83,13 +93,20 @@ public class ProductCategoryManagementController {
 	@RequestMapping(value = "/createProductCategory", method = RequestMethod.POST)
     public String saveProductCategory(@ModelAttribute("categoryForm") @Validated Productcategory productcategory, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
-		productcategory.setIsparent(false);
 		productcategory.setDeleteind(GeneralUtils.NOT_DELETED);
 		logger.debug("saveProductcategory() : " + productcategory.toString());
 		if (result.hasErrors()) {
 			return "createProductCategory";
 		} else {
 			productCategoryManagementService.saveProductCategory(productcategory);
+			if(!productcategory.getIsparent()) {
+				Productsubcategory productsubcategory = new Productsubcategory();
+				productsubcategory.setName(productcategory.getName());
+		    	productsubcategory.setDeleteind(GeneralUtils.NOT_DELETED);
+		    	productsubcategory.setProductcategoryid(new Integer(productcategory.getId()));
+		    	productsubcategory.setDisplayind(productcategory.getDisplayind());
+				productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
+			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product Category added successfully!");
 		}
@@ -129,6 +146,18 @@ public class ProductCategoryManagementController {
 		return "updateProductCategory";
 	}
 	
+	@RequestMapping(value = "/updateProductCategory/{id}", method = RequestMethod.GET)
+	public String getCategoryToUpdateByRedirect(@PathVariable String id, Model model) {
+		logger.debug("id = " + id);
+		Productcategory productcategory = productCategoryManagementService.findById(new Integer(id));
+		if (productcategory == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Product Category not found");
+		}
+		model.addAttribute("categoryForm", productcategory);
+		return "updateProductCategory";
+	}
+	
 	@RequestMapping(value = "/updateProductCategoryToDb", method = RequestMethod.POST)
 	public String updateProductCategory(@ModelAttribute("categoryForm") @Validated Productcategory productcategory,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
@@ -138,6 +167,21 @@ public class ProductCategoryManagementController {
 		if (result.hasErrors()) {
 			return "updateProductCategory";
 		} else {
+			Productcategory currentCategory = productCategoryManagementService.findById(productcategory.getId());
+			if(productcategory.getIsparent() != currentCategory.getIsparent()){
+				//check submodule
+				List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productcategory.getId());
+				for(Productsubcategory psc: subcategoryList) {
+					List<Product> productList = productManagementService.getAllProductsBySubCategory(psc.getId());
+					if(productList.size() > 0){
+						redirectAttributes.addFlashAttribute("css", "danger");
+						redirectAttributes.addFlashAttribute("msg", "Please remove products from the category!");
+						return "redirect:updateProductCategory/" + productcategory.getId();
+						
+					}
+				}
+			}
+			productSubCategoryManagementService.deleteProductSubCategoryByCategory(productcategory.getId());
 			productCategoryManagementService.updateProductcategory(productcategory);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product Category updated successfully!");

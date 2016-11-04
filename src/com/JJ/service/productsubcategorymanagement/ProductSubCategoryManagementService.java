@@ -40,17 +40,29 @@ public class ProductSubCategoryManagementService {
 		return subcategoryList;
 	}
 	
-	public void saveProductCategory(Productsubcategory productsubcategory) {
+	public void saveProductSubCategory(Productsubcategory productsubcategory) {
 		productSubCategoryMapper.insert(productsubcategory);
 	}
 	
-	public void deleteProductCategory(Integer id) {
+	public void deleteProductSubCategory(Integer id) {
 		Productsubcategory productsubcategory = findById(id);
 		if(productsubcategory.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
 			productsubcategory.setDeleteind(GeneralUtils.DELETED);
 			productSubCategoryMapper.updateByPrimaryKey(productsubcategory);
 		}
 	}
+	
+	public void deleteProductSubCategoryByCategory(Integer id) {
+		List<Productsubcategory> subcategoryList = getAllProductSubCategoryByCategory(id);
+		for(Productsubcategory psc: subcategoryList){
+			if(psc.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
+				psc.setDeleteind(GeneralUtils.DELETED);
+				productSubCategoryMapper.updateByPrimaryKey(psc);
+			}
+		}
+	}
+	
+	
 	
 	public void updateProductsubcategory(Productsubcategory productSubCategory) {
 		if(productSubCategory.getDeleteind().equals(GeneralUtils.NOT_DELETED))
