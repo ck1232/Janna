@@ -7,7 +7,7 @@
 	<div class="box">
 		<!--BOX HEADER-->
 	    <div class="box-header with-border">
-	    	<h3 class="box-title">User Information</h3>
+	    	<h3 class="box-title">Discount Information</h3>
 	    </div>
 	    <!--FORM-->
 	    
