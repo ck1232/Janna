@@ -733,7 +733,7 @@
     </definition>
     
     <definition name="createProduct" extends="main_template">
-    	<put-attribute name="title" value="Add New Product" />
+    	<put-attribute name="title" value="Create New Product" />
     	<put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Create New Product" />

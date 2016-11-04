@@ -49,8 +49,7 @@
 		  
 		  <link rel="stylesheet" href="<c:url value="/development/css/custom.css"/>">
 		  <!-- REQUIRED JS SCRIPTS -->
-
-		<!-- REQUIRED JS SCRIPTS -->
+		
 		
 		<!-- jQuery 2.2.3 -->
 		<script src="<c:url value="/development/plugins/jQuery/jquery-2.2.3.min.js"/>"></script>
@@ -76,8 +75,15 @@
 		<script src="<c:url value="/development/plugins/datepicker/bootstrap-datepicker.js" />"></script>
 		<!-- bootstrap color picker -->
 		<script src="<c:url value="/development/plugins/colorpicker/bootstrap-colorpicker.min.js" />"></script>
-		<!-- bootstrap time picker -->
-		<script src="<c:url value="/development//timepicker/bootstrap-timepicker.min.js" />"></script>
+		<!-- CK Editor -->
+		<script src="//cdn.ckeditor.com/4.5.11/full/ckeditor.js"></script>
+		<!-- upload -->
+		<link href="<c:url value="/development/plugins/upload/css/fileinput.css" />" media="all" rel="stylesheet" type="text/css" />
+        <script src="<c:url value="/development/plugins/upload/js/fileinput.js" />" type="text/javascript"></script>
+        <script src="<c:url value="/development/plugins/upload/js/fileinput_locale_fr.js" />" type="text/javascript"></script>
+        <script src="<c:url value="/development/plugins/upload/js/fileinput_locale_es.js" />" type="text/javascript"></script>
+        <script src="<c:url value="/development/plugins/upload/themes/fa/theme.js" />"></script>
+		<!-- REQUIRED JS SCRIPTS -->
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
