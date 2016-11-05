@@ -17,7 +17,6 @@
 			<form:form id="updateProductCategoryToDbForm" method="post" modelAttribute="categoryForm" action="${post_url }">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<form:input path="id" type="hidden" id="id"/>
-				<form:input path="isparent" type="hidden" id="isparent"/>
 				<form:input path="deleteind" type="hidden" id="deleteind"/>
 				<form:input path="id" type="hidden" id="id"/>
 	 			<div class="row">
@@ -30,6 +29,17 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">		  
+		 			<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Parent Category</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+						  		<label><form:checkbox path="isparent" id="isparent" /></label>
+		   						<form:errors path="isparent" class="text-danger" />
+							</div>
+						</div>
+		  			</div>
+		  		</div>
 				<div class="row">		  
 		 			<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Allow Display</label>

@@ -460,10 +460,6 @@
 		        						<put-attribute name="data-list" value="/JJ/product/category/getProductCategoryList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productcategorymanagement/column-mapping.jsp" />
-		        						<put-attribute name="subdatatable" value="/WEB-INF/jsp/productcategorymanagement/subdatatable/datatable.jsp" />
-		        						<put-attribute name="subdata-list" value="/JJ/product/subcategory/getProductSubCategoryListByCategory" />
-		        						<put-attribute name="subdatatable-data" value="/WEB-INF/jsp/productcategorymanagement/subdatatable/datatable-data.jsp"/>	
-		        						<put-attribute name="subcolumn-mapping" value="/WEB-INF/jsp/productcategorymanagement/subdatatable/column-mapping.jsp"></put-attribute>
 		        					</definition>
 		        				</put-attribute>
 		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productcategorymanagement/column-header.jsp"></put-attribute>
@@ -694,6 +690,51 @@
         		<put-attribute name="heading" value="View Discount" />
         		<put-attribute name="heading-description" value="To view discount." />
         		<put-attribute name="content" value="/WEB-INF/jsp/discountmanagement/viewDiscount.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="manageDiscount" extends="main_template">  
+        <put-attribute name="title" value="Manage Discount" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Manage Discount" />
+        		<put-attribute name="heading-description" value="To manage discounts for selected promotion" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/discountmanagement/manageforpromotion/manageDiscount.jsp">
+        				<put-attribute name="datatable1">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="Current Discount" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/options.jsp" />
+		        				<put-attribute name="datatable-options" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/datatable-options.jsp" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/discountmanagement/manageforpromotion/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/product/discount/getDiscountListInPromotion" />
+		        						<put-attribute name="datatable-data" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/datatable-data.jsp" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        				<put-attribute name="datatable2">
+		        			<definition template = "/WEB-INF/jsp/template/datatable2.jsp">
+		        				<put-attribute name="table-title2" value="Available Discount to be added" />
+		        				<put-attribute name="options2" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/options2.jsp" />
+		        				<put-attribute name="datatable-options2" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/datatable-options.jsp" />
+		        				<put-attribute name="datatable-script2">
+		        					<definition template="/WEB-INF/jsp/discountmanagement/manageforpromotion/datatable-script2.jsp" >
+		        						<put-attribute name="data-list2" value="/JJ/product/discount/getDiscountListNotInPromotion" />
+		        						<put-attribute name="datatable-data2" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/datatable-data.jsp" />
+		        						<put-attribute name="column-mapping2" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/column-mapping2.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header2" value="/WEB-INF/jsp/discountmanagement/manageforpromotion/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>

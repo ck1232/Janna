@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,8 +23,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Discount;
+import com.JJ.model.Promotion;
 import com.JJ.model.User;
 import com.JJ.service.discountmanagement.DiscountManagementService;
+import com.JJ.service.promotionmanagement.PromotionManagementService;
 import com.JJ.validator.DiscountFormValidator;
 
 
@@ -34,12 +37,15 @@ public class DiscountManagementController {
 	private static final Logger logger = Logger.getLogger(DiscountManagementController.class);
 	
 	private DiscountManagementService discountManagementService;
+	private PromotionManagementService promotionManagementService;
 	private DiscountFormValidator discountFormValidator;
 	
 	@Autowired
 	public DiscountManagementController(DiscountManagementService discountManagementService,
+			PromotionManagementService promotionManagementService,
 			DiscountFormValidator discountFormValidator) {
 		this.discountManagementService = discountManagementService;
+		this.promotionManagementService = promotionManagementService;
 		this.discountFormValidator = discountFormValidator;
 	}
 	
@@ -158,6 +164,90 @@ public class DiscountManagementController {
 		return "viewDiscount";
 
 	}
+	
+	@RequestMapping(value = "/manageDiscount", method = RequestMethod.POST)
+	public String getDiscountToManage(@RequestParam("editBtn") String id, Model model) {
+		
+		logger.debug("Loading manage discount page for " + id);
+		Promotion promotion = promotionManagementService.findById(new Integer(id));
+		model.addAttribute("promotion", promotion);
+		return "manageDiscount";
+	}
+	
+	@RequestMapping(value = "/manageDiscount/{id}", method = RequestMethod.GET)
+	public String getDiscountToManageForRedirect(@PathVariable String id, Model model) {
+		
+		logger.debug("Loading manage discount page for " + id);
+		Promotion promotion = promotionManagementService.findById(new Integer(id));
+		model.addAttribute("promotion", promotion);
+		return "manageDiscount";
+	}
+	
+	@RequestMapping(value = "/getDiscountListInPromotion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String getDiscountListInPromotion(@RequestParam("promotionid") String id, Model model) {
+		logger.debug("getting discount list");
+		List<Discount> discountList = discountManagementService.getAllDiscountsInPromotion(new Integer(id));
+		return GeneralUtils.convertListToJSONString(discountList);
+	}
+	
+	@RequestMapping(value = "/editDiscountList", method = RequestMethod.POST)
+	public String getDiscountListToEdit(@RequestParam("editBtn") String id, Model model) {
+		
+		logger.debug("Loading edit discount list page for " + id);
+		Promotion promotion = promotionManagementService.findById(new Integer(id));
+		model.addAttribute("promotion", promotion);
+		return "editDiscountList";
+	}
+	
+	@RequestMapping(value = "/getDiscountListNotInPromotion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String getDiscountListNotInPromotion(@RequestParam("promotionid") String id, Model model) {
+		logger.debug("getting discount list");
+		List<Discount> discountList = discountManagementService.getAllDiscountsNotInPromotion(new Integer(id));
+		return GeneralUtils.convertListToJSONString(discountList);
+	}
+	
+	@RequestMapping(value = "/addDiscount", method = RequestMethod.POST)
+	public String addDiscountToPromo(@RequestParam(value = "checkboxId2", required=false) List<String> ids,
+			@RequestParam("promotionid") String promotionid,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:manageDiscount/" + promotionid;
+		}
+		for (String id : ids) {
+			Discount discount = discountManagementService.findById(new Integer(id));
+			discount.setPromoid(new Integer(promotionid));
+			discountManagementService.updateDiscount(discount);
+			logger.debug("added to promotion: "+ id);
+		}
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Discount(s) added successfully!");
+		return "redirect:manageDiscount/" + promotionid;
+	}
+	
+	
+	
+	@RequestMapping(value = "/removeDiscount", method = RequestMethod.POST)
+	public String removeDiscountFromPromo(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			@RequestParam("promotionid") String promotionid,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:manageDiscount/" + promotionid;
+		}
+		for (String id : ids) {
+			Discount discount = discountManagementService.findById(new Integer(id));
+			discount.setPromoid(0);
+			discountManagementService.updateDiscount(discount);
+			logger.debug("removed from promotion: "+ id);
+		}
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Discount(s) removed successfully!");
+		return "redirect:manageDiscount/" + promotionid;
+	}
+	
 	
 	
 }

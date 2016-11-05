@@ -61,7 +61,7 @@ public class ProductSubCategoryManagementController {
 	
 	
 	@RequestMapping(value = "/listSubCategory", method = RequestMethod.POST)
-	public String listSubCategory(@RequestParam("editBtn") String id, Model model) {
+	public String listSubCategory(@RequestParam("manageSubCategoryBtn") String id, Model model) {
 		logger.debug("id = " + id);
 		Productcategory productcategory = productCategoryManagementService.findById(new Integer(id));
 		if (productcategory == null) {
@@ -127,7 +127,7 @@ public class ProductSubCategoryManagementController {
 			if(!pass){
 				return "createSubCategory";
 			}
-			productSubCategoryManagementService.saveProductCategory(productsubcategory);
+			productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "SubCategory added successfully!");
 			
@@ -146,7 +146,7 @@ public class ProductSubCategoryManagementController {
 		}
 		
 		for (String id : ids) {
-			productSubCategoryManagementService.deleteProductCategory(new Integer(id));
+			productSubCategoryManagementService.deleteProductSubCategory(new Integer(id));
 			logger.debug("deleted "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");

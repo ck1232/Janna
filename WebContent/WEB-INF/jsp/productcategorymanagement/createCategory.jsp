@@ -30,6 +30,17 @@
 							</div>
 							<div class="row">		  
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
+									<label class="col-sm-2 control-label">Parent Category</label>
+									<div class="col-sm-10">
+										<div class="checkbox">
+									  		<label><form:checkbox path="isparent" id="isparent" /></label>
+									     	<form:errors path="isparent" class="text-danger" />
+										</div>
+									</div>
+							  	</div>
+							</div>
+							<div class="row">		  
+							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Allow Display</label>
 									<div class="col-sm-10">
 										<div class="checkbox">
