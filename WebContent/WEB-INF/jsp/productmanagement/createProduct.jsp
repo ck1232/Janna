@@ -4,14 +4,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Content Wrapper. Contains page content -->
 	<script type="text/javascript">
-		$(function(){
-			$("#uploadImage").fileinput({
-			    uploadUrl: "http://localhost/file-upload-single/1", // server upload action
-			    uploadAsync: true,
-			    maxFileCount: 5
-			});
-			 CKEDITOR.replace('productInfoEditor');
-		});
+	$(function(){
+	// instantiate the uploader
+	  Dropzone.autoDiscover = false;
+	    $("#dZUpload").dropzone({
+	        url: "hn_SimpeFileUploader.ashx",
+	        addRemoveLinks: true,
+	        success: function (file, response) {
+	            var imgName = response;
+	            file.previewElement.classList.add("dz-success");
+	            console.log("Successfully uploaded :" + imgName);
+	        },
+	        error: function (file, response) {
+	            file.previewElement.classList.add("dz-error");
+	        }
+	    });
+		CKEDITOR.replace('productInfoEditor');
+	});
 		
 	</script>
 	<!-- Our main JS file -->
@@ -28,15 +37,13 @@
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />"></form>
                     <c:url var="post_url" value="/product/product/createProduct" />
-                    <form:form id="createProductForm" method="post" modelAttribute="productForm" action="${post_url}">
+                    <form:form id="createProductForm" method="post"  modelAttribute="productForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			              <div class="box-body">
 			              	<!-- upper row -->
 				              <div class="row form-group">
 				              	<!-- image panel -->
-				              	<div class="col-sm-5">
-					              	<input id="uploadImage" name="uploadImage" type="file" class="file-loading" accept="image/*">
-				              	</div>
+				              	
 				              	<!-- main content -->
 				              	<div class="col-sm-7">
 				              		<div class="row">
@@ -74,6 +81,9 @@
 									  	</div>
 				              		</div>
 				              	</div>
+				              	<div class="col-sm-5">
+					              	
+				              	</div>
 				              </div>
 				              
 				              <!-- lower row -->
@@ -86,6 +96,12 @@
 				              			<li class="active">
 				              				<a href="#product_info_tab" data-toggle="tab" aria-expanded="false">Product Info</a>
 				              			</li>
+				              			<li>
+				              				<a href="#image_tab" data-toggle="tab" aria-expanded="false">Image</a>
+				              			</li>
+				              			<li>
+				              				<a href="#option_tab" data-toggle="tab" aria-expanded="false">Option</a>
+				              			</li>
 				              		</ul>
 				              		<div class="tab-content">
 				              			<div id="product_info_tab" class="tab-pane active">
@@ -93,10 +109,17 @@
                                             	This is my textarea to be replaced with CKEditor.
                     						</textarea>
 				              			</div>
+				              			<div id="image_tab" class="tab-pane">
+									      	<div id="dZUpload" class="dropzone">
+											      <div class="dz-default dz-message"></div>
+											</div>
+				              			</div>
+				              			<div id="option_tab" class="tab-pane">
+				              				
+				              			</div>
 				              		</div>
 				              	</div>
 				              </div>
-			              </div>
 			              <!-- /.box-body -->
 		            </form:form>
 		            <!--/.FORM-->

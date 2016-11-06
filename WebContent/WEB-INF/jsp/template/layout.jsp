@@ -48,6 +48,7 @@
 		  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 		  
 		  <link rel="stylesheet" href="<c:url value="/development/css/custom.css"/>">
+		  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/3.8.4/css/dropzone.css">
 		  <!-- REQUIRED JS SCRIPTS -->
 		
 		
@@ -78,11 +79,7 @@
 		<!-- CK Editor -->
 		<script src="//cdn.ckeditor.com/4.5.11/full/ckeditor.js"></script>
 		<!-- upload -->
-		<link href="<c:url value="/development/plugins/upload/css/fileinput.css" />" media="all" rel="stylesheet" type="text/css" />
-        <script src="<c:url value="/development/plugins/upload/js/fileinput.js" />" type="text/javascript"></script>
-        <script src="<c:url value="/development/plugins/upload/js/fileinput_locale_fr.js" />" type="text/javascript"></script>
-        <script src="<c:url value="/development/plugins/upload/js/fileinput_locale_es.js" />" type="text/javascript"></script>
-        <script src="<c:url value="/development/plugins/upload/themes/fa/theme.js" />"></script>
+        <script src="<c:url value="https://raw.github.com/enyo/dropzone/master/dist/dropzone.js" />"></script>
 		<!-- REQUIRED JS SCRIPTS -->
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
