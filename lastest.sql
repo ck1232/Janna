@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `jj` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `jj`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: jj
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.16-MariaDB
+-- Server version	5.5.5-10.1.9-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -142,7 +142,7 @@ CREATE TABLE `module` (
   `icon` varchar(45) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Management','fa-users','Y'),(3,'Test Module','fa-users','Y'),(4,'test Management','fa-users','Y'),(5,'Product management','fa-users','N');
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Management','fa-users','Y'),(3,'Test Module','fa-users','Y'),(4,'test Management','fa-users','Y'),(5,'Product management','fa-users','N'),(6,'Promotion Management','fa-users','N');
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,12 +269,13 @@ DROP TABLE IF EXISTS `productoption`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `productoption` (
-  `productoptionId` int(11) NOT NULL,
+  `productoptionId` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `sequence` int(11) DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`productoptionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,6 +284,7 @@ CREATE TABLE `productoption` (
 
 LOCK TABLES `productoption` WRITE;
 /*!40000 ALTER TABLE `productoption` DISABLE KEYS */;
+INSERT INTO `productoption` VALUES (1,'Color','',1,'N'),(2,'Color','',2,'N'),(3,'Color','',3,'N'),(4,'Type','',1,'N'),(5,'Type','',2,'N'),(6,'Type','',3,'N');
 /*!40000 ALTER TABLE `productoption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -412,7 +414,7 @@ CREATE TABLE `role` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -421,7 +423,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'ADMIN',NULL,NULL,NULL,NULL,0),(2,'MODULE_MGR',NULL,NULL,NULL,NULL,0),(5,'ROLE_ADMIN',NULL,NULL,NULL,NULL,NULL),(6,'PRODUCT_MGR',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `role` VALUES (1,'ADMIN',NULL,NULL,NULL,NULL,0),(2,'MODULE_MGR',NULL,NULL,NULL,NULL,0),(5,'ROLE_ADMIN',NULL,NULL,NULL,NULL,NULL),(6,'PRODUCT_MGR',NULL,NULL,NULL,NULL,NULL),(7,'PROMOTION_MGR',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,7 +442,7 @@ CREATE TABLE `submodule` (
   `url` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -449,7 +451,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N'),(24,5,'Category Management','fa-users','product/category/listProductCategory','N'),(25,5,'Promotion Management','fa-users','product/promotion/listPromotion','N'),(26,5,'Product Management','fa-users','product/product/listProduct','N'),(27,5,'Discount Management','fa-users','/product/discount/listDiscount','N');
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N'),(24,5,'Category Management','fa-users','product/category/listProductCategory','N'),(25,5,'Promotion Management','fa-users','product/promotion/listPromotion','Y'),(26,5,'Product Management','fa-users','product/product/listProduct','N'),(27,5,'Discount Management','fa-users','/product/discount/listDiscount','Y'),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N'),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N'),(30,5,'Product Option Management','fa-users','/product/option/listProductOption','N');
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -474,7 +476,7 @@ CREATE TABLE `submodulepermission` (
 
 LOCK TABLES `submodulepermission` WRITE;
 /*!40000 ALTER TABLE `submodulepermission` DISABLE KEYS */;
-INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(1,22,'12'),(1,24,'16'),(1,25,'18'),(1,26,'20'),(1,27,'21'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12'),(5,26,'20'),(6,24,'16'),(6,25,'18'),(6,27,'21');
+INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(1,22,'12'),(1,24,'16'),(1,25,'18'),(1,26,'20'),(1,27,'21'),(1,28,'23'),(1,29,'24'),(1,30,'25'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12'),(5,26,'20'),(6,24,'16'),(6,25,'18'),(6,27,'21'),(6,30,'25'),(7,28,'23'),(7,29,'24');
 /*!40000 ALTER TABLE `submodulepermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,7 +495,7 @@ CREATE TABLE `submodulepermissiontype` (
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url_UNIQUE` (`url`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,7 +504,7 @@ CREATE TABLE `submodulepermissiontype` (
 
 LOCK TABLES `submodulepermissiontype` WRITE;
 /*!40000 ALTER TABLE `submodulepermissiontype` DISABLE KEYS */;
-INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser'),(16,'24','View','1','/product/category/listProductCategory'),(18,'25','View','1','/product/promotion/listPromotion'),(20,'26','View','1','product/product/listProduct'),(21,'27','View','1','product/discount/listDiscount');
+INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser'),(16,'24','View','1','/product/category/listProductCategory'),(20,'26','View','1','product/product/listProduct'),(23,'28','View','1','/product/promotion/listPromotion'),(24,'29','View','1','/product/discount/listDiscount'),(25,'30','View','1','/product/option/listProductOption');
 /*!40000 ALTER TABLE `submodulepermissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -584,4 +586,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-06 19:16:45
+-- Dump completed on 2016-11-07  0:08:18

@@ -28,7 +28,14 @@ public class ProductOptionManagementService {
 
 	public List<Productoption> getAllProductoptions() {
 		ProductoptionExample productoptionExample = new ProductoptionExample();
-		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andSequenceEqualTo(1);
+		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
+		return productoptionList;
+	}
+	
+	public List<Productoption> getAllProductoptionsByName(String name) {
+		ProductoptionExample productoptionExample = new ProductoptionExample();
+		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andNameEqualTo(name);
 		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
 		return productoptionList;
 	}
@@ -39,6 +46,13 @@ public class ProductOptionManagementService {
 	
 	public void deleteProductoption(Integer id) {
 		Productoption productoption = findById(id);
+		if(productoption.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
+			productoption.setDeleteind(GeneralUtils.DELETED);
+			productoptionMapper.updateByPrimaryKey(productoption);
+		}
+	}
+	
+	public void deleteProductoption(Productoption productoption) {
 		if(productoption.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
 			productoption.setDeleteind(GeneralUtils.DELETED);
 			productoptionMapper.updateByPrimaryKey(productoption);

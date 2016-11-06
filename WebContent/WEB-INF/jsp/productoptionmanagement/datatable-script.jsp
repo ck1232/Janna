@@ -22,9 +22,9 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.promotionid);
-          $(row).find('button[name="editBtn"]').prop('value', data.promotionid);
-          $(row).find('button[name="viewBtn"]').prop('value', data.promotionid);
+          $(row).find('input[type="checkbox"]').prop('value', data.productoptionid);
+          $(row).find('button[name="editBtn"]').prop('value', data.productoptionid);
+          $(row).find('button[name="viewBtn"]').prop('value', data.productoptionid);
        }
     });
 });

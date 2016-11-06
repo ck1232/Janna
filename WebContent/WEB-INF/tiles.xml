@@ -773,6 +773,30 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+    <definition name="createProductOption" extends="main_template">
+    	<put-attribute name="title" value="Add New Product Option" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Product Option" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/productoptionmanagement/createProductOption.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updateProductOption" extends="main_template">  
+        <put-attribute name="title" value="Update Product Option" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Product Option" />
+        		<put-attribute name="heading-description" value="To update discount." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/productoptionmanagement/updateProductOption.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
     <!-- Product Option Management Module END -->
   
 </tiles-definitions>  
