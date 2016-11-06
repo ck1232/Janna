@@ -1,0 +1,21 @@
+----ck----
+create product
+ - tabs - images
+        - options
+ - price, weight, display, tags
+ - ckeditor
+list product
+ - display as squares?
+ - OPtions: manage category, allow display, add, delete
+
+----J----
+discount table add column applyType(Product, delivery, total)
+ - create/update discount - applyType
+ - manage product from discount list if applytype is product
+Option management
+Delivery fee management
+
+
+
+==================================
+Order link to address

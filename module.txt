@@ -1,0 +1,6 @@
+Delivery fee management
+Order management
+Transaction management
+Receipt management
+Report management
+Customer management
