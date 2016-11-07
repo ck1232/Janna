@@ -3,4 +3,5 @@
   <th>Discount Name</th>
   <th>Type</th>
   <th>Value</th>
+  <th>Apply Type</th>
 </tr>

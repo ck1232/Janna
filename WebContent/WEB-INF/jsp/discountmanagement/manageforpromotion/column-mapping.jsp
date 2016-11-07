@@ -9,3 +9,4 @@
 {"data": "discountname"},
 {"data": "discounttype"},
 {"data": "discountvalue"},
+{"data": "applytype"},

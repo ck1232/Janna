@@ -38,6 +38,12 @@
 									<div class="col-sm-10">${discount.discountvalue}</div>
 								</div>
 							</div>	
+							<div class="row">
+						  		<div class="form-group">
+								    <div class="col-sm-2">Apply Type</div>
+								    <div class="col-sm-10">${discount.applytype}</div>
+								</div>
+							</div>	
 							<br/>
 							<br/>
 		            	

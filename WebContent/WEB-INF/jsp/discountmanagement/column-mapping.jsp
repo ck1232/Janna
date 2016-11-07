@@ -9,10 +9,12 @@
 {"data": "discountname"},
 {"data": "discounttype"},
 {"data": "discountvalue"},
+{"data": "applytype"},
 {
     "className":      '',
     "orderable":      false,
     "data":           null,
     "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewDiscountForm">View</button>'+
-    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateDiscountForm"><i class="fa fa-pencil"></i> Edit</button>'
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateDiscountForm"><i class="fa fa-pencil"></i> Edit</button>'+
+    '<button name="manageProductBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/product/discount/manageProductDiscount" />"><i class="fa fa-pencil"></i> Manage Products</button>'
 },
