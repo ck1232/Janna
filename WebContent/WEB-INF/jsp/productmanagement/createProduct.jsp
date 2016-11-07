@@ -6,9 +6,11 @@
 	<script type="text/javascript">
 	$(function(){
 	// instantiate the uploader
+	  
 	  Dropzone.autoDiscover = false;
 	    $("#dZUpload").dropzone({
-	        url: "hn_SimpeFileUploader.ashx",
+	        url: "uploadImage",
+	        param:{header:token},
 	        addRemoveLinks: true,
 	        success: function (file, response) {
 	            var imgName = response;
@@ -37,8 +39,8 @@
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />"></form>
                     <c:url var="post_url" value="/product/product/createProduct" />
-                    <form:form id="createProductForm" method="post"  modelAttribute="productForm" action="${post_url}">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <form:form id="createProductForm" method="post"  modelAttribute="productForm" action="${post_url}"  enctype="multipart/form-data">
+                    <input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			              <div class="box-body">
 			              	<!-- upper row -->
 				              <div class="row form-group">
@@ -120,6 +122,7 @@
 				              		</div>
 				              	</div>
 				              </div>
+				            </div>
 			              <!-- /.box-body -->
 		            </form:form>
 		            <!--/.FORM-->

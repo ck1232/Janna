@@ -52,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-	  http.csrf().and()
+	  http.csrf().ignoringAntMatchers("/product/product/uploadImage")
+	  	.and()
 	  	.authorizeRequests()
 	  	.accessDecisionManager(accessDecisionManager())
 	  	.antMatchers("/","/dashboard").authenticated()
