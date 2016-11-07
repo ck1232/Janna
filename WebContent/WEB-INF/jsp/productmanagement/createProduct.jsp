@@ -3,13 +3,24 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Content Wrapper. Contains page content -->
+
+	 <meta name="_csrf" content="${_csrf.token}"/>
+ 	<!-- default header name is X-CSRF-TOKEN -->
+	 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 	<script type="text/javascript">
 	$(function(){
 	// instantiate the uploader
 	  
 	  Dropzone.autoDiscover = false;
+	  //var token = $("#token").val();
+	  var token = $("meta[name='_csrf']").attr("content");
+      var header = $("meta[name='_csrf_header']").attr("content");
+      alert(header+":"+token);
 	    $("#dZUpload").dropzone({
 	        url: "uploadImage",
+	        headers: {
+	            header: token
+	        },
 	        param:{header:token},
 	        addRemoveLinks: true,
 	        success: function (file, response) {

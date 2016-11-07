@@ -13,6 +13,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Product;
 import com.JJ.model.ProductExample;
 import com.JJ.model.Productsubcategory;
+import com.JJ.service.imagestaging.ImageStagingService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 
 @Service
@@ -20,10 +21,13 @@ import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementS
 public class ProductService {
 	private ProductMapper productMapper;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
+	private ImageStagingService imageStagingService;
 	@Autowired
-	public ProductService(ProductMapper productMapper, ProductSubCategoryManagementService productSubCategoryManagementService){
+	public ProductService(ProductMapper productMapper, ProductSubCategoryManagementService productSubCategoryManagementService,
+			ImageStagingService imageStagingService){
 		this.productMapper = productMapper;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
+		this.imageStagingService = imageStagingService;
 	}
 	
 	public List<Product> getAllProducts() {
@@ -51,5 +55,8 @@ public class ProductService {
 		}
 		return map;
 	}
-
+	
+	public Integer insertImageStaging(byte[] image, String imageName, String username){
+		return imageStagingService.insertImageStaging(image, imageName, username);
+	}
 }

@@ -1,7 +1,7 @@
 package com.JJ.controller.productmanagement;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,16 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -102,7 +101,7 @@ public class ProductManagementController {
 		//1. build an iterator
         Iterator<String> itr =  request.getFileNames();
         MultipartFile mpf = null;
-
+        User userAccount = (User) request.getSession().getAttribute("userAccount");
         //2. get each file
         while(itr.hasNext()){
 
@@ -122,9 +121,9 @@ public class ProductManagementController {
 
             try {
                fileMeta.setBytes(mpf.getBytes());
-
-                // copy file to local disk (make sure the path "e.g. D:/temp/files" exists)            
-                FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream("D:/temp/files/"+mpf.getOriginalFilename()));
+               Integer stagingId = productService.insertImageStaging(fileMeta.getBytes(), fileMeta.getFileName(), userAccount.getUsername());
+               logger.debug("staging id:"+stagingId);          
+                
 
            } catch (IOException e) {
                // TODO Auto-generated catch block
