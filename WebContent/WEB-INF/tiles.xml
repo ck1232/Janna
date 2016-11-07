@@ -741,6 +741,63 @@
     </definition>
     
     <!-- Discount Management Module END -->
+    
+    <!-- Product Option Management Module START -->
+ 	
+ 	<definition name="listProductOption" extends="main_template">  
+        <put-attribute name="title" value="Product Option Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Product Option Listing" />
+        		<put-attribute name="heading-description" value="To view all the product options" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/productoptionmanagement/listProductOption.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Product Options" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/productoptionmanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/productoptionmanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/product/option/getProductOptionList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productoptionmanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productoptionmanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createProductOption" extends="main_template">
+    	<put-attribute name="title" value="Add New Product Option" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Product Option" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/productoptionmanagement/createProductOption.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="updateProductOption" extends="main_template">  
+        <put-attribute name="title" value="Update Product Option" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Product Option" />
+        		<put-attribute name="heading-description" value="To update discount." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/productoptionmanagement/updateProductOption.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    <!-- Product Option Management Module END -->
   
   	<!-- Product Management Module START -->
   	<definition name="listProduct" extends="main_template">  
