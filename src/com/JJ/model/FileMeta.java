@@ -8,7 +8,7 @@ public class FileMeta {
 	private String fileName;
     private String fileSize;
     private String fileType;
- 
+    private Integer imageStagingId;
     private byte[] bytes;
 
 	public String getFileName() {
@@ -41,6 +41,14 @@ public class FileMeta {
 
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
+	}
+
+	public Integer getImageStagingId() {
+		return imageStagingId;
+	}
+
+	public void setImageStagingId(Integer imageStagingId) {
+		this.imageStagingId = imageStagingId;
 	}
     
 }

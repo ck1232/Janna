@@ -1,7 +1,6 @@
 package com.JJ.controller.productmanagement;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -122,9 +121,7 @@ public class ProductManagementController {
             try {
                fileMeta.setBytes(mpf.getBytes());
                Integer stagingId = productService.insertImageStaging(fileMeta.getBytes(), fileMeta.getFileName(), userAccount.getUsername());
-               logger.debug("staging id:"+stagingId);          
-                
-
+               fileMeta.setImageStagingId(stagingId);
            } catch (IOException e) {
                // TODO Auto-generated catch block
                e.printStackTrace();

@@ -10,12 +10,32 @@
 	<script type="text/javascript">
 	$(function(){
 	// instantiate the uploader
-	  
+		var sortableList = $("#dZUpload");
+
+		var sortEventHandler = function(event, ui){
+			var listElements = $("#dZUpload").children().find("dz-preview");
+			var listValues = [];
+
+			
+			/* listElements.forEach(function(element){
+			    listValues.push(element.innerHTML);
+			}); */
+
+			console.log(listElements.length); 
+		};
+
+		sortableList.sortable({
+		    stop: sortEventHandler
+		});
+
+		// You can also set the event handler on an already existing Sortable widget this way:
+
+		sortableList.on("sortchange", sortEventHandler);
+		
 	  Dropzone.autoDiscover = false;
 	  //var token = $("#token").val();
 	  var token = $("meta[name='_csrf']").attr("content");
       var header = $("meta[name='_csrf_header']").attr("content");
-      alert(header+":"+token);
 	    $("#dZUpload").dropzone({
 	        url: "uploadImage",
 	        headers: {
@@ -33,6 +53,15 @@
 	        }
 	    });
 		CKEDITOR.replace('productInfoEditor');
+
+		$(".dropzone").sortable({
+	          items:'.dz-preview',
+	          cursor: 'move',
+	          opacity: 0.5,
+	          containment: '.dropzone',
+	          distance: 20,
+	          tolerance: 'pointer'
+	      });
 	});
 		
 	</script>

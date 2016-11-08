@@ -48,12 +48,15 @@
 		  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 		  
 		  <link rel="stylesheet" href="<c:url value="/development/css/custom.css"/>">
-		  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/3.8.4/css/dropzone.css">
+		  <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 		  <!-- REQUIRED JS SCRIPTS -->
 		
 		
 		<!-- jQuery 2.2.3 -->
 		<script src="<c:url value="/development/plugins/jQuery/jquery-2.2.3.min.js"/>"></script>
+		
+		<!--  JQuery-UI -->
+		<script src="<c:url value ="/development/jquery-ui-1.12.1/jquery-ui-1.12.1/jquery-ui.js" />"></script>
 		<!-- Bootstrap 3.3.6 -->
 		<script src="<c:url value="/development/bootstrap/js/bootstrap.min.js"/>"></script>
 		<!-- AdminLTE App -->
