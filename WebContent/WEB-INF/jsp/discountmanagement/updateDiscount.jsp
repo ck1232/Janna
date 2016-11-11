@@ -52,7 +52,20 @@
 						</div>	
 					</div>
 				</div>
-	
+				<div class="row">
+				  	<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Apply Type</label>
+						<div class="col-sm-10">
+							<form:select path="applytype" class="selectpicker" id="applytype" name ="applytype">
+								<c:forEach items="${applyTypeList}" var="appType">
+							    	<option value = "${appType}" <c:if test="${appType == discountForm.applytype }">selected</c:if>>
+							    		${appType}
+							    	</option>
+							    </c:forEach>
+							</form:select>
+						</div>
+				  	</div>
+				</div>
 				<br/>
 				<br/>
 	

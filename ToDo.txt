@@ -9,8 +9,8 @@ list product
  - OPtions: manage category, allow display, add, delete
 
 ----J----
-discount table add column applyType(Product, delivery, total)
- - create/update discount - applyType
+discount table add column applyType(Product, delivery, total) done
+ - create/update discount - applyType done
  - manage product from discount list if applytype is product
 Option management
 Delivery fee management

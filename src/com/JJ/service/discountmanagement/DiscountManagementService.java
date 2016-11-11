@@ -1,6 +1,5 @@
 package com.JJ.service.discountmanagement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +42,12 @@ public class DiscountManagementService {
 	
 	public List<Discount> getAllDiscountsNotInPromotion(Integer id) {
 		DiscountExample discountExample = new DiscountExample();
-		List<Integer> intList = new ArrayList<Integer>();
-		intList.add(null);
-		intList.add(0);
-		discountExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andPromoidIn(intList);
+		discountExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andPromoidIsNull();
 		List<Discount> discountList = discountMapper.selectByExample(discountExample);
+		
+		discountExample.clear();
+		discountExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andPromoidEqualTo(0);
+		discountList.addAll(discountMapper.selectByExample(discountExample));
 		return discountList;
 	}
 	

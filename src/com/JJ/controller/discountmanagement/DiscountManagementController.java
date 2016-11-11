@@ -73,7 +73,13 @@ public class DiscountManagementController {
     	discTypeList.add("Percentage %");
     	discTypeList.add("Value $");
     	
+    	List<String> applyTypeList = new ArrayList<String>();
+    	applyTypeList.add("Product");
+    	applyTypeList.add("Delivery");
+    	applyTypeList.add("Total");
+    	
     	model.addAttribute("discTypeList", discTypeList);
+    	model.addAttribute("applyTypeList", applyTypeList);
     	model.addAttribute("discountForm", discount);
         return "createDiscount";  
     }  
@@ -93,7 +99,13 @@ public class DiscountManagementController {
 	    	discTypeList.add("Percentage %");
 	    	discTypeList.add("Value $");
 	    	
+	    	List<String> applyTypeList = new ArrayList<String>();
+	    	applyTypeList.add("Product");
+	    	applyTypeList.add("Delivery");
+	    	applyTypeList.add("Total");
+	    	
 	    	model.addAttribute("discTypeList", discTypeList);
+	    	model.addAttribute("applyTypeList", applyTypeList);
 			return "createDiscount";
 		} else {
 			discountManagementService.saveDiscount(discount);
@@ -129,7 +141,13 @@ public class DiscountManagementController {
     	discTypeList.add("Percentage %");
     	discTypeList.add("Value $");
 		
+    	List<String> applyTypeList = new ArrayList<String>();
+    	applyTypeList.add("Product");
+    	applyTypeList.add("Delivery");
+    	applyTypeList.add("Total");
+    	
     	model.addAttribute("discTypeList", discTypeList);
+    	model.addAttribute("applyTypeList", applyTypeList);
 		model.addAttribute("discountForm", discount);
 		return "updateDiscount";
 	}

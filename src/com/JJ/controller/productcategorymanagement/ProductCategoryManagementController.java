@@ -168,8 +168,8 @@ public class ProductCategoryManagementController {
 			return "updateProductCategory";
 		} else {
 			Productcategory currentCategory = productCategoryManagementService.findById(productcategory.getId());
-			if(productcategory.getIsparent() != currentCategory.getIsparent()){
-				//check submodule
+			if(productcategory.getIsparent() != currentCategory.getIsparent()){ // to parent
+				//check if have products
 				List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productcategory.getId());
 				for(Productsubcategory psc: subcategoryList) {
 					List<Product> productList = productManagementService.getAllProductsBySubCategory(psc.getId());
@@ -183,6 +183,14 @@ public class ProductCategoryManagementController {
 			}
 			productSubCategoryManagementService.deleteProductSubCategoryByCategory(productcategory.getId());
 			productCategoryManagementService.updateProductcategory(productcategory);
+			if(!productcategory.getIsparent()) {
+				Productsubcategory productsubcategory = new Productsubcategory();
+				productsubcategory.setName(productcategory.getName());
+		    	productsubcategory.setDeleteind(GeneralUtils.NOT_DELETED);
+		    	productsubcategory.setProductcategoryid(new Integer(productcategory.getId()));
+		    	productsubcategory.setDisplayind(productcategory.getDisplayind());
+				productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
+			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product Category updated successfully!");
 		}
