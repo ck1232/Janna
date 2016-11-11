@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.JJ.model.Menu;
 import com.JJ.model.Module;
 import com.JJ.model.Submodule;
-import com.JJ.model.SubmodulepermissionKey;
+import com.JJ.model.Submodulepermission;
 import com.JJ.model.User;
 import com.JJ.model.UserRole;
 import com.JJ.service.common.CommonService;
@@ -89,8 +89,8 @@ public class CommonController {
 		if(roleIdList.size() == 0){
 			return null;
 		}
-		List<SubmodulepermissionKey> submodulepermissionKeyList = permissionManagementService.getSubmoduleByRole(roleIdList);
-		for(SubmodulepermissionKey obj : submodulepermissionKeyList){
+		List<Submodulepermission> submodulepermissionList = permissionManagementService.getSubmoduleByRole(roleIdList);
+		for(Submodulepermission obj : submodulepermissionList){
 			subModuleIdList.add(obj.getSubmoduleid());
 		}
 		if(subModuleIdList.size() == 0){

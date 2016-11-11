@@ -12,7 +12,6 @@ import com.JJ.dao.SubmodulepermissiontypeMapper;
 import com.JJ.model.RolesToPermission;
 import com.JJ.model.Submodulepermission;
 import com.JJ.model.SubmodulepermissionExample;
-import com.JJ.model.SubmodulepermissionKey;
 import com.JJ.model.Submodulepermissiontype;
 import com.JJ.model.SubmodulepermissiontypeExample;
 
@@ -32,10 +31,10 @@ public class PermissionManagementService {
 	
 	//Submodulepermission functions START
 
-	public List<SubmodulepermissionKey> getAllSubmodulepermission() {
+	public List<Submodulepermission> getAllSubmodulepermission() {
 		SubmodulepermissionExample submodulepermissionExample = new SubmodulepermissionExample();
 		submodulepermissionExample.createCriteria();
-		List<SubmodulepermissionKey> submodulepermissionList = submodulepermissionMapper.selectByExample(submodulepermissionExample);
+		List<Submodulepermission> submodulepermissionList = submodulepermissionMapper.selectByExample(submodulepermissionExample);
 		return submodulepermissionList;
 	}
 	
@@ -48,9 +47,9 @@ public class PermissionManagementService {
 		submodulepermissionMapper.insert(submodulepermission);
 	}
 	
-	public List<SubmodulepermissionKey> getSubmoduleByRole(List<Integer> roleIdList){
+	public List<Submodulepermission> getSubmoduleByRole(List<Integer> roleIdList){
 		if(roleIdList == null || roleIdList.size() == 0){
-			return new ArrayList<SubmodulepermissionKey>();
+			return new ArrayList<Submodulepermission>();
 		}
 		SubmodulepermissionExample example = new SubmodulepermissionExample();
 		example.createCriteria().andRoleidIn(roleIdList);

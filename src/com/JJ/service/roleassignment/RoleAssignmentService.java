@@ -10,7 +10,6 @@ import com.JJ.dao.UserRoleMapper;
 import com.JJ.model.RolesToAssign;
 import com.JJ.model.UserRole;
 import com.JJ.model.UserRoleExample;
-import com.JJ.model.UserRoleKey;
 
 @Service
 @Transactional
@@ -23,7 +22,7 @@ public class RoleAssignmentService {
 		this.userRoleMapper = userRoleMapper;
 	}
 	
-	public UserRole findById(UserRoleKey key) {
+	public UserRole findById(UserRole key) {
 		return userRoleMapper.selectByPrimaryKey(key);
 	}
 
@@ -50,7 +49,7 @@ public class RoleAssignmentService {
 	}
 	
 	
-	public void deleteUserRole(UserRoleKey key) {
+	public void deleteUserRole(UserRole key) {
 		userRoleMapper.deleteByPrimaryKey(key);
 	}
 	

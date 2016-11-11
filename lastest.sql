@@ -32,6 +32,12 @@ CREATE TABLE `customer` (
   `isActive` bit(1) DEFAULT NULL,
   `userId` varchar(255) NOT NULL,
   `password` varchar(60) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedBy` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`customerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -61,6 +67,11 @@ CREATE TABLE `customeraddress` (
   `postalCode` int(8) DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`addressId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -87,6 +98,12 @@ CREATE TABLE `deliveryfee` (
   `price` decimal(6,2) NOT NULL,
   `sequence` int(11) DEFAULT NULL,
   `carrierType` varchar(255) DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`delieveryfeeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -113,10 +130,15 @@ CREATE TABLE `discount` (
   `discountName` varchar(255) DEFAULT NULL,
   `discountType` varchar(100) DEFAULT NULL,
   `discountValue` decimal(6,2) DEFAULT '0.00',
-  `deleteInd` char(1) DEFAULT 'N',
   `applyType` varchar(50) DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`discountId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +147,7 @@ CREATE TABLE `discount` (
 
 LOCK TABLES `discount` WRITE;
 /*!40000 ALTER TABLE `discount` DISABLE KEYS */;
-INSERT INTO `discount` VALUES (1,NULL,'5 % discount','Percentage %',5.00,'N',NULL);
+INSERT INTO `discount` VALUES (1,NULL,'5 % discount','Percentage %',5.00,'Delivery','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,3,'4%','Percentage %',4.00,'Total','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `discount` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,6 +163,11 @@ CREATE TABLE `module` (
   `name` varchar(255) DEFAULT NULL,
   `icon` varchar(45) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -151,7 +178,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N'),(2,'Project Management','fa-users','Y'),(3,'Test Module','fa-users','Y'),(4,'test Management','fa-users','Y'),(5,'Product management','fa-users','N'),(6,'Promotion Management','fa-users','N');
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Project Management','fa-users','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Test Module','fa-users','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'test Management','fa-users','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Product management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Promotion Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +195,12 @@ CREATE TABLE `product` (
   `unitPrice` decimal(7,2) NOT NULL,
   `subcategoryId` int(11) DEFAULT NULL,
   `desciption` varchar(1000) DEFAULT NULL,
-  `deleteInd` char(1) DEFAULT 'N',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -195,6 +227,11 @@ CREATE TABLE `productcategory` (
   `isParent` bit(1) NOT NULL DEFAULT b'0',
   `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -205,7 +242,7 @@ CREATE TABLE `productcategory` (
 
 LOCK TABLES `productcategory` WRITE;
 /*!40000 ALTER TABLE `productcategory` DISABLE KEYS */;
-INSERT INTO `productcategory` VALUES (1,'light bulb','','','N'),(2,'hel','','','Y'),(3,'testing','','','N'),(4,'lamp','','','N');
+INSERT INTO `productcategory` VALUES (1,'light bulb','','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'hel','','','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'testing','','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'lamp','\0','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `productcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -220,6 +257,12 @@ CREATE TABLE `productdiscount_rs` (
   `productId` int(11) NOT NULL,
   `discountId` int(11) NOT NULL,
   `discountPrice` decimal(7,2) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productId`,`discountId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -248,6 +291,12 @@ CREATE TABLE `productimage` (
   `sequence` int(11) DEFAULT NULL,
   `thumbnailImage` mediumblob,
   `displayInd` bit(1) NOT NULL DEFAULT b'1',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`imageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -274,6 +323,11 @@ CREATE TABLE `productoption` (
   `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `sequence` int(11) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productoptionId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -284,7 +338,7 @@ CREATE TABLE `productoption` (
 
 LOCK TABLES `productoption` WRITE;
 /*!40000 ALTER TABLE `productoption` DISABLE KEYS */;
-INSERT INTO `productoption` VALUES (1,'Color','',1,'N'),(2,'Color','',2,'N'),(3,'Color','',3,'N'),(4,'Type','',1,'N'),(5,'Type','',2,'N'),(6,'Type','',3,'N');
+INSERT INTO `productoption` VALUES (1,'Color','',1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Color','',2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Color','',3,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','',1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Type','',2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Type','',3,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `productoption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,7 +353,12 @@ CREATE TABLE `productspecification` (
   `productSpecificationId` int(11) NOT NULL,
   `productId` int(11) DEFAULT NULL,
   `content` longtext,
-  `deleteInd` char(1) DEFAULT 'Y',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSpecificationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -326,8 +385,13 @@ CREATE TABLE `productsubcategory` (
   `productCategoryId` int(11) NOT NULL,
   `displayInd` bit(1) NOT NULL DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,7 +400,7 @@ CREATE TABLE `productsubcategory` (
 
 LOCK TABLES `productsubcategory` WRITE;
 /*!40000 ALTER TABLE `productsubcategory` DISABLE KEYS */;
-INSERT INTO `productsubcategory` VALUES (1,'Light Bulbs',1,'','Y'),(2,'Light Bulbs',1,'','N'),(3,'test1',3,'','N'),(4,'test2',3,'','N'),(5,'test3',3,'','N'),(6,'lamp',4,'','Y');
+INSERT INTO `productsubcategory` VALUES (1,'Light Bulbs',1,'','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Light Bulbs',1,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'test1',3,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'test2',3,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'test3',3,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'lamp',4,'','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,'lamp',4,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `productsubcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -354,6 +418,12 @@ CREATE TABLE `productsuboption` (
   `name` varchar(255) DEFAULT NULL,
   `sequence` int(11) DEFAULT NULL,
   `displayInd` bit(1) DEFAULT b'1',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSubOptionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -382,6 +452,11 @@ CREATE TABLE `promotion` (
   `promotionEndDate` datetime(6) DEFAULT NULL,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`promotionId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -392,7 +467,7 @@ CREATE TABLE `promotion` (
 
 LOCK TABLES `promotion` WRITE;
 /*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
-INSERT INTO `promotion` VALUES (1,'name','message','2016-05-10 00:00:00.000000','2016-12-10 00:00:00.000000','','N'),(2,'name','message','2016-10-04 00:00:00.000000','2016-10-06 00:00:00.000000','','N'),(3,'c','k','2016-10-31 00:00:00.000000','2016-10-31 00:00:00.000000','','N'),(4,'name','message',NULL,NULL,'','Y'),(5,'ck','ck','2016-11-09 19:29:00.000000','2016-11-12 22:16:00.000000','','N'),(6,'csdfs','c','2016-11-01 05:00:00.000000','2016-11-30 06:00:00.000000','\0','N');
+INSERT INTO `promotion` VALUES (1,'name','message','2016-05-10 00:00:00.000000','2016-12-10 00:00:00.000000','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'name','message','2016-10-04 00:00:00.000000','2016-10-06 00:00:00.000000','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'c','k','2016-10-31 00:00:00.000000','2016-10-31 00:00:00.000000','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'name','message',NULL,NULL,'','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'ck','ck','2016-11-09 19:29:00.000000','2016-11-12 22:16:00.000000','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'csdfs','c','2016-11-01 05:00:00.000000','2016-11-30 06:00:00.000000','\0','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -406,11 +481,12 @@ DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `createdby` varchar(50) DEFAULT NULL,
-  `createdon` datetime DEFAULT NULL,
-  `updatedby` varchar(50) DEFAULT NULL,
-  `updatedon` datetime DEFAULT NULL,
-  `version` tinyint(3) unsigned DEFAULT '0',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(50) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(50) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
@@ -423,7 +499,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'ADMIN',NULL,NULL,NULL,NULL,0),(2,'MODULE_MGR',NULL,NULL,NULL,NULL,0),(5,'ROLE_ADMIN',NULL,NULL,NULL,NULL,NULL),(6,'PRODUCT_MGR',NULL,NULL,NULL,NULL,NULL),(7,'PROMOTION_MGR',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `role` VALUES (1,'ADMIN','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'MODULE_MGR','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'ROLE_ADMIN','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'PRODUCT_MGR','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,'PROMOTION_MGR','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,7 +516,12 @@ CREATE TABLE `submodule` (
   `name` varchar(255) NOT NULL,
   `icon` varchar(45) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
-  `deleteInd` char(1) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -451,7 +532,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N'),(2,1,'Module Management','fa-users','admin/listModule','N'),(4,3,'Permissions Management','fa-users','admin/listModule','N'),(21,1,'Role Management','fa-users','admin/listRole','N'),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N'),(23,4,'test','fa-users','/admin/listPermission','N'),(24,5,'Category Management','fa-users','product/category/listProductCategory','N'),(25,5,'Promotion Management','fa-users','product/promotion/listPromotion','Y'),(26,5,'Product Management','fa-users','product/product/listProduct','N'),(27,5,'Discount Management','fa-users','/product/discount/listDiscount','Y'),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N'),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N'),(30,5,'Product Option Management','fa-users','/product/option/listProductOption','N');
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,1,'Module Management','fa-users','admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,3,'Permissions Management','fa-users','admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(21,1,'Role Management','fa-users','admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(22,1,'Permission Management','fa-users','admin/listPermissionModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(23,4,'test','fa-users','/admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,5,'Category Management','fa-users','product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(25,5,'Promotion Management','fa-users','product/promotion/listPromotion','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,5,'Product Management','fa-users','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(27,5,'Discount Management','fa-users','/product/discount/listDiscount','Y','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(30,5,'Product Option Management','fa-users','/product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -466,6 +547,12 @@ CREATE TABLE `submodulepermission` (
   `roleId` int(11) NOT NULL,
   `submoduleId` int(11) NOT NULL,
   `permission` varchar(255) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`roleId`,`submoduleId`,`permission`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -476,7 +563,7 @@ CREATE TABLE `submodulepermission` (
 
 LOCK TABLES `submodulepermission` WRITE;
 /*!40000 ALTER TABLE `submodulepermission` DISABLE KEYS */;
-INSERT INTO `submodulepermission` VALUES (1,18,'1'),(1,18,'2'),(1,18,'3'),(1,18,'4'),(1,22,'12'),(1,24,'16'),(1,25,'18'),(1,26,'20'),(1,27,'21'),(1,28,'23'),(1,29,'24'),(1,30,'25'),(2,18,'1'),(2,18,'2'),(5,1,'14'),(5,2,'11'),(5,18,'10'),(5,18,'3'),(5,21,'13'),(5,22,'12'),(5,26,'20'),(6,24,'16'),(6,25,'18'),(6,27,'21'),(6,30,'25'),(7,28,'23'),(7,29,'24');
+INSERT INTO `submodulepermission` VALUES (1,18,'1','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,18,'2','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,18,'3','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,18,'4','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,22,'12','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,24,'16','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,25,'18','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,26,'20','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,27,'21','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,28,'23','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,29,'24','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,30,'25','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,18,'1','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,18,'2','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,1,'14','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,2,'11','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,18,'10','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,18,'3','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,21,'13','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,22,'12','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,26,'20','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,24,'16','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,25,'18','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,27,'21','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,30,'25','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,28,'23','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,29,'24','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `submodulepermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,6 +580,12 @@ CREATE TABLE `submodulepermissiontype` (
   `permissiontype` varchar(45) DEFAULT NULL,
   `seqNo` varchar(45) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `url_UNIQUE` (`url`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
@@ -504,7 +597,7 @@ CREATE TABLE `submodulepermissiontype` (
 
 LOCK TABLES `submodulepermissiontype` WRITE;
 /*!40000 ALTER TABLE `submodulepermissiontype` DISABLE KEYS */;
-INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser'),(2,'18','modify','2','modifyUser'),(3,'18','erase','3','erase'),(4,'18','delete','4','delete'),(5,'18','assign','5','assign'),(6,'18','assign_shit','6','assign_shit'),(10,'18','test','10','/???'),(11,'2','View','1','/admin/listModule'),(12,'22','View','1','/admin/listPermission'),(13,'21','View','1','/admin/listRole'),(14,'1','View','1','/admin/listUser'),(16,'24','View','1','/product/category/listProductCategory'),(20,'26','View','1','product/product/listProduct'),(23,'28','View','1','/product/promotion/listPromotion'),(24,'29','View','1','/product/discount/listDiscount'),(25,'30','View','1','/product/option/listProductOption');
+INSERT INTO `submodulepermissiontype` VALUES (1,'18','view','1','viewUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'18','modify','2','modifyUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'18','erase','3','erase','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'18','delete','4','delete','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'18','assign','5','assign','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'18','assign_shit','6','assign_shit','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(10,'18','test','10','/???','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(11,'2','View','1','/admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(12,'22','View','1','/admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(13,'21','View','1','/admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(14,'1','View','1','/admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'24','View','1','/product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(20,'26','View','1','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(23,'28','View','1','/product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,'29','View','1','/product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(25,'30','View','1','/product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `submodulepermissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -520,15 +613,16 @@ CREATE TABLE `user` (
   `userid` varchar(50) NOT NULL,
   `password` varchar(60) NOT NULL,
   `status` varchar(50) DEFAULT NULL,
-  `name` varchar(50) NOT NULL,
-  `emailaddress` varchar(50) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `emailaddress` varchar(255) DEFAULT NULL,
   `lastlogints` datetime DEFAULT NULL,
   `enabled` bit(1) DEFAULT b'1',
-  `createdby` varchar(50) DEFAULT NULL,
-  `createdon` datetime DEFAULT NULL,
-  `updatedon` datetime DEFAULT NULL,
-  `updatedBy` varchar(50) DEFAULT NULL,
-  `version` tinyint(3) unsigned DEFAULT '0',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `userid_UNIQUE` (`userid`)
@@ -541,7 +635,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ck1232','$2a$10$fF7SimwO74sU2hSa8u0/u.s5tYGbPMorm6i17w2zdIcbb7mURlb6G',NULL,'choon keat','ck1232@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(2,'euphona','$2a$10$bbH4SEDcWxKoOFuu8RKi0ec1V20XR7UtiaoEpnesBVtuaT3SvX7gm',NULL,'Janice Lee','euphona@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,0),(5,'jannie','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','jj@hotmail.com',NULL,'',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `user` VALUES (1,'ck1232','$2a$10$fF7SimwO74sU2hSa8u0/u.s5tYGbPMorm6i17w2zdIcbb7mURlb6G',NULL,'choon keat','ck1232@hotmail.com',NULL,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'euphona','$2a$10$bbH4SEDcWxKoOFuu8RKi0ec1V20XR7UtiaoEpnesBVtuaT3SvX7gm',NULL,'Janice Lee','euphona@hotmail.com',NULL,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'jannie','$2a$10$W9oRWeFmOT0bByL5fmAceucetmEYFg2yzq3e50mcu.CO7rUDb/poG',NULL,'Janice Lee','jj@hotmail.com',NULL,'','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -555,11 +649,12 @@ DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
   `userid` int(11) NOT NULL,
   `roleid` int(11) NOT NULL,
-  `createdby` varchar(50) DEFAULT NULL,
-  `createdon` datetime DEFAULT NULL,
-  `updatedby` varchar(50) DEFAULT NULL,
-  `updatedon` datetime DEFAULT NULL,
-  `version` tinyint(3) unsigned DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(50) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(50) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`userid`,`roleid`),
   KEY `role_roleid_fk` (`roleid`),
   CONSTRAINT `role_roleid_fk` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -573,7 +668,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-INSERT INTO `user_role` VALUES (1,1,NULL,NULL,NULL,NULL,NULL),(1,2,NULL,NULL,NULL,NULL,NULL),(1,5,NULL,NULL,NULL,NULL,NULL),(2,1,NULL,NULL,NULL,NULL,NULL),(2,2,NULL,NULL,NULL,NULL,NULL),(2,5,NULL,NULL,NULL,NULL,NULL),(5,1,NULL,NULL,NULL,NULL,NULL),(5,2,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `user_role` VALUES (1,1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,5,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,5,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -586,4 +681,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-07  0:08:18
+-- Dump completed on 2016-11-09 23:28:36
