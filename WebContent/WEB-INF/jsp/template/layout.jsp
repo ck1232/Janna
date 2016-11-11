@@ -57,6 +57,8 @@
 		
 		<!--  JQuery-UI -->
 		<script src="<c:url value ="/development/jquery-ui-1.12.1/jquery-ui-1.12.1/jquery-ui.js" />"></script>
+		<!-- jQuery UI Touch Punch -->
+		<script src="https://raw.githubusercontent.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.js" ></script>
 		<!-- Bootstrap 3.3.6 -->
 		<script src="<c:url value="/development/bootstrap/js/bootstrap.min.js"/>"></script>
 		<!-- AdminLTE App -->

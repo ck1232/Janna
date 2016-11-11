@@ -59,4 +59,8 @@ public class ProductService {
 	public Integer insertImageStaging(byte[] image, String imageName, String username){
 		return imageStagingService.insertImageStaging(image, imageName, username);
 	}
+	
+	public void deleteImageStaging(Integer stagingId){
+		imageStagingService.deleteImageStaging(stagingId);
+	}
 }

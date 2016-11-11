@@ -836,7 +836,25 @@
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Create New Product" />
         		<put-attribute name="heading-description" value="" />
-        		<put-attribute name="content" value="/WEB-INF/jsp/productmanagement/createProduct.jsp" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/productmanagement/createProduct.jsp">
+        				<put-attribute name="options">
+        					<definition template="/WEB-INF/jsp/productmanagement/productOptions/productOptions.jsp">
+        						<put-attribute name="table-title" value="Options" />
+		        					<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/productOptions/options.jsp" />
+		        					<put-attribute name="datatable-options" value="" />
+		        					<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/productmanagement/productOptions/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/product/product/getProductOptionsList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productmanagement/productOptions/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productmanagement/productOptions/column-header.jsp"></put-attribute>
+        					</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>

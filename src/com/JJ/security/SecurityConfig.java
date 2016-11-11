@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-	  http.csrf().ignoringAntMatchers("/product/product/uploadImage")
+	  http.csrf()//.ignoringAntMatchers("/product/product/uploadImage")
 	  	.and()
 	  	.authorizeRequests()
 	  	.accessDecisionManager(accessDecisionManager())

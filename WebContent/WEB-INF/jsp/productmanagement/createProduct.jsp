@@ -11,17 +11,20 @@
 	$(function(){
 	// instantiate the uploader
 		var sortableList = $("#dZUpload");
+		var uploadImageOrderList = [];
 
+		function getSortOrder(){
+			var listElements = $("#dZUpload").find(".dz-success img");
+			uploadImageOrderList = [];
+
+			for(var i=0;i<listElements.length;i++){
+				var alt = $(listElements[i]).attr("alt");						
+				uploadImageOrderList.push(alt);
+			    console.log(alt); 
+			}
+		}
 		var sortEventHandler = function(event, ui){
-			var listElements = $("#dZUpload").children().find("dz-preview");
-			var listValues = [];
-
-			
-			/* listElements.forEach(function(element){
-			    listValues.push(element.innerHTML);
-			}); */
-
-			console.log(listElements.length); 
+			//getSortOrder();
 		};
 
 		sortableList.sortable({
@@ -43,13 +46,36 @@
 	        },
 	        param:{header:token},
 	        addRemoveLinks: true,
+	        sending:function (file, xhr, formData){
+	        	xhr.setRequestHeader(header, token);
+			},
 	        success: function (file, response) {
 	            var imgName = response;
 	            file.previewElement.classList.add("dz-success");
-	            console.log("Successfully uploaded :" + imgName);
+	            //console.log("Successfully uploaded :" + imgName);
 	        },
 	        error: function (file, response) {
 	            file.previewElement.classList.add("dz-error");
+	        },
+	        removedfile: function (file) {
+	        	console.log(file.previewElement);
+	        	$(document).find(file.previewElement).remove();
+		        if(file.status.localeCompare("sucess")){
+		        	var deleteAjax = $.ajax({
+		        		  type: "POST",
+		        		  url: "removeUploadImage",
+		        		  data: {fileName:file.name},
+		        		  dataType: 'json',
+	        			  beforeSend: function( xhr ) {
+	        				  xhr.setRequestHeader(header, token);
+	        				}
+		        		}).done(function() {
+        				    //alert( "success" );
+      				  	});
+	        		
+		        	//console.log("success");	
+				}
+		      	
 	        }
 	    });
 		CKEDITOR.replace('productInfoEditor');
@@ -157,7 +183,7 @@
 											</div>
 				              			</div>
 				              			<div id="option_tab" class="tab-pane">
-				              				
+				              				<tiles:insertAttribute name = "options" />
 				              			</div>
 				              		</div>
 				              	</div>

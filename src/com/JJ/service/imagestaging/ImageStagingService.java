@@ -28,4 +28,8 @@ public class ImageStagingService {
 		imageStagingMapper.insert(obj);
 		return obj.getImagestagingid();
 	}
+
+	public void deleteImageStaging(Integer stagingId) {
+		imageStagingMapper.deleteByPrimaryKey(stagingId);
+	}
 }
