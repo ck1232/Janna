@@ -1,5 +1,7 @@
 package com.JJ.model;
 
+import java.util.List;
+
 public class Productoption extends Base{
 
 	@Override
@@ -49,5 +51,16 @@ public class Productoption extends Base{
 	public void setSequence(Integer sequence) {
 		this.sequence = sequence;
 	}
+	
+	public List<Productsuboption> getSubOptionsList() {
+		return subOptionsList;
+	}
+
+	public void setSubOptionsList(List<Productsuboption> subOptionsList) {
+		this.subOptionsList = subOptionsList;
+	}
+
+	//non-db variable
+	private List<Productsuboption> subOptionsList;
 	
 }

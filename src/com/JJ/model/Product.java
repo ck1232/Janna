@@ -124,5 +124,14 @@ public class Product extends Base {
 	public void setDesciption(String desciption) {
 		this.desciption = desciption;
 	}
-	
+	public Productsubcategory getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(Productsubcategory subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	//non-db variable
+	private Productsubcategory subCategory;
 }

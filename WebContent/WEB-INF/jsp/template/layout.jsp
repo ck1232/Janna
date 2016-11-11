@@ -7,13 +7,9 @@
 <title><tiles:insertAttribute name="title" ignore="true" /></title>  
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>        
-        <script type="text/javascript" src="<c:url value="/development/x-tag-core.min.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/development/primeui-3.0.0-min.js"/>"></script>
-        <script type="text/javascript" src="<c:url value="/development/primeelements-3.0.0.js"/>"></script>
 
         <link type="text/css" href="<c:url value="/development/font-awesome/css/font-awesome.min.css"/>" rel="stylesheet"/>        
         <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
-        <link type="text/css" href="<c:url value="/development/primeui-3.0.0-min.css" />" rel="stylesheet" >
 		<link type="text/css" href="<c:url value="/development/themes/cruze/theme.css" />" rel="stylesheet" >
 		
 			<!-- Admin LTE -->
@@ -48,6 +44,8 @@
 		  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 		  
 		  <link rel="stylesheet" href="<c:url value="/development/css/custom.css"/>">
+		  <!-- typeahead -->
+		  <link rel="stylesheet" href="<c:url value="/development/typeahead/typeahead.css"/>">
 		  <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 		  <!-- REQUIRED JS SCRIPTS -->
 		
@@ -85,6 +83,8 @@
 		<script src="//cdn.ckeditor.com/4.5.11/full/ckeditor.js"></script>
 		<!-- upload -->
         <script src="<c:url value="https://raw.github.com/enyo/dropzone/master/dist/dropzone.js" />"></script>
+        <!-- typeahead -->
+        <script src="<c:url value="/development/typeahead/typeahead.bundle.js" />"></script>
 		<!-- REQUIRED JS SCRIPTS -->
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">

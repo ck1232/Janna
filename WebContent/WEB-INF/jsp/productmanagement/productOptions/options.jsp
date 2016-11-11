@@ -5,15 +5,28 @@
 <form id="editOptionForm" method="post" action="<c:url value="/admin/updateUser" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
-<script>
-	function addOption(){
 
+<script>
+	var countries = new Bloodhound({
+	  datumTokenizer: Bloodhound.tokenizers.whitespace,
+	  queryTokenizer: Bloodhound.tokenizers.whitespace,
+	  prefetch: '<c:url context="/JJ" value="/product/product/getProductOptionName" />'
+	});
+	function addOption(){
+		$("#optionModal").show();
 	}
+	$(function(){
+		$('#addOptionNameDiv .typeahead').typeahead(null, {
+			  name: 'countries',
+			  source: countries
+		});
+	});
+	
 </script>
 <div class="margin">
 	<div class="btn-grp">
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/admin/deleteUser" />"><i class="fa fa-user-times"></i> Delete Option</button>
-		<button class="btn btn-primary pull-right" type="button" onclick="addOption"><i class="fa fa-user-plus"></i> Add Option</button>
+		<button class="btn btn-primary pull-right" type="button" onclick="addOption();"><i class="fa fa-user-plus"></i> Add Option</button>
 	</div>
 </div>
 
@@ -30,17 +43,22 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label">Name</label>
 						<div class="col-sm-9" id="addOptionNameDiv">
-						
+							<input class="form-control typeahead col-sm-12" type="text" />
 						</div>
 					</div>
 				</div>
+				<hr>
 				<div class="row">
 					<div class="form-group">
-						<label class="col-sm-3 control-label">Sequence</label>
-						<div class="col-sm-9">
-							<input id="seqno" name="seqno" type="text" class="form-control"  />
+							<label class="col-sm-3 control-label">Option</label>
+							<div class="col-sm-6">
+								<input id="seqno" name="seqno" type="text" class="form-control"  />
+							</div>
+							<button id="add-new-option" type="button" class="col-sm-3 btn btn-primary btn-flat">Add</button>
+						<div class="row">
+				              
 						</div>
-					  </div>
+					 </div>
 				</div>
 			</div>
 			</form>

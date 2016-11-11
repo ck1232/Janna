@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +35,9 @@ import com.JJ.model.Productsubcategory;
 import com.JJ.model.Productsuboption;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productmanagement.ProductService;
+import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
+import com.mysql.jdbc.util.Base64Decoder;
 
 @Controller  
 @EnableWebMvc
@@ -49,12 +50,14 @@ public class ProductManagementController {
 	private LinkedList<FileMeta> files = new LinkedList<FileMeta>();
     private FileMeta fileMeta = null;
     private List<Productoption> productOptionsList; 
+    private ProductOptionManagementService productOptionManagementService;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
-			ProductSubCategoryManagementService productSubCategoryManagementService){
+			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
 		this.productService = productService;
 		this.productCategoryManagementService = productCategoryManagementService;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
+		this.productOptionManagementService = productOptionManagementService;
 	}
 	
 	public List<Productcategory> getProductCategoryList(){
@@ -126,13 +129,13 @@ public class ProductManagementController {
 		//1. build an iterator
         Iterator<String> itr =  request.getFileNames();
         MultipartFile mpf = null;
-        User userAccount = (User) request.getSession().getAttribute("userAccount");
+//        User userAccount = (User) request.getSession().getAttribute("userAccount");
         //2. get each file
         while(itr.hasNext()){
 
             //2.1 get next MultipartFile
             mpf = request.getFile(itr.next()); 
-            System.out.println(mpf.getOriginalFilename() +" uploaded! "+files.size());
+//            System.out.println(mpf.getOriginalFilename() +" uploaded! "+files.size());
 
             //2.2 if files > 10 remove the first from the list
             if(files.size() >= 10)
@@ -146,8 +149,8 @@ public class ProductManagementController {
 
             try {
                fileMeta.setBytes(mpf.getBytes());
-               Integer stagingId = productService.insertImageStaging(fileMeta.getBytes(), fileMeta.getFileName(), userAccount.getUsername());
-               fileMeta.setImageStagingId(stagingId);
+//               Integer stagingId = productService.insertImageStaging(fileMeta.getBytes(), fileMeta.getFileName(), userAccount.getUsername());
+//               fileMeta.setImageStagingId(stagingId);
            } catch (IOException e) {
                // TODO Auto-generated catch block
                e.printStackTrace();
@@ -167,12 +170,25 @@ public class ProductManagementController {
 			while(iterator.hasNext()){
 				FileMeta file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
-					productService.deleteImageStaging(file.getImageStagingId());
+//					productService.deleteImageStaging(file.getImageStagingId());
 					iterator.remove();
 					break;
 				}
 			}
 		}
 		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value = "/getProductOptionName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<String> getProductOptionList() {
+		logger.debug("getting product productOption list");
+		List<String> productOptionList = new ArrayList<String>();
+		List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
+		if(optionList != null && optionList.size() > 0){
+			for(Productoption option : optionList){
+				productOptionList.add(option.getName());
+			}
+		}
+		return productOptionList;
 	}
 }
