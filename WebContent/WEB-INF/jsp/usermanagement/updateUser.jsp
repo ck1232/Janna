@@ -2,6 +2,8 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script type="text/javascript" src="<c:url value="/development/js/cryptoJS/aes.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/development/js/cryptoJS/pbkdf2.js"/>"></script>
 <!-- Content Wrapper. Contains page content -->
 
 	<div class="box">
@@ -100,7 +102,7 @@
 					<div class="modal-body">
 						<form action="<c:url value="/admin/resetpassword" />" id="resetPasswordForm" name="resetPasswordForm" method="post">
 							<input type="hidden" value="${userForm.userid}" name="userid" />
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<input type="hidden" id="csrfId" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							<div class="row form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Password</label>
 								<div class="col-sm-10">
@@ -114,8 +116,30 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default pull-left"
 							data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#resetPasswordForm').submit();">Reset</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="setPassword();$('#resetPasswordForm').submit();">Reset</button>
 					</div>
 				</div>
 			</div>
 		</div>
+	<script>
+		function setPassword() {
+			var plaintext = document.getElementById("password").value;
+			var secret = document.getElementById("csrfId").value;
+
+			var salt = CryptoJS.lib.WordArray.random(16);
+			var salt_hex = CryptoJS.enc.Hex.stringify(salt);
+
+			var iv = CryptoJS.lib.WordArray.random(16);
+			var iv_hex = CryptoJS.enc.Hex.stringify(iv);
+
+			var key = CryptoJS.PBKDF2(secret, salt, { keySize: 256/32, iterations: 1 });
+			var key_hex= key;
+
+			var encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv: iv }); 
+			var encryptedtxt = salt_hex+":"+iv_hex+":"+encrypted.ciphertext.toString(CryptoJS.enc.Base64)+":"+key_hex;
+			//var hpw = CryptoJS.AES.encrypt(x, a) + "";
+			//var s = hpw.concat(a);
+			//var hall = CryptoJS.AES.encrypt(s, a);
+			$("#password").val(encryptedtxt);
+		}
+	</script>

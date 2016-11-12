@@ -2,9 +2,16 @@ package com.JJ.controller.usermanagement;
 
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +31,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.User;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
+import com.mysql.jdbc.util.Base64Decoder;
 
 
 @Controller  
@@ -125,8 +133,31 @@ public class UserManagementController {
 	}
 	
 	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
-	public String resetPassword(@RequestParam(value="userid", required=false) String userid, @RequestParam(value="password", required=false) String password, RedirectAttributes redirectAttributes) {
-		userManagementService.resetPassword(userid, password);
+	public String resetPassword(HttpServletRequest request, @RequestParam(value="userid", required=false) String userid, @RequestParam(value="password", required=false) String password, RedirectAttributes redirectAttributes) {
+		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+		String csrf = token.getToken();
+		int size = csrf.getBytes().length;
+		String data[] = password.split(":");
+        String salt_hex = data[0];
+        String iv_hex = data[1];
+        String msg64 = data[2];
+        String jskey_hex = data[3];
+        byte[] jskey = hexStringToByteArray(jskey_hex);
+        byte[] iv = hexStringToByteArray(iv_hex);
+        byte[] salt = hexStringToByteArray(salt_hex);
+        Base64Decoder decoder = new Base64Decoder();
+        byte[] msg = decoder.decode(msg64.getBytes(), 0, msg64.length());
+        String plaintext = "";
+        try {
+            SecretKey key = new SecretKeySpec(jskey, "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+            plaintext = new String(cipher.doFinal(msg), "UTF-8");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+		//userManagementService.resetPassword(userid, plaintext);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Password reset!");
 		return "redirect:updateUserById/"+userid;
@@ -162,5 +193,16 @@ public class UserManagementController {
 		return "viewUser";
 
 	}
+	
+	 //Converting a string of hex character to bytes
+	  public static byte[] hexStringToByteArray(String s) {
+	  int len = s.length();
+	  byte[] data = new byte[len / 2];
+	  for (int i = 0; i < len; i += 2){
+	  data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	  + Character.digit(s.charAt(i+1), 16));
+	  }
+	  return data;
+	  }
 	
 }
