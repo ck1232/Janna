@@ -20,13 +20,17 @@ public class Base {
 	private Integer version;
 	
 	public Base() {
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		deleteind = "N";
-		createdby = principal.getUsername();
-		createdon = new Date();
-		updatedby = principal.getUsername();
-		updatedon = new Date();
-		version = 1;
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(principal instanceof UserDetails){
+			UserDetails user = (UserDetails)principal;
+			deleteind = "N";
+			createdby = user.getUsername();
+			createdon = new Date();
+			updatedby = user.getUsername();
+			updatedon = new Date();
+			version = 1;
+		}
 	}
 
 	public String getDeleteind() {
