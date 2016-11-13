@@ -15,6 +15,10 @@
 	function addOption(){
 		$("#optionModal").show();
 	}
+
+	function closeOption(){
+		$("#optionModal").hide();
+	}
 	$(function(){
 		$('#addOptionNameDiv .typeahead').typeahead(null, {
 			  name: 'countries',
@@ -54,9 +58,11 @@
 							<div class="col-sm-6">
 								<input id="seqno" name="seqno" type="text" class="form-control"  />
 							</div>
-							<button id="add-new-option" type="button" class="col-sm-3 btn btn-primary btn-flat">Add</button>
+							<div class="col-sm-3">
+								<button id="add-new-option" type="button" class="btn btn-primary btn-flat">Add</button>
+							</div>
 						<div class="row">
-				              
+				           
 						</div>
 					 </div>
 				</div>
@@ -64,7 +70,7 @@
 			</form>
 			<div class="modal-footer">
 				<button id="saveTypeSeqBtn" class="btn btn-primary" type="button" data-dismiss="modal" onclick="$('#updatePermissionTypeSeqToDbForm').submit();">Save changes</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" onclick="closeOption();" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
