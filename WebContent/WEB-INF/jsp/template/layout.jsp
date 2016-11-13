@@ -51,7 +51,7 @@
 		<script src="<c:url context="/JJ" value="/development/plugins/jQuery/jquery-2.2.3.min.js"/>"></script>
 		
 		<!--  JQuery-UI -->
-		<script src="<c:url context="/JJ" value ="/development/jquery-ui-1.12.1/jquery-ui.js" />"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 		<!-- jQuery UI Touch Punch -->
 		<script src="<c:url context="/JJ" value="/development/jquery-ui-touch-punch/js/jquery.ui.touch-punch.js" />" ></script>
 		<!-- Bootstrap 3.3.6 -->

@@ -61,9 +61,17 @@
 							<div class="col-sm-3">
 								<button id="add-new-option" type="button" class="btn btn-primary btn-flat">Add</button>
 							</div>
-						<div class="row">
+						
 				           
-						</div>
+				           		<div id="col-sm-10">
+				                <div class="bg-green">Lunch</div>
+				                <div class="bg-yellow">Go home</div>
+				                <div class="bg-aqua">Do homework</div>
+				                <div class="bg-light-blue">Work on UI design</div>
+				                <div class="bg-red">Sleep tight</div>
+				              </div>
+				           
+						
 					 </div>
 				</div>
 			</div>
