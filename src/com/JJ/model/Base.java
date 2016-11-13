@@ -7,6 +7,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class Base {
     
+	public Base(String deleteind, String createdby, Date createdon, String updatedby, Date updatedon, Integer version) {
+		this.deleteind = deleteind;
+		this.createdby = createdby;
+		this.createdon = createdon;
+		this.updatedby = updatedby;
+		this.updatedon = updatedon;
+		this.version = version;
+	}
+
 	private String deleteind;
 
 	private String createdby;
@@ -20,7 +29,9 @@ public class Base {
 	private Integer version;
 	
 	public Base() {
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
+	
+	public Base(UserDetails principal) {
 		deleteind = "N";
 		createdby = principal.getUsername();
 		createdon = new Date();

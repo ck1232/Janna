@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,13 +20,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.JJ.model.LoginForm;
 import com.JJ.model.Menu;
 import com.JJ.model.Module;
 import com.JJ.model.Submodule;
@@ -35,6 +43,7 @@ import com.JJ.service.permissionmanagement.PermissionManagementService;
 import com.JJ.service.roleassignment.RoleAssignmentService;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
 import com.JJ.service.usermanagement.UserManagementService;
+import com.mysql.jdbc.util.Base64Decoder;
 
 
 @Controller  
@@ -63,9 +72,11 @@ public class CommonController {
 	@RequestMapping(value={"/","/dashboard"})  
     public String loadDashboard(HttpSession session) {  
     	logger.debug("dashboard is executed!");
-    	UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	session.setAttribute("userAccount", principal);
-    	session.setAttribute("menu", this.populateMenu(principal));
+    	LoginForm loginform = (LoginForm) session.getAttribute("LOGGEDIN_USER");
+    	//UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	Menu menu = this.populateMenu(loginform.getUsername());
+    	session.setAttribute("userAccount", loginform);
+    	session.setAttribute("menu", menu);
     	List<String> roleList = new ArrayList<String>();
     	for(GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
     		roleList.add(authority.getAuthority());
@@ -98,10 +109,10 @@ public class CommonController {
 		}
 		return subModuleManagementService.getSubmodulesById(subModuleIdList);
 	}
-	public Menu populateMenu(UserDetails user){
+	public Menu populateMenu(String username){
 		Menu menu = new Menu();
 		
-		List<Submodule> subModuleList = getAllSubModuleByUserId(user.getUsername());
+		List<Submodule> subModuleList = getAllSubModuleByUserId(username);
 		List<Module> moduleList = moduleManagementService.getAllModules();
 //		List<Submodule> submoduleList = subModuleManagementService.getAllSubmodules();
 		
@@ -126,6 +137,26 @@ public class CommonController {
     public String login() {  
         return "login";  
     }
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(Model model, LoginForm loginform, HttpServletRequest request) throws Exception {
+		
+		String username = loginform.getUsername();
+		String password = getPassword(loginform.getPassword());
+		// A simple authentication manager
+		if(username != null && password != null){
+			List<User> uList = userManagementService.getAllUsers();
+			for(User u: uList) {
+				if(u.getUserid().equals(username) && BCrypt.checkpw(password, u.getPassword())) {
+					request.getSession().setAttribute("LOGGEDIN_USER", loginform);
+					return loadDashboard(request.getSession());
+				}
+			}
+			return "redirect:/login";
+		}else{
+			return "redirect:/login";
+		}
+	}
 	
 	@RequestMapping(value="/home",method = RequestMethod.POST)
 	public String userAuthenticated(){
@@ -162,4 +193,39 @@ public class CommonController {
         }
         return userName;
     }
+	
+	private String getPassword(String ePassword) {
+		String data[] = ePassword.split(":");
+        String salt_hex = data[0];
+        String iv_hex = data[1];
+        String msg64 = data[2];
+        String jskey_hex = data[3];
+        byte[] jskey = hexStringToByteArray(jskey_hex);
+        byte[] iv = hexStringToByteArray(iv_hex);
+        byte[] salt = hexStringToByteArray(salt_hex);
+        Base64Decoder decoder = new Base64Decoder();
+        byte[] msg = decoder.decode(msg64.getBytes(), 0, msg64.length());
+        String plaintext = "";
+        try {
+            SecretKey key = new SecretKeySpec(jskey, "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+            plaintext = new String(cipher.doFinal(msg), "UTF-8");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return plaintext;
+	}
+	
+	//Converting a string of hex character to bytes
+	  public static byte[] hexStringToByteArray(String s) {
+		  int len = s.length();
+		  byte[] data = new byte[len / 2];
+		  for (int i = 0; i < len; i += 2){
+		  data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+		  + Character.digit(s.charAt(i+1), 16));
+		  }
+		  return data;
+	  }
 }

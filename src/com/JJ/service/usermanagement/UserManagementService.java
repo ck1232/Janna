@@ -1,5 +1,6 @@
 package com.JJ.service.usermanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,18 +9,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.dao.UserMapper;
+import com.JJ.model.CustomUser;
+import com.JJ.model.GrantedAuthorityRole;
+import com.JJ.model.Role;
 import com.JJ.model.User;
 import com.JJ.model.UserExample;
+import com.JJ.model.UserRole;
+import com.JJ.service.roleassignment.RoleAssignmentService;
+import com.JJ.service.rolemanagement.RoleManagementService;
 
 @Service
 @Transactional
 public class UserManagementService {
 	
 	private UserMapper userMapper;
+	private RoleAssignmentService roleAssignmentService;
+	private RoleManagementService roleManagementService;
 	
 	@Autowired
-	public UserManagementService(UserMapper userMapper) {
+	public UserManagementService(UserMapper userMapper, RoleAssignmentService roleAssignmentService,
+			RoleManagementService roleManagementService) {
 		this.userMapper = userMapper;
+		this.roleAssignmentService = roleAssignmentService;
+		this.roleManagementService = roleManagementService;
 	}
 	
 	public User findById(Integer id) {
@@ -36,6 +48,33 @@ public class UserManagementService {
 			User user = users.get(0);
 			user.setPassword(null);
 			return user;
+		}else{
+			return null;
+		}
+	}
+	
+	public CustomUser findCustomUserByUserId(String userid) {
+		User user = findByUserId(userid);
+		if(user != null){
+			CustomUser u = new CustomUser();
+			u.setUsername(user.getUserid());
+			u.setPassword(user.getPassword());
+			u.setEmail(user.getEmailaddress());
+			u.setEnabled(user.getEnabled());
+			List<UserRole> urList = roleAssignmentService.getRoleListByUserId(user.getId());
+			List<Integer> rIdList = new ArrayList<Integer>();
+			List<GrantedAuthorityRole> garList = new ArrayList<GrantedAuthorityRole>();
+			for(UserRole ur: urList) {
+				rIdList.add(ur.getRoleid());
+			}
+			List<Role> rList = roleManagementService.getAllRolesByIdList(rIdList);
+			for(Role r: rList) {
+				GrantedAuthorityRole role = new GrantedAuthorityRole();
+				role.setName(r.getName());
+				garList.add(role);
+			}
+			u.setAuthorities(garList);
+			return u;
 		}else{
 			return null;
 		}

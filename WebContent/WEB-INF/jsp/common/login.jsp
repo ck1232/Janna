@@ -25,6 +25,8 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <script type="text/javascript" src="<c:url value="/development/js/cryptoJS/sha256.js"/>"></script>
   <script type="text/javascript" src="<c:url value="/development/js/cryptoJS/aes.js"/>"></script>
+  <script type="text/javascript" src="<c:url value="/development/js/cryptoJS/pbkdf2.js"/>"></script>
+  
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -85,13 +87,32 @@
   });
   
 	function setPassword() {
-		var x = document.getElementById("passwordId").value;
+		/* var x = document.getElementById("passwordId").value;
 		var a = document.getElementById("csrfId").value;
 		var hpw = CryptoJS.AES.encrypt(x, a) + "";
 		//var hpw = String(CryptoJS.SHA256(x));
 		var s = hpw.concat(a);
 		var hall = CryptoJS.SHA256(s);
-		//$("#passwordId").val(hall);
+		$("#passwordId").val(hall); */
+
+		var plaintext = document.getElementById("passwordId").value;
+		var secret = document.getElementById("csrfId").value;
+
+		var salt = CryptoJS.lib.WordArray.random(16);
+		var salt_hex = CryptoJS.enc.Hex.stringify(salt);
+
+		var iv = CryptoJS.lib.WordArray.random(16);
+		var iv_hex = CryptoJS.enc.Hex.stringify(iv);
+
+		var key = CryptoJS.PBKDF2(secret, salt, { keySize: 256/64, iterations: 1 });
+		var key_hex= key;
+
+		var encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv: iv }); 
+		var encryptedtxt = salt_hex+":"+iv_hex+":"+encrypted.ciphertext.toString(CryptoJS.enc.Base64)+":"+key_hex;
+		//var hpw = CryptoJS.AES.encrypt(x, a) + "";
+		//var s = hpw.concat(a);
+		//var hall = CryptoJS.AES.encrypt(s, a);
+		$("#passwordId").val(encryptedtxt);
 	}
  
   

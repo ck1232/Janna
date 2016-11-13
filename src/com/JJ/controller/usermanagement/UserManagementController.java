@@ -157,7 +157,7 @@ public class UserManagementController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-		//userManagementService.resetPassword(userid, plaintext);
+		userManagementService.resetPassword(userid, plaintext);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Password reset!");
 		return "redirect:updateUserById/"+userid;

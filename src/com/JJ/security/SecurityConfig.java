@@ -3,9 +3,11 @@ package com.JJ.security;
 import java.util.Arrays;
 import java.util.List;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.access.AccessDecisionManager;
@@ -22,22 +24,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 @Configuration
 @EnableWebSecurity
+//@ComponentScan(basePackages = {"com.JJ"})
+//@MapperScan("com.JJ")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
+	/*private ApplicationContext context;
+	private CustomAuthenticationProvider authProvider;
 	@Autowired
-	ApplicationContext context;
-	
+	public SecurityConfig(ApplicationContext context, CustomAuthenticationProvider authProvider){
+		this.context = context;
+		this.authProvider = authProvider;
+	}*/
 	@Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(securityDataSource())
+		auth.eraseCredentials(false).jdbcAuthentication().dataSource(securityDataSource())
 		.passwordEncoder(passwordEncoder())
 		.usersByUsernameQuery(
-			"select userid,password, enabled from user where userid=?")
+			"select userid as username,password, enabled from user where userid=?")
 		.authoritiesByUsernameQuery(
-			"select u.userid, r.name from jj.user_role ur join jj.user u on u.id = ur.userid join jj.role r on ur.roleid= r.id where u.userid=?");
+			"select u.userid as username, r.name as role from jj.user_role ur join jj.user u on u.id = ur.userid join jj.role r on ur.roleid= r.id where u.userid=?");
 //        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
 //        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
 //        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");//dba have two roles.
+//		auth.authenticationProvider(authProvider);
     }
 	
 	public DriverManagerDataSource securityDataSource() {
@@ -51,17 +60,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
-	  http.csrf().and()
+		
+	  /*http
+	  	.formLogin()
+	  		.loginPage("/login")
+	  		.and()
+	  	.csrf()
+	  		.and()
 	  	.authorizeRequests()
-	  	.accessDecisionManager(accessDecisionManager())
-	  	.antMatchers("/","/dashboard").authenticated()
-		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
-//		.antMatchers("/development/**").authenticated()
-//		.antMatchers("/**").denyAll()
-		.and().formLogin().loginPage("/login")
-		.usernameParameter("username").passwordParameter("password")
-		.and().exceptionHandling().accessDeniedPage("/Access_Denied");
+	  		.antMatchers("/login", "/development/**").permitAll()
+	  		//.antMatchers("/admin/**").access("hasAnyAuthority('ADMIN')")
+	  		.anyRequest().authenticated()
+		//.and()
+		//.usernameParameter("username").passwordParameter("password")
+		.and().exceptionHandling().accessDeniedPage("/Access_Denied");*/
 
 	}
 	

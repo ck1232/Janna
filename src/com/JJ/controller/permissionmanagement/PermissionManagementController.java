@@ -52,10 +52,10 @@ public class PermissionManagementController {
 		this.permissionTypeFormValidator = permissionTypeFormValidator;
 	}
 	
-	@RequestMapping("/listPermissionModule")  
+	@RequestMapping("/listPermission")  
     public String listPermissionModule() {  
     	logger.debug("loading listPermissionModule");
-        return "listPermissionModule";  
+        return "listPermission";  
     } 
 	
 	@RequestMapping(value = "/updateSubmodulePermission", method = RequestMethod.POST)

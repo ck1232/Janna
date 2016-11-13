@@ -132,7 +132,7 @@
 			var iv = CryptoJS.lib.WordArray.random(16);
 			var iv_hex = CryptoJS.enc.Hex.stringify(iv);
 
-			var key = CryptoJS.PBKDF2(secret, salt, { keySize: 256/32, iterations: 1 });
+			var key = CryptoJS.PBKDF2(secret, salt, { keySize: 256/64, iterations: 1 });
 			var key_hex= key;
 
 			var encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv: iv }); 

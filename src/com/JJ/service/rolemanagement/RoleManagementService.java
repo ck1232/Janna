@@ -32,6 +32,13 @@ public class RoleManagementService {
 		return roleList;
 	}
 	
+	public List<Role> getAllRolesByIdList(List<Integer> roleIdList) {
+		RoleExample roleExample = new RoleExample();
+		roleExample.createCriteria().andIdIn(roleIdList);
+		List<Role> roleList = roleMapper.selectByExample(roleExample);
+		return roleList;
+	}
+	
 	public void saveRole(Role role) {
 		roleMapper.insert(role);
 	}
