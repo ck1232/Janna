@@ -325,7 +325,7 @@
   	
   	<!-- Permission Management Module START -->
   	
-  	<definition name="listPermissionModule" extends="main_template">  
+  	<definition name="listPermission" extends="main_template">  
         <put-attribute name="title" value="Grant Permission" /> 
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
