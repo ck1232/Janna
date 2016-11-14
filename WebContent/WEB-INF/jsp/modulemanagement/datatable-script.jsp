@@ -89,7 +89,8 @@ function subdatatable(datatableid){
 	        	  $(row).find('input[type="checkbox"]').prop('checked', false);
 	          }
 	          $(row).find('div[name="iconSubDiv"]').html(data.icon+" <i class='fa "+data.icon+"'></i>");
-	          
+	          $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.id);
+	          $(row).find('button[name="editBtn"]').prop('value', data.id);
 	       }
 	    });
 }
