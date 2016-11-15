@@ -7,11 +7,12 @@
 </form>
 
 <script>
-	var countries = new Bloodhound({
+	var option = new Bloodhound({
 	  datumTokenizer: Bloodhound.tokenizers.whitespace,
 	  queryTokenizer: Bloodhound.tokenizers.whitespace,
 	  prefetch: '<c:url context="/JJ" value="/product/product/getProductOptionName" />'
 	});
+	
 	function addOption(){
 		$("#optionModal").show();
 	}
@@ -19,10 +20,22 @@
 	function closeOption(){
 		$("#optionModal").hide();
 	}
+	function addNewSubOption(){
+		
+		var subOption = $.trim($("#subOptionInput").val());
+		var option = $("#name").val();
+		if(subOption != ""){
+			$( "#subOptionDiv" ).append( '<div style="padding:0px 5%;">'+ subOption +' <a class="pull-right cross" onclick="removeSubOption(this)">x</a></div>' );
+			$("#subOptionInput").val("");
+		}
+	}
+	function removeSubOption(suboption){
+		$(suboption).closest("div").remove();
+	}
 	$(function(){
 		$('#addOptionNameDiv .typeahead').typeahead(null, {
-			  name: 'countries',
-			  source: countries
+			  name: 'option',
+			  source: option
 		});
 	});
 	
@@ -47,7 +60,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label">Name</label>
 						<div class="col-sm-9" id="addOptionNameDiv">
-							<input class="form-control typeahead col-sm-12" type="text" />
+							<input id="name" class="form-control typeahead col-sm-12" type="text" />
 						</div>
 					</div>
 				</div>
@@ -56,23 +69,17 @@
 					<div class="form-group">
 							<label class="col-sm-3 control-label">Option</label>
 							<div class="col-sm-6">
-								<input id="seqno" name="seqno" type="text" class="form-control"  />
+								<input id="subOptionInput" name="subOptionInput" type="text" class="form-control"  />
 							</div>
 							<div class="col-sm-3">
-								<button id="add-new-option" type="button" class="btn btn-primary btn-flat">Add</button>
+								<button id="add-new-option" type="button" onclick="addNewSubOption();" class="btn btn-primary btn-flat">Add</button>
 							</div>
-						
-				           
-				           		<div id="col-sm-10">
-				                <div class="bg-green">Lunch</div>
-				                <div class="bg-yellow">Go home</div>
-				                <div class="bg-aqua">Do homework</div>
-				                <div class="bg-light-blue">Work on UI design</div>
-				                <div class="bg-red">Sleep tight</div>
-				              </div>
-				           
-						
 					 </div>
+				</div>
+				<div class="row" style="padding-top:15px;">
+					<div class="col-sm-3"></div>
+					<div class="box-body form-group col-sm-6 bg-gray" id="subOptionDiv">
+				    </div>
 				</div>
 			</div>
 			</form>

@@ -5,3 +5,25 @@ td.details-control {
 tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
+
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+	max-height: calc(100vh - 160px);
+	overflow-y:auto;	
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
+
+.cross{
+	color: rgb(255,255,255);
+	cursor: pointer; cursor: hand;
+}
+
+.cross:hover{
+	cursor: pointer; cursor: hand;
+}

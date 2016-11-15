@@ -3,7 +3,9 @@
 <!DOCTYPE HTML>  
 <html>
 <head>  
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title><tiles:insertAttribute name="title" ignore="true" /></title>  
 		
         <link type="text/css" href="<c:url context="/JJ" value="/development/font-awesome/css/font-awesome.min.css"/>" rel="stylesheet"/>        
@@ -83,6 +85,10 @@
         <!-- typeahead -->
         <script src="<c:url context="/JJ" value="/development/typeahead/typeahead.bundle.js" />"></script>
 		<!-- REQUIRED JS SCRIPTS -->
+		<script>
+			var token = $("meta[name='_csrf']").attr("content");
+	    	var header = $("meta[name='_csrf_header']").attr("content");
+		</script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">

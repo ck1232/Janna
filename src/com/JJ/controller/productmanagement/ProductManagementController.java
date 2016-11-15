@@ -37,7 +37,6 @@ import com.JJ.service.productcategorymanagement.ProductCategoryManagementService
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
-import com.mysql.jdbc.util.Base64Decoder;
 
 @Controller  
 @EnableWebMvc
@@ -190,5 +189,29 @@ public class ProductManagementController {
 			}
 		}
 		return productOptionList;
+	}
+	
+	@RequestMapping(value = "/addNewSubOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse addNewSubOption(@RequestParam(value="option", required=true) String option,@RequestParam(value="subOption", required=false) String subOption) {
+		logger.debug("add new sub option");
+		if(option != null && !option.trim().isEmpty() && subOption != null && !subOption.trim().isEmpty()){
+			Productoption productOption = new Productoption();
+			productOption.setName(option);
+			if(productOptionsList == null){
+				productOptionsList = new ArrayList<Productoption>();
+			}
+			if(!productOptionsList.contains(productOption)){
+				productOptionsList.add(productOption);
+			}
+			Productsuboption suboption = new Productsuboption();
+			suboption.setName(subOption);
+			
+			Productoption pOption = productOptionsList.get(productOptionsList.indexOf(productOption));
+			if(pOption.getSubOptionsList() == null){
+				pOption.setSubOptionsList(new ArrayList<Productsuboption>());
+			}
+			pOption.getSubOptionsList().add(suboption);
+		}
+		return new JsonResponse("success");
 	}
 }
