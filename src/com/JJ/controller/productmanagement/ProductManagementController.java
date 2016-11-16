@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -191,7 +192,7 @@ public class ProductManagementController {
 		return productOptionList;
 	}
 	
-	@RequestMapping(value = "/addNewSubOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	/*@RequestMapping(value = "/addNewSubOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse addNewSubOption(@RequestParam(value="option", required=true) String option,@RequestParam(value="subOption", required=false) String subOption) {
 		logger.debug("add new sub option");
 		if(option != null && !option.trim().isEmpty() && subOption != null && !subOption.trim().isEmpty()){
@@ -212,6 +213,11 @@ public class ProductManagementController {
 			}
 			pOption.getSubOptionsList().add(suboption);
 		}
+		return new JsonResponse("success");
+	}*/
+	
+	@RequestMapping(value = "/saveOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse saveOption(@RequestBody OptionVo option) {
 		return new JsonResponse("success");
 	}
 }

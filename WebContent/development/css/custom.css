@@ -19,11 +19,16 @@ tr.shown td.details-control {
   overflow: hidden;
 }
 
-.cross{
+.icon{
+	padding:0px 10px;
 	color: rgb(255,255,255);
 	cursor: pointer; cursor: hand;
 }
 
-.cross:hover{
-	cursor: pointer; cursor: hand;
+.display{
+	color: rgb(0,0,0);
+}
+
+.subOptionDiv{
+	
 }

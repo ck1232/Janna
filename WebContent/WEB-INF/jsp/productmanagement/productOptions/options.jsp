@@ -20,23 +20,76 @@
 	function closeOption(){
 		$("#optionModal").hide();
 	}
+
+	function saveOption(){
+		var optionName = $("#name").val();
+		var subOptionList = [];
+		var subOptionDivList = $("#subOptionDiv").find("div.subOptionDiv");
+		if(subOptionDivList != null && subOptionDivList.length > 0){
+			for(var i=0; i< subOptionDivList.length;i++){
+				var item = subOptionDivList.get(i);
+				var displayInd = $(item).find(".display i").hasClass("fa-eye");
+				var subOption = {
+					subOptionName:$(item).find("label").text(),
+					display:displayInd,
+					seq:i+1
+				}
+				subOptionList.push(subOption);
+			}
+		}
+		var data = {
+			optionName : optionName,
+			subOptionList : subOptionList
+		}
+
+		var saveAjax = $.ajax({
+  		  type: "POST",
+  		  url: "saveOption",
+  		  data: JSON.stringify(data),
+  		  contentType:"application/json; charset=utf-8",
+		  beforeSend: function( xhr ) {
+			  xhr.setRequestHeader(header, token);
+
+			}
+  		}).done(function() {
+			    alert( "success" );
+		});
+	}
 	function addNewSubOption(){
-		
 		var subOption = $.trim($("#subOptionInput").val());
-		var option = $("#name").val();
 		if(subOption != ""){
-			$( "#subOptionDiv" ).append( '<div style="padding:0px 5%;">'+ subOption +' <a class="pull-right cross" onclick="removeSubOption(this)">x</a></div>' );
+			$( "#subOptionDiv" ).append( '<div class="subOptionDiv" style="padding:0px 5%;"><label>'+ subOption +'</label><a class="pull-right icon" onclick="removeSubOption(this)">x</a><a class="pull-right icon display" onclick="toggleView(this);"><i class="fa fa-eye"></i></a></div>' );
 			$("#subOptionInput").val("");
 		}
 	}
 	function removeSubOption(suboption){
 		$(suboption).closest("div").remove();
 	}
+
+	function toggleView(suboption){
+		var icon = $(suboption).find("i");
+		if(icon.hasClass("fa-eye")){
+			icon.removeClass("fa-eye");
+			icon.addClass("fa-eye-slash");
+		}else{
+			icon.addClass("fa-eye");
+			icon.removeClass("fa-eye-slash");
+		}
+	}
 	$(function(){
 		$('#addOptionNameDiv .typeahead').typeahead(null, {
 			  name: 'option',
 			  source: option
 		});
+
+		$("#subOptionDiv").sortable({
+	          items:'.subOptionDiv',
+	          cursor: 'move',
+	          opacity: 0.5,
+	          containment: '#subOptionDiv',
+	          distance: 20,
+	          tolerance: 'pointer'
+	      });
 	});
 	
 </script>
@@ -84,7 +137,7 @@
 			</div>
 			</form>
 			<div class="modal-footer">
-				<button id="saveTypeSeqBtn" class="btn btn-primary" type="button" data-dismiss="modal" onclick="$('#updatePermissionTypeSeqToDbForm').submit();">Save changes</button>
+				<button id="saveOptionBtn" class="btn btn-primary" type="button" onclick="saveOption();">Save changes</button>
 				<button type="button" onclick="closeOption();" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
