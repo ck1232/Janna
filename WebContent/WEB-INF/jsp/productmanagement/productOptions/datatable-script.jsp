@@ -1,8 +1,8 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
+var optionTable= null;
 $(function () {
-	var rows_selected = [];
-    $('#datatable1').DataTable({
+    optionTable = $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
       "lengthChange": false,
@@ -22,9 +22,8 @@ $(function () {
       "order": [1, 'asc'],
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
-          var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.id);
-          $(row).find('button[name="editBtn"]').prop('value', data.id);
+          $(row).find('input[type="checkbox"]').prop('value', data.optionName);
+          $(row).find('button[name="editBtn"]').prop('value', data.optionName);
        }
     });
 });

@@ -1,4 +1,4 @@
-package com.JJ.controller.productmanagement;
+package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
 

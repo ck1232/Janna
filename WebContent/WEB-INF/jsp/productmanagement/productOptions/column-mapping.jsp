@@ -6,8 +6,8 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "name"},
-{"data": "subOptionsList[, ].name"},
+{"data": "optionName"},
+{"data": "subOptionList[, ].subOptionName"},
 {
     "className":      '',
     "orderable":      false,

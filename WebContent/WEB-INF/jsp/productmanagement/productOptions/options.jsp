@@ -33,7 +33,7 @@
 					subOptionName:$(item).find("label").text(),
 					display:displayInd,
 					seq:i+1
-				}
+				};
 				subOptionList.push(subOption);
 			}
 		}
@@ -52,7 +52,13 @@
 
 			}
   		}).done(function() {
-			    alert( "success" );
+			$("#subOptionInput").val("");
+			$("#name").val("");
+			$("#subOptionDiv").children().remove();
+			optionTable.ajax.reload();
+    		alert( "success" );
+    		closeOption();
+			    
 		});
 	}
 	function addNewSubOption(){
@@ -95,7 +101,7 @@
 </script>
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/admin/deleteUser" />"><i class="fa fa-user-times"></i> Delete Option</button>
+		<button class="btn btn-primary pull-right" type="button" form="datatableForm" formaction="<c:url value="/admin/deleteProductOption" />"><i class="fa fa-user-times"></i> Delete Option</button>
 		<button class="btn btn-primary pull-right" type="button" onclick="addOption();"><i class="fa fa-user-plus"></i> Add Option</button>
 	</div>
 </div>

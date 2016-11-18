@@ -111,9 +111,9 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Name:</label>
 											<div class="col-sm-10">
-												<form:input path="productname" type="text" class="form-control"
+												<form:input path="productName" type="text" class="form-control"
 								                                id="productName" placeholder="Enter product name" />
-												<form:errors path="productname" class="text-danger" />
+												<form:errors path="productName" class="text-danger" />
 											</div>
 									  	</div>
 				              		</div>
@@ -122,7 +122,7 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Category:</label>
 											<div class="col-sm-10">
-												<form:select path="subcategoryid" type="text" class="form-control" id="subcategory" >
+												<form:select path="subcategoryId" type="text" class="form-control" id="subcategory" >
 													<form:option value="">No Category</form:option>
 								                	<c:forEach items="${categoryList}" var="category">
 								                		<c:if test="${category.isparent == true}">
@@ -137,7 +137,7 @@
 								                		</c:if>
 								                	</c:forEach>
 								                </form:select>
-												<form:errors path="subcategoryid" class="text-danger" />
+												<form:errors path="subcategoryId" class="text-danger" />
 											</div>
 									  	</div>
 				              		</div>
@@ -180,7 +180,12 @@
 				              			</div>
 				              		</div>
 				              	</div>
+				              	<div class="row">
+				              		<button type="submit" class="btn btn-default pull-right" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+									<button id="addProductBtn" type="submit" class="btn btn-primary pull-right" form ="createProductOptionForm">Add</button>
 				              </div>
+				              </div>
+				              
 				            </div>
 			              <!-- /.box-body -->
 		            </form:form>

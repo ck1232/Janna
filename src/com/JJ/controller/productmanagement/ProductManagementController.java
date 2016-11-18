@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.JJ.controller.productmanagement.vo.OptionVo;
+import com.JJ.controller.productmanagement.vo.ProductVo;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.FileMeta;
 import com.JJ.model.JsonResponse;
@@ -33,7 +35,6 @@ import com.JJ.model.Product;
 import com.JJ.model.Productcategory;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsubcategory;
-import com.JJ.model.Productsuboption;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
@@ -47,10 +48,8 @@ public class ProductManagementController {
 	private ProductService productService;
 	private ProductCategoryManagementService productCategoryManagementService;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
-	private LinkedList<FileMeta> files = new LinkedList<FileMeta>();
-    private FileMeta fileMeta = null;
-    private List<Productoption> productOptionsList; 
     private ProductOptionManagementService productOptionManagementService;
+    private ProductVo newProduct;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
 			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
@@ -98,9 +97,8 @@ public class ProductManagementController {
 	@RequestMapping("/createProduct")
 	public String createProduct(Model model){
 		logger.debug("loading create product");
-		productOptionsList = new ArrayList<Productoption>();
-		Product product = new Product();
-		model.addAttribute("productForm", product);
+		newProduct = new ProductVo();
+		model.addAttribute("productForm", newProduct);
 		model.addAttribute("categoryList", getProductCategoryList());
 		return "createProduct";
 	}
@@ -108,20 +106,12 @@ public class ProductManagementController {
 	@RequestMapping(value = "/getProductOptionsList",method = RequestMethod.GET)
 	public @ResponseBody String getProductOptionsList(){
 		logger.debug("getting Product Options list");
-		if(this.productOptionsList == null || this.productOptionsList.size() == 0){
-			Productoption option = new Productoption();
-			option.setName("Colour");
-			List<Productsuboption> list = new ArrayList<Productsuboption>();
-			Productsuboption red = new Productsuboption();
-			red.setName("Red");
-			list.add(red);
-			Productsuboption green = new Productsuboption();
-			green.setName("Green");
-			list.add(green);
-			option.setSubOptionsList(list);
-			productOptionsList.add(option);
+		if(newProduct != null && newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
+			return GeneralUtils.convertListToJSONString(newProduct.getOptionList());
+		}else{
+			return GeneralUtils.convertListToJSONString(new ArrayList<OptionVo>());
 		}
-		return GeneralUtils.convertListToJSONString(this.productOptionsList);
+		
 	}
 	
 	@RequestMapping(value = "/uploadImage",method = RequestMethod.POST)
@@ -138,11 +128,11 @@ public class ProductManagementController {
 //            System.out.println(mpf.getOriginalFilename() +" uploaded! "+files.size());
 
             //2.2 if files > 10 remove the first from the list
-            if(files.size() >= 10)
-                files.pop();
+            if(newProduct!= null && newProduct.getImages() != null && newProduct.getImages().size() >= 10)
+            	newProduct.getImages().pop();
 
             //2.3 create new fileMeta
-            fileMeta = new FileMeta();
+            FileMeta fileMeta = new FileMeta();
             fileMeta.setFileName(mpf.getOriginalFilename());
             fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
             fileMeta.setFileType(mpf.getContentType());
@@ -156,17 +146,24 @@ public class ProductManagementController {
                e.printStackTrace();
            }
             //2.4 add to files
-            files.add(fileMeta);
-        }
+            if(newProduct != null){
+            	if(newProduct.getImages() == null){
+            		newProduct.setImages(new LinkedList<FileMeta>());
+            	}
+            	newProduct.getImages().add(fileMeta);
+            	return newProduct.getImages();
+            }
+       }
+            
        // result will be like this
        // [{"fileName":"app_engine-85x77.png","fileSize":"8 Kb","fileType":"image/png"},...]
-       return files;
+       return null;
 	}
 	
 	@RequestMapping(value = "/removeUploadImage",method = RequestMethod.POST)
 	public @ResponseBody JsonResponse upload(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
-		if(files != null && files.size() > 0 && fileName != null && !fileName.trim().isEmpty()){
-			Iterator<FileMeta> iterator = files.iterator();
+		if(newProduct != null && newProduct.getImages() != null && newProduct.getImages().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
+			Iterator<FileMeta> iterator = newProduct.getImages().iterator();
 			while(iterator.hasNext()){
 				FileMeta file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
@@ -218,6 +215,12 @@ public class ProductManagementController {
 	
 	@RequestMapping(value = "/saveOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse saveOption(@RequestBody OptionVo option) {
+		if(newProduct != null){
+			if(newProduct.getOptionList() == null){
+				newProduct.setOptionList(new ArrayList<OptionVo>());
+			}
+			newProduct.getOptionList().add(option);
+		}
 		return new JsonResponse("success");
 	}
 }
