@@ -97,9 +97,9 @@
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />"></form>
-                    <c:url var="post_url" value="/product/product/createProduct" />
+                    <c:url var="post_url" value="/product/product/saveNewProduct?_csrf=${_csrf.token}" />
                     <form:form id="createProductForm" method="post"  modelAttribute="productForm" action="${post_url}"  enctype="multipart/form-data">
-                    <input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			              <div class="box-body">
 			              	<!-- upper row -->
 				              <div class="row form-group">
@@ -166,9 +166,8 @@
 				              		</ul>
 				              		<div class="tab-content">
 				              			<div id="product_info_tab" class="tab-pane active">
-				              				<textarea id="productInfoEditor" name="productInfoEditor" rows="10" cols="80">
-                                            	This is my textarea to be replaced with CKEditor.
-                    						</textarea>
+				              				<form:textarea path="productInfo" id="productInfoEditor" name="productInfo" rows="10" cols="80" />
+				              				<form:errors path="productInfo" class="text-danger" />
 				              			</div>
 				              			<div id="image_tab" class="tab-pane">
 									      	<div id="dZUpload" class="dropzone">
@@ -182,7 +181,7 @@
 				              	</div>
 				              	<div class="row">
 				              		<button type="submit" class="btn btn-default pull-right" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
-									<button id="addProductBtn" type="submit" class="btn btn-primary pull-right" form ="createProductOptionForm">Add</button>
+									<button id="addProductBtn" type="submit" class="btn btn-primary pull-right" form ="createProductForm">Add</button>
 				              </div>
 				              </div>
 				              

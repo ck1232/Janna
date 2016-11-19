@@ -56,7 +56,6 @@
 			$("#name").val("");
 			$("#subOptionDiv").children().remove();
 			optionTable.ajax.reload();
-    		alert( "success" );
     		closeOption();
 			    
 		});

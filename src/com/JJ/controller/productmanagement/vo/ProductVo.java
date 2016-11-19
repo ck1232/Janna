@@ -7,16 +7,13 @@ import java.util.List;
 import com.JJ.model.FileMeta;
 
 public class ProductVo implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String productName;
 	private List<OptionVo> optionList;
 	private Integer subcategoryId;
 	private LinkedList<FileMeta> images;
+	private String productInfo;
 	public Integer getId() {
 		return id;
 	}
@@ -40,6 +37,12 @@ public class ProductVo implements Serializable {
 	}
 	public void setSubcategoryId(Integer subcategoryId) {
 		this.subcategoryId = subcategoryId;
+	}
+	public String getProductInfo() {
+		return productInfo;
+	}
+	public void setProductInfo(String productInfo) {
+		this.productInfo = productInfo;
 	}
 	public LinkedList<FileMeta> getImages() {
 		return images;
