@@ -4,6 +4,8 @@
 <html>
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title><tiles:insertAttribute name="title" ignore="true" /></title>  
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>        
@@ -77,7 +79,13 @@
 		<!-- bootstrap color picker -->
 		<script src="<c:url value="/development/plugins/colorpicker/bootstrap-colorpicker.min.js" />"></script>
 		<!-- bootstrap time picker -->
-		<script src="<c:url value="/development//timepicker/bootstrap-timepicker.min.js" />"></script>
+		<script src="<c:url value="/development/timepicker/bootstrap-timepicker.min.js" />"></script>
+		<script>
+			var token = $("meta[name='_csrf']").attr("content");
+	    	var header = $("meta[name='_csrf_header']").attr("content");
+		</script>
+		<!-- JQuery redirect -->
+		<script src="<c:url value="/development/js/jquery/jquery.redirect.js"/>"></script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">

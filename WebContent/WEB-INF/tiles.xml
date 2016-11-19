@@ -784,4 +784,73 @@
     </definition>
     <!-- Product Option Management Module END -->
   
+  	<!-- Customer Management Module START -->
+ 	
+ 	<definition name="listCustomer" extends="main_template">  
+        <put-attribute name="title" value="Customer Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Customer Listing" />
+        		<put-attribute name="heading-description" value="To view all the customers" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/customermanagement/listCustomer.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Customers" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/customermanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/customermanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/customer/getCustomerList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/customermanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/customermanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="viewCustomer" extends="main_template">  
+        <put-attribute name="title" value="View Customer" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Customer" />
+        		<put-attribute name="heading-description" value="To view customer." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/customermanagement/viewCustomer.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createCustomer" extends="main_template">
+    	<put-attribute name="title" value="Add New Customer" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Create New Customer" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/customermanagement/createCustomer.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+     <definition name="updateCustomer" extends="main_template">  
+        <put-attribute name="title" value="Update Customer" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Customer" />
+        		<put-attribute name="heading-description" value="To update customer" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/customermanagement/updateCustomer.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    <!-- Customer Management Module END -->
+  
 </tiles-definitions>  
