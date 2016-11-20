@@ -4,7 +4,7 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "name"},
+{"data": "productname"},
 {
     "className":      '',
     "orderable":      false,

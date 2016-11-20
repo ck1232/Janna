@@ -38,7 +38,6 @@ import com.JJ.model.Productcategory;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
-import com.JJ.service.productmanagement.ProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
@@ -53,16 +52,13 @@ public class ProductManagementController {
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
     private ProductOptionManagementService productOptionManagementService;
     private ProductVo newProduct;
-    private ProductManagementService productManagementService;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
-			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService,
-			ProductManagementService productManagementService){
+			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
 		this.productService = productService;
 		this.productCategoryManagementService = productCategoryManagementService;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productOptionManagementService = productOptionManagementService;
-		this.productManagementService = productManagementService;
 	}
 	
 	public List<Productcategory> getProductCategoryList(){
@@ -125,7 +121,6 @@ public class ProductManagementController {
 		//1. build an iterator
         Iterator<String> itr =  request.getFileNames();
         MultipartFile mpf = null;
-//        User userAccount = (User) request.getSession().getAttribute("userAccount");
         //2. get each file
         while(itr.hasNext()){
 
@@ -145,8 +140,6 @@ public class ProductManagementController {
 
             try {
                fileMeta.setBytes(mpf.getBytes());
-//               Integer stagingId = productService.insertImageStaging(fileMeta.getBytes(), fileMeta.getFileName(), userAccount.getUsername());
-//               fileMeta.setImageStagingId(stagingId);
            } catch (IOException e) {
                // TODO Auto-generated catch block
                e.printStackTrace();
@@ -156,6 +149,7 @@ public class ProductManagementController {
             	if(newProduct.getImages() == null){
             		newProduct.setImages(new LinkedList<FileMeta>());
             	}
+            	fileMeta.setSequence(newProduct.getImages().size() + 1);
             	newProduct.getImages().add(fileMeta);
             	return newProduct.getImages();
             }
@@ -173,9 +167,24 @@ public class ProductManagementController {
 			while(iterator.hasNext()){
 				FileMeta file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
-//					productService.deleteImageStaging(file.getImageStagingId());
 					iterator.remove();
 					break;
+				}
+			}
+		}
+		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value = "/sortImage", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse saveOption(@RequestBody List<String> orderList) {
+		if(newProduct.getImages() != null && newProduct.getImages().size() > 0){
+			for(FileMeta image : newProduct.getImages()){
+				int index = orderList.indexOf(image.getFileName());
+				if(index < 0){
+					image.setSequence(0);
+				}
+				else{
+					image.setSequence(index + 1);
 				}
 			}
 		}
@@ -195,30 +204,6 @@ public class ProductManagementController {
 		return productOptionList;
 	}
 	
-	/*@RequestMapping(value = "/addNewSubOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse addNewSubOption(@RequestParam(value="option", required=true) String option,@RequestParam(value="subOption", required=false) String subOption) {
-		logger.debug("add new sub option");
-		if(option != null && !option.trim().isEmpty() && subOption != null && !subOption.trim().isEmpty()){
-			Productoption productOption = new Productoption();
-			productOption.setName(option);
-			if(productOptionsList == null){
-				productOptionsList = new ArrayList<Productoption>();
-			}
-			if(!productOptionsList.contains(productOption)){
-				productOptionsList.add(productOption);
-			}
-			Productsuboption suboption = new Productsuboption();
-			suboption.setName(subOption);
-			
-			Productoption pOption = productOptionsList.get(productOptionsList.indexOf(productOption));
-			if(pOption.getSubOptionsList() == null){
-				pOption.setSubOptionsList(new ArrayList<Productsuboption>());
-			}
-			pOption.getSubOptionsList().add(suboption);
-		}
-		return new JsonResponse("success");
-	}*/
-	
 	@RequestMapping(value = "/saveOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse saveOption(@RequestBody OptionVo option) {
 		if(newProduct != null){
@@ -233,12 +218,15 @@ public class ProductManagementController {
 	@RequestMapping(value = "/saveNewProduct", method = RequestMethod.POST)
 	public String saveNewProduct(@ModelAttribute("productForm") ProductVo product, final RedirectAttributes redirectAttributes) {
 		product.setOptionList(newProduct.getOptionList());
-		//setimage sequence
-		
+		reshuffleImage(newProduct.getImages());
 		product.setImages(newProduct.getImages());
-		productManagementService.saveProduct(product);
+		productService.saveProduct(product);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Product added successfully!");
 		return "redirect:listProduct";
+	}
+
+	private void reshuffleImage(LinkedList<FileMeta> images) {
+		
 	}
 }

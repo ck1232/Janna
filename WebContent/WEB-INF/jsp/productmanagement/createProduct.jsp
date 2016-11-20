@@ -16,11 +16,21 @@
 			for(var i=0;i<listElements.length;i++){
 				var alt = $(listElements[i]).attr("alt");						
 				uploadImageOrderList.push(alt);
-			    console.log(alt); 
 			}
+			return uploadImageOrderList; 
 		}
 		var sortEventHandler = function(event, ui){
-			//getSortOrder();
+			var uploadImageOrderList = getSortOrder();
+			var orderAjax = $.ajax({
+		  		  type: "POST",
+		  		  url: "sortImage",
+		  		  data: JSON.stringify(uploadImageOrderList),
+		  		  contentType:"application/json; charset=utf-8",
+				  beforeSend: function( xhr ) {
+					  xhr.setRequestHeader(header, token);
+
+					}
+		  		}).done(function() {});
 		};
 
 		sortableList.sortable({
