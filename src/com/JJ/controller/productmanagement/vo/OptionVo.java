@@ -9,8 +9,17 @@ public class OptionVo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private Integer optionId;
 	private String optionName;
 	private List<SubOptionVo> subOptionList;
+	
+	public Integer getOptionId() {
+		return optionId;
+	}
+	public void setOptionId(Integer optionId) {
+		this.optionId = optionId;
+	}
 	public String getOptionName() {
 		return optionName;
 	}

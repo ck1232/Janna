@@ -38,6 +38,7 @@ import com.JJ.model.Productcategory;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
+import com.JJ.service.productmanagement.ProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
@@ -52,13 +53,16 @@ public class ProductManagementController {
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
     private ProductOptionManagementService productOptionManagementService;
     private ProductVo newProduct;
+    private ProductManagementService productManagementService;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
-			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
+			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService,
+			ProductManagementService productManagementService){
 		this.productService = productService;
 		this.productCategoryManagementService = productCategoryManagementService;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productOptionManagementService = productOptionManagementService;
+		this.productManagementService = productManagementService;
 	}
 	
 	public List<Productcategory> getProductCategoryList(){
@@ -229,7 +233,10 @@ public class ProductManagementController {
 	@RequestMapping(value = "/saveNewProduct", method = RequestMethod.POST)
 	public String saveNewProduct(@ModelAttribute("productForm") ProductVo product, final RedirectAttributes redirectAttributes) {
 		product.setOptionList(newProduct.getOptionList());
+		//setimage sequence
+		
 		product.setImages(newProduct.getImages());
+		productManagementService.saveProduct(product);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Product added successfully!");
 		return "redirect:listProduct";
