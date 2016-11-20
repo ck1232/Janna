@@ -78,8 +78,6 @@
 		<script src="<c:url value="/development/plugins/datepicker/bootstrap-datepicker.js" />"></script>
 		<!-- bootstrap color picker -->
 		<script src="<c:url value="/development/plugins/colorpicker/bootstrap-colorpicker.min.js" />"></script>
-		<!-- bootstrap time picker -->
-		<script src="<c:url value="/development/timepicker/bootstrap-timepicker.min.js" />"></script>
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 	    	var header = $("meta[name='_csrf_header']").attr("content");
@@ -95,7 +93,7 @@
 				// Apply the search
 			    table.columns().every( function () {
 			        var that = this;
-			 		
+			 		console.log("init table search called");
 			        $( 'input', this.header() ).on( 'keyup change', function () {
 			            if ( that.search() !== this.value ) {
 			                that.search( this.value ).draw();

@@ -6,7 +6,6 @@
 },
 {"data": "name"},
 {"data": "userid"},
-{"data": "dob"},
 {"data": "emailaddress"},
 {"data": "isactive"},
 {

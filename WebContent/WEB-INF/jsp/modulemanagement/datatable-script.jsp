@@ -3,8 +3,9 @@
 var selectedModuleId = 0;
 var selectedModuleName = "";
 $(function () {
-    var table = $('#datatable1').DataTable({
+    table = $('#datatable1').DataTable({
       "paging": true,
+      "pageLength": 10,
       "responsive" : true,
       "lengthChange": false,
       "searching": false,
@@ -35,6 +36,7 @@ $(function () {
        }
     });
 
+    initTableSearch();
 
     $('#datatable1 tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');

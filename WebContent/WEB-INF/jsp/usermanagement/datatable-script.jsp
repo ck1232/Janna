@@ -2,8 +2,9 @@
 <script>
 $(function () {
 	var rows_selected = [];
-    $('#datatable1').DataTable({
+	table = $('#datatable1').DataTable({
       "paging": true,
+      "pageLength": 10,
       "responsive" : true,
       "lengthChange": false,
       "searching": false,
@@ -29,5 +30,7 @@ $(function () {
           $(row).find('button[name="assignRoleBtn"]').prop('value', data.id);
        }
     });
+
+	initTableSearch();
 });
 </script>
