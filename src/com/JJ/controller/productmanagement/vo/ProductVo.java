@@ -1,6 +1,7 @@
 package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class ProductVo implements Serializable {
 	private Integer subcategoryId;
 	private LinkedList<FileMeta> images;
 	private String productInfo;
+	private BigDecimal unitPrice;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -49,6 +52,12 @@ public class ProductVo implements Serializable {
 	}
 	public void setImages(LinkedList<FileMeta> images) {
 		this.images = images;
+	}
+	public BigDecimal getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(BigDecimal unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 	
 	
