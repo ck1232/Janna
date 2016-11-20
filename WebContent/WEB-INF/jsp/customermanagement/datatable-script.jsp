@@ -1,7 +1,9 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 $(function () {
-    $('#datatable1').DataTable({
+	
+    
+    table = $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
       "lengthChange": false,
@@ -26,6 +28,9 @@ $(function () {
           $(row).find('button[name="viewBtn"]').prop('value', data.customerid);
        }
     });
+
+    initTableSearch();
+
 
     $('#saveAddressBtn').on('click', function() {
        	$('#saveAddressBtn').submit();

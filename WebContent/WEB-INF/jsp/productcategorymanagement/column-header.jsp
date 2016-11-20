@@ -3,5 +3,5 @@
   <th>Name</th>
   <th>Parent Indicator</th>
   <th>Display Indicator</th>
-  <th>Actions</th>
+  <th>Action</th>
 </tr>

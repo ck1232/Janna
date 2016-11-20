@@ -83,6 +83,26 @@
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 	    	var header = $("meta[name='_csrf_header']").attr("content");
+	    	$(function(){
+	    		$('#datatable1 thead th').each( function () {
+	    	        var title = $(this).text();
+	    	        if(title != "" && title != "Action"){
+	    	        	$(this).append( '<br><input type="text" placeholder="Search '+title+'" />' );
+	    	        }
+	    	    } );
+		    });
+			function initTableSearch(){
+				// Apply the search
+			    table.columns().every( function () {
+			        var that = this;
+			 		
+			        $( 'input', this.header() ).on( 'keyup change', function () {
+			            if ( that.search() !== this.value ) {
+			                that.search( this.value ).draw();
+			            }
+			        } );
+			    } );
+			}
 		</script>
 		<!-- JQuery redirect -->
 		<script src="<c:url value="/development/js/jquery/jquery.redirect.js"/>"></script>
