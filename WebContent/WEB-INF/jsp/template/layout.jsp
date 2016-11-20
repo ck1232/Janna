@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title><tiles:insertAttribute name="title" ignore="true" /></title>  
 		
         <link type="text/css" href="<c:url context="/JJ" value="/development/font-awesome/css/font-awesome.min.css"/>" rel="stylesheet"/>        
@@ -85,9 +87,30 @@
         <!-- typeahead -->
         <script src="<c:url context="/JJ" value="/development/typeahead/typeahead.bundle.js" />"></script>
 		<!-- REQUIRED JS SCRIPTS -->
+		
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 	    	var header = $("meta[name='_csrf_header']").attr("content");
+	    	$(function(){
+	    		$('#datatable1 thead th').each( function () {
+	    	        var title = $(this).text();
+	    	        if(title != "" && title != "Action"){
+	    	        	$(this).append( '<br><input type="text" placeholder="Search '+title+'" />' );
+	    	        }
+	    	    } );
+		    });
+			function initTableSearch(){
+				// Apply the search
+			    table.columns().every( function () {
+			        var that = this;
+			 		console.log("init table search called");
+			        $( 'input', this.header() ).on( 'keyup change', function () {
+			            if ( that.search() !== this.value ) {
+			                that.search( this.value ).draw();
+			            }
+			        } );
+			    } );
+			}
 		</script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini">
