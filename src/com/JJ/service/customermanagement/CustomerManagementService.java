@@ -29,17 +29,30 @@ public class CustomerManagementService {
 	public List<Customer> getAllCustomers() {
 		CustomerExample customerExample = new CustomerExample();
 		customerExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Customer> customerList = customerMapper.selectByExample(customerExample);
-		return customerList;
+		return customerMapper.selectByExample(customerExample);
 	}
 	
-	public void saveCustomer(Customer customer) {
-		customerMapper.insert(customer);
+	public List<Customer> getAllCustomers(List<Integer> customerIdList) {
+		CustomerExample customerExample = new CustomerExample();
+		customerExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andCustomeridIn(customerIdList);
+		return customerMapper.selectByExample(customerExample);
+	}
+	
+	public int saveCustomer(Customer customer) {
+		return customerMapper.insert(customer);
 	}
 	
 	public void deleteCustomer(Integer id) {
 		Customer customer = findById(id);
 		if(customer.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
+			customer.setDeleteind(GeneralUtils.DELETED);
+			customerMapper.updateByPrimaryKey(customer);
+		}
+	}
+	
+	public void deleteCustomer(List<Integer> customerIdList) {
+		List<Customer> customerList = getAllCustomers(customerIdList);
+		for(Customer customer: customerList){
 			customer.setDeleteind(GeneralUtils.DELETED);
 			customerMapper.updateByPrimaryKey(customer);
 		}

@@ -11,7 +11,7 @@
 </form>
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/product/promotion/deletePromotion" />"><i class="fa fa-user-times"></i> Delete</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/customer/deleteCustomer" />"><i class="fa fa-user-times"></i> Delete</button>
 		<button class="btn btn-primary pull-right" type="submit" form="createCustomerForm"><i class="fa fa-user-plus"></i> Add</button>
 	</div>
 </div>

@@ -1,5 +1,6 @@
 package com.JJ.controller.customermanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -123,8 +124,65 @@ public class CustomerManagementController {
 //		}
 		
 		
-        return "redirect:listCustomer";  
+        return "redirect:viewCustomer/" + customer.getCustomerid();  
     }  
+	
+	@RequestMapping(value = "/deleteCustomer", method = RequestMethod.POST)
+	public String deleteCustomer(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listCustomer";
+		}
+		List<Integer> customerIdList = new ArrayList<Integer>();
+		for (String id : ids) {
+			customerIdList.add(Integer.valueOf(id));
+		}
+		//check if customer has pending order, if have stop from deleting
+		customerManagementService.deleteCustomer(customerIdList);
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Customer(s) deleted successfully!");
+		return "redirect:listCustomer";
+	}
+	
+	@RequestMapping(value = "/deleteAddress", method = RequestMethod.POST)
+	public String deleteAddress(@RequestParam("deleteBtn") String id, Model model, 
+			RedirectAttributes redirectAttributes) {
+		customerAddressManagementService.deleteCustomerAddress(Integer.valueOf(id));
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Address deleted successfully!");
+		Customeraddress address = customerAddressManagementService.findById(Integer.parseInt(id));
+		return "redirect:viewCustomer/"+address.getCustomerid();
+	}
+	
+	@RequestMapping(value = "/createCustomerAddress", method = RequestMethod.POST)
+    public String createCustomerAddress(@RequestParam(value="customerid", required=false) String customerid,
+    		@RequestParam(value="recipientname", required=false) String recipientname,
+			@RequestParam(value="address", required=false) String address,
+			@RequestParam(value="postalcode", required=false) String postalcode,
+			@RequestParam(value="contactnumber", required=false) String contactnumber,
+			@RequestParam(value="country", required=false) String country,
+			RedirectAttributes redirectAttributes) {  
+		Customeraddress customerAddress = new Customeraddress();
+		customerAddress.setCustomerid(Integer.parseInt(customerid));
+		customerAddress.setRecipientname(recipientname);
+		customerAddress.setAddress(address);
+		customerAddress.setContactnumber(Long.parseLong(contactnumber));
+		customerAddress.setPostalcode(Integer.parseInt(postalcode));
+		customerAddress.setCountry(country);
+		List<Customeraddress> addressList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(customerid));
+		if(addressList.size() == 0){
+			customerAddress.setDefaultind("Y");
+		}else{
+			customerAddress.setDefaultind("N");
+		}
+		customerAddressManagementService.saveCustomerAddress(customerAddress);
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Address added successfully!");
+
+        return "redirect:viewCustomer/" + customerid;  
+    } 
 	
 	@RequestMapping(value = "/saveCustomerAddressToDb", method = RequestMethod.POST)
 	public String saveAddress(@RequestParam(value="addressid", required=false) String addressid, 
@@ -147,6 +205,7 @@ public class CustomerManagementController {
 	@RequestMapping(value = "/setAddressDefault", method = RequestMethod.POST)
 	public String getAddressToUpdate(@RequestParam("setDefaultBtn") String id, Model model) {
 		Customeraddress customerAddress = customerAddressManagementService.findById(Integer.parseInt(id));
+		customerAddressManagementService.updateCustomerAddressToUndefault(customerAddress.getCustomerid());
 		customerAddress.setDefaultind("Y");
 		customerAddressManagementService.updateCustomerAddress(customerAddress);
 		return "redirect:viewCustomer/"+customerAddress.getCustomerid();

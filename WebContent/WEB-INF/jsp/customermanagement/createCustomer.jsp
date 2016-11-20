@@ -34,8 +34,8 @@
 										<div class="radio">
 											<label class="col-sm-2 control-label">Name</label>
 											<div class="col-sm-10">
-												<form:radiobutton path="gender" value="M"/>Male
-												<form:radiobutton path="gender" value="F"/>Female
+												<label><form:radiobutton path="gender" value="M"/>Male</label>
+												<label><form:radiobutton path="gender" value="F"/>Female</label>
 						                    </div>
 						               	</div>
 									</div>
@@ -76,7 +76,7 @@
 										<label class="col-sm-2 control-label">User Id</label>
 											<div class="col-sm-10">
 						                  		<form:input path="userid" type="text" class="form-control" 
-						                  			  id="userid" placeholder="Enter user id" autocomplete="false"/>
+						                  			  id="userid" placeholder="Enter user id"/>
 						                  		<form:errors path="userid" class="text-danger" />
 						                	</div>
 						              </div>
@@ -86,7 +86,7 @@
 										<label class="col-sm-2 control-label">Password</label>
 											<div class="col-sm-10">
 						                  		<form:input path="password" type="password" class="form-control" 
-						                  			  id="password" autocomplete="false"/>
+						                  			  id="password"/>
 						                  		<form:errors path="password" class="text-danger" />
 						                	</div>
 						              </div>

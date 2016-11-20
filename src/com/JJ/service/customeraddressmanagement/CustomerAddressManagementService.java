@@ -29,15 +29,13 @@ public class CustomerAddressManagementService {
 	public List<Customeraddress> getAllCustomerAddress() {
 		CustomeraddressExample customeraddressExample = new CustomeraddressExample();
 		customeraddressExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Customeraddress> customeraddressList = customerAddressMapper.selectByExample(customeraddressExample);
-		return customeraddressList;
+		return customerAddressMapper.selectByExample(customeraddressExample);
 	}
 	
 	public List<Customeraddress> getAllCustomerAddressByCustomerId(Integer customerId) {
 		CustomeraddressExample customeraddressExample = new CustomeraddressExample();
 		customeraddressExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andCustomeridEqualTo(customerId);
-		List<Customeraddress> customeraddressList = customerAddressMapper.selectByExample(customeraddressExample);
-		return customeraddressList;
+		return customerAddressMapper.selectByExample(customeraddressExample);
 	}
 	
 	public void saveCustomerAddress(Customeraddress customerAddress) {
@@ -55,6 +53,16 @@ public class CustomerAddressManagementService {
 	public void updateCustomerAddress(Customeraddress customerAddress) {
 		if(customerAddress.getDeleteind().equals(GeneralUtils.NOT_DELETED))
 			customerAddressMapper.updateByPrimaryKeySelective(customerAddress);
+	}
+	
+	public void updateCustomerAddressToUndefault(Integer customerid) {
+		CustomeraddressExample customeraddressExample = new CustomeraddressExample();
+		customeraddressExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andCustomeridEqualTo(customerid).andDefaultindEqualTo("Y");
+		List<Customeraddress> customeraddressList = customerAddressMapper.selectByExample(customeraddressExample);
+		for(Customeraddress address: customeraddressList){
+			address.setDefaultind("N");
+			customerAddressMapper.updateByPrimaryKey(address);
+		}
 	}
 	 
 	
