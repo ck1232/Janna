@@ -19,6 +19,7 @@ public class ProductCategoryManagementService {
 	@Autowired
 	public ProductCategoryManagementService(ProductcategoryMapper productCategoryMapper) {
 		this.productCategoryMapper = productCategoryMapper;
+		
 	}
 	
 	public Productcategory findById(Integer id) {
@@ -48,5 +49,4 @@ public class ProductCategoryManagementService {
 		if(productCategory.getDeleteind().equals(GeneralUtils.NOT_DELETED))
 			productCategoryMapper.updateByPrimaryKeySelective(productCategory);
 	}
-
 }

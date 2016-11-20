@@ -1,5 +1,7 @@
 package com.JJ.model;
 
+import java.util.List;
+
 public class Productcategory extends Base{
 
 	/**
@@ -110,6 +112,8 @@ public class Productcategory extends Base{
     private String isparentString;
 
     private String displayindString;
+    
+    private List<Productsubcategory> subcategoryList;
 
 	public void setIsparentString() {
 		if(isparent.booleanValue()) {
@@ -126,6 +130,14 @@ public class Productcategory extends Base{
     	}else{
     		this.displayindString =  "N";
     	}
+	}
+
+	public List<Productsubcategory> getSubcategoryList() {
+		return subcategoryList;
+	}
+
+	public void setSubcategoryList(List<Productsubcategory> subcategoryList) {
+		this.subcategoryList = subcategoryList;
 	} 
     
 }

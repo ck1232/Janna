@@ -63,15 +63,20 @@ public class CommonController {
 	@RequestMapping(value={"/","/dashboard"})  
     public String loadDashboard(HttpSession session) {  
     	logger.debug("dashboard is executed!");
-    	UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	session.setAttribute("userAccount", principal);
-    	session.setAttribute("menu", this.populateMenu(principal));
-    	List<String> roleList = new ArrayList<String>();
-    	for(GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
-    		roleList.add(authority.getAuthority());
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	if(principal instanceof UserDetails){
+    		UserDetails userDetails = (UserDetails)principal ;
+	    	session.setAttribute("userAccount", principal);
+	    	session.setAttribute("menu", this.populateMenu(userDetails));
+	    	List<String> roleList = new ArrayList<String>();
+	    	for(GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+	    		roleList.add(authority.getAuthority());
+	    	}
+	    	List<String> urlList = commonService.getAllowedUrlByRoleName(roleList);
+	    	session.setAttribute("allowedUrl", urlList);
+    	}else if(principal instanceof String){
+    		logger.debug("principal:"+principal.toString());
     	}
-    	List<String> urlList = commonService.getAllowedUrlByRoleName(roleList);
-    	session.setAttribute("allowedUrl", urlList);
         return "dashboard";  
     }
 	

@@ -52,12 +52,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-	  http.csrf().and()
+	  http.csrf()//.ignoringAntMatchers("/product/product/saveNewProduct")
+	  	.and()
 	  	.authorizeRequests()
 	  	.accessDecisionManager(accessDecisionManager())
+//	  	.antMatchers("/login").anonymous()
 	  	.antMatchers("/","/dashboard").authenticated()
 		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
-//		.antMatchers("/development/**").authenticated()
+//		.antMatchers("/**").authenticated()
 //		.antMatchers("/**").denyAll()
 		.and().formLogin().loginPage("/login")
 		.usernameParameter("username").passwordParameter("password")

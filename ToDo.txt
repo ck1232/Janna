@@ -1,20 +1,28 @@
 ----ck----
 create product
- - tabs - images
-        - options
+ - tabs -done
+- images -done
+- options
  - price, weight, display, tags
  - ckeditor
 list product
  - display as squares?
  - OPtions: manage category, allow display, add, delete
-
+-last update version
+-decyption in controller spring security
 ----J----
-discount table add column applyType(Product, delivery, total) done
- - create/update discount - applyType done
  - manage product from discount list if applytype is product
-Option management
 Delivery fee management
-
+Customer management
+ - view customer list
+ - view orders link to the customer
+ -
+Order management
+ - list orders
+ - search order
+ - view order - facilitate product packing
+ - delete order
+ - update order
 
 
 ==================================

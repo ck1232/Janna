@@ -1,6 +1,7 @@
 package com.JJ.controller.productsubcategorymanagement;
 
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Productcategory;
 import com.JJ.model.Productsubcategory;
-import com.JJ.model.Submodule;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.validator.ProductSubCategoryFormValidator;

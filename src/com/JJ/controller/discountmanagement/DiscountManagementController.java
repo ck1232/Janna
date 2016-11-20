@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Discount;
 import com.JJ.model.Promotion;
-import com.JJ.model.User;
 import com.JJ.service.discountmanagement.DiscountManagementService;
 import com.JJ.service.promotionmanagement.PromotionManagementService;
 import com.JJ.validator.DiscountFormValidator;

@@ -21,7 +21,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Productoption;
-import com.JJ.model.Role;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.validator.ProductOptionFormValidator;
 
@@ -51,7 +50,7 @@ public class ProductOptionManagementController {
 	
 	@RequestMapping(value = "/getProductOptionList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getProductOptionList() {
-		logger.debug("getting promotion list");
+		logger.debug("getting productOption list");
 		List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
 		return GeneralUtils.convertListToJSONString(optionList);
 	}
