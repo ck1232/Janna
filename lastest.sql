@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `jj` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `jj`;
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: jj
@@ -749,4 +747,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-20 15:04:37
+-- Dump completed on 2016-11-20 15:12:07
