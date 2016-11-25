@@ -13,7 +13,7 @@ public class OptionVo implements Serializable {
 	private Integer optionId;
 	private String optionName;
 	private List<SubOptionVo> subOptionList;
-	
+	private Integer sequence;
 	public Integer getOptionId() {
 		return optionId;
 	}
@@ -31,6 +31,12 @@ public class OptionVo implements Serializable {
 	}
 	public void setSubOptionList(List<SubOptionVo> subOptionList) {
 		this.subOptionList = subOptionList;
+	}
+	public Integer getSequence() {
+		return sequence;
+	}
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
 	}
 
 }

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <form id="createProductForm" method="get" action="<c:url value="/product/product/createProduct" />"></form>
-<form id="updateProductForm" method="post" action="<c:url value="/product/product/updateProduct" />">
+<form id="editProductForm" method="post" action="<c:url value="/product/product/editProduct" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 

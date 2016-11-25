@@ -107,9 +107,10 @@
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />"></form>
-                    <c:url var="post_url" value="/product/product/saveNewProduct?_csrf=${_csrf.token}" />
-                    <form:form id="createProductForm" method="post"  modelAttribute="productForm" action="${post_url}"  enctype="multipart/form-data">
+                    <c:url var="post_url" value="/product/product/saveProduct?_csrf=${_csrf.token}" />
+                    <form:form id="productForm" method="post"  modelAttribute="productForm" action="${post_url}"  enctype="multipart/form-data">
                     	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    	<form:input path="id" type="hidden" class="form-control" id="productId"/>
 			              <div class="box-body">
 			              	<!-- upper row -->
 				              <div class="row form-group">
@@ -120,7 +121,7 @@
 				              		<div class="row">
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Name:</label>
-											<div class="col-sm-10">
+											<div class="col-sm-10 input-group">
 												<form:input path="productName" type="text" class="form-control"
 								                                id="productName" placeholder="Enter product name" />
 												<form:errors path="productName" class="text-danger" />
@@ -131,7 +132,7 @@
 				              		<div class="row">
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Category:</label>
-											<div class="col-sm-10">
+											<div class="col-sm-10 input-group">
 												<form:select path="subcategoryId" type="text" class="form-control" id="subcategory" >
 													<form:option value="">No Category</form:option>
 								                	<c:forEach items="${categoryList}" var="category">
@@ -148,6 +149,31 @@
 								                	</c:forEach>
 								                </form:select>
 												<form:errors path="subcategoryId" class="text-danger" />
+											</div>
+									  	</div>
+				              		</div>
+				              		
+				              		<div class="row">
+					              		<div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Price:</label>
+											<div class="col-sm-10 input-group">
+												<span class="input-group-addon">$</span>
+												<form:input path="unitPrice" type="text" class="form-control"
+								                                id="unitPrice" placeholder="" />
+								                <span class="input-group-addon">.00</span>
+												<form:errors path="unitPrice" class="text-danger" />
+											</div>
+									  	</div>
+				              		</div>
+				              		
+				              		<div class="row">
+					              		<div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Weight:</label>
+											<div class="col-sm-10 input-group">
+												<form:input path="weight" type="text" class="form-control"
+								                                id="weight" placeholder="Enter weight" />
+								                <span class="input-group-addon">gram</span>
+												<form:errors path="weight" class="text-danger" />
 											</div>
 									  	</div>
 				              		</div>
@@ -191,7 +217,7 @@
 				              	</div>
 				              	<div class="row">
 				              		<button type="submit" class="btn btn-default pull-right" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
-									<button id="addProductBtn" type="submit" class="btn btn-primary pull-right" form ="createProductForm">Add</button>
+									<tiles:insertAttribute name = "button" />
 				              </div>
 				              </div>
 				              

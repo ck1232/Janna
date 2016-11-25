@@ -11,6 +11,7 @@ public class ProductVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String productName;
+	private Integer weight;
 	private List<OptionVo> optionList;
 	private Integer subcategoryId;
 	private LinkedList<FileMeta> images;
@@ -58,6 +59,12 @@ public class ProductVo implements Serializable {
 	}
 	public void setUnitPrice(BigDecimal unitPrice) {
 		this.unitPrice = unitPrice;
+	}
+	public Integer getWeight() {
+		return weight;
+	}
+	public void setWeight(Integer weight) {
+		this.weight = weight;
 	}
 	
 	

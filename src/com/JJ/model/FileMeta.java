@@ -9,7 +9,6 @@ public class FileMeta {
 	private String fileName;
     private String fileSize;
     private String fileType;
-    private Integer imageStagingId;
     private Integer sequence;
     private byte[] bytes;
 
@@ -59,14 +58,6 @@ public class FileMeta {
 
 	public void setSequence(Integer sequence) {
 		this.sequence = sequence;
-	}
-
-	public Integer getImageStagingId() {
-		return imageStagingId;
-	}
-
-	public void setImageStagingId(Integer imageStagingId) {
-		this.imageStagingId = imageStagingId;
 	}
     
 }
