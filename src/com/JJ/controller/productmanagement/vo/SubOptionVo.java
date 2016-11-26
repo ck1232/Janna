@@ -7,9 +7,16 @@ public class SubOptionVo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Integer subOptionId;
 	private String subOptionName;
 	private boolean display;
 	private int seq;
+	public Integer getSubOptionId() {
+		return subOptionId;
+	}
+	public void setSubOptionId(Integer subOptionId) {
+		this.subOptionId = subOptionId;
+	}
 	public String getSubOptionName() {
 		return subOptionName;
 	}
