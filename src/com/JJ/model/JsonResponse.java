@@ -5,11 +5,13 @@ public class JsonResponse {
 	private String redirectUrl;
 	private String css;
 	private String message;
+	private String jsonString;
 	
-	public JsonResponse() {
-	}
 	public JsonResponse(String status) {
 		this.status = status;
+	}
+	
+	public JsonResponse() {
 	}
 
 	public String getStatus() {
@@ -38,5 +40,13 @@ public class JsonResponse {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getJsonString() {
+		return jsonString;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 }

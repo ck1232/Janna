@@ -27,7 +27,7 @@ import com.JJ.model.Product;
 import com.JJ.model.Productcategory;
 import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
-import com.JJ.service.productmanagement.ProductManagementService;
+import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.validator.ProductCategoryFormValidator;
 
@@ -39,18 +39,18 @@ public class ProductCategoryManagementController {
 	
 	private ProductCategoryManagementService productCategoryManagementService;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
-	private ProductManagementService productManagementService;
+	private ProductService productService;
 	private ProductCategoryFormValidator productCategoryFormValidator;
 	
 
 	@Autowired
 	public ProductCategoryManagementController(ProductCategoryManagementService productCategoryManagementService, 
 			ProductSubCategoryManagementService productSubCategoryManagementService,
-			ProductManagementService productManagementService,
+			ProductService productService,
 			ProductCategoryFormValidator productCategoryFormValidator){
 		this.productCategoryManagementService = productCategoryManagementService;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
-		this.productManagementService = productManagementService;
+		this.productService = productService;
 		this.productCategoryFormValidator = productCategoryFormValidator;
 	}
 	
@@ -172,7 +172,7 @@ public class ProductCategoryManagementController {
 				//check if have products
 				List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productcategory.getId());
 				for(Productsubcategory psc: subcategoryList) {
-					List<Product> productList = productManagementService.getAllProductsBySubCategory(psc.getId());
+					List<Product> productList = productService.getAllProductsBySubCategory(psc.getId());
 					if(productList.size() > 0){
 						redirectAttributes.addFlashAttribute("css", "danger");
 						redirectAttributes.addFlashAttribute("msg", "Please remove products from the category!");

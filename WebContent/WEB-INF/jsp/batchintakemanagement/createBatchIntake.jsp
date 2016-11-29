@@ -5,12 +5,12 @@
 
 <script>
 
-    var productname = new Bloodhound({
-    	  datumTokenizer: Bloodhound.tokenizers.whitespace,
+     var productList = new Bloodhound({
+    	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('productname'),
     	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-    	  prefetch: '<c:url context="/JJ" value="/batchintake/getProductNameList" />'
-    	});
-    
+    	  prefetch: '<c:url context="/JJ" value="/batchintake/getProductList" />'
+    	}); 
+ 	
     $( function() {
     	$('#date').datepicker(
     	{
@@ -19,33 +19,50 @@
 	    });
 	    
     	$('#addProductNameDiv .typeahead').typeahead(null, {
-			  name: 'productname',
-			  source: productname
+    		 name: 'productList',
+    		  display: 'productname',
+    		source: productList
 		});
 		
     	$('#addProductNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
+        	$("#productId").val(item.productid);
     		getList(item);
-    		//alert(item);
     	});
 	 } );
 
 	function getList(item) {
-		alert(item);
-		
+		var id = item.productid;
+		var data = {
+	  	        "productid" : id
+	    	}
 		$.ajax({
 	  		  type: "POST",
 	  		  url: "getBatchProductVo",
-	  		  data: item,
+	  		  data: JSON.stringify(data),
 	  		  contentType:"application/json; charset=utf-8",
 		  	  success: function (result) {
-		            alert(result.status);
+		            //console.log(result.status);
 		        },
 			  beforeSend: function( xhr ) {
 				  xhr.setRequestHeader(header, token);
 
 				}
-	  		}).done(function() {
+	  		}).done(function(productVo) {
   	  			//alert("done");
+  	  			console.log(productVo);
+  	  			$('#optionDiv').empty();
+  	  			$.each(productVo.optionList, function(index){
+					$("#optionDiv").append('<div class="row"><div class="form-group">'+
+							'<label class="col-sm-3 control-label">'+this.optionName+'</label>'+
+							'<select class="selectpicker col-sm-9" id='+this.optionName+' name ='+this.optionName+'></select></div></div>');
+					var name = this.optionName;
+					$.each(this.subOptionList, function(index){
+						$('#'+name).append('<option value=' + this.subOptionId + '>' + this.subOptionName + '</option>');
+					});
+					$('#'+name).selectpicker('val', "");
+  	  	  	  	});
+  	  		$('#quantityDiv').css("display", "");
+  	  		$('#unitcostDiv').css("display", "");
 			});
 	}
     
@@ -57,8 +74,53 @@
 		$("#productModal").hide();
 	}
 
-    function saveProduct(){
-    	closeProduct();
+    function saveAddIntakeProduct(){
+    	var productName = $("#name").val();
+    	var productId = $("#productId").val();
+    	var productData = {
+    	    productid  : productId,
+    		productname : productName
+    	}
+    	var qty = $("#quantity").val();
+    	var unitprice = $("#unitPrice").val();
+		var productDivList = $("#optionDiv").find("select");
+		console.log(productDivList);
+		var subOptionList = []; 
+		if(productDivList != null && productDivList.length > 0){
+			$.each(productDivList, function(index){
+				var subOptionId = $(this).val();
+				var subOptionData = {
+					subOptionId : subOptionId
+				}
+				subOptionList.push(subOptionData);
+			});
+		}
+
+		var data = {
+			product : productData,
+			subOptionList : subOptionList,
+			unitcost : unitprice,
+			qty : qty
+		}
+		
+
+		var saveAjax = $.ajax({
+  		  type: "POST",
+  		  url: "saveAddProduct",
+  		  data: JSON.stringify(data),
+  		  contentType:"application/json; charset=utf-8",
+		  beforeSend: function( xhr ) {
+			  xhr.setRequestHeader(header, token);
+
+			}
+  		}).done(function() {
+			$("#optionDiv").empty();
+			$("#name").val("");
+			$("#quantity").val("");
+			
+			closeProduct();
+			intakeTable.ajax.reload();
+		}); 
     }
       
 
@@ -151,13 +213,32 @@
 						<label class="col-sm-3 control-label">Name</label>
 						<div class="col-sm-9" id="addProductNameDiv">
 							<input id="name" class="form-control typeahead col-sm-12" type="text" />
+							<input id="productId" type="hidden">
 						</div>
-						<hr>
 					</div>
 				</div>
+				<div id = "optionDiv"></div>
+				<hr>
+				<div class="row" id="unitcostDiv" style="display:none">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Unit Cost</label>
+						<div class="col-sm-9">
+							<input id="unitPrice" class="form-control col-sm-12" type="number" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="quantityDiv" style="display:none">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Quantity</label>
+						<div class="col-sm-9">
+							<input id="quantity" class="form-control col-sm-12" type="number" />
+						</div>
+					</div>
+				</div>
+				
 			</div>
 			<div class="modal-footer">
-				<button id="saveOptionBtn" class="btn btn-primary" type="button" onclick="saveProduct();">Save changes</button>
+				<button id="saveProductBtn" class="btn btn-primary" type="button" onclick="saveAddIntakeProduct();">Add</button>
 				<button type="button" onclick="closeProduct();" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>

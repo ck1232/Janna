@@ -12,5 +12,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="editOptionForm"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="button" onclick="editOption(this);"><i class="fa fa-pencil"></i> Edit</button>'
 },

@@ -4,9 +4,10 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "productName"},
-{"data": "productName"},
-{"data": "productName"},
+{"data": "product.productname"},
+{"data": "subOptionList[, ].subOptionName"},
+{"data": "unitcost"},
+{"data": "qty"},
 {
     "className":      '',
     "orderable":      false,

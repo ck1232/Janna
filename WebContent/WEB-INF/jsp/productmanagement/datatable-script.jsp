@@ -1,14 +1,11 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
-var intakeTaable = null;
 $(function () {
-	
-    
-    intakeTable = $('#datatable1').DataTable({
+    $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
       "lengthChange": false,
-      "searching": true,
+      "searching": false,
       "ordering": true,
       "info": true,
       "autoWidth": false,
@@ -25,13 +22,9 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.customerid);
-          $(row).find('button[name="updateBtn"]').prop('value', data.customerid);
+          $(row).find('input[type="checkbox"]').prop('value', data.productid);
+          $(row).find('button[name="editBtn"]').prop('value', data.productid);
        }
     });
 });
-
-function addOption(){
-	$("#productModal").show();
-}
 </script>

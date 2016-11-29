@@ -5,11 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //ignore "bytes" when return json format
 @JsonIgnoreProperties({"bytes"}) 
 public class FileMeta {
+	private Integer imageId;
 	private String fileName;
     private String fileSize;
     private String fileType;
-    private Integer imageStagingId;
+    private Integer sequence;
     private byte[] bytes;
+
+	public Integer getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
 
 	public String getFileName() {
 		return fileName;
@@ -43,12 +52,12 @@ public class FileMeta {
 		this.bytes = bytes;
 	}
 
-	public Integer getImageStagingId() {
-		return imageStagingId;
+	public Integer getSequence() {
+		return sequence;
 	}
 
-	public void setImageStagingId(Integer imageStagingId) {
-		this.imageStagingId = imageStagingId;
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
 	}
     
 }
