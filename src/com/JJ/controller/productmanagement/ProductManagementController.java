@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -132,7 +133,6 @@ public class ProductManagementController {
 		}else{
 			return GeneralUtils.convertListToJSONString(new ArrayList<OptionVo>());
 		}
-		
 	}
 	
 	@RequestMapping(value = "/uploadImage",method = RequestMethod.POST)
@@ -193,6 +193,15 @@ public class ProductManagementController {
 			reshuffleImage(newProduct.getImages());
 		}
 		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value = "/getPreUploadImage", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<FileMeta> getPreUploadImage() {
+		if(newProduct == null || newProduct.getImages() == null ){
+			return new ArrayList<FileMeta>();
+		}else{
+			return newProduct.getImages();
+		}
 	}
 	
 	@RequestMapping(value = "/sortImage", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -334,6 +343,26 @@ public class ProductManagementController {
 		redirectAttributes.addFlashAttribute("msg", "Product(s) deleted successfully!");
 		return "redirect:listProduct";
 	}
+	
+	@RequestMapping(value="/getImage/{imageId}", method = RequestMethod.GET)
+	public void getImage(@PathVariable Integer imageId, HttpServletRequest request, HttpServletResponse response){
+		if(this.newProduct != null && this.newProduct.getImages() != null && this.newProduct.getImages().size() > 0){
+			for(FileMeta image : newProduct.getImages()){
+				if(image.getImageId() == imageId){
+					  response.setContentType(image.getFileType());
+					  try {
+						response.getOutputStream().write(image.getBytes(),0,image.getBytes().length);
+						response.getOutputStream().flush();  
+						break;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					  
+				}
+			}
+		}
+	}	
 	
 	class ImageCompare implements Comparator<FileMeta>{
 

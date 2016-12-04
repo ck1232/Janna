@@ -206,6 +206,7 @@ public class ProductService {
 			for(ProductimageWithBLOBs image : productImageList){
 				FileMeta fileMeta = new FileMeta();
 				fileMeta.setBytes(image.getImage());
+				fileMeta.setFileSize(image.getImage().length+"");
 				fileMeta.setFileName(image.getImagename());
 				fileMeta.setImageId(image.getImageid());
 				fileMeta.setSequence(image.getSequence());
@@ -309,6 +310,8 @@ public class ProductService {
 			if(productOptionList != null && productOptionList.size() > 0){
 				for(Productoption productOption : productOptionList){
 					OptionVo optionVo = optionMap.get(productOption.getName());
+					//reset all optionId
+					optionVo.setOptionId(null);
 					if(optionVo != null && productOption.getSequence().compareTo(optionVo.getSequence())== 0){
 						optionVo.setOptionId(productOption.getProductoptionid());
 					}
@@ -401,6 +404,7 @@ public class ProductService {
 		if(optionList != null  && optionList.size() > 0){
 			for(OptionVo optionVo : optionList){
 				Productoption productOption = new Productoption();
+				productOption.setProductoptionid(optionVo.getOptionId());
 				productOption.setSequence(optionVo.getSequence());
 				productOption.setName(optionVo.getOptionName());
 				productOption.setDeleteind(GeneralUtils.NOT_DELETED);
@@ -436,6 +440,7 @@ public class ProductService {
 				ProductimageWithBLOBs productImage = new ProductimageWithBLOBs();
 				productImage.setImageid(image.getImageId());
 				productImage.setProductid(productId);
+				productImage.setImagename(image.getFileName());
 				productImage.setSequence(image.getSequence());
 				productImage.setFiletype(image.getFileType());
 				if(image.getImageId() != null && image.getImageId().intValue() > 0){

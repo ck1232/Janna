@@ -4,6 +4,52 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Content Wrapper. Contains page content -->
 	<script type="text/javascript">
+	Dropzone.options.dZUpload = {
+    	    init: function() {
+    	    	var myDropzone = this;
+    	    	//set preload image
+    	    	var getPreUploadImageAjax = $.ajax({
+          		  type: "POST",
+          		  url: "getPreUploadImage",
+          		  dataType: 'json',
+         			  beforeSend: function( xhr ) {
+         				  xhr.setRequestHeader(header, token);
+         				}
+          		}).done(function(data) {
+              		$.each(data, function(i, fileMeta){
+              			var image = { name: fileMeta.fileName, size: fileMeta.fileSize};
+              			var imageUrl = "<c:out value="${pageContext.request.contextPath}" />/product/product/getImage/"+fileMeta.imageId;
+              			console.log(imageUrl);
+              			myDropzone.emit("addedfile", image);
+              			myDropzone.createThumbnailFromUrl(image, imageUrl);
+              			myDropzone.emit("complete", image);
+                  	});
+	    		});
+
+	    		this.on("removedfile", function(file){
+		    		console.log(file);
+		    		var data = {"fileName": file.name};
+	    			var removePreUploadImageAjax = $.ajax({
+	            		  type: "POST",
+	            		  url: "removeUploadImage",
+	            		  dataType: 'json',
+	            		  data: JSON.stringify(data),
+	           			  beforeSend: function( xhr ) {
+	           				  xhr.setRequestHeader(header, token);
+	           				}
+	            		}).done(function(data) {
+	                		$.each(data, function(i, fileMeta){
+	                			var image = { name: fileMeta.fileName, size: fileMeta.fileSize};
+	                			var imageUrl = "<c:out value="${pageContext.request.contextPath}" />/product/product/getImage/"+fileMeta.imageId;
+	                			console.log(imageUrl);
+	                			myDropzone.emit("addedfile", image);
+	                			myDropzone.createThumbnailFromUrl(image, imageUrl);
+	                			myDropzone.emit("complete", image);
+	                    	});
+	  	    		});
+		    	});
+  			}
+	    };
 	$(function(){
 	// instantiate the uploader
 		var sortableList = $("#dZUpload");
@@ -42,7 +88,8 @@
 		sortableList.on("sortchange", sortEventHandler);
 		
 	  Dropzone.autoDiscover = false;
-	    $("#dZUpload").dropzone({
+	  
+	    var dz = $("#dZUpload").dropzone({
 	        url: "uploadImage",
 	        headers: {
 	            header: token
@@ -63,24 +110,26 @@
 	        removedfile: function (file) {
 	        	console.log(file.previewElement);
 	        	$(document).find(file.previewElement).remove();
-		        if(file.status.localeCompare("sucess")){
-		        	var deleteAjax = $.ajax({
-		        		  type: "POST",
-		        		  url: "removeUploadImage",
-		        		  data: {fileName:file.name},
-		        		  dataType: 'json',
-	        			  beforeSend: function( xhr ) {
-	        				  xhr.setRequestHeader(header, token);
-	        				}
-		        		}).done(function() {
-        				    //alert( "success" );
-      				  	});
+	        	var deleteAjax = $.ajax({
+	        		  type: "POST",
+	        		  url: "removeUploadImage",
+	        		  data: {fileName:file.name},
+	        		  dataType: 'json',
+        			  beforeSend: function( xhr ) {
+        				  xhr.setRequestHeader(header, token);
+        				}
+	        		}).done(function() {
+       				    //alert( "success" );
+     				  	});
 	        		
 		        	//console.log("success");	
 				}
 		      	
-	        }
+	        
 	    });
+	    
+	    
+	    
 		CKEDITOR.replace('productInfoEditor');
 
 		$(".dropzone").sortable({
