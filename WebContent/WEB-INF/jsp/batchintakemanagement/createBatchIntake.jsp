@@ -17,6 +17,18 @@
     		dateFormat: 'dd/MM/yyyy',
 	      	autoclose: true
 	    });
+
+    	$('#addProductNameDiv .typeahead').keyup(function(){
+    		if(!this.value) {
+        		console.log("stupid ck");
+    			$("#productId").val("");
+    	    	$("#quantity").val("");
+    	    	$("#unitPrice").val("");
+    	    	$('#optionDiv').empty();
+    	    	$('#quantityDiv').css("display", "none");
+    		  	$('#unitcostDiv').css("display", "none");
+        	}
+		});
 	    
     	$('#addProductNameDiv .typeahead').typeahead(null, {
     		 name: 'productList',
@@ -67,10 +79,18 @@
 	}
     
     function addProduct(){
+    	$("#name").val("");
+    	$("#productId").val("");
+    	$("#quantity").val("");
+    	$("#unitPrice").val("");
+    	$('#optionDiv').empty();
 		$("#productModal").show();
 	}
 
     function closeProduct(){
+    	$('#optionDiv').empty();
+    	$('#quantityDiv').css("display", "none");
+	  	$('#unitcostDiv').css("display", "none");
 		$("#productModal").hide();
 	}
 
@@ -88,8 +108,10 @@
 		var subOptionList = []; 
 		if(productDivList != null && productDivList.length > 0){
 			$.each(productDivList, function(index){
+				var optionName = $(this).attr('id');
 				var subOptionId = $(this).val();
 				var subOptionData = {
+					optionName : optionName,
 					subOptionId : subOptionId
 				}
 				subOptionList.push(subOptionData);
@@ -112,18 +134,78 @@
 		  beforeSend: function( xhr ) {
 			  xhr.setRequestHeader(header, token);
 
+			},
+			success: function(data, textStatus ){
+				if(data.status =="error"){
+					alert("error");
+				}else{
+					console.log(textStatus);
+					$("#optionDiv").empty();
+					$("#name").val("");
+					$("#quantity").val("");
+					$("#unitPrice").val("");
+					closeProduct();
+					intakeTable.ajax.reload();
+				}
+		    }
+  		}); 
+    }
+    /* ------------------------ edit -------------------------------*/
+    function closeEditProduct(){
+		$("#editModal").hide();
+	}
+    function saveEditIntakeProduct(){
+        var hashCode = $('#hashCodeId').val();
+    	var productName = $("#editName").val();
+    	var productId = $("#editProductId").val();
+    	var productData = {
+    	    productid  : productId,
+    		productname : productName
+    	}
+    	var qty = $("#editQuantity").val();
+    	var unitprice = $("#editUnitPrice").val();
+		var productDivList = $("#optionDiv").find("input");
+		console.log(productDivList);
+		var subOptionList = []; 
+		if(productDivList != null && productDivList.length > 0){
+			$.each(productDivList, function(index){
+				var optionName = $(this).attr('id');
+				var subOptionId = $(this).val();
+				var subOptionData = {
+					optionName : optionName,
+					subOptionId : subOptionId
+				}
+				subOptionList.push(subOptionData);
+			});
+		}
+
+		var data = {
+			product : productData,
+			subOptionList : subOptionList,
+			unitcost : unitprice,
+			qty : qty,
+			hashCode : hashCode
+		}
+		
+
+		var saveAjax = $.ajax({
+  		  type: "POST",
+  		  url: "saveEditProduct",
+  		  data: JSON.stringify(data),
+  		  contentType:"application/json; charset=utf-8",
+		  beforeSend: function( xhr ) {
+			  xhr.setRequestHeader(header, token);
+
 			}
   		}).done(function() {
-			$("#optionDiv").empty();
-			$("#name").val("");
-			$("#quantity").val("");
-			
-			closeProduct();
+			$("#editOptionDiv").empty();
+			$("#editName").val("");
+			$("#editQuantity").val("");
+			$("#editUnitPrice").val("");
+			closeEditProduct();
 			intakeTable.ajax.reload();
 		}); 
     }
-      
-
 </script>
 <!-- Content Wrapper. Contains page content -->
     <section class="content">
@@ -247,4 +329,52 @@
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+
+<div id="editModal" class="modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title">Edit Product</h3>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Name</label>
+						<div class="col-sm-9" id="addProductNameDiv">
+							<input id="editName" class="form-control typeahead col-sm-12" type="text" disabled />
+							<input id="editProductId" type="hidden">
+							<input id="hashCodeId" type="hidden">
+						</div>
+					</div>
+				</div>
+				<div id = "editOptionDiv"></div>
+				<hr>
+				<div class="row" id="editUnitcostDiv">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Unit Cost</label>
+						<div class="col-sm-9">
+							<input id="editUnitPrice" class="form-control col-sm-12" type="number" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="editQuantityDiv">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Quantity</label>
+						<div class="col-sm-9">
+							<input id="editQuantity" class="form-control col-sm-12" type="number" />
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button id="editSaveProductBtn" class="btn btn-primary" type="button" onclick="saveEditIntakeProduct();">Edit</button>
+				<button type="button" onclick="closeEditProduct();" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
     

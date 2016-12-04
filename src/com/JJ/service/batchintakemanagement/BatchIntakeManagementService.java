@@ -32,8 +32,8 @@ public class BatchIntakeManagementService {
 		return batchStockIntakeMapper.selectByExample(batchStockIntakeExample);
 	}
 	
-	public int saveBatchstockintake(Batchstockintake batchStockIntake) {
-		return batchStockIntakeMapper.insert(batchStockIntake);
+	public void saveBatchstockintake(Batchstockintake batchStockIntake) {
+		batchStockIntakeMapper.insert(batchStockIntake);
 	}
 	
 	public void deleteBatchstockintake(Integer id) {
@@ -42,6 +42,14 @@ public class BatchIntakeManagementService {
 			batchStockIntake.setDeleteind(GeneralUtils.DELETED);
 			batchStockIntakeMapper.updateByPrimaryKey(batchStockIntake);
 		}
+	}
+	
+	public void deleteBatchstockintake(List<Integer> idList) {
+		BatchstockintakeExample batchStockIntakeExample = new BatchstockintakeExample();
+		batchStockIntakeExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidIn(idList);
+		Batchstockintake batchStockIntake = new Batchstockintake();
+		batchStockIntake.setDeleteind(GeneralUtils.DELETED);
+		batchStockIntakeMapper.updateByExampleSelective(batchStockIntake, batchStockIntakeExample);
 	}
 	
 	public void updateBatchstockintake(Batchstockintake batchStockIntake) {

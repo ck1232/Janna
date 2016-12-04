@@ -1,5 +1,4 @@
 <tr>
-  <th></th>
   <th>Product Name</th>
   <th>Option</th>
   <th>Unit Cost</th>

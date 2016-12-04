@@ -25,8 +25,8 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.customerid);
-          $(row).find('button[name="updateBtn"]').prop('value', data.customerid);
+          $(row).find('button[name="editProductBtn"]').prop('value', data.hashCode);
+          $(row).find('button[name="deleteProductBtn"]').prop('value', data.hashCode);
        }
     });
 });

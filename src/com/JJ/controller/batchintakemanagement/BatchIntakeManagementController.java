@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -36,6 +37,7 @@ import com.JJ.service.batchintakemanagement.BatchIntakeManagementService;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.validator.BatchIntakeFormValidator;
+import com.mysql.jdbc.StringUtils;
 
 
 @Controller  
@@ -113,11 +115,11 @@ public class BatchIntakeManagementController {
 			}
 			batchIntake.setAdditionalcost(batchIntake.getTotalcost().subtract(totalProductCost));
 			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
-			int batchid = batchIntakeManagementService.saveBatchstockintake(batchIntake);
+			batchIntakeManagementService.saveBatchstockintake(batchIntake);
 			if(batchIntakeProductList != null) {
 				for(BatchIntakeProduct product: batchIntakeProductList){
 					BatchproductRs batchProductRs = new BatchproductRs();
-					batchProductRs.setBatchid(batchid);
+					batchProductRs.setBatchid(batchIntake.getBatchid());
 					batchProductRs.setProductid(product.getProduct().getProductid());
 					List<SubOptionVo> suboptionList = product.getSubOptionList();
 					if(suboptionList.size() >= 1) 
@@ -141,9 +143,28 @@ public class BatchIntakeManagementController {
         return "redirect:listBatchIntake";  
     }  
 	
+	@RequestMapping(value = "/deleteBatchIntake", method = RequestMethod.POST)
+	public String deleteBatchIntake(@RequestParam(value = "checkboxId", required=false) List<Integer> ids,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listBatchIntake";
+		}
+		
+		batchIntakeManagementService.deleteBatchstockintake(ids);
+		batchProductRSManagementService.deleteBatchproduct(ids);
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Batch Intake(s) deleted successfully!");
+		return "redirect:listBatchIntake";
+	}
+	
 	@RequestMapping(value = "/getBatchProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getBatchProductList() {
 		if(batchIntakeProductList != null){
+			for(BatchIntakeProduct batchIntakeProduct : batchIntakeProductList){
+				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
+			}
 			return GeneralUtils.convertListToJSONString(batchIntakeProductList);
 		}
 		return GeneralUtils.convertListToJSONString(new ArrayList<BatchIntakeProduct>());
@@ -151,7 +172,7 @@ public class BatchIntakeManagementController {
 	
 	@RequestMapping(value = "/getProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<Product> getProductNameList() {
-		logger.debug("getting product list");
+		logger.debug("getting product lis`t");
 		List<Product> productList = productService.getAllProducts();		
 		return productList;
 		/*if(productList != null && productList.size() > 0){
@@ -173,6 +194,25 @@ public class BatchIntakeManagementController {
 	@RequestMapping(value = "/saveAddProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse saveAddProduct(@RequestBody BatchIntakeProduct product) {
 		logger.debug("save add product");
+		boolean pass = true;
+		if(StringUtils.isNullOrEmpty(product.getProduct().getProductname()) ||
+				product.getSubOptionList() == null ||
+				product.getSubOptionList().size() == 0 ||
+				product.getUnitcost() == null ||
+				product.getQty() == null){
+			pass = false;
+		}else if(product.getSubOptionList().size() > 0){
+			for(SubOptionVo vo : product.getSubOptionList()){
+				if(StringUtils.isNullOrEmpty(vo.getSubOptionName())){
+					pass = false;
+					break;
+				}
+			}
+		}
+		if(!pass){
+			return new JsonResponse("error");
+		}
+		
 		if(batchIntakeProductList == null) { 
 			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
 		}
@@ -186,10 +226,55 @@ public class BatchIntakeManagementController {
 				subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 				subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
 			}
+			batchIntakeProductList.add(product);
+		}else{
+			return new JsonResponse("error");
 		}
-		
-		batchIntakeProductList.add(product);	
 		return new JsonResponse("success");
 	}
 	
+	@RequestMapping(value="/editBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody BatchIntakeProduct editBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+		if(batchIntakeProductList != null && batchIntakeProductList.size() > 0){
+			for(BatchIntakeProduct batchIntakeProduct : batchIntakeProductList){
+				if(batchIntakeProduct.getHashCode() == product.getHashCode()){
+					return batchIntakeProduct;
+				}
+			}
+		}
+		return new BatchIntakeProduct();
+	}
+	
+	@RequestMapping(value = "/saveEditProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse saveEditProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("save edit product");
+		if(batchIntakeProductList != null) {
+			for(BatchIntakeProduct batchproduct: batchIntakeProductList){
+				if((batchproduct.getHashCode()) == product.getHashCode()) {
+					batchproduct.setUnitcost(product.getUnitcost());
+					batchproduct.setQty(product.getQty());
+					break;
+				}
+			}
+		}
+		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value = "/deleteBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse deleteBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("delete product");
+		int index = -1;
+		if(batchIntakeProductList != null) {
+			for(BatchIntakeProduct batchproduct: batchIntakeProductList){
+				if((batchproduct.getHashCode()) == product.getHashCode()) {
+					index = batchIntakeProductList.indexOf(batchproduct);
+					break;
+				}
+			}
+		}
+		if(index > -1){
+			batchIntakeProductList.remove(index);
+		}
+		return new JsonResponse("success");
+	}
 }
