@@ -7,6 +7,11 @@ public class JsonResponse {
 	private String message;
 	private String jsonString;
 	
+	public JsonResponse(String status, String message) {
+		this.status = status;
+		this.message = message;
+	}
+
 	public JsonResponse(String status) {
 		this.status = status;
 	}

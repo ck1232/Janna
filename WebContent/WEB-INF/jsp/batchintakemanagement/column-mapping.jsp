@@ -13,5 +13,5 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewCustomerForm">View</button>'
+    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="updateBatchIntakeForm"><i class="fa fa-pencil"></i> Edit</button>'
 },

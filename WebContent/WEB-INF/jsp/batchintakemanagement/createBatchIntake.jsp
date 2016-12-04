@@ -137,7 +137,7 @@
 			},
 			success: function(data, textStatus ){
 				if(data.status =="error"){
-					alert("error");
+					alert(data.message);
 				}else{
 					console.log(textStatus);
 					$("#optionDiv").empty();

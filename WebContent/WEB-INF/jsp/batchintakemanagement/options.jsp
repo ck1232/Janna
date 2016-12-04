@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <form id="createBatchIntakeForm" method="get" action="<c:url value="/batchintake/createBatchIntake" />"></form>
-<form id="viewCustomerForm" method="post" action="<c:url value="/customer/viewCustomer" />">
+<form id="updateBatchIntakeForm" method="post" action="<c:url value="/batchintake/updateBatchIntake" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 <div class="margin">

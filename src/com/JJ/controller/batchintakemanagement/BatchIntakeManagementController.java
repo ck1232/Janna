@@ -172,7 +172,7 @@ public class BatchIntakeManagementController {
 	
 	@RequestMapping(value = "/getProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<Product> getProductNameList() {
-		logger.debug("getting product lis`t");
+		logger.debug("getting product list");
 		List<Product> productList = productService.getAllProducts();		
 		return productList;
 		/*if(productList != null && productList.size() > 0){
@@ -184,9 +184,13 @@ public class BatchIntakeManagementController {
 	@RequestMapping(value = "/getBatchProductVo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ProductVo getBatchProductVo(@RequestBody Product product) {
 		logger.debug(product.getProductid());
-		productVo = productService.getAllProductVo(product.getProductid()).get(0);
-		if(productVo != null){
-			return productVo;
+		
+		List<ProductVo> productVoList = productService.getAllProductVo(product.getProductid());
+		if(productVoList != null && productVoList.size() > 0){
+			productVo = productVoList.get(0);
+			if(productVo != null){
+				return productVo;
+			}
 		}
 		return new ProductVo();
 	}
@@ -203,14 +207,14 @@ public class BatchIntakeManagementController {
 			pass = false;
 		}else if(product.getSubOptionList().size() > 0){
 			for(SubOptionVo vo : product.getSubOptionList()){
-				if(StringUtils.isNullOrEmpty(vo.getSubOptionName())){
+				if(vo.getSubOptionId() == null){
 					pass = false;
 					break;
 				}
 			}
 		}
 		if(!pass){
-			return new JsonResponse("error");
+			return new JsonResponse("error", "Please fill in all the details!");
 		}
 		
 		if(batchIntakeProductList == null) { 
@@ -218,18 +222,19 @@ public class BatchIntakeManagementController {
 		}
 		
 		//for generating suboption
-		if(product.getSubOptionList() != null){
-			Iterator<SubOptionVo> i = product.getSubOptionList().iterator();
-			while(i.hasNext()){
-				SubOptionVo subOptionVo = i.next();
-				SubOptionVo generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
-				subOptionVo.setSeq(generatedSubOptionVo.getSeq());
-				subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
-			}
-			batchIntakeProductList.add(product);
-		}else{
-			return new JsonResponse("error");
+		Iterator<SubOptionVo> i = product.getSubOptionList().iterator();
+		while(i.hasNext()){
+			SubOptionVo subOptionVo = i.next();
+			SubOptionVo generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
+			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
+			subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
 		}
+		for(BatchIntakeProduct p : batchIntakeProductList){
+			if(p.hashCode() == product.hashCode()) {
+				return new JsonResponse("error", "Product already exists!");
+			}
+		}
+		batchIntakeProductList.add(product);
 		return new JsonResponse("success");
 	}
 	
