@@ -28,6 +28,7 @@
 
 	    		this.on("removedfile", function(file){
 		    		console.log(file);
+		    		$(document).find(file.previewElement).remove();
 		    		var data = {"fileName": file.name};
 	    			var removePreUploadImageAjax = $.ajax({
 	            		  type: "POST",
@@ -38,15 +39,8 @@
 	           				  xhr.setRequestHeader(header, token);
 	           				}
 	            		}).done(function(data) {
-	                		$.each(data, function(i, fileMeta){
-	                			var image = { name: fileMeta.fileName, size: fileMeta.fileSize};
-	                			var imageUrl = "<c:out value="${pageContext.request.contextPath}" />/product/product/getImage/"+fileMeta.imageId;
-	                			console.log(imageUrl);
-	                			myDropzone.emit("addedfile", image);
-	                			myDropzone.createThumbnailFromUrl(image, imageUrl);
-	                			myDropzone.emit("complete", image);
-	                    	});
-	  	    		});
+	            			
+	  	    			});
 		    	});
   			}
 	    };

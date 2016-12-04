@@ -180,7 +180,7 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping(value = "/removeUploadImage",method = RequestMethod.POST)
-	public @ResponseBody JsonResponse upload(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
+	public @ResponseBody JsonResponse removeUploadImage(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
 		if(newProduct != null && newProduct.getImages() != null && newProduct.getImages().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
 			Iterator<FileMeta> iterator = newProduct.getImages().iterator();
 			while(iterator.hasNext()){

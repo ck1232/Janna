@@ -23,6 +23,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.FileMeta;
 import com.JJ.model.Product;
 import com.JJ.model.ProductExample;
+import com.JJ.model.Productimage;
 import com.JJ.model.ProductimageExample;
 import com.JJ.model.ProductimageWithBLOBs;
 import com.JJ.model.Productoption;
@@ -262,10 +263,17 @@ public class ProductService {
 	}
 	
 	private void saveProductImage(ProductVo productVo, Integer productId){
+		//delete all images
+		ProductimageExample deleteExample = new ProductimageExample();
+		deleteExample.createCriteria().andProductidEqualTo(productId);
+		ProductimageWithBLOBs obj = new ProductimageWithBLOBs();
+		obj.setDeleteind(GeneralUtils.DELETED);
+		productImageMapper.updateByExampleSelective(obj, deleteExample);
 		//table image
 		LinkedList<FileMeta> images = productVo.getImages();
 		List<ProductimageWithBLOBs> productImages = convertToProductImage(productId,images);
 		for(ProductimageWithBLOBs productImage : productImages){
+			productImage.setDeleteind(GeneralUtils.NOT_DELETED);
 			if(productImage.getImageid() != null){
 				productImageMapper.updateByPrimaryKeySelective(productImage);
 			}else{
