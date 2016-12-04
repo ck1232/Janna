@@ -2,6 +2,8 @@ package com.JJ.service.productmanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,6 +79,20 @@ public class ProductService {
 			}
 		}
 		return productList;
+	}
+	
+	public Product getProductsById(Integer productId) {
+		ProductExample productExample = new ProductExample();
+		ProductExample.Criteria criteria = productExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		if(productId != null){
+			criteria.andProductidEqualTo(productId);
+		}
+		List<Product> productList = productMapper.selectByExample(productExample);
+		if(productList != null && productList.size() > 0){
+			return productList.get(0);
+		}
+		return new Product();
 	}
 	//-------------- START
 	public List<ProductVo> getAllProductsByName(String name) {
@@ -164,7 +180,7 @@ public class ProductService {
 				
 				//get Product Option
 				List<OptionVo> optionVoList = getOptionVoList(product.getProductid());
-				
+				Collections.sort(optionVoList,new OptionVoCompare());
 				//convert To productVo
 				productVoList.add(convertToProductVo(product, productImage, productInfo, optionVoList));
 			}
@@ -280,6 +296,7 @@ public class ProductService {
 			for(ProductimageWithBLOBs image : productImageList){
 				FileMeta fileMeta = new FileMeta();
 				fileMeta.setBytes(image.getImage());
+				fileMeta.setFileSize(image.getImage().length+"");
 				fileMeta.setFileName(image.getImagename());
 				fileMeta.setImageId(image.getImageid());
 				fileMeta.setSequence(image.getSequence());
@@ -335,10 +352,17 @@ public class ProductService {
 	}
 	
 	private void saveProductImage(ProductVo productVo, Integer productId){
+		//delete all images
+		ProductimageExample deleteExample = new ProductimageExample();
+		deleteExample.createCriteria().andProductidEqualTo(productId);
+		ProductimageWithBLOBs obj = new ProductimageWithBLOBs();
+		obj.setDeleteind(GeneralUtils.DELETED);
+		productImageMapper.updateByExampleSelective(obj, deleteExample);
 		//table image
 		LinkedList<FileMeta> images = productVo.getImages();
 		List<ProductimageWithBLOBs> productImages = convertToProductImage(productId,images);
 		for(ProductimageWithBLOBs productImage : productImages){
+			productImage.setDeleteind(GeneralUtils.NOT_DELETED);
 			if(productImage.getImageid() != null){
 				productImageMapper.updateByPrimaryKeySelective(productImage);
 			}else{
@@ -383,6 +407,8 @@ public class ProductService {
 			if(productOptionList != null && productOptionList.size() > 0){
 				for(Productoption productOption : productOptionList){
 					OptionVo optionVo = optionMap.get(productOption.getName());
+					//reset all optionId
+					optionVo.setOptionId(null);
 					if(optionVo != null && productOption.getSequence().compareTo(optionVo.getSequence())== 0){
 						optionVo.setOptionId(productOption.getProductoptionid());
 					}
@@ -475,6 +501,7 @@ public class ProductService {
 		if(optionList != null  && optionList.size() > 0){
 			for(OptionVo optionVo : optionList){
 				Productoption productOption = new Productoption();
+				productOption.setProductoptionid(optionVo.getOptionId());
 				productOption.setSequence(optionVo.getSequence());
 				productOption.setName(optionVo.getOptionName());
 				productOption.setDeleteind(GeneralUtils.NOT_DELETED);
@@ -510,6 +537,7 @@ public class ProductService {
 				ProductimageWithBLOBs productImage = new ProductimageWithBLOBs();
 				productImage.setImageid(image.getImageId());
 				productImage.setProductid(productId);
+				productImage.setImagename(image.getFileName());
 				productImage.setSequence(image.getSequence());
 				productImage.setFiletype(image.getFileType());
 				if(image.getImageId() != null && image.getImageId().intValue() > 0){
@@ -529,5 +557,19 @@ public class ProductService {
 		Product product = new Product();
 		product.setDeleteind(GeneralUtils.DELETED);
 		productMapper.updateByExampleSelective(product, example);
+	}
+	
+	public class OptionVoCompare implements Comparator<OptionVo>{
+		@Override
+		public int compare(OptionVo o1, OptionVo o2) {
+			if(o1.getSequence() != null && o2.getSequence() != null){
+				return o1.getSequence().compareTo(o2.getSequence());
+			}else if(o1.getSequence() != null){
+				return 1;
+			}else if(o2.getSequence() != null){
+				return -1;
+			}
+			return 0;
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.JJ.controller.batchintakemanagement;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +34,7 @@ import com.JJ.model.BatchproductRs;
 import com.JJ.model.Batchstockintake;
 import com.JJ.model.JsonResponse;
 import com.JJ.model.Product;
+import com.JJ.model.Promotion;
 import com.JJ.service.batchintakemanagement.BatchIntakeManagementService;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
 import com.JJ.service.productmanagement.ProductService;
@@ -85,11 +87,10 @@ public class BatchIntakeManagementController {
     	logger.debug("loading showAddBatchIntakeForm");
     	Batchstockintake batchIntake = new Batchstockintake();
     	batchIntake.setDate(new Date());
-    	productList = new ArrayList<BatchProductVo>();
+    	batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
     	model.addAttribute("batchIntakeForm", batchIntake);
-    	model.addAttribute("productList", productList);
         return "createBatchIntake";  
-    }  
+    }
 	
 	@InitBinder("batchIntakeForm")
 	protected void initBinder(WebDataBinder binder) {
@@ -282,4 +283,51 @@ public class BatchIntakeManagementController {
 		}
 		return new JsonResponse("success");
 	}
+	
+	/*----------------------Update batch intake ------------------------------*/
+	
+	@RequestMapping(value = "/updateBatchIntake", method = RequestMethod.POST)
+	public String getBatchIntakeToUpdate(@RequestParam("editBtn") String id, Model model) {
+		Batchstockintake batchIntake = batchIntakeManagementService.findById(Integer.parseInt(id));
+		batchIntakeProductList = batchProductRSManagementService.getAllBatchProductVoByBatchId(batchIntake.getBatchid());
+		logger.debug("Loading update Batch Intake page for " + batchIntake.toString());
+		model.addAttribute("batchIntakeForm", batchIntake);
+        return "updateBatchIntake";  
+	}
+	
+	@RequestMapping(value = "/editBatchIntake", method = RequestMethod.POST)
+    public String saveEditBatchIntake(@ModelAttribute("batchIntakeForm") @Validated Batchstockintake batchIntake, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
+    	
+		logger.debug("saveEditBatchIntake() : " + batchIntake.toString());
+		if (result.hasErrors()) {
+			return "editBatchIntake";
+		} else {
+			BigDecimal totalProductCost = BigDecimal.ZERO;
+			if(batchIntakeProductList != null) {
+				for(BatchIntakeProduct product: batchIntakeProductList){
+					BigDecimal i = product.getUnitcost().multiply(BigDecimal.valueOf(product.getQty()));
+					totalProductCost = totalProductCost.add(i);
+				}
+			}
+			batchIntake.setAdditionalcost(batchIntake.getTotalcost().subtract(totalProductCost));
+			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
+			batchIntakeManagementService.updateBatchstockintake(batchIntake);
+			if(batchIntakeProductList != null) {
+				for(BatchIntakeProduct product: batchIntakeProductList){
+					BatchproductRs batchProductRs = batchProductRSManagementService.findByProductNameAndSubOption(batchIntake.getBatchid(), product);
+					batchProductRs.setUnitcost(product.getUnitcost());
+					batchProductRs.setQty(product.getQty());
+					batchProductRSManagementService.updateBatchproductRS(batchProductRs);
+				}
+			}
+			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Batch intake updated successfully!");
+		}
+		
+		
+        return "redirect:listBatchIntake";  
+    }  
+	
 }

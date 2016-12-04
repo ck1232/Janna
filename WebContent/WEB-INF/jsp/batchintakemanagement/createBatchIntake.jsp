@@ -221,6 +221,7 @@
                     	<h3 class="box-title">Batch Information</h3>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <form:input path="batchid" type="hidden" class="form-control" id="batchid" />
 			              <div class="box-body">
 				              	<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
@@ -271,7 +272,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label"></label>
 						<div class="col-sm-10">
-							<button id="addBatchIntakeBtn" type="submit" class="btn btn-primary" form ="createBatchIntakeForm">Add</button>
+							<button id="addBatchIntakeBtn" type="submit" class="btn btn-primary" form ="createBatchIntakeForm" formaction="../<tiles:getAsString name="action" />">Save</button>
 		                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
 						</div>
 					</div>
@@ -369,7 +370,7 @@
 				
 			</div>
 			<div class="modal-footer">
-				<button id="editSaveProductBtn" class="btn btn-primary" type="button" onclick="saveEditIntakeProduct();">Edit</button>
+				<button id="editSaveProductBtn" class="btn btn-primary" type="button" onclick="saveEditIntakeProduct();">Save</button>
 				<button type="button" onclick="closeEditProduct();" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
