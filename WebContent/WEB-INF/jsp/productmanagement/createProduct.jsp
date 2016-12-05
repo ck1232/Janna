@@ -45,7 +45,14 @@
   			}
 	    };
 	$(function(){
-	// instantiate the uploader
+		$(window).keydown(function(event){
+		    if(event.keyCode == 13 && $(event.target).is("input")) {
+		      event.preventDefault();
+		      return false;
+		    }
+		  });
+		
+		// instantiate the uploader
 		var sortableList = $("#dZUpload");
 		var uploadImageOrderList = [];
 
@@ -217,6 +224,22 @@
 								                                id="weight" placeholder="Enter weight" />
 								                <span class="input-group-addon">gram</span>
 												<form:errors path="weight" class="text-danger" />
+											</div>
+									  	</div>
+				              		</div>
+				              		
+				              		<div class="row">
+					              		<div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Tags:</label>
+											<div class="col-sm-10 input-group">
+												<form:select path="tags" type="text" class="form-control" data-role="tagsinput"
+								                                id="tags" placeholder="Enter tags" multiple="true">
+								                                
+								                 	<c:forEach items="${productForm.tags}" var="tag">
+								                		<form:option value="${tag}">${tag}</form:option>
+								                	</c:forEach>               
+								                </form:select>
+												<form:errors path="tags" class="text-danger" />
 											</div>
 									  	</div>
 				              		</div>

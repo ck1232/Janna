@@ -17,7 +17,7 @@ public class ProductVo implements Serializable {
 	private LinkedList<FileMeta> images;
 	private String productInfo;
 	private BigDecimal unitPrice;
-	
+	private List<String> tags;
 	public Integer getId() {
 		return id;
 	}
@@ -65,6 +65,12 @@ public class ProductVo implements Serializable {
 	}
 	public void setWeight(Integer weight) {
 		this.weight = weight;
+	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 	
 	

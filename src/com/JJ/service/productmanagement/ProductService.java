@@ -2,6 +2,8 @@ package com.JJ.service.productmanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,11 +21,11 @@ import com.JJ.dao.ProductimageMapper;
 import com.JJ.dao.ProductoptionMapper;
 import com.JJ.dao.ProductspecificationMapper;
 import com.JJ.dao.ProductsuboptionMapper;
+import com.JJ.dao.ProducttagsMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.FileMeta;
 import com.JJ.model.Product;
 import com.JJ.model.ProductExample;
-import com.JJ.model.Productimage;
 import com.JJ.model.ProductimageExample;
 import com.JJ.model.ProductimageWithBLOBs;
 import com.JJ.model.Productoption;
@@ -33,6 +35,8 @@ import com.JJ.model.ProductspecificationExample;
 import com.JJ.model.Productsubcategory;
 import com.JJ.model.Productsuboption;
 import com.JJ.model.ProductsuboptionExample;
+import com.JJ.model.Producttags;
+import com.JJ.model.ProducttagsExample;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 
@@ -46,11 +50,12 @@ public class ProductService {
 	private ProductspecificationMapper productSpecificationMapper;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
 	private ProductOptionManagementService productOptionManagementService;
+	private ProducttagsMapper productTagsMapper;
 	@Autowired
 	public ProductService(ProductMapper productMapper, ProductSubCategoryManagementService productSubCategoryManagementService,
 			ProductoptionMapper productOptionMapper,ProductsuboptionMapper productSubOptionMapper,
 			ProductimageMapper productImageMapper,ProductspecificationMapper productSpecificationMapper, 
-			ProductOptionManagementService productOptionManagementService){
+			ProductOptionManagementService productOptionManagementService, ProducttagsMapper productTagsMapper){
 		this.productMapper = productMapper;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productImageMapper = productImageMapper;
@@ -58,6 +63,7 @@ public class ProductService {
 		this.productSubOptionMapper = productSubOptionMapper;
 		this.productSpecificationMapper = productSpecificationMapper;
 		this.productOptionManagementService = productOptionManagementService;
+		this.productTagsMapper = productTagsMapper;
 	}
 	
 	public List<Product> getAllProducts() {
@@ -100,14 +106,30 @@ public class ProductService {
 				
 				//get Product Option
 				List<OptionVo> optionVoList = getOptionVoList(product.getProductid());
+				Collections.sort(optionVoList, new OptionVoCompare());
 				
+				//get ProductTags
+				List<String> tagsList = getProductTags(product.getProductid());
 				//convert To productVo
-				productVoList.add(convertToProductVo(product, productImage, productInfo, optionVoList));
+				productVoList.add(convertToProductVo(product, productImage, productInfo, optionVoList, tagsList));
 			}
 		}
 		return productVoList;
 	}
 	
+	private List<String> getProductTags(Integer productid) {
+		List<String> tagsList = new ArrayList<String>();
+		ProducttagsExample example = new ProducttagsExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductidEqualTo(productid);
+		List<Producttags> dbList = productTagsMapper.selectByExample(example);
+		if(dbList != null && dbList.size() > 0){
+			for(Producttags tags : dbList){
+				tagsList.add(tags.getName());
+			}
+		}
+		return tagsList;
+	}
+
 	private List<OptionVo> getOptionVoList(Integer productId){
 		if(productId != null){
 			List<OptionVo> optionVoList = new ArrayList<OptionVo>();
@@ -186,7 +208,7 @@ public class ProductService {
 		}
 		return productImageList;
 	}
-	private ProductVo convertToProductVo(Product product, List<ProductimageWithBLOBs> productImageList, Productspecification productInfo, List<OptionVo> optionVoList){
+	private ProductVo convertToProductVo(Product product, List<ProductimageWithBLOBs> productImageList, Productspecification productInfo, List<OptionVo> optionVoList, List<String> productTagsList){
 		ProductVo productVo = new ProductVo();
 		if(product != null){
 			productVo.setId(product.getProductid());
@@ -197,6 +219,7 @@ public class ProductService {
 			productVo.setProductInfo(productInfo.getContent());
 			productVo.setImages(convertToFileMetaList(productImageList));
 			productVo.setOptionList(optionVoList);
+			productVo.setTags(productTagsList);
 		}
 		return productVo;
 	}
@@ -260,8 +283,54 @@ public class ProductService {
 		saveProductInfo(productVo, product.getProductid());
 		//image
 		saveProductImage(productVo, product.getProductid());
+		//tags
+		saveProductTags(productVo, product.getProductid());
 	}
 	
+	private void saveProductTags(ProductVo productVo, Integer productid) {
+		//delete all tags not in tags list
+		ProducttagsExample deleteExample = new ProducttagsExample();
+		ProducttagsExample.Criteria criteria = deleteExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductidEqualTo(productid);
+		if(productVo.getTags() != null && !productVo.getTags().isEmpty()){
+			criteria.andNameNotIn(productVo.getTags());
+		}
+		Producttags tags = new Producttags();
+		tags.setDeleteind(GeneralUtils.DELETED);
+		productTagsMapper.updateByExampleSelective(tags, deleteExample);
+		if(productVo.getTags() != null && !productVo.getTags().isEmpty()){
+			//get all active tags
+			ProducttagsExample selectExample = new ProducttagsExample();
+			selectExample.createCriteria().andNameIn(productVo.getTags()).andProductidEqualTo(productid).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+			List<Producttags> productTagsList = productTagsMapper.selectByExample(selectExample);
+			if(productTagsList != null && !productTagsList.isEmpty()){
+				//remove exists tags from list
+				for(Producttags productTags : productTagsList){
+					productVo.getTags().remove(productTags.getName());
+				}
+			}
+			//insert those non exist tags
+			List<Producttags> dbList = convertToProductTags(productVo.getTags(), productid);
+			for(Producttags dbTags : dbList){
+				productTagsMapper.insert(dbTags);
+			}
+		}
+		
+	}
+	
+	private List<Producttags> convertToProductTags(List<String> tagsList, Integer productId){
+		List<Producttags> dbList = new ArrayList<Producttags>();
+		if(tagsList != null && !tagsList.isEmpty()){
+			for(String tag: tagsList){
+				Producttags dbTag = new Producttags();
+				dbTag.setName(tag);
+				dbTag.setProductid(productId);
+				dbList.add(dbTag);
+			}
+		}
+		return dbList;
+	}
+
 	private void saveProductImage(ProductVo productVo, Integer productId){
 		//delete all images
 		ProductimageExample deleteExample = new ProductimageExample();
@@ -468,5 +537,19 @@ public class ProductService {
 		Product product = new Product();
 		product.setDeleteind(GeneralUtils.DELETED);
 		productMapper.updateByExampleSelective(product, example);
+	}
+	
+	public class OptionVoCompare implements Comparator<OptionVo>{
+		@Override
+		public int compare(OptionVo o1, OptionVo o2) {
+			if(o1.getSequence() != null && o2.getSequence() != null){
+				return o1.getSequence().compareTo(o2.getSequence());
+			}else if(o1.getSequence() != null){
+				return 1;
+			}else if(o2.getSequence() != null){
+				return -1;
+			}
+			return 0;
+		}
 	}
 }

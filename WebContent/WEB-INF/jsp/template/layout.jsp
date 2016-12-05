@@ -46,6 +46,8 @@
 		  <!-- typeahead -->
 		  <link rel="stylesheet" href="<c:url context="/JJ" value="/development/typeahead/typeahead.css"/>">
 		  <link rel="stylesheet" href="<c:url context="/JJ" value="/development/dropzone/dropzone.css" />">
+		  <!-- tags -->
+		  <link rel="stylesheet" href="<c:url context="/JJ" value="/development/tags/bootstrap-tagsinput.css"/>">
 		  <!-- REQUIRED JS SCRIPTS -->
 		
 		
@@ -84,6 +86,8 @@
         <script src="<c:url context="/JJ" value="/development/dropzone/dropzone.js" />"></script>
         <!-- typeahead -->
         <script src="<c:url context="/JJ" value="/development/typeahead/typeahead.bundle.js" />"></script>
+        <!-- tags -->
+        <script src="<c:url context="/JJ" value="/development/tags/bootstrap-tagsinput.js" />"></script>
 		<!-- REQUIRED JS SCRIPTS -->
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
