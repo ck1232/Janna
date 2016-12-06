@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
--- Host: localhost    Database: jj
+-- Host: 127.0.0.1    Database: jj
 -- ------------------------------------------------------
--- Server version	5.6.21
+-- Server version	5.5.5-10.1.9-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `batchproduct_rs` (
   `updatedon` datetime DEFAULT NULL,
   `updatedby` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`batchproductId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +46,7 @@ CREATE TABLE `batchproduct_rs` (
 
 LOCK TABLES `batchproduct_rs` WRITE;
 /*!40000 ALTER TABLE `batchproduct_rs` DISABLE KEYS */;
+INSERT INTO `batchproduct_rs` VALUES (23,18,22,20,NULL,NULL,5.00,10,'Y','2016-12-05 22:59:10','euphona','2016-12-05 22:59:10','euphona'),(24,18,23,23,27,NULL,3.00,10,'Y','2016-12-05 23:00:00','euphona','2016-12-05 23:00:00','euphona'),(25,18,23,23,30,NULL,6.00,10,'Y','2016-12-05 23:00:00','euphona','2016-12-05 23:00:00','euphona'),(26,18,23,21,31,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(27,18,23,21,27,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(28,18,23,21,30,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(29,18,22,20,NULL,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(30,18,23,21,29,NULL,2.00,15,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(31,19,22,20,NULL,NULL,4.00,53,'Y','2016-12-05 23:10:51','euphona','2016-12-05 23:10:51','euphona'),(32,19,23,26,30,NULL,60.00,79,'Y','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05','euphona'),(33,19,22,20,NULL,NULL,4.00,345,'Y','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05','euphona'),(34,20,22,20,NULL,NULL,3.00,3,'N','2016-12-06 22:41:53','euphona','2016-12-06 22:41:53','euphona');
 /*!40000 ALTER TABLE `batchproduct_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +58,7 @@ DROP TABLE IF EXISTS `batchstockintake`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `batchstockintake` (
-  `batchid` int(11) NOT NULL,
+  `batchid` int(11) NOT NULL AUTO_INCREMENT,
   `remarks` varchar(255) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
   `storagelocation` int(11) DEFAULT NULL,
@@ -65,11 +66,11 @@ CREATE TABLE `batchstockintake` (
   `additionalcost` decimal(6,2) DEFAULT '0.00',
   `deleteind` char(1) NOT NULL DEFAULT 'N',
   `updatedby` varchar(255) DEFAULT NULL,
-  `updateon` datetime DEFAULT NULL,
+  `updatedon` datetime DEFAULT NULL,
   `createdby` varchar(255) DEFAULT NULL,
   `createdon` datetime DEFAULT NULL,
   PRIMARY KEY (`batchid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,6 +79,7 @@ CREATE TABLE `batchstockintake` (
 
 LOCK TABLES `batchstockintake` WRITE;
 /*!40000 ALTER TABLE `batchstockintake` DISABLE KEYS */;
+INSERT INTO `batchstockintake` VALUES (18,'batch for getting bulbs','2016-11-05 00:00:00',1,500.00,310.00,'N','euphona','2016-12-05 23:08:35','euphona','2016-12-05 23:08:35'),(19,'tesrtih','2018-01-05 00:00:00',1,500.00,-5620.00,'Y','euphona','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05'),(20,'test warehouse','2016-12-06 00:00:00',1,23.00,14.00,'N','euphona','2016-12-06 22:48:43','euphona','2016-12-06 22:48:43');
 /*!40000 ALTER TABLE `batchstockintake` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,7 +266,7 @@ CREATE TABLE `module` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +275,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Product management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Promotion Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,'Customer Management','fa-users','N','euphona','2016-11-15 21:23:46','euphona','2016-11-15 21:23:46',1);
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Product management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Promotion Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,'Customer Management','fa-users','N','euphona','2016-11-15 21:23:46','euphona','2016-11-15 21:23:46',1),(8,'Batch Management','fa-users','N','euphona','2016-11-26 20:11:59','euphona','2016-11-26 20:11:59',1);
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +300,7 @@ CREATE TABLE `product` (
   `updatedon` datetime DEFAULT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productId`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,7 +309,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,'N','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1),(18,'testing',123.00,500,2,NULL,'Y',NULL,NULL,NULL,NULL,0),(19,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(20,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(21,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(22,'testing',123.00,456,2,NULL,'N',NULL,NULL,NULL,NULL,0);
+INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,'Y','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1),(18,'testing',123.00,500,2,NULL,'Y',NULL,NULL,NULL,NULL,0),(19,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(20,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(21,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(22,'testing',123.00,456,2,NULL,'N',NULL,NULL,NULL,NULL,0),(23,'product3',100.00,1,2,NULL,'N',NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -428,7 +430,7 @@ CREATE TABLE `productoption` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productoptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -437,7 +439,7 @@ CREATE TABLE `productoption` (
 
 LOCK TABLES `productoption` WRITE;
 /*!40000 ALTER TABLE `productoption` DISABLE KEYS */;
-INSERT INTO `productoption` VALUES (1,'Color','',1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Color','',2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Color','',3,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','',1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Type','',2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Type','',3,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(9,'No Option','',0,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0);
+INSERT INTO `productoption` VALUES (1,'Color','',1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Color','',2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Color','',3,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','',1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Type','',2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Type','',3,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(9,'No Option','',0,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'testck','',1,'N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(17,'testck','',2,'N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(18,'testck','',3,'N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(19,'it works32','',1,'N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(20,'it works32','',2,'N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(21,'it works32','',3,'N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1);
 /*!40000 ALTER TABLE `productoption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -459,7 +461,7 @@ CREATE TABLE `productspecification` (
   `updatedon` datetime DEFAULT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSpecificationId`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -468,7 +470,7 @@ CREATE TABLE `productspecification` (
 
 LOCK TABLES `productspecification` WRITE;
 /*!40000 ALTER TABLE `productspecification` DISABLE KEYS */;
-INSERT INTO `productspecification` VALUES (11,17,'<p>sddsad</p>\r\n','N',NULL,NULL,NULL,NULL,0),(12,18,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(13,19,'<p>asdas123</p>\r\n','N',NULL,NULL,NULL,NULL,0),(14,20,'<p>asdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(15,21,'<p>asdas1</p>\r\n','N',NULL,NULL,NULL,NULL,0),(16,22,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0);
+INSERT INTO `productspecification` VALUES (11,17,'<p>sddsad</p>\r\n','N',NULL,NULL,NULL,NULL,0),(12,18,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(13,19,'<p>asdas123</p>\r\n','N',NULL,NULL,NULL,NULL,0),(14,20,'<p>asdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(15,21,'<p>asdas1</p>\r\n','N',NULL,NULL,NULL,NULL,0),(16,22,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(17,23,'<p>Ck is shit</p>\r\n','N',NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `productspecification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -525,7 +527,7 @@ CREATE TABLE `productsuboption` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSubOptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -534,7 +536,7 @@ CREATE TABLE `productsuboption` (
 
 LOCK TABLES `productsuboption` WRITE;
 /*!40000 ALTER TABLE `productsuboption` DISABLE KEYS */;
-INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,NULL,'N','ck1232','2016-11-23 22:02:03','ck1232','2016-11-23 22:02:03',1),(11,18,0,NULL,NULL,NULL,'N','ck1232','2016-11-23 22:22:19','ck1232','2016-11-23 22:22:19',1),(12,19,1,'1',1,'','N','ck1232','2016-11-25 23:31:34','ck1232','2016-11-25 23:31:34',1),(13,21,1,'1',1,'','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(14,21,1,'2',2,'','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(15,22,4,'1',1,'','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(16,22,2,'1',1,'\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(17,22,2,'2',2,'','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(18,22,2,'123',1,'\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(19,22,4,'1',1,'\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(20,22,4,'1',1,'','N','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1);
+INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,NULL,'N','ck1232','2016-11-23 22:02:03','ck1232','2016-11-23 22:02:03',1),(11,18,0,NULL,NULL,NULL,'N','ck1232','2016-11-23 22:22:19','ck1232','2016-11-23 22:22:19',1),(12,19,1,'1',1,'','N','ck1232','2016-11-25 23:31:34','ck1232','2016-11-25 23:31:34',1),(13,21,1,'1',1,'','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(14,21,1,'2',2,'','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(15,22,4,'1',1,'','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(16,22,2,'1',1,'\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(17,22,2,'2',2,'','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(18,22,2,'123',1,'\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(19,22,4,'1',1,'\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(20,22,4,'1',1,'','N','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(21,23,4,'Long',1,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(22,23,4,'Short',2,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(23,23,4,'Round',3,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(24,23,4,'Square',4,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(25,23,4,'Rectangle',5,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(26,23,4,'Pentagon',6,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(27,23,2,'white',1,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(28,23,2,'red',2,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(29,23,2,'yellow',3,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(30,23,2,'blue',4,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(31,23,2,'green',5,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(32,23,2,'pink',6,'','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1);
 /*!40000 ALTER TABLE `productsuboption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -605,6 +607,38 @@ INSERT INTO `role` VALUES (1,'ADMIN','N','','0000-00-00 00:00:00','','0000-00-00
 UNLOCK TABLES;
 
 --
+-- Table structure for table `storagelocation`
+--
+
+DROP TABLE IF EXISTS `storagelocation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `storagelocation` (
+  `locationid` int(11) NOT NULL AUTO_INCREMENT,
+  `locationname` varchar(255) DEFAULT NULL,
+  `address` varchar(512) DEFAULT NULL,
+  `postalCode` int(8) DEFAULT NULL,
+  `deleteind` char(1) NOT NULL DEFAULT 'N',
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`locationid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `storagelocation`
+--
+
+LOCK TABLES `storagelocation` WRITE;
+/*!40000 ALTER TABLE `storagelocation` DISABLE KEYS */;
+INSERT INTO `storagelocation` VALUES (1,'Warehouse 1','Tampines',123456,'N','euphona','2016-12-05 23:08:35','euphona','2016-12-05 23:08:35',1),(2,'Warehouse 2','Bedok',234567,'N','euphona','2016-12-05 23:08:35','euphona','2016-12-05 23:08:35',1),(3,'Warehouse 3','Queenstown',345678,'N','euphona','2016-12-05 23:08:35','euphona','2016-12-05 23:08:35',1);
+/*!40000 ALTER TABLE `storagelocation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `submodule`
 --
 
@@ -624,7 +658,7 @@ CREATE TABLE `submodule` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -633,7 +667,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,1,'Module Management','fa-users','admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(21,1,'Role Management','fa-users','admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(22,1,'Permission Management','fa-users','admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,5,'Category Management','fa-users','product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,5,'Product Management','fa-users','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(30,5,'Product Option Management','fa-users','product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(31,7,'Customer Management','fa-users','customer/listCustomer','N','euphona','2016-11-15 21:24:32','euphona','2016-11-15 21:24:32',1);
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,1,'Module Management','fa-users','admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(21,1,'Role Management','fa-users','admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(22,1,'Permission Management','fa-users','admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,5,'Category Management','fa-users','product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,5,'Product Management','fa-users','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(30,5,'Product Option Management','fa-users','product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(31,7,'Customer Management','fa-users','customer/listCustomer','N','euphona','2016-11-15 21:24:32','euphona','2016-11-15 21:24:32',1),(32,8,'Batch Management','fa-users','/batchintake/listBatchIntake','N','euphona','2016-11-26 20:12:21','euphona','2016-11-26 20:12:21',1);
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -664,7 +698,7 @@ CREATE TABLE `submodulepermission` (
 
 LOCK TABLES `submodulepermission` WRITE;
 /*!40000 ALTER TABLE `submodulepermission` DISABLE KEYS */;
-INSERT INTO `submodulepermission` VALUES (1,1,'14','N','euphona','2016-11-12 21:47:51','euphona','2016-11-12 21:47:51',1),(1,2,'11','N','euphona','2016-11-12 21:49:07','euphona','2016-11-12 21:49:07',1),(1,21,'13','N','euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19',1),(1,22,'12','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,24,'16','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,26,'20','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,28,'23','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,29,'24','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,30,'25','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,31,'26','N','euphona','2016-11-15 21:25:31','euphona','2016-11-15 21:25:31',1),(5,1,'14','N','euphona','2016-11-12 22:55:59','euphona','2016-11-12 22:55:59',1),(6,1,'14','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',1);
+INSERT INTO `submodulepermission` VALUES (1,1,'14','N','euphona','2016-11-12 21:47:51','euphona','2016-11-12 21:47:51',1),(1,2,'11','N','euphona','2016-11-12 21:49:07','euphona','2016-11-12 21:49:07',1),(1,21,'13','N','euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19',1),(1,22,'12','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,24,'16','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,26,'20','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,28,'23','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,29,'24','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,30,'25','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(1,31,'26','N','euphona','2016-11-15 21:25:31','euphona','2016-11-15 21:25:31',1),(1,32,'27','N','euphona','2016-11-26 20:13:09','euphona','2016-11-26 20:13:09',1),(5,1,'14','N','euphona','2016-11-12 22:55:59','euphona','2016-11-12 22:55:59',1),(5,32,'27','N','euphona','2016-11-26 20:13:15','euphona','2016-11-26 20:13:15',1),(6,1,'14','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',1);
 /*!40000 ALTER TABLE `submodulepermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -689,7 +723,7 @@ CREATE TABLE `submodulepermissiontype` (
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `url_UNIQUE` (`url`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -698,7 +732,7 @@ CREATE TABLE `submodulepermissiontype` (
 
 LOCK TABLES `submodulepermissiontype` WRITE;
 /*!40000 ALTER TABLE `submodulepermissiontype` DISABLE KEYS */;
-INSERT INTO `submodulepermissiontype` VALUES (11,'2','View','1','/admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(12,'22','View','1','/admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(13,'21','View','1','/admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(14,'1','View','1','/admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'24','View','1','/product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(20,'26','View','1','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(23,'28','View','1','/product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,'29','View','1','/product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(25,'30','View','1','/product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,'31','View','1','/customer/listCustomer','N','euphona','2016-11-15 21:25:16','euphona','2016-11-15 21:25:16',1);
+INSERT INTO `submodulepermissiontype` VALUES (11,'2','View','1','/admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(12,'22','View','1','/admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(13,'21','View','1','/admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(14,'1','View','1','/admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'24','View','1','/product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(20,'26','View','1','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(23,'28','View','1','/product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,'29','View','1','/product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(25,'30','View','1','/product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,'31','View','1','/customer/listCustomer','N','euphona','2016-11-15 21:25:16','euphona','2016-11-15 21:25:16',1),(27,'32','View','1','/batchintake/listBatchIntake','N','euphona','2016-11-26 20:12:48','euphona','2016-11-26 20:12:48',1);
 /*!40000 ALTER TABLE `submodulepermissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -772,14 +806,6 @@ LOCK TABLES `user_role` WRITE;
 INSERT INTO `user_role` VALUES (1,1,'N','euphona','2016-11-14 00:29:43','euphona','2016-11-14 00:29:43',1),(2,1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,5,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(8,5,'N','euphona','2016-11-14 00:34:58','euphona','2016-11-14 00:34:58',1);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'jj'
---
-
---
--- Dumping routines for database 'jj'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -790,4 +816,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-26 10:44:51
+-- Dump completed on 2016-12-06 22:52:17
