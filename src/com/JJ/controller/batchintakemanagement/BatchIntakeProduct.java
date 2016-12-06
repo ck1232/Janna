@@ -10,11 +10,18 @@ import com.JJ.model.Product;
 public class BatchIntakeProduct implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	private Integer batchProductId;
 	private Product product;
 	private List<SubOptionVo> subOptionList;
 	private BigDecimal unitcost;
 	private Integer qty;
 	private int hashCode;
+	public Integer getBatchProductId() {
+		return batchProductId;
+	}
+	public void setBatchProductId(Integer batchProductId) {
+		this.batchProductId = batchProductId;
+	}
 	public Product getProduct() {
 		return product;
 	}

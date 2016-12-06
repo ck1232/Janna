@@ -153,4 +153,16 @@ public class Batchstockintake extends Base{
 	public void setAdditionalcost(BigDecimal additionalcost) {
 		this.additionalcost = additionalcost;
 	}
+	
+	//non db fields
+	private String storagelocationname;
+	
+	public String getStoragelocationname() {
+		return storagelocationname;
+	}
+
+	public void setStoragelocationname(String storagelocationname) {
+		this.storagelocationname = storagelocationname;
+	}
+	
 }

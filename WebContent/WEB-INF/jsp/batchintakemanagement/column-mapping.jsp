@@ -7,7 +7,7 @@
 {"data": "batchid"},
 {"data": "remarks"},
 {"data": "date"},
-{"data": "storagelocation"},
+{"data": "storagelocationname"},
 {"data": "totalcost"},
 {
     "className":      '',

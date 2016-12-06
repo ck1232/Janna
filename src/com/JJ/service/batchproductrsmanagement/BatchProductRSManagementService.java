@@ -95,9 +95,22 @@ public class BatchProductRSManagementService {
 		}
 	}
 	
-	public void deleteBatchproduct(List<Integer> idList) {
+	public void deleteBatchproduct(List<Integer> batchidList) {
 		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
-		batchproductRsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidIn(idList);
+		batchproductRsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidIn(batchidList);
+		BatchproductRs batchproductRs = new BatchproductRs();
+		batchproductRs.setDeleteind(GeneralUtils.DELETED);
+		batchproductRsMapper.updateByExampleSelective(batchproductRs, batchproductRsExample);
+	}
+	
+	public void deleteBatchproductNotInBatchProductidList(Integer batchid, List<Integer> idList) {
+		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
+		BatchproductRsExample.Criteria criteria = batchproductRsExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidEqualTo(batchid);
+		
+		if(idList != null && idList.size() > 0){
+			criteria.andBatchproductidNotIn(idList);
+		}
 		BatchproductRs batchproductRs = new BatchproductRs();
 		batchproductRs.setDeleteind(GeneralUtils.DELETED);
 		batchproductRsMapper.updateByExampleSelective(batchproductRs, batchproductRsExample);
@@ -118,6 +131,7 @@ public class BatchProductRSManagementService {
 				batchProduct.setProduct(product);
 				batchProduct.setQty(rs.getQty());
 				batchProduct.setUnitcost(rs.getUnitcost());
+				batchProduct.setBatchProductId(rs.getBatchproductid());
 				batchProduct.setSubOptionList(new ArrayList<SubOptionVo>());
 				if(rs.getProductsuboption1id() != null && rs.getProductsuboption1id().intValue() > 0){
 					SubOptionVo subOption1 = productService.getSubOptionVo(rs.getProductsuboption1id());

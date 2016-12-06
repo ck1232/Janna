@@ -10,6 +10,12 @@
     	  queryTokenizer: Bloodhound.tokenizers.whitespace,
     	  prefetch: '<c:url context="/JJ" value="/batchintake/getProductList" />'
     	}); 
+
+     var locationList = new Bloodhound({
+   	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationname'),
+   	  queryTokenizer: Bloodhound.tokenizers.whitespace,
+   	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
+   	}); 
  	
     $( function() {
     	$('#date').datepicker(
@@ -20,7 +26,6 @@
 
     	$('#addProductNameDiv .typeahead').keyup(function(){
     		if(!this.value) {
-        		console.log("stupid ck");
     			$("#productId").val("");
     	    	$("#quantity").val("");
     	    	$("#unitPrice").val("");
@@ -39,6 +44,22 @@
     	$('#addProductNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
         	$("#productId").val(item.productid);
     		getList(item);
+    	});
+
+    	$('#addLocationNameDiv .typeahead').keyup(function(){
+    		if(!this.value) {
+    			$("#storagelocation").val("");
+        	}
+		});
+
+    	$('#addLocationNameDiv .typeahead').typeahead(null, {
+   		 name: 'locationList',
+   		  display: 'locationname',
+   		source: locationList
+		});
+
+    	$('#addLocationNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
+        	$("#storagelocation").val(item.locationid);
     	});
 	 } );
 
@@ -246,9 +267,10 @@
 					            <div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Initial Location</label>
-											<div class="col-sm-10">
-						                  		<form:input path="storagelocation" type="text" class="form-control" 
-						                  			  id="storagelocation" placeholder="Enter initial location"/>
+											<div class="col-sm-10" id="addLocationNameDiv">
+						                  		<form:input type="text" class="form-control typeahead" 
+						                  			  path="storagelocationname" id="storagelocationname" />
+						                  		<form:input path="storagelocation" id="storagelocation" type="hidden"/>
 						                  		<form:errors path="storagelocation" class="text-danger" />
 						                	</div>
 						              </div>
@@ -346,6 +368,7 @@
 							<input id="editName" class="form-control typeahead col-sm-12" type="text" disabled />
 							<input id="editProductId" type="hidden">
 							<input id="hashCodeId" type="hidden">
+							<input id="batchproductId" type="hidden">
 						</div>
 					</div>
 				</div>
