@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: jj
+-- Host: localhost    Database: jj
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.9-MariaDB
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -541,6 +541,37 @@ INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,NULL,'N','ck1232','2016
 UNLOCK TABLES;
 
 --
+-- Table structure for table `producttags`
+--
+
+DROP TABLE IF EXISTS `producttags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `producttags` (
+  `tagsId` int(11) NOT NULL AUTO_INCREMENT,
+  `productId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`tagsId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `producttags`
+--
+
+LOCK TABLES `producttags` WRITE;
+/*!40000 ALTER TABLE `producttags` DISABLE KEYS */;
+INSERT INTO `producttags` VALUES (1,30,'23','N','ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25',1),(2,30,'fsd','Y','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(3,30,'testing','N','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1);
+/*!40000 ALTER TABLE `producttags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `promotion`
 --
 
@@ -806,6 +837,14 @@ LOCK TABLES `user_role` WRITE;
 INSERT INTO `user_role` VALUES (1,1,'N','euphona','2016-11-14 00:29:43','euphona','2016-11-14 00:29:43',1),(2,1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,5,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(8,5,'N','euphona','2016-11-14 00:34:58','euphona','2016-11-14 00:34:58',1);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'jj'
+--
+
+--
+-- Dumping routines for database 'jj'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -816,4 +855,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-06 22:52:17
+-- Dump completed on 2016-12-06 23:08:46
