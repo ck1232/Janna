@@ -2,9 +2,6 @@ package com.JJ.model;
 
 import java.util.Date;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-
 public class Base {
     
 	private String deleteind;
@@ -21,7 +18,7 @@ public class Base {
 	
 	public Base() {
 		
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		/*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(principal instanceof UserDetails){
 			UserDetails user = (UserDetails)principal;
 			deleteind = "N";
@@ -30,7 +27,7 @@ public class Base {
 			updatedby = user.getUsername();
 			updatedon = new Date();
 			version = 1;
-		}
+		}*/
 	}
 
 	public String getDeleteind() {
