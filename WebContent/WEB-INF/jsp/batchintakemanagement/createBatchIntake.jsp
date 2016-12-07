@@ -25,14 +25,12 @@
 	    });
 
     	$('#addProductNameDiv .typeahead').keyup(function(){
-    		if(!this.value) {
-    			$("#productId").val("");
-    	    	$("#quantity").val("");
-    	    	$("#unitPrice").val("");
-    	    	$('#optionDiv').empty();
-    	    	$('#quantityDiv').css("display", "none");
-    		  	$('#unitcostDiv').css("display", "none");
-        	}
+   			$("#productId").val("");
+   	    	$("#quantity").val("");
+   	    	$("#unitPrice").val("");
+   	    	$('#optionDiv').empty();
+   	    	$('#quantityDiv').css("display", "none");
+   		  	$('#unitcostDiv').css("display", "none");
 		});
 	    
     	$('#addProductNameDiv .typeahead').typeahead(null, {
@@ -47,9 +45,7 @@
     	});
 
     	$('#addLocationNameDiv .typeahead').keyup(function(){
-    		if(!this.value) {
-    			$("#storagelocation").val("");
-        	}
+    		$("#storagelocation").val("");
 		});
 
     	$('#addLocationNameDiv .typeahead').typeahead(null, {

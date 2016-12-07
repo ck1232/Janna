@@ -1,7 +1,6 @@
 package com.JJ.controller.batchintakemanagement;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +33,6 @@ import com.JJ.model.BatchproductRs;
 import com.JJ.model.Batchstockintake;
 import com.JJ.model.JsonResponse;
 import com.JJ.model.Product;
-import com.JJ.model.Promotion;
 import com.JJ.model.Storagelocation;
 import com.JJ.service.batchintakemanagement.BatchIntakeManagementService;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
@@ -123,7 +121,12 @@ public class BatchIntakeManagementController {
 					totalProductCost = totalProductCost.add(i);
 				}
 			}
-			batchIntake.setAdditionalcost(batchIntake.getTotalcost().subtract(totalProductCost));
+			BigDecimal addcost = batchIntake.getTotalcost().subtract(totalProductCost);
+			if(addcost.signum() == -1) {
+				result.rejectValue("totalcost", "error.lessthan.batchintakeform.totalcost");
+				return "createBatchIntake";
+			}
+			batchIntake.setAdditionalcost(addcost);
 			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
 			batchIntakeManagementService.saveBatchstockintake(batchIntake);
 			if(batchIntakeProductList != null) {
@@ -207,6 +210,23 @@ public class BatchIntakeManagementController {
 		}
 		return new ProductVo();
 	}
+	/*
+	@RequestMapping(value = "/calculateAdditionalCost", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse calculateAdditionalCost(@RequestBody Batchstockintake batch) {
+		logger.debug(batch.getTotalcost());
+		BigDecimal totalcostNum = batch.getTotalcost();
+		if(batchIntakeProductList != null) {
+			for(BatchIntakeProduct product: batchIntakeProductList) {
+				BigDecimal d = product.getUnitcost().multiply(BigDecimal.valueOf((double)product.getQty()));
+				totalcostNum = totalcostNum.subtract(d);
+				if(totalcostNum.signum() == -1) {
+					return new JsonResponse("error", "Total cost entered is less than the total cost of input batch product list.");
+				}
+			}
+		}
+		return new JsonResponse("success", totalcostNum.toString());
+	}
+	*/
 	
 	@RequestMapping(value = "/saveAddProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse saveAddProduct(@RequestBody BatchIntakeProduct product) {
@@ -233,7 +253,23 @@ public class BatchIntakeManagementController {
 		if(batchIntakeProductList == null) { 
 			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
 		}
-		
+		/*
+		BigDecimal totalcostNum = product.getBatchtotalcost();
+		if(totalcostNum != null){
+			if(batchIntakeProductList.size() > 0) { 
+				for(BatchIntakeProduct p: batchIntakeProductList) {
+					BigDecimal d = p.getUnitcost().multiply(BigDecimal.valueOf((double)p.getQty()));
+					totalcostNum = totalcostNum.subtract(d);
+				}
+			}
+			BigDecimal d = product.getUnitcost().multiply(BigDecimal.valueOf((double)product.getQty()));
+				totalcostNum = totalcostNum.subtract(d);
+				if(totalcostNum.signum() == -1) {
+					return new JsonResponse("error", "Please either lower the price of products or add the total cost!");
+				
+			}
+		}
+		*/
 		//for generating suboption
 		Iterator<SubOptionVo> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
@@ -315,7 +351,7 @@ public class BatchIntakeManagementController {
     	
 		logger.debug("saveEditBatchIntake() : " + batchIntake.toString());
 		if (result.hasErrors()) {
-			return "editBatchIntake";
+			return "updateBatchIntake";
 		} else {
 			BigDecimal totalProductCost = BigDecimal.ZERO;
 			if(batchIntakeProductList != null) {
@@ -324,7 +360,13 @@ public class BatchIntakeManagementController {
 					totalProductCost = totalProductCost.add(i);
 				}
 			}
-			batchIntake.setAdditionalcost(batchIntake.getTotalcost().subtract(totalProductCost));
+			
+			BigDecimal addcost = batchIntake.getTotalcost().subtract(totalProductCost);
+			if(addcost.signum() == -1) {
+				result.rejectValue("totalcost", "error.lessthan.batchintakeform.totalcost");
+				return "updateBatchIntake";
+			}
+			batchIntake.setAdditionalcost(addcost);
 			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
 			batchIntakeManagementService.updateBatchstockintake(batchIntake);
 			List<Integer> idList = new ArrayList<Integer>();

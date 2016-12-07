@@ -81,5 +81,15 @@ public class BatchIntakeProduct implements Serializable {
 	public void setHashCode(int hashCode) {
 		this.hashCode = hashCode;
 	}
+	/*
+	//TAG ALONG
+	private BigDecimal batchtotalcost;
 	
+	public BigDecimal getBatchtotalcost() {
+		return batchtotalcost;
+	}
+	public void setBatchtotalcost(BigDecimal batchtotalcost) {
+		this.batchtotalcost = batchtotalcost;
+	}
+	*/
 }
