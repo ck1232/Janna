@@ -412,6 +412,45 @@ INSERT INTO `productimage` VALUES (3,17,NULL,'ÿ\Øÿ\à\0JFIF\0\0\0\0\0\0ÿ\Û\0
 UNLOCK TABLES;
 
 --
+-- Table structure for table `productinventory`
+--
+
+DROP TABLE IF EXISTS `productinventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productinventory` (
+  `productInventoryId` int(11) NOT NULL AUTO_INCREMENT,
+  `productId` int(11) NOT NULL,
+  `suboption1Id` int(11) DEFAULT NULL,
+  `suboption2Id` int(11) DEFAULT NULL,
+  `suboption3Id` int(11) DEFAULT NULL,
+  `transferFrom` int(11) DEFAULT NULL,
+  `transferTo` int(11) DEFAULT NULL,
+  `plusOrMinus` bit(1) NOT NULL DEFAULT b'1',
+  `qty` int(11) NOT NULL DEFAULT '0',
+  `remarks` varchar(522) DEFAULT NULL,
+  `unitCost` decimal(8,2) DEFAULT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
+  `deleteInd` bit(1) NOT NULL DEFAULT b'0',
+  `deleteRemarks` varchar(522) DEFAULT NULL,
+  `createdOn` datetime NOT NULL,
+  `createdBy` varchar(255) NOT NULL,
+  `updatedBy` varchar(255) NOT NULL,
+  `updatedOn` datetime NOT NULL,
+  PRIMARY KEY (`productInventoryId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productinventory`
+--
+
+LOCK TABLES `productinventory` WRITE;
+/*!40000 ALTER TABLE `productinventory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productinventory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `productoption`
 --
 
@@ -855,4 +894,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-06 23:08:46
+-- Dump completed on 2016-12-11 10:20:34
