@@ -438,7 +438,7 @@ CREATE TABLE `productinventory` (
   `updatedBy` varchar(255) NOT NULL,
   `updatedOn` datetime NOT NULL,
   PRIMARY KEY (`productInventoryId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,6 +447,7 @@ CREATE TABLE `productinventory` (
 
 LOCK TABLES `productinventory` WRITE;
 /*!40000 ALTER TABLE `productinventory` DISABLE KEYS */;
+INSERT INTO `productinventory` VALUES (1,22,20,NULL,NULL,1,2,'',10,'abc',10.00,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(2,22,20,NULL,NULL,1,2,'\0',5,NULL,NULL,0,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(3,23,21,31,NULL,1,2,'',2,NULL,NULL,1,'',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `productinventory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -878,12 +879,122 @@ INSERT INTO `user_role` VALUES (1,1,'N','euphona','2016-11-14 00:29:43','euphona
 UNLOCK TABLES;
 
 --
+-- Temporary view structure for view `view_product_inventory`
+--
+
+DROP TABLE IF EXISTS `view_product_inventory`;
+/*!50001 DROP VIEW IF EXISTS `view_product_inventory`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_product_inventory` AS SELECT 
+ 1 AS `ProductName`,
+ 1 AS `ProductId`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `view_product_inventory_location`
+--
+
+DROP TABLE IF EXISTS `view_product_inventory_location`;
+/*!50001 DROP VIEW IF EXISTS `view_product_inventory_location`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_product_inventory_location` AS SELECT 
+ 1 AS `locationId`,
+ 1 AS `location`,
+ 1 AS `ProductName`,
+ 1 AS `ProductId`,
+ 1 AS `suboption1Name`,
+ 1 AS `subOption1Id`,
+ 1 AS `suboption2Name`,
+ 1 AS `subOption2Id`,
+ 1 AS `suboption3Name`,
+ 1 AS `subOption3Id`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `view_product_suboption_inventory`
+--
+
+DROP TABLE IF EXISTS `view_product_suboption_inventory`;
+/*!50001 DROP VIEW IF EXISTS `view_product_suboption_inventory`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_product_suboption_inventory` AS SELECT 
+ 1 AS `ProductName`,
+ 1 AS `ProductId`,
+ 1 AS `suboption1Name`,
+ 1 AS `subOption1Id`,
+ 1 AS `suboption2Name`,
+ 1 AS `subOption2Id`,
+ 1 AS `suboption3Name`,
+ 1 AS `subOption3Id`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Dumping events for database 'jj'
 --
 
 --
 -- Dumping routines for database 'jj'
 --
+
+--
+-- Final view structure for view `view_product_inventory`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_product_inventory`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_product_inventory` AS select `prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from ((((`productinventory` `inv` join `product` `prd` on((`prd`.`productId` = `inv`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `inv`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `inv`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `inv`.`suboption3Id`))) where (`inv`.`deleteInd` = 'N') group by `prd`.`productId` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_product_inventory_location`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_product_inventory_location`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_product_inventory_location` AS select `inv`.`transferTo` AS `locationId`,`loc`.`locationname` AS `location`,`prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,`sopt1`.`name` AS `suboption1Name`,`inv`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`inv`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`inv`.`suboption3Id` AS `subOption3Id`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from (((((`productinventory` `inv` join `product` `prd` on((`prd`.`productId` = `inv`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `inv`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `inv`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `inv`.`suboption3Id`))) left join `storagelocation` `loc` on((`inv`.`transferTo` = `loc`.`locationid`))) where (`inv`.`deleteInd` = 0x00) group by `inv`.`transferTo`,`prd`.`productId`,`inv`.`suboption1Id`,`inv`.`suboption2Id`,`inv`.`suboption3Id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_product_suboption_inventory`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_product_suboption_inventory`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_product_suboption_inventory` AS select `prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,`sopt1`.`name` AS `suboption1Name`,`inv`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`inv`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`inv`.`suboption3Id` AS `subOption3Id`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from ((((`productinventory` `inv` join `product` `prd` on((`prd`.`productId` = `inv`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `inv`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `inv`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `inv`.`suboption3Id`))) where (`inv`.`deleteInd` = 'N') group by `prd`.`productId`,`inv`.`suboption1Id`,`inv`.`suboption2Id`,`inv`.`suboption3Id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -894,4 +1005,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-11 10:20:34
+-- Dump completed on 2016-12-13 20:51:16
