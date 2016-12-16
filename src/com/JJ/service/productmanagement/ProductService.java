@@ -1,5 +1,13 @@
 package com.JJ.service.productmanagement;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,6 +16,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +61,8 @@ public class ProductService {
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
 	private ProductOptionManagementService productOptionManagementService;
 	private ProducttagsMapper productTagsMapper;
+	private final static int thumbnail_width = 200;
+	private final static int thumbnail_height = 200;
 	@Autowired
 	public ProductService(ProductMapper productMapper, ProductSubCategoryManagementService productSubCategoryManagementService,
 			ProductoptionMapper productOptionMapper,ProductsuboptionMapper productSubOptionMapper,
@@ -235,6 +247,7 @@ public class ProductService {
 				fileMeta.setImageId(image.getImageid());
 				fileMeta.setSequence(image.getSequence());
 				fileMeta.setFileType(image.getFiletype());
+				fileMeta.setThumbnail(image.getThumbnailimage());
 				fileMetaList.add(fileMeta);
 			}
 		}
@@ -524,6 +537,7 @@ public class ProductService {
 					
 				}else{
 					productImage.setImage(image.getBytes());
+					productImage.setThumbnailimage(getThumbnail(image.getBytes(), thumbnail_width, thumbnail_height));
 				}
 				productImages.add(productImage);
 			}
@@ -539,6 +553,18 @@ public class ProductService {
 		productMapper.updateByExampleSelective(product, example);
 	}
 	
+	public ProductimageWithBLOBs getCoverImageByProductId(Integer productId){
+		ProductimageExample selectExample = new ProductimageExample();
+		selectExample.createCriteria().andProductidEqualTo(productId).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		selectExample.setOrderByClause("sequence");
+		List<ProductimageWithBLOBs> productImageList = productImageMapper.selectByExampleWithBLOBs(selectExample);
+		if(productImageList != null && productImageList.size() > 0){
+			return productImageList.get(0);
+		}else{
+			return null;
+		}
+	}
+	
 	public class OptionVoCompare implements Comparator<OptionVo>{
 		@Override
 		public int compare(OptionVo o1, OptionVo o2) {
@@ -551,5 +577,33 @@ public class ProductService {
 			}
 			return 0;
 		}
+	}
+	
+	
+	private byte[] getThumbnail(byte[] source,int w, int h){
+		try {
+			InputStream in = new ByteArrayInputStream(source);
+			BufferedImage buf = ImageIO.read(in);
+			
+			BufferedImage thumb = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		    Graphics2D graphics2D = thumb.createGraphics();
+		    graphics2D.setBackground(Color.WHITE);
+		    graphics2D.setPaint(Color.WHITE); 
+		    graphics2D.fillRect(0, 0, w, h);
+		    graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		    graphics2D.drawImage(buf, 0, 0, w, h, null);
+		    
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	  
+			ImageIO.write( thumb, "jpg", baos );
+			baos.flush();
+			byte[] imageInByte = baos.toByteArray();
+			baos.close();
+			return imageInByte;
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return new byte[0];
+	}
 	}
 }

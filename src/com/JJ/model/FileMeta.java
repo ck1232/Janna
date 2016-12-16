@@ -11,7 +11,7 @@ public class FileMeta {
     private String fileType;
     private Integer sequence;
     private byte[] bytes;
-
+    private byte[] thumbnail;
 	public Integer getImageId() {
 		return imageId;
 	}
@@ -58,6 +58,14 @@ public class FileMeta {
 
 	public void setSequence(Integer sequence) {
 		this.sequence = sequence;
+	}
+
+	public byte[] getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(byte[] thumbnail) {
+		this.thumbnail = thumbnail;
 	}
     
 }

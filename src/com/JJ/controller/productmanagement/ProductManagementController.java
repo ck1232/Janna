@@ -38,6 +38,7 @@ import com.JJ.model.FileMeta;
 import com.JJ.model.JsonResponse;
 import com.JJ.model.Product;
 import com.JJ.model.Productcategory;
+import com.JJ.model.ProductimageWithBLOBs;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
@@ -88,8 +89,10 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping("/listProduct")  
-    public String listProduct(HttpSession session) {  
+    public String listProduct(HttpSession session, Model model) {
     	logger.debug("loading listProduct");
+    	List<Product> productList = productService.getAllProducts();
+    	model.addAttribute("productList", productList);
         return "listProduct";  
     } 
 	
@@ -331,7 +334,7 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
-	public String deleteProductCategory(@RequestParam(value = "checkboxId", required=false) List<Integer> ids,
+	public String deleteProduct(@RequestParam(value = "checkboxId", required=false) List<Integer> ids,
 			final RedirectAttributes redirectAttributes) {
 		if(ids == null || ids.size() < 1){
 			redirectAttributes.addFlashAttribute("css", "danger");
@@ -360,6 +363,22 @@ public class ProductManagementController {
 					}
 					  
 				}
+			}
+		}
+	}	
+	
+	@RequestMapping(value="/getProductImage/{productId}", method = RequestMethod.GET)
+	public void getProductImage(@PathVariable Integer productId, HttpServletRequest request, HttpServletResponse response){
+		ProductimageWithBLOBs image = productService.getCoverImageByProductId(productId);
+		if(image != null){
+			 try {
+				response.setContentType(image.getFiletype());
+				response.getOutputStream().write(image.getThumbnailimage(),0,image.getThumbnailimage().length);
+				response.getOutputStream().flush();  
+				return;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}	
