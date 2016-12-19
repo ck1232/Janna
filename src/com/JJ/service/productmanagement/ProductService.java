@@ -155,6 +155,15 @@ public class ProductService {
 	}
 	//-------------- END
 	
+	public ProductVo getProductVoById(Integer id) {
+		ProductVo product = new ProductVo();
+		List<ProductVo> productList = getAllProductVo(id);
+		if(productList != null && productList.size() > 0){
+			product = productList.get(0); 
+		}
+		return product;
+	}
+		
 	public List<ProductVo> getAllProductVo(Integer id) {
 		ProductExample productExample = new ProductExample();
 		ProductExample.Criteria criteria = productExample.createCriteria();

@@ -1151,6 +1151,40 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+    <definition name="viewInventoryProduct" extends="main_template">  
+        <put-attribute name="title" value="View Inventory Product" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Inventory Product" />
+        		<put-attribute name="heading-description" value="To view inventory product." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/inventorymanagement/viewInventoryProduct.jsp">
+        				<put-attribute name="datatable1">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="Product Quantity" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/inventorymanagement/viewproductlocation/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/inventorymanagement/viewproductlocation/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/inventory/getInventoryProductQuantityList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/inventorymanagement/viewproductlocation/column-mapping.jsp" />
+		        						<put-attribute name="subdatatable" value="/WEB-INF/jsp/inventorymanagement/viewproductlocation/subdatatable/datatable.jsp" />
+		        						<put-attribute name="subdata-list" value="/JJ/inventory/getInventoryProductLocationList" />
+		        						<put-attribute name="subdatatable-data" value="/WEB-INF/jsp/inventorymanagement/viewproductlocation/subdatatable/datatable-data.jsp"/>	
+		        						<put-attribute name="subcolumn-mapping" value="/WEB-INF/jsp/inventorymanagement/viewproductlocation/subdatatable/column-mapping.jsp"></put-attribute>
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/inventorymanagement/viewproductlocation/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
   	<!-- Inventory Management Module END -->
   	
 </tiles-definitions>  
