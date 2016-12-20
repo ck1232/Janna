@@ -66,14 +66,14 @@ public class BatchProductRSManagementService {
 			for(SubOptionVo vo: product.getSubOptionList()) {
 				Productsuboption suboption = productSubOptionManagementService.findById(vo.getSubOptionId());
 				Productoption option = productOptionManagementService.findById(suboption.getProductoptionid());
-				int seq = option.getSequence();
+				/*int seq = option.getSequence();
 				if(seq == 1) {
 					criteria.andProductsuboption1idEqualTo(vo.getSubOptionId());
 				}else if(seq == 2) {
 					criteria.andProductsuboption2idEqualTo(vo.getSubOptionId());
 				}else if(seq == 3) {
 					criteria.andProductsuboption3idEqualTo(vo.getSubOptionId());
-				}
+				}*/
 			}
 		}
 		List<BatchproductRs> rsList = batchproductRsMapper.selectByExample(batchproductRsExample);

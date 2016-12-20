@@ -32,14 +32,7 @@ public class ProductOptionManagementService {
 		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
 		return productoptionList;
 	}
-	
-	public List<Productoption> getDistinctProductoptions() {
-		ProductoptionExample productoptionExample = new ProductoptionExample();
-		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andSequenceEqualTo(1);
-		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
-		return productoptionList;
-	}
-	
+
 	public List<Productoption> getAllProductoptionsByName(String name) {
 		ProductoptionExample productoptionExample = new ProductoptionExample();
 		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andNameEqualTo(name);

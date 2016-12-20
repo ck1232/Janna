@@ -51,7 +51,7 @@ public class ProductOptionManagementController {
 	@RequestMapping(value = "/getProductOptionList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getProductOptionList() {
 		logger.debug("getting productOption list");
-		List<Productoption> optionList = productOptionManagementService.getDistinctProductoptions();
+		List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
 		return GeneralUtils.convertListToJSONString(optionList);
 	}
 	
@@ -85,11 +85,7 @@ public class ProductOptionManagementController {
 				}
 			}
 			productoption.setDeleteind(GeneralUtils.NOT_DELETED);
-			for(int i = 1 ; i <= GeneralUtils.SIZE_PER_PRODUCT_OPTION ; i++) {
-				productoption.setSequence(i);
-				productoption.setProductoptionid(null);
-				productOptionManagementService.saveProductoption(productoption);
-			}
+			productOptionManagementService.saveProductoption(productoption);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product option added successfully!");
 		}

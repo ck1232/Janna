@@ -141,7 +141,7 @@ public class ProductService {
 						Productoption po = productOptionManagementService.findById(optionid);
 						option.setOptionId(optionid);
 						option.setOptionName(po.getName());
-						option.setSequence(po.getSequence());
+						//option.setSequence(po.getSequence());
 						List<SubOptionVo> suboptionvoList = new ArrayList<SubOptionVo>();
 						for(Productsuboption suboption: suboptionMap.get(optionid)){
 							suboptionvoList.add(productSubOptionManagementService.convertSubOptionToVo(suboption));
@@ -282,7 +282,7 @@ public class ProductService {
 		if(option != null){
 			optionVo.setOptionId(option.getProductoptionid());
 			optionVo.setOptionName(option.getName());
-			optionVo.setSequence(option.getSequence());
+			//optionVo.setSequence(option.getSequence());
 		}
 		return optionVo;
 	}
@@ -498,9 +498,9 @@ public class ProductService {
 					OptionVo optionVo = optionMap.get(productOption.getName());
 					//reset all optionId
 					optionVo.setOptionId(null);
-					if(optionVo != null && productOption.getSequence().compareTo(optionVo.getSequence())== 0){
+					/*if(optionVo != null && productOption.getSequence().compareTo(optionVo.getSequence())== 0){
 						optionVo.setOptionId(productOption.getProductoptionid());
-					}
+					}*/
 				}
 			}
 			//find non exist productoption
@@ -591,7 +591,7 @@ public class ProductService {
 			for(OptionVo optionVo : optionList){
 				Productoption productOption = new Productoption();
 				productOption.setProductoptionid(optionVo.getOptionId());
-				productOption.setSequence(optionVo.getSequence());
+//				productOption.setSequence(optionVo.getSequence());
 				productOption.setName(optionVo.getOptionName());
 				productOption.setDeleteind(GeneralUtils.NOT_DELETED);
 				productOption.setDisplayind(true);
