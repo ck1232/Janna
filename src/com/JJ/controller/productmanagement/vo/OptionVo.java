@@ -13,6 +13,7 @@ public class OptionVo implements Serializable {
 	private Integer optionId;
 	private String optionName;
 	private List<SubOptionVo> subOptionList;
+	private String subOptionListComma;
 	private Integer sequence;
 	public Integer getOptionId() {
 		return optionId;
@@ -37,6 +38,16 @@ public class OptionVo implements Serializable {
 	}
 	public void setSequence(Integer sequence) {
 		this.sequence = sequence;
+	}
+	public String getSubOptionListComma() {
+		String subOptionListComma = "";
+		for(SubOptionVo vo: subOptionList){
+			subOptionListComma += vo.getSubOptionName() + ", ";
+		}
+		return subOptionListComma.substring(0, subOptionListComma.length()-2);
+	}
+	public void setSubOptionListComma(String subOptionListComma) {
+		this.subOptionListComma = subOptionListComma;
 	}
 
 }

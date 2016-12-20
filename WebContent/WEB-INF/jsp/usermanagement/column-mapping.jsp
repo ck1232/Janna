@@ -13,5 +13,7 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewUserForm">View</button>   <button name="editBtn" class="btn btn-primary" type="submit" form="updateUserForm"><i class="fa fa-pencil"></i> Edit</button>   <button name="assignRoleBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/admin/assignRole" />">Assign Role</button>'
+    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewUserForm">View</button>'+
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateUserForm"><i class="fa fa-pencil"></i> Edit</button>'+
+    '<button name="assignRoleBtn" class="btn btn-primary" type="submit" form="datatableForm" formaction="<c:url value="/admin/assignRole" />">Assign Role</button>'
 },

@@ -23,7 +23,7 @@ public class GeneralUtils {
 	public static final String NOT_ALLOW_DISPLAY = "N";
 	public static final int SIZE_PER_PRODUCT_OPTION = 3;
 	
-	private static final Logger logger = Logger.getLogger(GeneralUtils.class);
+	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){
 		return  convertListToJSONObject(list).toJSONString();
 	}

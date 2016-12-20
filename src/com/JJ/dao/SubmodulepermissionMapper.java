@@ -1,6 +1,7 @@
 package com.JJ.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -78,4 +79,7 @@ public interface SubmodulepermissionMapper {
 	int updateByPrimaryKey(Submodulepermission record);
 
 	List<RolesToPermission> getRolesToPermission (String submoduleid);
+	
+	List<Submodulepermission> getSubmodulePermissionByRoleIdList (Map roleList);
+	
 }

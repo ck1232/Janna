@@ -24,11 +24,8 @@
                 <thead>
                 	<tiles:insertAttribute name="column-header2" />
                 </thead>
-               
                 <tfoot>
-                <tr>
                   <tiles:insertAttribute name="column-header2" />
-                </tr>
                 </tfoot>
               </table>
               <tiles:insertAttribute name = "datatable-options2" />

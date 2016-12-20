@@ -79,4 +79,25 @@ public class Submodulepermission extends Base {
 	public void setPermission(String permission) {
 		this.permission = permission;
 	}
+	
+	//non db field
+	private String submodulename;
+	private String permissiontype;
+	
+	public String getSubmodulename() {
+		return submodulename;
+	}
+
+	public void setSubmodulename(String submodulename) {
+		this.submodulename = submodulename;
+	}
+	
+	public String getPermissiontype() {
+		return permissiontype;
+	}
+
+	public void setPermissiontype(String permissiontype) {
+		this.permissiontype = permissiontype;
+	}
+	
 }

@@ -2,6 +2,7 @@ package com.JJ.service.permissionmanagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,10 @@ public class PermissionManagementService {
 		SubmodulepermissionExample example = new SubmodulepermissionExample();
 		example.createCriteria().andRoleidIn(roleIdList);
 		return submodulepermissionMapper.selectByExample(example);
+	}
+	
+	public List<Submodulepermission> getSubmodulePermissionByRoleIdList(Map roleList){
+		return submodulepermissionMapper.getSubmodulePermissionByRoleIdList(roleList);
 	}
 	
 	

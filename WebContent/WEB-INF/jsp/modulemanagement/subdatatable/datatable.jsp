@@ -13,12 +13,14 @@
 '<tr>'+
   '<th>Name</th>'+
   '<th>Icon</th>'+
+  '<th>Action</th>'+
 '</tr>'+
 '</thead>'+
 '<tfoot>'+
 '<tr>'+
   '<th>Name</th>'+
   '<th>Icon</th>'+
+  '<th>Action</th>'+
 '</tr>'+
 '</tfoot>'+
 '</table>'+

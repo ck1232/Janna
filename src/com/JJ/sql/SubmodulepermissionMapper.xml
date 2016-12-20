@@ -368,4 +368,21 @@
 	left join jj.submodulepermission smp on r.id = smp.roleId where r.id not in (
 	select distinct(roleId) from jj.submodulepermission where submoduleId = #{submoduleid}))
 	</select>
+	
+	<resultMap id="submodulePermissionResultMap" type="com.JJ.model.Submodulepermission">
+	    <id column="submoduleId" jdbcType="INTEGER" property="submoduleid" />
+	    <id column="submodulename" jdbcType="VARCHAR" property="submodulename" />
+	    <id column="permission" jdbcType="VARCHAR" property="permission" />
+	    <id column="permissiontype" jdbcType="VARCHAR" property="permissiontype" />
+	</resultMap>
+	<select id="getSubmodulePermissionByRoleIdList" parameterType="map" resultMap="submodulePermissionResultMap">  
+	SELECT distinct(a.submoduleId) as "submoduleId", b.name as "submodulename", a.permission as "permission", c.permissiontype as "permissiontype"
+	FROM jj.submodulepermission a left join submodule b on a.submoduleId = b.id 
+	left join submodulepermissiontype c on a.permission = c.id 
+	where a.roleId in 
+	 <foreach item="item" index="index" collection="list"
+             open="(" separator="," close=")">
+        #{item}
+    </foreach> and a.deleteInd = 'N'
+	</select>
 </mapper>

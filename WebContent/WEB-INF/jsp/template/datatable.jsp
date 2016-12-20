@@ -28,7 +28,6 @@
                 <thead>
                 	<tiles:insertAttribute name="column-header" />
                 </thead>
-               
                 <tfoot>
                   <tiles:insertAttribute name="column-header" />
                 </tfoot>

@@ -49,6 +49,7 @@ import com.JJ.model.Producttags;
 import com.JJ.model.ProducttagsExample;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
+import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
 @Transactional(rollbackFor=Exception.class)
@@ -60,14 +61,17 @@ public class ProductService {
 	private ProductspecificationMapper productSpecificationMapper;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
 	private ProductOptionManagementService productOptionManagementService;
+	private ProductSubOptionManagementService productSubOptionManagementService;
 	private ProducttagsMapper productTagsMapper;
 	private final static int thumbnail_width = 200;
 	private final static int thumbnail_height = 200;
 	@Autowired
-	public ProductService(ProductMapper productMapper, ProductSubCategoryManagementService productSubCategoryManagementService,
+	public ProductService(ProductMapper productMapper, 
 			ProductoptionMapper productOptionMapper,ProductsuboptionMapper productSubOptionMapper,
 			ProductimageMapper productImageMapper,ProductspecificationMapper productSpecificationMapper, 
-			ProductOptionManagementService productOptionManagementService, ProducttagsMapper productTagsMapper){
+			ProductOptionManagementService productOptionManagementService, ProducttagsMapper productTagsMapper,
+			ProductSubOptionManagementService productSubOptionManagementService,
+			ProductSubCategoryManagementService productSubCategoryManagementService){
 		this.productMapper = productMapper;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productImageMapper = productImageMapper;
@@ -76,6 +80,7 @@ public class ProductService {
 		this.productSpecificationMapper = productSpecificationMapper;
 		this.productOptionManagementService = productOptionManagementService;
 		this.productTagsMapper = productTagsMapper;
+		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
 	public List<Product> getAllProducts() {
@@ -93,6 +98,89 @@ public class ProductService {
 		return productList;
 	}
 	
+	public Product getProductsById(Integer productId) {
+		ProductExample productExample = new ProductExample();
+		ProductExample.Criteria criteria = productExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		if(productId != null){
+			criteria.andProductidEqualTo(productId);
+		}
+		List<Product> productList = productMapper.selectByExample(productExample);
+		if(productList != null && productList.size() > 0){
+			return productList.get(0);
+		}
+		return new Product();
+	}
+	//-------------- START
+	public List<ProductVo> getAllProductsByName(String name) {
+		List<ProductVo> productVoList = new ArrayList<ProductVo>();
+		ProductExample productExample = new ProductExample();
+		productExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductnameEqualTo(name);
+		List<Product> productList = productMapper.selectByExample(productExample);
+		//get suboptions
+		if(productList.size() > 0) {
+			for(Product product: productList) {
+				ProductVo vo = new ProductVo();
+				List<Productsuboption> suboptionList = productSubOptionManagementService.getAllProductsuboptionsByProductId(product.getProductid());
+				if(suboptionList.size() > 0){
+					Map<Integer, List<Productsuboption>> suboptionMap = new HashMap<Integer, List<Productsuboption>>();
+					for(Productsuboption suboption: suboptionList) {
+						Integer optionid = suboption.getProductoptionid();
+						if(null == suboptionMap.get(optionid)) {
+							List<Productsuboption> psoList = new ArrayList<Productsuboption>();
+							psoList.add(suboption);
+							suboptionMap.put(optionid, psoList);
+						}else if(suboptionMap.get(optionid).size() > 0) {
+							suboptionMap.get(optionid).add(suboption);
+						}
+					}
+					
+					List<OptionVo> optionvoList = new ArrayList<OptionVo>();
+					for(Integer optionid: suboptionMap.keySet()){
+						OptionVo option = new OptionVo();
+						Productoption po = productOptionManagementService.findById(optionid);
+						option.setOptionId(optionid);
+						option.setOptionName(po.getName());
+						option.setSequence(po.getSequence());
+						List<SubOptionVo> suboptionvoList = new ArrayList<SubOptionVo>();
+						for(Productsuboption suboption: suboptionMap.get(optionid)){
+							suboptionvoList.add(productSubOptionManagementService.convertSubOptionToVo(suboption));
+						}
+						option.setSubOptionList(suboptionvoList);
+						optionvoList.add(option);
+					}
+					vo.setOptionList(optionvoList);
+				}
+				vo.setId(product.getProductid());
+				vo.setProductName(product.getProductname());
+				vo.setProductInfo(product.getDesciption());
+				vo.setUnitPrice(product.getUnitprice());
+				
+				productVoList.add(vo);
+			}
+			
+			/*Map<Integer, Productsubcategory> subcategoryMap =  getProductsubcategoryMap();
+			if(productList != null && productList.size() > 0){
+				for(Product product : productList){
+					if(product.getSubcategoryid() != null && product.getSubcategoryid().intValue() > 0){
+						product.setSubCategory(subcategoryMap.get(product.getSubcategoryid()));
+					}
+				}
+			}*/
+		}
+		return productVoList;
+	}
+	//-------------- END
+	
+	public ProductVo getProductVoById(Integer id) {
+		ProductVo product = new ProductVo();
+		List<ProductVo> productList = getAllProductVo(id);
+		if(productList != null && productList.size() > 0){
+			product = productList.get(0); 
+		}
+		return product;
+	}
+		
 	public List<ProductVo> getAllProductVo(Integer id) {
 		ProductExample productExample = new ProductExample();
 		ProductExample.Criteria criteria = productExample.createCriteria();
@@ -118,8 +206,7 @@ public class ProductService {
 				
 				//get Product Option
 				List<OptionVo> optionVoList = getOptionVoList(product.getProductid());
-				Collections.sort(optionVoList, new OptionVoCompare());
-				
+				Collections.sort(optionVoList,new OptionVoCompare());
 				//get ProductTags
 				List<String> tagsList = getProductTags(product.getProductid());
 				//convert To productVo
@@ -142,6 +229,15 @@ public class ProductService {
 		return tagsList;
 	}
 
+	public SubOptionVo getSubOptionVo(Integer suboptionId){
+		ProductsuboptionExample example = new ProductsuboptionExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductsuboptionidEqualTo(suboptionId);
+		List<Productsuboption> productSubOptionList = productSubOptionMapper.selectByExample(example);
+		if(productSubOptionList != null && productSubOptionList.size() > 0){
+			return convertToSubOptionVo(productSubOptionList.get(0));
+		}
+		return new SubOptionVo();
+	}
 	private List<OptionVo> getOptionVoList(Integer productId){
 		if(productId != null){
 			List<OptionVo> optionVoList = new ArrayList<OptionVo>();
