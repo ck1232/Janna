@@ -25,10 +25,7 @@ DROP TABLE IF EXISTS `batchproduct_rs`;
 CREATE TABLE `batchproduct_rs` (
   `batchproductId` int(11) NOT NULL AUTO_INCREMENT,
   `batchid` int(11) NOT NULL,
-  `productid` int(11) NOT NULL,
-  `productsuboption1id` int(11) DEFAULT NULL,
-  `productsuboption2id` int(11) DEFAULT NULL,
-  `productsuboption3id` int(11) DEFAULT NULL,
+  `productsuboptionId` int(11) NOT NULL,
   `unitcost` decimal(6,2) DEFAULT '0.00',
   `qty` int(11) DEFAULT NULL,
   `deleteind` char(1) NOT NULL DEFAULT 'N',
@@ -46,7 +43,7 @@ CREATE TABLE `batchproduct_rs` (
 
 LOCK TABLES `batchproduct_rs` WRITE;
 /*!40000 ALTER TABLE `batchproduct_rs` DISABLE KEYS */;
-INSERT INTO `batchproduct_rs` VALUES (23,18,22,20,NULL,NULL,5.00,10,'Y','2016-12-05 22:59:10','euphona','2016-12-05 22:59:10','euphona'),(24,18,23,23,27,NULL,3.00,10,'Y','2016-12-05 23:00:00','euphona','2016-12-05 23:00:00','euphona'),(25,18,23,23,30,NULL,6.00,10,'Y','2016-12-05 23:00:00','euphona','2016-12-05 23:00:00','euphona'),(26,18,23,21,31,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(27,18,23,21,27,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(28,18,23,21,30,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(29,18,22,20,NULL,NULL,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(30,18,23,21,29,NULL,2.00,15,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(31,19,22,20,NULL,NULL,4.00,53,'Y','2016-12-05 23:10:51','euphona','2016-12-05 23:10:51','euphona'),(32,19,23,26,30,NULL,60.00,79,'Y','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05','euphona'),(33,19,22,20,NULL,NULL,4.00,345,'Y','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05','euphona'),(34,20,22,20,NULL,NULL,3.00,3,'N','2016-12-06 22:41:53','euphona','2016-12-06 22:41:53','euphona');
+INSERT INTO `batchproduct_rs` VALUES (23,18,22,5.00,10,'Y','2016-12-05 22:59:10','euphona','2016-12-05 22:59:10','euphona'),(24,18,23,3.00,10,'Y','2016-12-05 23:00:00','euphona','2016-12-05 23:00:00','euphona'),(25,18,23,6.00,10,'Y','2016-12-05 23:00:00','euphona','2016-12-05 23:00:00','euphona'),(26,18,23,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(27,18,23,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(28,18,23,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(29,18,22,2.00,20,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(30,18,23,2.00,15,'N','2016-12-05 23:03:37','euphona','2016-12-05 23:03:37','euphona'),(31,19,22,4.00,53,'Y','2016-12-05 23:10:51','euphona','2016-12-05 23:10:51','euphona'),(32,19,23,60.00,79,'Y','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05','euphona'),(33,19,22,4.00,345,'Y','2016-12-05 23:13:05','euphona','2016-12-05 23:13:05','euphona'),(34,20,22,3.00,3,'N','2016-12-06 22:41:53','euphona','2016-12-06 22:41:53','euphona');
 /*!40000 ALTER TABLE `batchproduct_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -420,10 +417,7 @@ DROP TABLE IF EXISTS `productinventory`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `productinventory` (
   `productInventoryId` int(11) NOT NULL AUTO_INCREMENT,
-  `productId` int(11) NOT NULL,
-  `suboption1Id` int(11) DEFAULT NULL,
-  `suboption2Id` int(11) DEFAULT NULL,
-  `suboption3Id` int(11) DEFAULT NULL,
+  `productsuboptionId` int(11) NOT NULL,
   `transferFrom` int(11) DEFAULT NULL,
   `transferTo` int(11) DEFAULT NULL,
   `plusOrMinus` bit(1) NOT NULL DEFAULT b'1',
@@ -447,7 +441,7 @@ CREATE TABLE `productinventory` (
 
 LOCK TABLES `productinventory` WRITE;
 /*!40000 ALTER TABLE `productinventory` DISABLE KEYS */;
-INSERT INTO `productinventory` VALUES (1,22,20,NULL,NULL,1,2,'',10,'abc',10.00,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(2,22,20,NULL,NULL,1,2,'\0',5,NULL,NULL,0,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(3,23,21,31,NULL,1,2,'',2,NULL,NULL,1,'',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00');
+INSERT INTO `productinventory` VALUES (1,22,1,2,'',10,'abc',10.00,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(2,22,1,2,'\0',5,NULL,NULL,0,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(3,23,1,2,'',2,NULL,NULL,1,'',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `productinventory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -576,6 +570,38 @@ LOCK TABLES `productsuboption` WRITE;
 /*!40000 ALTER TABLE `productsuboption` DISABLE KEYS */;
 INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,'N','ck1232','2016-11-23 22:02:03','ck1232','2016-11-23 22:02:03',1),(11,18,0,NULL,NULL,'N','ck1232','2016-11-23 22:22:19','ck1232','2016-11-23 22:22:19',1),(12,19,1,'1','','N','ck1232','2016-11-25 23:31:34','ck1232','2016-11-25 23:31:34',1),(13,21,1,'1','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(14,21,1,'2','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(15,22,4,'1','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(16,22,2,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(17,22,2,'2','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(18,22,2,'123','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(19,22,4,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(20,22,4,'1','','N','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(21,23,4,'Long','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(22,23,4,'Short','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(23,23,4,'Round','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(24,23,4,'Square','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(25,23,4,'Rectangle','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(26,23,4,'Pentagon','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(27,23,2,'white','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(28,23,2,'red','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(29,23,2,'yellow','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(30,23,2,'blue','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(31,23,2,'green','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(32,23,2,'pink','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1);
 /*!40000 ALTER TABLE `productsuboption` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productsuboption_rs`
+--
+
+DROP TABLE IF EXISTS `productsuboption_rs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productsuboption_rs` (
+  `productsuboptionId` int(11) NOT NULL AUTO_INCREMENT,
+  `productId` int(11) NOT NULL,
+  `suboption1Id` int(11) DEFAULT NULL,
+  `suboption2Id` int(11) DEFAULT NULL,
+  `suboption3Id` int(11) DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdby` varchar(255) NOT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `version` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`productsuboptionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productsuboption_rs`
+--
+
+LOCK TABLES `productsuboption_rs` WRITE;
+/*!40000 ALTER TABLE `productsuboption_rs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productsuboption_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -877,122 +903,12 @@ INSERT INTO `user_role` VALUES (1,1,'N','euphona','2016-11-14 00:29:43','euphona
 UNLOCK TABLES;
 
 --
--- Temporary view structure for view `view_product_inventory`
---
-
-DROP TABLE IF EXISTS `view_product_inventory`;
-/*!50001 DROP VIEW IF EXISTS `view_product_inventory`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `view_product_inventory` AS SELECT 
- 1 AS `ProductName`,
- 1 AS `ProductId`,
- 1 AS `qty`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Temporary view structure for view `view_product_inventory_location`
---
-
-DROP TABLE IF EXISTS `view_product_inventory_location`;
-/*!50001 DROP VIEW IF EXISTS `view_product_inventory_location`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `view_product_inventory_location` AS SELECT 
- 1 AS `locationId`,
- 1 AS `location`,
- 1 AS `ProductName`,
- 1 AS `ProductId`,
- 1 AS `suboption1Name`,
- 1 AS `subOption1Id`,
- 1 AS `suboption2Name`,
- 1 AS `subOption2Id`,
- 1 AS `suboption3Name`,
- 1 AS `subOption3Id`,
- 1 AS `qty`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Temporary view structure for view `view_product_suboption_inventory`
---
-
-DROP TABLE IF EXISTS `view_product_suboption_inventory`;
-/*!50001 DROP VIEW IF EXISTS `view_product_suboption_inventory`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `view_product_suboption_inventory` AS SELECT 
- 1 AS `ProductName`,
- 1 AS `ProductId`,
- 1 AS `suboption1Name`,
- 1 AS `subOption1Id`,
- 1 AS `suboption2Name`,
- 1 AS `subOption2Id`,
- 1 AS `suboption3Name`,
- 1 AS `subOption3Id`,
- 1 AS `qty`*/;
-SET character_set_client = @saved_cs_client;
-
---
 -- Dumping events for database 'jj'
 --
 
 --
 -- Dumping routines for database 'jj'
 --
-
---
--- Final view structure for view `view_product_inventory`
---
-
-/*!50001 DROP VIEW IF EXISTS `view_product_inventory`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_product_inventory` AS select `prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from ((((`productinventory` `inv` join `product` `prd` on((`prd`.`productId` = `inv`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `inv`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `inv`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `inv`.`suboption3Id`))) where (`inv`.`deleteInd` = 'N') group by `prd`.`productId` */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `view_product_inventory_location`
---
-
-/*!50001 DROP VIEW IF EXISTS `view_product_inventory_location`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_product_inventory_location` AS select `inv`.`transferTo` AS `locationId`,`loc`.`locationname` AS `location`,`prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,`sopt1`.`name` AS `suboption1Name`,`inv`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`inv`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`inv`.`suboption3Id` AS `subOption3Id`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from (((((`productinventory` `inv` join `product` `prd` on((`prd`.`productId` = `inv`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `inv`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `inv`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `inv`.`suboption3Id`))) left join `storagelocation` `loc` on((`inv`.`transferTo` = `loc`.`locationid`))) where (`inv`.`deleteInd` = 0x00) group by `inv`.`transferTo`,`prd`.`productId`,`inv`.`suboption1Id`,`inv`.`suboption2Id`,`inv`.`suboption3Id` */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `view_product_suboption_inventory`
---
-
-/*!50001 DROP VIEW IF EXISTS `view_product_suboption_inventory`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_product_suboption_inventory` AS select `prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,`sopt1`.`name` AS `suboption1Name`,`inv`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`inv`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`inv`.`suboption3Id` AS `subOption3Id`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from ((((`productinventory` `inv` join `product` `prd` on((`prd`.`productId` = `inv`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `inv`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `inv`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `inv`.`suboption3Id`))) where (`inv`.`deleteInd` = 'N') group by `prd`.`productId`,`inv`.`suboption1Id`,`inv`.`suboption2Id`,`inv`.`suboption3Id` */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1003,4 +919,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-20 21:08:26
+-- Dump completed on 2016-12-20 21:55:51
