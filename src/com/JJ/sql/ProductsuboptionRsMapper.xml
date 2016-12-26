@@ -106,7 +106,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.JJ.model.ProductsuboptionRs">
+  <insert id="insert" parameterType="com.JJ.model.ProductsuboptionRs" useGeneratedKeys="true" keyProperty="productsuboptionid" keyColumn="productSubOptionId">
     insert into productsuboption_rs (productsuboptionId, productId, suboption1Id, 
       suboption2Id, suboption3Id, deleteInd, 
       createdby, createdon, updatedby, 
@@ -116,7 +116,7 @@
       #{createdby,jdbcType=VARCHAR}, #{createdon,jdbcType=TIMESTAMP}, #{updatedby,jdbcType=VARCHAR}, 
       #{updatedon,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.JJ.model.ProductsuboptionRs">
+  <insert id="insertSelective" parameterType="com.JJ.model.ProductsuboptionRs" useGeneratedKeys="true" keyProperty="productsuboptionid" keyColumn="productSubOptionId">
     insert into productsuboption_rs
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productsuboptionid != null">
