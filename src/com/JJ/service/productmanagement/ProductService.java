@@ -891,12 +891,12 @@ public class ProductService {
 		}else{
 			return new ArrayList<Integer>();
 		}
-		suboptionIdList.clear();
-		suboptionIdList.addAll(duplicateSet);
+		List<Integer> distinctSuboptionIdList = new ArrayList<Integer>();
+		distinctSuboptionIdList.addAll(duplicateSet);
 		ProductsuboptionExample selectExample = new ProductsuboptionExample();
-		selectExample.createCriteria().andProductidEqualTo(productId).andProductsuboptionidIn(suboptionIdList);
+		selectExample.createCriteria().andProductidEqualTo(productId).andProductsuboptionidIn(distinctSuboptionIdList);
 		List<Productsuboption> productSuboption = productSubOptionMapper.selectByExample(selectExample);
-		if(productSuboption != null && productSuboption.size() == suboptionIdList.size()){
+		if(productSuboption != null && productSuboption.size() == distinctSuboptionIdList.size()){
 			List<Integer> optionIdList = new ArrayList<Integer>();
 			for(Productsuboption suboption:productSuboption){
 				optionIdList.add(suboption.getProductoptionid());
