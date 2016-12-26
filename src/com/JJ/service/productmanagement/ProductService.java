@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.productmanagement.vo.OptionVo;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
 import com.JJ.controller.productmanagement.vo.ProductVo;
 import com.JJ.controller.productmanagement.vo.SubOptionVo;
 import com.JJ.dao.ProductMapper;
@@ -916,5 +917,74 @@ public class ProductService {
 			return suboptionOrderedList;
 		}
 		return null;
+	}
+	
+	public ProductSubOptionRsVo getProductSubOptionVo(Integer productSubOptionId){
+		ProductsuboptionRsExample selectExample = new ProductsuboptionRsExample();
+		selectExample.createCriteria().andProductidEqualTo(productSubOptionId).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		List<ProductsuboptionRs> result = productSuboptionRsMapper.selectByExample(selectExample);
+		
+		if(result != null && result.size() > 0){
+			ProductsuboptionRs obj = result.get(0);
+			ProductSubOptionRsVo vo = new ProductSubOptionRsVo();
+			vo.setProductsuboptionid(obj.getProductsuboptionid());
+			vo.setProductid(obj.getProductid());
+			vo.setSuboption1id(obj.getSuboption1id());
+			vo.setSuboption2id(obj.getSuboption2id());
+			vo.setSuboption3id(obj.getSuboption3id());
+			List<OptionVo> allOptionVo = getOptionVoList(obj.getProductid());
+			if(vo.getSuboption1id() != null && allOptionVo != null && allOptionVo.size() > 0){
+				for(OptionVo option: allOptionVo){
+					if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+						for(SubOptionVo suboptionVo :option.getSubOptionList()){
+							if(suboptionVo.getSubOptionId().equals(vo.getSuboption1id())){
+								OptionVo option1 = new OptionVo();
+								option1.setOptionId(option.getOptionId());
+								option1.setOptionName(option.getOptionName());
+								option1.setSubOptionList(Arrays.asList(suboptionVo));
+								vo.setSubOption1(option1);
+								break;
+							}
+						}
+					}
+				}
+			}
+			
+			if(vo.getSuboption2id() != null && allOptionVo != null && allOptionVo.size() > 0){
+				for(OptionVo option: allOptionVo){
+					if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+						for(SubOptionVo suboptionVo :option.getSubOptionList()){
+							if(suboptionVo.getSubOptionId().equals(vo.getSuboption2id())){
+								OptionVo option2 = new OptionVo();
+								option2.setOptionId(option.getOptionId());
+								option2.setOptionName(option.getOptionName());
+								option2.setSubOptionList(Arrays.asList(suboptionVo));
+								vo.setSubOption2(option2);
+								break;
+							}
+						}
+					}
+				}
+			}
+			
+			if(vo.getSuboption3id() != null && allOptionVo != null && allOptionVo.size() > 0){
+				for(OptionVo option: allOptionVo){
+					if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+						for(SubOptionVo suboptionVo :option.getSubOptionList()){
+							if(suboptionVo.getSubOptionId().equals(vo.getSuboption3id())){
+								OptionVo option3 = new OptionVo();
+								option3.setOptionId(option.getOptionId());
+								option3.setOptionName(option.getOptionName());
+								option3.setSubOptionList(Arrays.asList(suboptionVo));
+								vo.setSubOption1(option3);
+								break;
+							}
+						}
+					}
+				}
+			}
+			return vo;
+		}
+		return new ProductSubOptionRsVo();
 	}
 }
