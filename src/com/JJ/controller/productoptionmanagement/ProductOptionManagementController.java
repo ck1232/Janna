@@ -86,7 +86,6 @@ public class ProductOptionManagementController {
 			}
 			productoption.setDeleteind(GeneralUtils.NOT_DELETED);
 			for(int i = 1 ; i <= GeneralUtils.SIZE_PER_PRODUCT_OPTION ; i++) {
-				productoption.setSequence(i);
 				productoption.setProductoptionid(null);
 				productOptionManagementService.saveProductoption(productoption);
 			}

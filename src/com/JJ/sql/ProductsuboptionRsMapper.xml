@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.JJ.dao.ProductsuboptionMapper">
-  <resultMap id="BaseResultMap" type="com.JJ.model.Productsuboption">
-    <id column="productSubOptionId" jdbcType="INTEGER" property="productsuboptionid" />
+<mapper namespace="com.JJ.dao.ProductsuboptionRsMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.ProductsuboptionRs">
+    <id column="productsuboptionId" jdbcType="INTEGER" property="productsuboptionid" />
     <result column="productId" jdbcType="INTEGER" property="productid" />
-    <result column="productoptionId" jdbcType="INTEGER" property="productoptionid" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="displayInd" jdbcType="BIT" property="displayind" />
+    <result column="suboption1Id" jdbcType="INTEGER" property="suboption1id" />
+    <result column="suboption2Id" jdbcType="INTEGER" property="suboption2id" />
+    <result column="suboption3Id" jdbcType="INTEGER" property="suboption3id" />
     <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
     <result column="createdby" jdbcType="VARCHAR" property="createdby" />
     <result column="createdon" jdbcType="TIMESTAMP" property="createdon" />
@@ -73,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    productSubOptionId, productId, productoptionId, name, displayInd, deleteInd, createdby, 
-    createdon, updatedby, updatedon, version
+    productsuboptionId, productId, suboption1Id, suboption2Id, suboption3Id, deleteInd, 
+    createdby, createdon, updatedby, updatedon, version
   </sql>
-  <select id="selectByExample" parameterType="com.JJ.model.ProductsuboptionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.JJ.model.ProductsuboptionRsExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from productsuboption
+    from productsuboption_rs
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,46 +93,46 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from productsuboption
-    where productSubOptionId = #{productsuboptionid,jdbcType=INTEGER}
+    from productsuboption_rs
+    where productsuboptionId = #{productsuboptionid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from productsuboption
-    where productSubOptionId = #{productsuboptionid,jdbcType=INTEGER}
+    delete from productsuboption_rs
+    where productsuboptionId = #{productsuboptionid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.JJ.model.ProductsuboptionExample">
-    delete from productsuboption
+  <delete id="deleteByExample" parameterType="com.JJ.model.ProductsuboptionRsExample">
+    delete from productsuboption_rs
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.JJ.model.Productsuboption" useGeneratedKeys="true" keyColumn="productSubOptionId" keyProperty="productsuboptionid">
-    insert into productsuboption (productSubOptionId, productId, productoptionId, 
-      name, displayInd, deleteInd, 
+  <insert id="insert" parameterType="com.JJ.model.ProductsuboptionRs">
+    insert into productsuboption_rs (productsuboptionId, productId, suboption1Id, 
+      suboption2Id, suboption3Id, deleteInd, 
       createdby, createdon, updatedby, 
       updatedon, version)
-    values (#{productsuboptionid,jdbcType=INTEGER}, #{productid,jdbcType=INTEGER}, #{productoptionid,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{displayind,jdbcType=BIT}, #{deleteind,jdbcType=CHAR}, 
+    values (#{productsuboptionid,jdbcType=INTEGER}, #{productid,jdbcType=INTEGER}, #{suboption1id,jdbcType=INTEGER}, 
+      #{suboption2id,jdbcType=INTEGER}, #{suboption3id,jdbcType=INTEGER}, #{deleteind,jdbcType=CHAR}, 
       #{createdby,jdbcType=VARCHAR}, #{createdon,jdbcType=TIMESTAMP}, #{updatedby,jdbcType=VARCHAR}, 
       #{updatedon,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.JJ.model.Productsuboption" useGeneratedKeys="true" keyColumn="productSubOptionId" keyProperty="productsuboptionid">
-    insert into productsuboption
+  <insert id="insertSelective" parameterType="com.JJ.model.ProductsuboptionRs">
+    insert into productsuboption_rs
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productsuboptionid != null">
-        productSubOptionId,
+        productsuboptionId,
       </if>
       <if test="productid != null">
         productId,
       </if>
-      <if test="productoptionid != null">
-        productoptionId,
+      <if test="suboption1id != null">
+        suboption1Id,
       </if>
-      <if test="name != null">
-        name,
+      <if test="suboption2id != null">
+        suboption2Id,
       </if>
-      <if test="displayind != null">
-        displayInd,
+      <if test="suboption3id != null">
+        suboption3Id,
       </if>
       <if test="deleteind != null">
         deleteInd,
@@ -160,14 +160,14 @@
       <if test="productid != null">
         #{productid,jdbcType=INTEGER},
       </if>
-      <if test="productoptionid != null">
-        #{productoptionid,jdbcType=INTEGER},
+      <if test="suboption1id != null">
+        #{suboption1id,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="suboption2id != null">
+        #{suboption2id,jdbcType=INTEGER},
       </if>
-      <if test="displayind != null">
-        #{displayind,jdbcType=BIT},
+      <if test="suboption3id != null">
+        #{suboption3id,jdbcType=INTEGER},
       </if>
       <if test="deleteind != null">
         #{deleteind,jdbcType=CHAR},
@@ -189,29 +189,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.JJ.model.ProductsuboptionExample" resultType="java.lang.Integer">
-    select count(*) from productsuboption
+  <select id="countByExample" parameterType="com.JJ.model.ProductsuboptionRsExample" resultType="java.lang.Integer">
+    select count(*) from productsuboption_rs
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update productsuboption
+    update productsuboption_rs
     <set>
       <if test="record.productsuboptionid != null">
-        productSubOptionId = #{record.productsuboptionid,jdbcType=INTEGER},
+        productsuboptionId = #{record.productsuboptionid,jdbcType=INTEGER},
       </if>
       <if test="record.productid != null">
         productId = #{record.productid,jdbcType=INTEGER},
       </if>
-      <if test="record.productoptionid != null">
-        productoptionId = #{record.productoptionid,jdbcType=INTEGER},
+      <if test="record.suboption1id != null">
+        suboption1Id = #{record.suboption1id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.suboption2id != null">
+        suboption2Id = #{record.suboption2id,jdbcType=INTEGER},
       </if>
-      <if test="record.displayind != null">
-        displayInd = #{record.displayind,jdbcType=BIT},
+      <if test="record.suboption3id != null">
+        suboption3Id = #{record.suboption3id,jdbcType=INTEGER},
       </if>
       <if test="record.deleteind != null">
         deleteInd = #{record.deleteind,jdbcType=CHAR},
@@ -237,12 +237,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update productsuboption
-    set productSubOptionId = #{record.productsuboptionid,jdbcType=INTEGER},
+    update productsuboption_rs
+    set productsuboptionId = #{record.productsuboptionid,jdbcType=INTEGER},
       productId = #{record.productid,jdbcType=INTEGER},
-      productoptionId = #{record.productoptionid,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      displayInd = #{record.displayind,jdbcType=BIT},
+      suboption1Id = #{record.suboption1id,jdbcType=INTEGER},
+      suboption2Id = #{record.suboption2id,jdbcType=INTEGER},
+      suboption3Id = #{record.suboption3id,jdbcType=INTEGER},
       deleteInd = #{record.deleteind,jdbcType=CHAR},
       createdby = #{record.createdby,jdbcType=VARCHAR},
       createdon = #{record.createdon,jdbcType=TIMESTAMP},
@@ -253,20 +253,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.Productsuboption">
-    update productsuboption
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.ProductsuboptionRs">
+    update productsuboption_rs
     <set>
       <if test="productid != null">
         productId = #{productid,jdbcType=INTEGER},
       </if>
-      <if test="productoptionid != null">
-        productoptionId = #{productoptionid,jdbcType=INTEGER},
+      <if test="suboption1id != null">
+        suboption1Id = #{suboption1id,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="suboption2id != null">
+        suboption2Id = #{suboption2id,jdbcType=INTEGER},
       </if>
-      <if test="displayind != null">
-        displayInd = #{displayind,jdbcType=BIT},
+      <if test="suboption3id != null">
+        suboption3Id = #{suboption3id,jdbcType=INTEGER},
       </if>
       <if test="deleteind != null">
         deleteInd = #{deleteind,jdbcType=CHAR},
@@ -287,20 +287,20 @@
         version = #{version,jdbcType=INTEGER},
       </if>
     </set>
-    where productSubOptionId = #{productsuboptionid,jdbcType=INTEGER}
+    where productsuboptionId = #{productsuboptionid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.JJ.model.Productsuboption">
-    update productsuboption
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.ProductsuboptionRs">
+    update productsuboption_rs
     set productId = #{productid,jdbcType=INTEGER},
-      productoptionId = #{productoptionid,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      displayInd = #{displayind,jdbcType=BIT},
+      suboption1Id = #{suboption1id,jdbcType=INTEGER},
+      suboption2Id = #{suboption2id,jdbcType=INTEGER},
+      suboption3Id = #{suboption3id,jdbcType=INTEGER},
       deleteInd = #{deleteind,jdbcType=CHAR},
       createdby = #{createdby,jdbcType=VARCHAR},
       createdon = #{createdon,jdbcType=TIMESTAMP},
       updatedby = #{updatedby,jdbcType=VARCHAR},
       updatedon = #{updatedon,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=INTEGER}
-    where productSubOptionId = #{productsuboptionid,jdbcType=INTEGER}
+    where productsuboptionId = #{productsuboptionid,jdbcType=INTEGER}
   </update>
 </mapper>

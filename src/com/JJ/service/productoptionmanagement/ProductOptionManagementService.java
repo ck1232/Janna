@@ -35,7 +35,7 @@ public class ProductOptionManagementService {
 	
 	public List<Productoption> getDistinctProductoptions() {
 		ProductoptionExample productoptionExample = new ProductoptionExample();
-		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andSequenceEqualTo(1);
+		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
 		return productoptionList;
 	}

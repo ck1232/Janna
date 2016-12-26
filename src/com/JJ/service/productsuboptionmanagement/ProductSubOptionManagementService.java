@@ -29,7 +29,7 @@ public class ProductSubOptionManagementService {
 
 	public List<Productsuboption> getAllProductsuboptions() {
 		ProductsuboptionExample productsuboptionExample = new ProductsuboptionExample();
-		productsuboptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andSequenceEqualTo(1);
+		productsuboptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Productsuboption> productsuboptionList = productsuboptionMapper.selectByExample(productsuboptionExample);
 		return productsuboptionList;
 	}
@@ -71,7 +71,6 @@ public class ProductSubOptionManagementService {
 		SubOptionVo vo = new SubOptionVo();
 		vo.setSubOptionId(suboption.getProductsuboptionid());
 		vo.setSubOptionName(suboption.getName());
-		vo.setSeq(suboption.getSequence());
 		return vo;
 	}
 	 

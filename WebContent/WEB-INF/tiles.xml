@@ -863,8 +863,21 @@
         		<put-attribute name="heading-description" value="To view all the products" />
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/productmanagement/listProduct.jsp">
-		        		<put-attribute name="table-title" value="All Products" />
-		        		<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/options.jsp" />
+		        		<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Product Categories" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/productmanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/product/product/getProductList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productmanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productmanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
 	        		</definition>
        			</put-attribute>
         	</definition>

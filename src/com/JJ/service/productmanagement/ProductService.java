@@ -31,6 +31,7 @@ import com.JJ.dao.ProductimageMapper;
 import com.JJ.dao.ProductoptionMapper;
 import com.JJ.dao.ProductspecificationMapper;
 import com.JJ.dao.ProductsuboptionMapper;
+import com.JJ.dao.ProductsuboptionRsMapper;
 import com.JJ.dao.ProducttagsMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.FileMeta;
@@ -45,6 +46,8 @@ import com.JJ.model.ProductspecificationExample;
 import com.JJ.model.Productsubcategory;
 import com.JJ.model.Productsuboption;
 import com.JJ.model.ProductsuboptionExample;
+import com.JJ.model.ProductsuboptionRs;
+import com.JJ.model.ProductsuboptionRsExample;
 import com.JJ.model.Producttags;
 import com.JJ.model.ProducttagsExample;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
@@ -62,6 +65,7 @@ public class ProductService {
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
 	private ProductOptionManagementService productOptionManagementService;
 	private ProductSubOptionManagementService productSubOptionManagementService;
+	private ProductsuboptionRsMapper productSuboptionRsMapper;
 	private ProducttagsMapper productTagsMapper;
 	private final static int thumbnail_width = 200;
 	private final static int thumbnail_height = 200;
@@ -71,7 +75,8 @@ public class ProductService {
 			ProductimageMapper productImageMapper,ProductspecificationMapper productSpecificationMapper, 
 			ProductOptionManagementService productOptionManagementService, ProducttagsMapper productTagsMapper,
 			ProductSubOptionManagementService productSubOptionManagementService,
-			ProductSubCategoryManagementService productSubCategoryManagementService){
+			ProductSubCategoryManagementService productSubCategoryManagementService,
+			ProductsuboptionRsMapper productSuboptionRsMapper){
 		this.productMapper = productMapper;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productImageMapper = productImageMapper;
@@ -81,6 +86,7 @@ public class ProductService {
 		this.productOptionManagementService = productOptionManagementService;
 		this.productTagsMapper = productTagsMapper;
 		this.productSubOptionManagementService = productSubOptionManagementService;
+		this.productSuboptionRsMapper = productSuboptionRsMapper;
 	}
 	
 	public List<Product> getAllProducts() {
@@ -141,7 +147,6 @@ public class ProductService {
 						Productoption po = productOptionManagementService.findById(optionid);
 						option.setOptionId(optionid);
 						option.setOptionName(po.getName());
-						option.setSequence(po.getSequence());
 						List<SubOptionVo> suboptionvoList = new ArrayList<SubOptionVo>();
 						for(Productsuboption suboption: suboptionMap.get(optionid)){
 							suboptionvoList.add(productSubOptionManagementService.convertSubOptionToVo(suboption));
@@ -282,7 +287,6 @@ public class ProductService {
 		if(option != null){
 			optionVo.setOptionId(option.getProductoptionid());
 			optionVo.setOptionName(option.getName());
-			optionVo.setSequence(option.getSequence());
 		}
 		return optionVo;
 	}
@@ -290,7 +294,6 @@ public class ProductService {
 		SubOptionVo subOptionVo = new SubOptionVo();
 		if(suboption != null){
 			subOptionVo.setDisplay(suboption.getDisplayind()== null ? false: suboption.getDisplayind().booleanValue());
-			subOptionVo.setSeq(suboption.getSequence() == null ? 1:suboption.getSequence().intValue());
 			subOptionVo.setSubOptionId(suboption.getProductsuboptionid());
 			subOptionVo.setSubOptionName(suboption.getName());
 		}
@@ -434,6 +437,7 @@ public class ProductService {
 				Producttags dbTag = new Producttags();
 				dbTag.setName(tag);
 				dbTag.setProductid(productId);
+				dbTag.setDeleteind(GeneralUtils.NOT_DELETED);
 				dbList.add(dbTag);
 			}
 		}
@@ -498,7 +502,7 @@ public class ProductService {
 					OptionVo optionVo = optionMap.get(productOption.getName());
 					//reset all optionId
 					optionVo.setOptionId(null);
-					if(optionVo != null && productOption.getSequence().compareTo(optionVo.getSequence())== 0){
+					if(optionVo != null && productOption.getName().compareTo(optionVo.getOptionName())== 0){
 						optionVo.setOptionId(productOption.getProductoptionid());
 					}
 				}
@@ -547,6 +551,7 @@ public class ProductService {
 			productSubOptionMapper.updateByExample(updateProductSubOption, deleteExample);
 			
 			//insert into productsuboption
+			
 			for(Productsuboption productSubOption : productSubOptionList){
 				//update
 				if(productSubOption.getProductsuboptionid() != null){
@@ -554,6 +559,20 @@ public class ProductService {
 				}else{
 					//insert
 					productSubOptionMapper.insert(productSubOption);
+					//set id back to suboptionVo
+					A:
+					for(OptionVo optionVo : productVo.getOptionList()){
+						if(optionVo.getOptionId() != null && productSubOption.getProductoptionid() != null &&
+								optionVo.getOptionId().compareTo(productSubOption.getProductoptionid()) == 0){
+							for(SubOptionVo suboptionVO : optionVo.getSubOptionList()){
+								if(suboptionVO.getSubOptionId() == null 
+										&& suboptionVO.getSubOptionName().equals(productSubOption.getName())){
+									suboptionVO.setSubOptionId(productSubOption.getProductsuboptionid());
+									break A;
+								}
+							}
+						}
+					}
 				}
 			}
 		}else{
@@ -571,8 +590,133 @@ public class ProductService {
 				productSubOptionMapper.insert(productSubOption);
 			}
 		}
+		
+		//maintain productsuboption_rs
+		productVo.setId(productId);
+		saveProductSubOptionRs(productVo);
 	}
 	
+	private void saveProductSubOptionRs(ProductVo productVo) {
+		
+		//find if product suboption rs exists
+		//set delete ind to true for all suboption
+		ProductsuboptionRsExample deleteExample = new ProductsuboptionRsExample();
+		deleteExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductidEqualTo(productVo.getId());
+		ProductsuboptionRs obj = new ProductsuboptionRs();
+		obj.setDeleteind(GeneralUtils.DELETED);
+		productSuboptionRsMapper.updateByExampleSelective(obj, deleteExample);
+		
+		//if suboption exists
+		if(productVo.getOptionList() != null && productVo.getOptionList().size() > 0){
+			//sort optionVO
+			Collections.sort(productVo.getOptionList(),new OptionVoCompare());
+			//todo generate matrix
+			List<ProductsuboptionRs> productSuboptionRsList = new ArrayList<ProductsuboptionRs>();
+			int size = productVo.getOptionList().size();
+			if(productVo.getOptionList() != null && size >= 1){
+				productSuboptionRsList =  generateLevelOne(productVo.getOptionList().get(0));
+				if(size >= 2){
+					productSuboptionRsList = generateLevelTwo(productVo.getOptionList().get(1), productSuboptionRsList);
+					if(size >= 3){
+						productSuboptionRsList = generateLevelThree(productVo.getOptionList().get(2), productSuboptionRsList);
+					}
+				}
+			}
+			for(ProductsuboptionRs dbObj : productSuboptionRsList){
+				insertOrUpdateProductSuboptionRs(productVo.getId(), dbObj.getSuboption1id(), dbObj.getSuboption2id(),dbObj.getSuboption3id());
+			}
+			
+		}else{
+			insertOrUpdateProductSuboptionRs(productVo.getId(), null, null, null);
+		}
+		
+		//delete non used records
+		ProductsuboptionRsExample deleteRsExample = new ProductsuboptionRsExample();
+		ProductsuboptionRsExample.Criteria criteria = deleteRsExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.DELETED);
+		//TODO delete those not used id
+		productSuboptionRsMapper.deleteByExample(deleteRsExample);
+	}
+	
+	private List<ProductsuboptionRs> generateLevelOne(OptionVo option){
+		List<ProductsuboptionRs> list = new ArrayList<ProductsuboptionRs>();
+		if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+			for(SubOptionVo suboptionVo : option.getSubOptionList()){
+				ProductsuboptionRs suboption = new ProductsuboptionRs();
+				suboption.setSuboption1id(suboptionVo.getSubOptionId());
+				list.add(suboption);
+			}
+		}
+		return list;
+	}
+	
+	private List<ProductsuboptionRs> generateLevelTwo(OptionVo option, List<ProductsuboptionRs> list){
+		List<ProductsuboptionRs> list2 = new ArrayList<ProductsuboptionRs>();
+		
+		if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+			for(SubOptionVo suboptionVo : option.getSubOptionList()){
+				if(list != null && list.size() > 0){
+					for(ProductsuboptionRs suboption1 : list){
+						ProductsuboptionRs suboption = new ProductsuboptionRs();
+						suboption.setSuboption1id(suboption1.getSuboption1id());
+						suboption.setSuboption2id(suboptionVo.getSubOptionId());
+						list2.add(suboption);
+					}
+				}
+			}
+		}
+		return list2;
+	}
+	private List<ProductsuboptionRs> generateLevelThree(OptionVo option, List<ProductsuboptionRs> list){
+		List<ProductsuboptionRs> list2 = new ArrayList<ProductsuboptionRs>();
+		
+		if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+			for(SubOptionVo suboptionVo : option.getSubOptionList()){
+				if(list != null && list.size() > 0){
+					for(ProductsuboptionRs suboption1 : list){
+						ProductsuboptionRs suboption = new ProductsuboptionRs();
+						suboption.setSuboption1id(suboption1.getSuboption1id());
+						suboption.setSuboption2id(suboption1.getSuboption2id());
+						suboption.setSuboption3id(suboptionVo.getSubOptionId());
+						list2.add(suboption);
+					}
+				}
+			}
+		}
+		return list2;
+	}
+	
+	private void insertOrUpdateProductSuboptionRs(Integer productId, Integer suboption1, Integer suboption2, Integer suboption3){
+		ProductsuboptionRsExample updateExample = new ProductsuboptionRsExample();
+		ProductsuboptionRsExample.Criteria criteria = updateExample.createCriteria();
+		criteria.andProductidEqualTo(productId);
+		if(suboption1 != null){
+			criteria.andSuboption1idEqualTo(suboption1);
+		}
+		if(suboption2 != null){
+			criteria.andSuboption2idEqualTo(suboption2);
+		}
+		if(suboption3 != null){
+			criteria.andSuboption3idEqualTo(suboption3);
+		}
+		ProductsuboptionRs deleteObj = new ProductsuboptionRs();
+		deleteObj.setDeleteind(GeneralUtils.NOT_DELETED);
+		int rowsUpdated = productSuboptionRsMapper.updateByExampleSelective(deleteObj, updateExample);
+		
+		//record dont exist, insert record
+		if(rowsUpdated == 0){
+			ProductsuboptionRs obj = new ProductsuboptionRs();
+			obj.setProductid(productId);
+			obj.setSuboption1id(suboption1);
+			obj.setSuboption2id(suboption2);
+			obj.setSuboption3id(suboption3);
+			obj.setDeleteind(GeneralUtils.NOT_DELETED);
+			productSuboptionRsMapper.insertSelective(obj);
+		}
+		
+		
+	}
+
 	private Product convertToProduct(ProductVo productVo){
 		Product product = new Product();
 		product.setProductid(productVo.getId());
@@ -591,7 +735,6 @@ public class ProductService {
 			for(OptionVo optionVo : optionList){
 				Productoption productOption = new Productoption();
 				productOption.setProductoptionid(optionVo.getOptionId());
-				productOption.setSequence(optionVo.getSequence());
 				productOption.setName(optionVo.getOptionName());
 				productOption.setDeleteind(GeneralUtils.NOT_DELETED);
 				productOption.setDisplayind(true);
@@ -612,7 +755,6 @@ public class ProductService {
 				productSubOption.setName(subOption.getSubOptionName());
 				productSubOption.setDeleteind(GeneralUtils.NOT_DELETED);
 				productSubOption.setDisplayind(subOption.isDisplay());
-				productSubOption.setSequence(subOption.getSeq());
 				productOptionList.add(productSubOption);
 			}
 		}
