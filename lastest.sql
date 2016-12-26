@@ -297,7 +297,7 @@ CREATE TABLE `product` (
   `updatedon` datetime DEFAULT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productId`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,7 +306,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,'Y','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1),(18,'testing',123.00,500,2,NULL,'Y',NULL,NULL,NULL,NULL,0),(19,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(20,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(21,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(22,'testing',123.00,456,2,NULL,'N',NULL,NULL,NULL,NULL,0),(23,'product3',100.00,1,2,NULL,'N',NULL,NULL,NULL,NULL,0);
+INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,'Y','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1),(18,'testing',123.00,500,2,NULL,'Y',NULL,NULL,NULL,NULL,0),(19,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(20,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(21,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0),(22,'testing',123.00,456,2,NULL,'N',NULL,NULL,NULL,NULL,0),(23,'product3',100.00,1,2,NULL,'N',NULL,NULL,NULL,NULL,0),(26,'IPHONE',12.00,56,2,NULL,'N',NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -463,7 +463,7 @@ CREATE TABLE `productoption` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productoptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -472,7 +472,7 @@ CREATE TABLE `productoption` (
 
 LOCK TABLES `productoption` WRITE;
 /*!40000 ALTER TABLE `productoption` DISABLE KEYS */;
-INSERT INTO `productoption` VALUES (1,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(9,'No Option','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(17,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(18,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(19,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(20,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(21,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1);
+INSERT INTO `productoption` VALUES (1,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(9,'No Option','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(17,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(18,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(19,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(20,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(21,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(23,'memory','','N','ck1232','2016-12-23 23:54:28','ck1232','2016-12-23 23:54:28',1);
 /*!40000 ALTER TABLE `productoption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -494,7 +494,7 @@ CREATE TABLE `productspecification` (
   `updatedon` datetime DEFAULT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSpecificationId`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -503,7 +503,7 @@ CREATE TABLE `productspecification` (
 
 LOCK TABLES `productspecification` WRITE;
 /*!40000 ALTER TABLE `productspecification` DISABLE KEYS */;
-INSERT INTO `productspecification` VALUES (11,17,'<p>sddsad</p>\r\n','N',NULL,NULL,NULL,NULL,0),(12,18,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(13,19,'<p>asdas123</p>\r\n','N',NULL,NULL,NULL,NULL,0),(14,20,'<p>asdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(15,21,'<p>asdas1</p>\r\n','N',NULL,NULL,NULL,NULL,0),(16,22,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(17,23,'<p>Ck is shit</p>\r\n','N',NULL,NULL,NULL,NULL,0);
+INSERT INTO `productspecification` VALUES (11,17,'<p>sddsad</p>\r\n','N',NULL,NULL,NULL,NULL,0),(12,18,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(13,19,'<p>asdas123</p>\r\n','N',NULL,NULL,NULL,NULL,0),(14,20,'<p>asdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(15,21,'<p>asdas1</p>\r\n','N',NULL,NULL,NULL,NULL,0),(16,22,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(17,23,'<p>Ck is shit</p>\r\n','N',NULL,NULL,NULL,NULL,0),(19,26,'','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1);
 /*!40000 ALTER TABLE `productspecification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -559,7 +559,7 @@ CREATE TABLE `productsuboption` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSubOptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -568,7 +568,7 @@ CREATE TABLE `productsuboption` (
 
 LOCK TABLES `productsuboption` WRITE;
 /*!40000 ALTER TABLE `productsuboption` DISABLE KEYS */;
-INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,'N','ck1232','2016-11-23 22:02:03','ck1232','2016-11-23 22:02:03',1),(11,18,0,NULL,NULL,'N','ck1232','2016-11-23 22:22:19','ck1232','2016-11-23 22:22:19',1),(12,19,1,'1','','N','ck1232','2016-11-25 23:31:34','ck1232','2016-11-25 23:31:34',1),(13,21,1,'1','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(14,21,1,'2','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(15,22,4,'1','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(16,22,2,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(17,22,2,'2','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(18,22,2,'123','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(19,22,4,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(20,22,4,'1','','N','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(21,23,4,'Long','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(22,23,4,'Short','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(23,23,4,'Round','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(24,23,4,'Square','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(25,23,4,'Rectangle','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(26,23,4,'Pentagon','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(27,23,2,'white','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(28,23,2,'red','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(29,23,2,'yellow','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(30,23,2,'blue','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(31,23,2,'green','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1),(32,23,2,'pink','','N','euphona','2016-11-27 13:34:19','euphona','2016-11-27 13:34:19',1);
+INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,'N','ck1232','2016-11-23 22:02:03','ck1232','2016-11-23 22:02:03',1),(11,18,0,NULL,NULL,'N','ck1232','2016-11-23 22:22:19','ck1232','2016-11-23 22:22:19',1),(12,19,1,'1','','N','ck1232','2016-11-25 23:31:34','ck1232','2016-11-25 23:31:34',1),(13,21,1,'1','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(14,21,1,'2','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(15,22,4,'1','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(16,22,2,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(17,22,2,'2','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(18,22,2,'123','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(19,22,4,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(20,22,6,'1','','N','ck1232','2016-11-25 23:41:34','ck1232','2016-12-23 23:14:32',1),(21,23,6,'Long','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(22,23,6,'Short','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(23,23,6,'Round','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(24,23,6,'Square','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(25,23,6,'Rectangle','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(26,23,6,'Pentagon','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(27,23,2,'white','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(28,23,2,'red','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(29,23,2,'yellow','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(30,23,2,'blue','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(31,23,2,'green','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(32,23,2,'pink','','N','euphona','2016-11-27 13:34:19','ck1232','2016-12-21 22:19:59',1),(33,23,3,'1','\0','N','ck1232','2016-12-21 21:58:49','ck1232','2016-12-21 22:19:59',1),(34,23,3,'2','','N','ck1232','2016-12-21 21:58:49','ck1232','2016-12-21 22:19:59',1),(35,23,6,'ok','','N','ck1232','2016-12-21 22:19:59','ck1232','2016-12-21 22:19:59',1),(36,22,6,'2','','N','ck1232','2016-12-23 23:13:49','ck1232','2016-12-23 23:14:32',1),(37,22,3,'red','','N','ck1232','2016-12-23 23:14:32','ck1232','2016-12-23 23:14:32',1),(38,22,3,'pink','','N','ck1232','2016-12-23 23:14:36','ck1232','2016-12-23 23:14:36',1),(59,26,3,'gold','','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:54:28',1),(60,26,3,'silver','','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:54:28',1),(61,26,6,'4','','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:54:28',1),(62,26,6,'5','','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:54:28',1),(63,26,6,'6','','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:54:28',1),(65,26,NULL,'16gb','','N','ck1232','2016-12-23 23:54:28','ck1232','2016-12-23 23:54:28',1),(66,26,NULL,'32gb','','N','ck1232','2016-12-23 23:54:28','ck1232','2016-12-23 23:54:28',1);
 /*!40000 ALTER TABLE `productsuboption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -592,7 +592,7 @@ CREATE TABLE `productsuboption_rs` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productsuboptionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -601,6 +601,7 @@ CREATE TABLE `productsuboption_rs` (
 
 LOCK TABLES `productsuboption_rs` WRITE;
 /*!40000 ALTER TABLE `productsuboption_rs` DISABLE KEYS */;
+INSERT INTO `productsuboption_rs` VALUES (3,22,20,37,NULL,'N','ck1232','2016-12-23 23:14:38','ck1232','2016-12-23 23:14:38',1),(4,22,36,37,NULL,'N','ck1232','2016-12-23 23:14:38','ck1232','2016-12-23 23:14:38',1),(5,22,20,38,NULL,'N','ck1232','2016-12-23 23:14:38','ck1232','2016-12-23 23:14:38',1),(6,22,36,38,NULL,'N','ck1232','2016-12-23 23:14:38','ck1232','2016-12-23 23:14:38',1),(31,26,59,61,NULL,'N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1),(32,26,60,61,NULL,'N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1),(33,26,59,62,NULL,'N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1),(34,26,60,62,NULL,'N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1),(35,26,59,63,NULL,'N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1),(36,26,60,63,NULL,'N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1);
 /*!40000 ALTER TABLE `productsuboption_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -622,7 +623,7 @@ CREATE TABLE `producttags` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tagsId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -631,7 +632,7 @@ CREATE TABLE `producttags` (
 
 LOCK TABLES `producttags` WRITE;
 /*!40000 ALTER TABLE `producttags` DISABLE KEYS */;
-INSERT INTO `producttags` VALUES (1,30,'23','N','ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25',1),(2,30,'fsd','Y','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(3,30,'testing','N','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1);
+INSERT INTO `producttags` VALUES (1,30,'23','N','ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25',1),(2,30,'fsd','Y','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(3,30,'testing','N','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(4,26,'apple','N','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1),(5,26,'iphone','Y','ck1232','2016-12-23 23:47:14','ck1232','2016-12-23 23:47:14',1);
 /*!40000 ALTER TABLE `producttags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -919,4 +920,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-20 21:55:51
+-- Dump completed on 2016-12-26 10:12:01
