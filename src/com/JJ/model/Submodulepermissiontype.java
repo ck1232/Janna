@@ -2,6 +2,11 @@ package com.JJ.model;
 
 public class Submodulepermissiontype extends Base{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String toString() {
 		return "Submodulepermissiontype [id=" + id + ", submoduleid=" + submoduleid + ", permissiontype="

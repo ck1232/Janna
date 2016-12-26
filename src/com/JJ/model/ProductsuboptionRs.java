@@ -2,16 +2,16 @@ package com.JJ.model;
 
 import java.util.Date;
 
-public class Productsuboption extends Base{
+public class ProductsuboptionRs extends Base{
     private Integer productsuboptionid;
 
     private Integer productid;
 
-    private Integer productoptionid;
+    private Integer suboption1id;
 
-    private String name;
+    private Integer suboption2id;
 
-    private Boolean displayind;
+    private Integer suboption3id;
 
     private String deleteind;
 
@@ -41,28 +41,28 @@ public class Productsuboption extends Base{
         this.productid = productid;
     }
 
-    public Integer getProductoptionid() {
-        return productoptionid;
+    public Integer getSuboption1id() {
+        return suboption1id;
     }
 
-    public void setProductoptionid(Integer productoptionid) {
-        this.productoptionid = productoptionid;
+    public void setSuboption1id(Integer suboption1id) {
+        this.suboption1id = suboption1id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getSuboption2id() {
+        return suboption2id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSuboption2id(Integer suboption2id) {
+        this.suboption2id = suboption2id;
     }
 
-    public Boolean getDisplayind() {
-        return displayind;
+    public Integer getSuboption3id() {
+        return suboption3id;
     }
 
-    public void setDisplayind(Boolean displayind) {
-        this.displayind = displayind;
+    public void setSuboption3id(Integer suboption3id) {
+        this.suboption3id = suboption3id;
     }
 
     public String getDeleteind() {

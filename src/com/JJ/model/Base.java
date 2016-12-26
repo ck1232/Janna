@@ -1,9 +1,15 @@
 package com.JJ.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Base {
+public class Base implements Serializable {
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String deleteind;
 
 	private String createdby;

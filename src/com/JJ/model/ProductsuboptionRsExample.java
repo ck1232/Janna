@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductsuboptionExample {
+public class ProductsuboptionRsExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProductsuboptionExample() {
+    public ProductsuboptionRsExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -106,62 +106,62 @@ public class ProductsuboptionExample {
         }
 
         public Criteria andProductsuboptionidIsNull() {
-            addCriterion("productSubOptionId is null");
+            addCriterion("productsuboptionId is null");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidIsNotNull() {
-            addCriterion("productSubOptionId is not null");
+            addCriterion("productsuboptionId is not null");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidEqualTo(Integer value) {
-            addCriterion("productSubOptionId =", value, "productsuboptionid");
+            addCriterion("productsuboptionId =", value, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidNotEqualTo(Integer value) {
-            addCriterion("productSubOptionId <>", value, "productsuboptionid");
+            addCriterion("productsuboptionId <>", value, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidGreaterThan(Integer value) {
-            addCriterion("productSubOptionId >", value, "productsuboptionid");
+            addCriterion("productsuboptionId >", value, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("productSubOptionId >=", value, "productsuboptionid");
+            addCriterion("productsuboptionId >=", value, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidLessThan(Integer value) {
-            addCriterion("productSubOptionId <", value, "productsuboptionid");
+            addCriterion("productsuboptionId <", value, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidLessThanOrEqualTo(Integer value) {
-            addCriterion("productSubOptionId <=", value, "productsuboptionid");
+            addCriterion("productsuboptionId <=", value, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidIn(List<Integer> values) {
-            addCriterion("productSubOptionId in", values, "productsuboptionid");
+            addCriterion("productsuboptionId in", values, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidNotIn(List<Integer> values) {
-            addCriterion("productSubOptionId not in", values, "productsuboptionid");
+            addCriterion("productsuboptionId not in", values, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidBetween(Integer value1, Integer value2) {
-            addCriterion("productSubOptionId between", value1, value2, "productsuboptionid");
+            addCriterion("productsuboptionId between", value1, value2, "productsuboptionid");
             return (Criteria) this;
         }
 
         public Criteria andProductsuboptionidNotBetween(Integer value1, Integer value2) {
-            addCriterion("productSubOptionId not between", value1, value2, "productsuboptionid");
+            addCriterion("productsuboptionId not between", value1, value2, "productsuboptionid");
             return (Criteria) this;
         }
 
@@ -225,193 +225,183 @@ public class ProductsuboptionExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidIsNull() {
-            addCriterion("productoptionId is null");
+        public Criteria andSuboption1idIsNull() {
+            addCriterion("suboption1Id is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidIsNotNull() {
-            addCriterion("productoptionId is not null");
+        public Criteria andSuboption1idIsNotNull() {
+            addCriterion("suboption1Id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidEqualTo(Integer value) {
-            addCriterion("productoptionId =", value, "productoptionid");
+        public Criteria andSuboption1idEqualTo(Integer value) {
+            addCriterion("suboption1Id =", value, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidNotEqualTo(Integer value) {
-            addCriterion("productoptionId <>", value, "productoptionid");
+        public Criteria andSuboption1idNotEqualTo(Integer value) {
+            addCriterion("suboption1Id <>", value, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidGreaterThan(Integer value) {
-            addCriterion("productoptionId >", value, "productoptionid");
+        public Criteria andSuboption1idGreaterThan(Integer value) {
+            addCriterion("suboption1Id >", value, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("productoptionId >=", value, "productoptionid");
+        public Criteria andSuboption1idGreaterThanOrEqualTo(Integer value) {
+            addCriterion("suboption1Id >=", value, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidLessThan(Integer value) {
-            addCriterion("productoptionId <", value, "productoptionid");
+        public Criteria andSuboption1idLessThan(Integer value) {
+            addCriterion("suboption1Id <", value, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidLessThanOrEqualTo(Integer value) {
-            addCriterion("productoptionId <=", value, "productoptionid");
+        public Criteria andSuboption1idLessThanOrEqualTo(Integer value) {
+            addCriterion("suboption1Id <=", value, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidIn(List<Integer> values) {
-            addCriterion("productoptionId in", values, "productoptionid");
+        public Criteria andSuboption1idIn(List<Integer> values) {
+            addCriterion("suboption1Id in", values, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidNotIn(List<Integer> values) {
-            addCriterion("productoptionId not in", values, "productoptionid");
+        public Criteria andSuboption1idNotIn(List<Integer> values) {
+            addCriterion("suboption1Id not in", values, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidBetween(Integer value1, Integer value2) {
-            addCriterion("productoptionId between", value1, value2, "productoptionid");
+        public Criteria andSuboption1idBetween(Integer value1, Integer value2) {
+            addCriterion("suboption1Id between", value1, value2, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andProductoptionidNotBetween(Integer value1, Integer value2) {
-            addCriterion("productoptionId not between", value1, value2, "productoptionid");
+        public Criteria andSuboption1idNotBetween(Integer value1, Integer value2) {
+            addCriterion("suboption1Id not between", value1, value2, "suboption1id");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNull() {
-            addCriterion("name is null");
+        public Criteria andSuboption2idIsNull() {
+            addCriterion("suboption2Id is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+        public Criteria andSuboption2idIsNotNull() {
+            addCriterion("suboption2Id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+        public Criteria andSuboption2idEqualTo(Integer value) {
+            addCriterion("suboption2Id =", value, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+        public Criteria andSuboption2idNotEqualTo(Integer value) {
+            addCriterion("suboption2Id <>", value, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+        public Criteria andSuboption2idGreaterThan(Integer value) {
+            addCriterion("suboption2Id >", value, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+        public Criteria andSuboption2idGreaterThanOrEqualTo(Integer value) {
+            addCriterion("suboption2Id >=", value, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+        public Criteria andSuboption2idLessThan(Integer value) {
+            addCriterion("suboption2Id <", value, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+        public Criteria andSuboption2idLessThanOrEqualTo(Integer value) {
+            addCriterion("suboption2Id <=", value, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+        public Criteria andSuboption2idIn(List<Integer> values) {
+            addCriterion("suboption2Id in", values, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+        public Criteria andSuboption2idNotIn(List<Integer> values) {
+            addCriterion("suboption2Id not in", values, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+        public Criteria andSuboption2idBetween(Integer value1, Integer value2) {
+            addCriterion("suboption2Id between", value1, value2, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+        public Criteria andSuboption2idNotBetween(Integer value1, Integer value2) {
+            addCriterion("suboption2Id not between", value1, value2, "suboption2id");
             return (Criteria) this;
         }
 
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+        public Criteria andSuboption3idIsNull() {
+            addCriterion("suboption3Id is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+        public Criteria andSuboption3idIsNotNull() {
+            addCriterion("suboption3Id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindIsNull() {
-            addCriterion("displayInd is null");
+        public Criteria andSuboption3idEqualTo(Integer value) {
+            addCriterion("suboption3Id =", value, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindIsNotNull() {
-            addCriterion("displayInd is not null");
+        public Criteria andSuboption3idNotEqualTo(Integer value) {
+            addCriterion("suboption3Id <>", value, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindEqualTo(Boolean value) {
-            addCriterion("displayInd =", value, "displayind");
+        public Criteria andSuboption3idGreaterThan(Integer value) {
+            addCriterion("suboption3Id >", value, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindNotEqualTo(Boolean value) {
-            addCriterion("displayInd <>", value, "displayind");
+        public Criteria andSuboption3idGreaterThanOrEqualTo(Integer value) {
+            addCriterion("suboption3Id >=", value, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindGreaterThan(Boolean value) {
-            addCriterion("displayInd >", value, "displayind");
+        public Criteria andSuboption3idLessThan(Integer value) {
+            addCriterion("suboption3Id <", value, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("displayInd >=", value, "displayind");
+        public Criteria andSuboption3idLessThanOrEqualTo(Integer value) {
+            addCriterion("suboption3Id <=", value, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindLessThan(Boolean value) {
-            addCriterion("displayInd <", value, "displayind");
+        public Criteria andSuboption3idIn(List<Integer> values) {
+            addCriterion("suboption3Id in", values, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindLessThanOrEqualTo(Boolean value) {
-            addCriterion("displayInd <=", value, "displayind");
+        public Criteria andSuboption3idNotIn(List<Integer> values) {
+            addCriterion("suboption3Id not in", values, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindIn(List<Boolean> values) {
-            addCriterion("displayInd in", values, "displayind");
+        public Criteria andSuboption3idBetween(Integer value1, Integer value2) {
+            addCriterion("suboption3Id between", value1, value2, "suboption3id");
             return (Criteria) this;
         }
 
-        public Criteria andDisplayindNotIn(List<Boolean> values) {
-            addCriterion("displayInd not in", values, "displayind");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisplayindBetween(Boolean value1, Boolean value2) {
-            addCriterion("displayInd between", value1, value2, "displayind");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisplayindNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("displayInd not between", value1, value2, "displayind");
+        public Criteria andSuboption3idNotBetween(Integer value1, Integer value2) {
+            addCriterion("suboption3Id not between", value1, value2, "suboption3id");
             return (Criteria) this;
         }
 
