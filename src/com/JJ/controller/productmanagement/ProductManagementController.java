@@ -1,6 +1,11 @@
 package com.JJ.controller.productmanagement;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -376,6 +381,30 @@ public class ProductManagementController {
 				response.getOutputStream().write(image.getThumbnailimage(),0,image.getThumbnailimage().length);
 				response.getOutputStream().flush();  
 				return;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			InputStream is;
+			try {
+				is = request.getSession().getServletContext().getResourceAsStream("/development/images/No-image-found.jpg");
+				ByteArrayOutputStream bos=new ByteArrayOutputStream();
+				int b;
+				byte[] buffer = new byte[1024];
+				while((b=is.read(buffer))!=-1){
+				   bos.write(buffer,0,b);
+				}
+				byte[] fileBytes=bos.toByteArray();
+				is.close();
+				bos.close();
+				response.setContentType("image/jpeg");
+				response.getOutputStream().write(fileBytes,0,fileBytes.length);
+				response.getOutputStream().flush();  
+				return;
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
