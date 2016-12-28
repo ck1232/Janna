@@ -3,6 +3,8 @@
 $(function () {
     $('#datatable1').DataTable({
       "paging": true,
+      "scrollY": 300,
+      "scrollCollapse": true,
       "responsive" : true,
       "lengthChange": false,
       "searching": false,
@@ -18,12 +20,13 @@ $(function () {
 	  "columns": [
 	              <tiles:insertAttribute name="column-mapping" />
 	            ],
-      "order": [1, 'asc'],
+      "order": [2, 'asc'],
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
           $(row).find('input[type="checkbox"]').prop('value', data.productid);
           $(row).find('button[name="editBtn"]').prop('value', data.productid);
+          $(row).find('img[name="img"]').prop('src', "./getProductImage/"+data.productid);
        }
     });
 });
