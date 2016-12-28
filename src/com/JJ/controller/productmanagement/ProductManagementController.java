@@ -1,8 +1,6 @@
 package com.JJ.controller.productmanagement;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -248,6 +246,11 @@ public class ProductManagementController {
 			if(newProduct.getOptionList() == null){
 				newProduct.setOptionList(new ArrayList<OptionVo>());
 			}
+			for(OptionVo optionVo : newProduct.getOptionList()){
+				if(optionVo.getOptionName().equalsIgnoreCase(option.getOptionName())){
+					return new JsonResponse("fail", "Option Name already exists.");
+				}
+			}
 			newProduct.getOptionList().add(option);
 		}
 		return new JsonResponse("success");
@@ -255,6 +258,14 @@ public class ProductManagementController {
 	
 	@RequestMapping(value = "/saveEditOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse saveEditOption(@RequestBody OptionVo option) {
+		if(newProduct != null && newProduct.getOptionList() != null){
+			for(OptionVo optionVo : newProduct.getOptionList()){
+				if(optionVo.getOptionName().equalsIgnoreCase(option.getOptionName()) && optionVo.getOptionId() != option.getOptionId()){
+					return new JsonResponse("fail", "Option Name already exists.");
+				}
+			}
+		}
+		
 		if(selectedOption != null){
 			selectedOption.setOptionName(option.getOptionName());
 			selectedOption.setOptionId(option.getOptionId());
