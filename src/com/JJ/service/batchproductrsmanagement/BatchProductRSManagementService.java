@@ -17,6 +17,7 @@ import com.JJ.model.Product;
 import com.JJ.model.ProductExample;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsuboption;
+import com.JJ.model.ProductsuboptionRs;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
@@ -56,7 +57,7 @@ public class BatchProductRSManagementService {
 		return batchproductRsMapper.selectByExample(batchproductRsExample);
 	}
 	
-	public BatchproductRs findByProductNameAndSubOption(Integer batchid, BatchIntakeProduct product) {
+	/*public BatchproductRs findByProductNameAndSubOption(Integer batchid, BatchIntakeProduct product) {
 		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
 		BatchproductRsExample.Criteria criteria = batchproductRsExample.createCriteria();
 		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED)
@@ -66,14 +67,14 @@ public class BatchProductRSManagementService {
 			for(SubOptionVo vo: product.getSubOptionList()) {
 				Productsuboption suboption = productSubOptionManagementService.findById(vo.getSubOptionId());
 				Productoption option = productOptionManagementService.findById(suboption.getProductoptionid());
-				/*int seq = option.getSequence();
+				int seq = option.getSequence();
 				if(seq == 1) {
 					criteria.andProductsuboption1idEqualTo(vo.getSubOptionId());
 				}else if(seq == 2) {
 					criteria.andProductsuboption2idEqualTo(vo.getSubOptionId());
 				}else if(seq == 3) {
 					criteria.andProductsuboption3idEqualTo(vo.getSubOptionId());
-				}*/
+				}
 			}
 		}
 		List<BatchproductRs> rsList = batchproductRsMapper.selectByExample(batchproductRsExample);
@@ -81,7 +82,7 @@ public class BatchProductRSManagementService {
 			return null;
 		}
 		return rsList.get(0);
-	}
+	}*/
 	
 	public int saveBatchproduct(BatchproductRs batchproductRs) {
 		return batchproductRsMapper.insert(batchproductRs);
@@ -127,26 +128,27 @@ public class BatchProductRSManagementService {
 		if(rsList.size() != 0){
 			for(BatchproductRs rs: rsList){
 				BatchIntakeProduct batchProduct = new BatchIntakeProduct();
-				Product product = productService.getProductsById(rs.getProductid());
+				ProductsuboptionRs productoptionrs = productService.getProductsuboptionRsById(rs.getProductsuboptionid());
+				Product product = productService.getProductsById(productoptionrs.getProductid());
 				batchProduct.setProduct(product);
 				batchProduct.setQty(rs.getQty());
 				batchProduct.setUnitcost(rs.getUnitcost());
 				batchProduct.setBatchProductId(rs.getBatchproductid());
 				batchProduct.setSubOptionList(new ArrayList<SubOptionVo>());
-				if(rs.getProductsuboption1id() != null && rs.getProductsuboption1id().intValue() > 0){
-					SubOptionVo subOption1 = productService.getSubOptionVo(rs.getProductsuboption1id());
+				if(productoptionrs.getSuboption1id() != null && productoptionrs.getSuboption1id() > 0){
+					SubOptionVo subOption1 = productService.getSubOptionVo(productoptionrs.getSuboption1id());
 					if(subOption1 != null){
 						batchProduct.getSubOptionList().add(subOption1);
 					}
 				}
-				if(rs.getProductsuboption2id() != null && rs.getProductsuboption2id().intValue() > 0){
-					SubOptionVo subOption2 = productService.getSubOptionVo(rs.getProductsuboption2id());
+				if(productoptionrs.getSuboption2id() != null && productoptionrs.getSuboption2id() > 0){
+					SubOptionVo subOption2 = productService.getSubOptionVo(productoptionrs.getSuboption2id());
 					if(subOption2 != null){
 						batchProduct.getSubOptionList().add(subOption2);
 					}
 				}
-				if(rs.getProductsuboption3id() != null && rs.getProductsuboption3id().intValue() > 0){
-					SubOptionVo subOption3 = productService.getSubOptionVo(rs.getProductsuboption3id());
+				if(productoptionrs.getSuboption3id() != null && productoptionrs.getSuboption3id() > 0){
+					SubOptionVo subOption3 = productService.getSubOptionVo(productoptionrs.getSuboption3id());
 					if(subOption3 != null){
 						batchProduct.getSubOptionList().add(subOption3);
 					}

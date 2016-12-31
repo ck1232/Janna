@@ -33,6 +33,7 @@ import com.JJ.model.BatchproductRs;
 import com.JJ.model.Batchstockintake;
 import com.JJ.model.JsonResponse;
 import com.JJ.model.Product;
+import com.JJ.model.ProductsuboptionRs;
 import com.JJ.model.Storagelocation;
 import com.JJ.service.batchintakemanagement.BatchIntakeManagementService;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
@@ -131,20 +132,27 @@ public class BatchIntakeManagementController {
 			batchIntakeManagementService.saveBatchstockintake(batchIntake);
 			if(batchIntakeProductList != null) {
 				for(BatchIntakeProduct product: batchIntakeProductList){
-					BatchproductRs batchProductRs = new BatchproductRs();
-					batchProductRs.setBatchid(batchIntake.getBatchid());
-					batchProductRs.setProductid(product.getProduct().getProductid());
-					List<SubOptionVo> suboptionList = product.getSubOptionList();
-					if(suboptionList.size() >= 1) 
-						batchProductRs.setProductsuboption1id(suboptionList.get(0).getSubOptionId());
-					if(suboptionList.size() >= 2) 
-						batchProductRs.setProductsuboption2id(suboptionList.get(1).getSubOptionId());
-					if(suboptionList.size() == 3) 
-						batchProductRs.setProductsuboption3id(suboptionList.get(2).getSubOptionId());
-					
-					batchProductRs.setUnitcost(product.getUnitcost());
-					batchProductRs.setQty(product.getQty());
-					batchProductRSManagementService.saveBatchproduct(batchProductRs);
+					//find if exist in db
+					List<Integer> suboptionIdList = new ArrayList<Integer>();
+					for(SubOptionVo suboption: product.getSubOptionList()) {
+						suboptionIdList.add(suboption.getSubOptionId());
+					}
+					ProductsuboptionRs rs = productService.findProductSubOptionRs(product.getProduct().getProductid(), suboptionIdList);
+					//if exist, get id
+					if(rs.getProductid() != null) {
+						BatchproductRs batchProductRs = new BatchproductRs();
+						batchProductRs.setBatchid(batchIntake.getBatchid());
+						batchProductRs.setProductsuboptionid(rs.getProductsuboptionid());
+						batchProductRs.setUnitcost(product.getUnitcost());
+						batchProductRs.setQty(product.getQty());
+						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);
+						batchProductRSManagementService.saveBatchproduct(batchProductRs);
+					//else invalid
+					}else{
+						redirectAttributes.addFlashAttribute("css", "danger");
+						redirectAttributes.addFlashAttribute("msg", "Invalid Product(s)!");
+						return "redirect:createBatchIntake";
+					}
 				}
 			}
 			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
@@ -382,16 +390,19 @@ public class BatchIntakeManagementController {
 				for(BatchIntakeProduct product: batchIntakeProductList){
 					BatchproductRs batchProductRs = batchProductRSManagementService.findById(product.getBatchProductId());
 					if(batchProductRs == null){
+						List<Integer> suboptionIdList = new ArrayList<Integer>();
+						for(SubOptionVo suboption: product.getSubOptionList()) {
+							suboptionIdList.add(suboption.getSubOptionId());
+						}
+						ProductsuboptionRs rs = productService.findProductSubOptionRs(product.getProduct().getProductid(), suboptionIdList);
+						if(rs.getProductsuboptionid() == null){
+							redirectAttributes.addFlashAttribute("css", "danger");
+							redirectAttributes.addFlashAttribute("msg", "Invalid Product(s)!");
+							return "redirect:updateBatchIntake";
+						}
 						batchProductRs = new BatchproductRs();
 						batchProductRs.setBatchid(batchIntake.getBatchid());
-						batchProductRs.setProductid(product.getProduct().getProductid());
-						List<SubOptionVo> suboptionList = product.getSubOptionList();
-						if(suboptionList.size() >= 1) 
-							batchProductRs.setProductsuboption1id(suboptionList.get(0).getSubOptionId());
-						if(suboptionList.size() >= 2) 
-							batchProductRs.setProductsuboption2id(suboptionList.get(1).getSubOptionId());
-						if(suboptionList.size() == 3) 
-							batchProductRs.setProductsuboption3id(suboptionList.get(2).getSubOptionId());
+						batchProductRs.setProductsuboptionid(rs.getProductsuboptionid());
 						batchProductRs.setUnitcost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
 						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);

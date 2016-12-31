@@ -921,4 +921,8 @@ public class ProductService {
 		}
 		return null;
 	}
+	
+	public ProductsuboptionRs getProductsuboptionRsById(Integer productsuboptionid) {
+		return productSuboptionRsMapper.selectByPrimaryKey(productsuboptionid);
+	}
 }
