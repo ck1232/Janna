@@ -14,16 +14,13 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.BatchproductRs;
 import com.JJ.model.BatchproductRsExample;
 import com.JJ.model.Product;
-import com.JJ.model.ProductExample;
-import com.JJ.model.Productoption;
-import com.JJ.model.Productsuboption;
 import com.JJ.model.ProductsuboptionRs;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class BatchProductRSManagementService {
 	
 	private BatchproductRsMapper batchproductRsMapper;
