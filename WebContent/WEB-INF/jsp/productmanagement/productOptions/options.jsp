@@ -112,13 +112,17 @@
 			  xhr.setRequestHeader(header, token);
 
 			}
-  		}).done(function() {
-			$("#subOptionInput").val("");
-			$("#name").val("");
-			$("#subOptionDiv").children().remove();
-			optionTable.ajax.reload();
-    		closeOption();
-			    
+  		}).done(function(data) {
+  	  		console.log(data);
+  	  		if(data.status == "fail"){
+				alert(data.message);
+  	  	  	}else{
+				$("#subOptionInput").val("");
+				$("#name").val("");
+				$("#subOptionDiv").children().remove();
+				optionTable.ajax.reload();
+	    		closeOption();
+  	  	  	}
 		});
 	}
 
@@ -156,12 +160,16 @@
 			  xhr.setRequestHeader(header, token);
 
 			}
-  		}).done(function() {
-			$("#subOptionInput").val("");
-			$("#name").val("");
-			$("#subOptionDiv").children().remove();
-			optionTable.ajax.reload();
-    		closeOption();
+  		}).done(function(data) {
+  			if(data.status == "fail"){
+				alert(data.message);
+  	  	  	}else{
+				$("#subOptionInput").val("");
+				$("#name").val("");
+				$("#subOptionDiv").children().remove();
+				optionTable.ajax.reload();
+	    		closeOption();
+  	  	  	}
 			    
 		});
 	}

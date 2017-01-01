@@ -3,7 +3,12 @@ package com.JJ.model;
 import java.util.Date;
 
 public class ProductsuboptionRs extends Base{
-    private Integer productsuboptionid;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Integer productsuboptionid;
 
     private Integer productid;
 
