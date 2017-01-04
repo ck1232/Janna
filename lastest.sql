@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: jj
+-- Host: localhost    Database: jj
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.9-MariaDB
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -246,6 +246,63 @@ INSERT INTO `imagestaging` VALUES (1,'0.jpg','2016-11-08 21:38:58','ck1232','ÿ\Ø
 UNLOCK TABLES;
 
 --
+-- Temporary view structure for view `inventory_from`
+--
+
+DROP TABLE IF EXISTS `inventory_from`;
+/*!50001 DROP VIEW IF EXISTS `inventory_from`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `inventory_from` AS SELECT 
+ 1 AS `productsuboptionId`,
+ 1 AS `transferFrom`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `inventory_location_final_qty`
+--
+
+DROP TABLE IF EXISTS `inventory_location_final_qty`;
+/*!50001 DROP VIEW IF EXISTS `inventory_location_final_qty`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `inventory_location_final_qty` AS SELECT 
+ 1 AS `productsuboptionId`,
+ 1 AS `locationId`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `inventory_location_qty`
+--
+
+DROP TABLE IF EXISTS `inventory_location_qty`;
+/*!50001 DROP VIEW IF EXISTS `inventory_location_qty`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `inventory_location_qty` AS SELECT 
+ 1 AS `productsuboptionId`,
+ 1 AS `locationId`,
+ 1 AS `Toqty`,
+ 1 AS `Fromqty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `inventory_to`
+--
+
+DROP TABLE IF EXISTS `inventory_to`;
+/*!50001 DROP VIEW IF EXISTS `inventory_to`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `inventory_to` AS SELECT 
+ 1 AS `productsuboptionId`,
+ 1 AS `transferTo`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `module`
 --
 
@@ -432,7 +489,7 @@ CREATE TABLE `productinventory` (
   `updatedBy` varchar(255) NOT NULL,
   `updatedOn` datetime NOT NULL,
   PRIMARY KEY (`productInventoryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -441,7 +498,7 @@ CREATE TABLE `productinventory` (
 
 LOCK TABLES `productinventory` WRITE;
 /*!40000 ALTER TABLE `productinventory` DISABLE KEYS */;
-INSERT INTO `productinventory` VALUES (1,38,1,2,'',10,'abc',10.00,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(2,38,1,2,'\0',5,NULL,NULL,0,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(3,38,1,2,'',2,NULL,NULL,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00');
+INSERT INTO `productinventory` VALUES (1,38,1,2,'',10,'abc',10.00,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(2,38,1,2,'\0',10,'abc',10.00,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(3,38,2,0,'',2,NULL,NULL,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(4,38,2,0,'\0',2,NULL,NULL,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00'),(5,38,0,1,'',10,NULL,NULL,1,'\0',NULL,'0000-00-00 00:00:00','','','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `productinventory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -833,6 +890,28 @@ INSERT INTO `submodulepermissiontype` VALUES (11,'2','View','1','/admin/listModu
 UNLOCK TABLES;
 
 --
+-- Temporary view structure for view `testing`
+--
+
+DROP TABLE IF EXISTS `testing`;
+/*!50001 DROP VIEW IF EXISTS `testing`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `testing` AS SELECT 
+ 1 AS `locationId`,
+ 1 AS `location`,
+ 1 AS `productId`,
+ 1 AS `productName`,
+ 1 AS `suboption1Name`,
+ 1 AS `subOption1Id`,
+ 1 AS `suboption2Name`,
+ 1 AS `subOption2Id`,
+ 1 AS `suboption3Name`,
+ 1 AS `subOption3Id`,
+ 1 AS `qty`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `user`
 --
 
@@ -912,8 +991,8 @@ DROP TABLE IF EXISTS `view_product_inventory`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE VIEW `view_product_inventory` AS SELECT 
- 1 AS `ProductName`,
- 1 AS `ProductId`,
+ 1 AS `productId`,
+ 1 AS `productName`,
  1 AS `qty`*/;
 SET character_set_client = @saved_cs_client;
 
@@ -928,8 +1007,8 @@ SET character_set_client = utf8;
 /*!50001 CREATE VIEW `view_product_inventory_location` AS SELECT 
  1 AS `locationId`,
  1 AS `location`,
- 1 AS `ProductName`,
- 1 AS `ProductId`,
+ 1 AS `productId`,
+ 1 AS `productName`,
  1 AS `suboption1Name`,
  1 AS `subOption1Id`,
  1 AS `suboption2Name`,
@@ -948,8 +1027,8 @@ DROP TABLE IF EXISTS `view_product_suboption_inventory`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE VIEW `view_product_suboption_inventory` AS SELECT 
- 1 AS `ProductName`,
- 1 AS `ProductId`,
+ 1 AS `productId`,
+ 1 AS `productName`,
  1 AS `suboption1Name`,
  1 AS `subOption1Id`,
  1 AS `suboption2Name`,
@@ -958,6 +1037,104 @@ SET character_set_client = utf8;
  1 AS `subOption3Id`,
  1 AS `qty`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping events for database 'jj'
+--
+
+--
+-- Dumping routines for database 'jj'
+--
+
+--
+-- Final view structure for view `inventory_from`
+--
+
+/*!50001 DROP VIEW IF EXISTS `inventory_from`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `inventory_from` AS select `inv`.`productsuboptionId` AS `productsuboptionId`,`inv`.`transferFrom` AS `transferFrom`,sum((case `inv`.`plusOrMinus` when 0x00 then (`inv`.`qty` * -(1)) when 0x01 then 0 end)) AS `qty` from `productinventory` `inv` where ((`inv`.`deleteInd` = 0x00) and (`inv`.`transferFrom` is not null)) group by `inv`.`productsuboptionId`,`inv`.`transferFrom` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `inventory_location_final_qty`
+--
+
+/*!50001 DROP VIEW IF EXISTS `inventory_location_final_qty`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `inventory_location_final_qty` AS select `inventory_location_qty`.`productsuboptionId` AS `productsuboptionId`,`inventory_location_qty`.`locationId` AS `locationId`,(`inventory_location_qty`.`Toqty` + `inventory_location_qty`.`Fromqty`) AS `qty` from `inventory_location_qty` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `inventory_location_qty`
+--
+
+/*!50001 DROP VIEW IF EXISTS `inventory_location_qty`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `inventory_location_qty` AS select `invto`.`productsuboptionId` AS `productsuboptionId`,`invto`.`transferTo` AS `locationId`,ifnull(`invto`.`qty`,0) AS `Toqty`,ifnull(`invfrom`.`qty`,0) AS `Fromqty` from (`inventory_to` `invto` left join `inventory_from` `invfrom` on(((`invto`.`productsuboptionId` = `invfrom`.`productsuboptionId`) and (`invto`.`transferTo` = `invfrom`.`transferFrom`)))) union select `invfrom`.`productsuboptionId` AS `productsuboptionId`,`invfrom`.`transferFrom` AS `locationId`,ifnull(`invto`.`qty`,0) AS `Toqty`,ifnull(`invfrom`.`qty`,0) AS `Fromqty` from (`inventory_from` `invfrom` left join `inventory_to` `invto` on(((`invto`.`productsuboptionId` = `invfrom`.`productsuboptionId`) and (`invto`.`transferTo` = `invfrom`.`transferFrom`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `inventory_to`
+--
+
+/*!50001 DROP VIEW IF EXISTS `inventory_to`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `inventory_to` AS select `inv`.`productsuboptionId` AS `productsuboptionId`,`inv`.`transferTo` AS `transferTo`,sum((case `inv`.`plusOrMinus` when 0x00 then 0 when 0x01 then (`inv`.`qty` * 1) end)) AS `qty` from `productinventory` `inv` where ((`inv`.`deleteInd` = 0x00) and (`inv`.`transferTo` is not null)) group by `inv`.`productsuboptionId`,`inv`.`transferTo` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `testing`
+--
+
+/*!50001 DROP VIEW IF EXISTS `testing`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `testing` AS select `final_qty`.`locationId` AS `locationId`,`loc`.`locationname` AS `location`,`rs`.`productId` AS `productId`,`prd`.`productName` AS `productName`,`sopt1`.`name` AS `suboption1Name`,`rs`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`rs`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`rs`.`suboption3Id` AS `subOption3Id`,sum(`final_qty`.`qty`) AS `qty` from ((((((`inventory_location_final_qty` `final_qty` join `productsuboption_rs` `rs` on((`rs`.`productsuboptionId` = `final_qty`.`productsuboptionId`))) join `product` `prd` on((`rs`.`productId` = `prd`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `rs`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `rs`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `rs`.`suboption3Id`))) left join `storagelocation` `loc` on((`final_qty`.`locationId` = `loc`.`locationid`))) where (`final_qty`.`locationId` > 0) group by `rs`.`productId`,`prd`.`productName`,`rs`.`suboption1Id`,`rs`.`suboption2Id`,`rs`.`suboption3Id`,`final_qty`.`locationId` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
 -- Final view structure for view `view_product_inventory`
@@ -972,7 +1149,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_product_inventory` AS select `prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from (((((`productinventory` `inv` join `productsuboption_rs` `prd_sub_rs` on((`prd_sub_rs`.`productsuboptionId` = `inv`.`productsuboptionId`))) join `product` `prd` on((`prd`.`productId` = `prd_sub_rs`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `prd_sub_rs`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `prd_sub_rs`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `prd_sub_rs`.`suboption3Id`))) where (`inv`.`deleteInd` = 0x00) group by `prd`.`productId` */;
+/*!50001 VIEW `view_product_inventory` AS select `rs`.`productId` AS `productId`,`prd`.`productName` AS `productName`,sum(`final_qty`.`qty`) AS `qty` from ((`inventory_location_final_qty` `final_qty` join `productsuboption_rs` `rs` on((`rs`.`productsuboptionId` = `final_qty`.`productsuboptionId`))) join `product` `prd` on((`rs`.`productId` = `prd`.`productId`))) where (`final_qty`.`locationId` > 0) group by `rs`.`productId`,`prd`.`productName` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -990,7 +1167,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_product_inventory_location` AS select `inv`.`transferTo` AS `locationId`,`loc`.`locationname` AS `location`,`prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,`sopt1`.`name` AS `suboption1Name`,`prd_sub_rs`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`prd_sub_rs`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`prd_sub_rs`.`suboption3Id` AS `subOption3Id`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from ((((((`productinventory` `inv` join `productsuboption_rs` `prd_sub_rs` on((`prd_sub_rs`.`productsuboptionId` = `inv`.`productsuboptionId`))) join `product` `prd` on((`prd`.`productId` = `prd_sub_rs`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `prd_sub_rs`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `prd_sub_rs`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `prd_sub_rs`.`suboption3Id`))) left join `storagelocation` `loc` on((`inv`.`transferTo` = `loc`.`locationid`))) where (`inv`.`deleteInd` = 0x00) group by `inv`.`transferTo`,`prd`.`productId`,`prd_sub_rs`.`suboption1Id`,`prd_sub_rs`.`suboption2Id`,`prd_sub_rs`.`suboption3Id` */;
+/*!50001 VIEW `view_product_inventory_location` AS select `final_qty`.`locationId` AS `locationId`,`loc`.`locationname` AS `location`,`rs`.`productId` AS `productId`,`prd`.`productName` AS `productName`,`sopt1`.`name` AS `suboption1Name`,`rs`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`rs`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`rs`.`suboption3Id` AS `subOption3Id`,sum(`final_qty`.`qty`) AS `qty` from ((((((`inventory_location_final_qty` `final_qty` join `productsuboption_rs` `rs` on((`rs`.`productsuboptionId` = `final_qty`.`productsuboptionId`))) join `product` `prd` on((`rs`.`productId` = `prd`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `rs`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `rs`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `rs`.`suboption3Id`))) left join `storagelocation` `loc` on((`final_qty`.`locationId` = `loc`.`locationid`))) where (`final_qty`.`locationId` > 0) group by `rs`.`productId`,`prd`.`productName`,`rs`.`suboption1Id`,`rs`.`suboption2Id`,`rs`.`suboption3Id`,`final_qty`.`locationId` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1008,7 +1185,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_product_suboption_inventory` AS select `prd`.`productName` AS `ProductName`,`prd`.`productId` AS `ProductId`,`sopt1`.`name` AS `suboption1Name`,`prd_sub_rs`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`prd_sub_rs`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`prd_sub_rs`.`suboption3Id` AS `subOption3Id`,sum((case `inv`.`plusOrMinus` when 0x01 then `inv`.`qty` when 0x00 then (`inv`.`qty` * -(1)) end)) AS `qty` from (((((`productinventory` `inv` join `productsuboption_rs` `prd_sub_rs` on((`prd_sub_rs`.`productsuboptionId` = `inv`.`productsuboptionId`))) join `product` `prd` on((`prd`.`productId` = `prd_sub_rs`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `prd_sub_rs`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `prd_sub_rs`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `prd_sub_rs`.`suboption3Id`))) where (`inv`.`deleteInd` = 0x00) group by `prd`.`productId`,`prd_sub_rs`.`suboption1Id`,`prd_sub_rs`.`suboption2Id`,`prd_sub_rs`.`suboption3Id` */;
+/*!50001 VIEW `view_product_suboption_inventory` AS select `rs`.`productId` AS `productId`,`prd`.`productName` AS `productName`,`sopt1`.`name` AS `suboption1Name`,`rs`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`rs`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`rs`.`suboption3Id` AS `subOption3Id`,sum(`final_qty`.`qty`) AS `qty` from (((((`inventory_location_final_qty` `final_qty` join `productsuboption_rs` `rs` on((`rs`.`productsuboptionId` = `final_qty`.`productsuboptionId`))) join `product` `prd` on((`rs`.`productId` = `prd`.`productId`))) left join `productsuboption` `sopt1` on((`sopt1`.`productSubOptionId` = `rs`.`suboption1Id`))) left join `productsuboption` `sopt2` on((`sopt2`.`productSubOptionId` = `rs`.`suboption2Id`))) left join `productsuboption` `sopt3` on((`sopt3`.`productSubOptionId` = `rs`.`suboption3Id`))) where (`final_qty`.`locationId` > 0) group by `rs`.`productId`,`prd`.`productName`,`rs`.`suboption1Id`,`rs`.`suboption2Id`,`rs`.`suboption3Id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1022,4 +1199,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-01 14:44:48
+-- Dump completed on 2017-01-04 23:24:45
