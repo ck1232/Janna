@@ -15,10 +15,10 @@ import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Base;
-@Intercepts( { @Signature(type = Executor.class, method = "update", args = {
-    MappedStatement.class, Object.class/*, RowBounds.class, ResultHandler.class*/
-})
+@Intercepts(value=
+{@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class/*, RowBounds.class, ResultHandler.class*/}),
 })
 public class SQLInterceptor implements Interceptor {
 	private static final Logger logger = Logger.getLogger(SQLInterceptor.class);
@@ -38,6 +38,9 @@ public class SQLInterceptor implements Interceptor {
 			if(mappedStatement.getSqlCommandType().equals(SqlCommandType.UPDATE)){
 				if(queryArgs[PARAMETER_INDEX] instanceof Base){
 					Base base = (Base)queryArgs[PARAMETER_INDEX];
+					if(base.getDeleteind() == null){
+						base.setDeleteind(GeneralUtils.NOT_DELETED);
+					}
 					Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 					if(principal instanceof UserDetails){
 						UserDetails user = (UserDetails)principal;
@@ -53,6 +56,9 @@ public class SQLInterceptor implements Interceptor {
 			}else if(mappedStatement.getSqlCommandType().equals(SqlCommandType.INSERT)){
 				if(queryArgs[PARAMETER_INDEX] instanceof Base){
 					Base base = (Base)queryArgs[PARAMETER_INDEX];
+					if(base.getDeleteind() == null){
+						base.setDeleteind(GeneralUtils.NOT_DELETED);
+					}
 					Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 					if(principal instanceof UserDetails){
 						UserDetails user = (UserDetails)principal;

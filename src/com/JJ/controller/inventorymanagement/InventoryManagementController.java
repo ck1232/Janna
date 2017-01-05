@@ -7,28 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.productmanagement.vo.ProductVo;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Storagelocation;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryLocation;
 import com.JJ.model.ViewProductSuboptionInventory;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
-import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
-import com.JJ.validator.StorageLocationFormValidator;
 
 
 @Controller  

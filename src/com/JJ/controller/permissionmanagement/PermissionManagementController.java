@@ -1,6 +1,7 @@
 package com.JJ.controller.permissionmanagement;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +115,6 @@ public class PermissionManagementController {
 				submodulepermission.setRoleid(new Integer(roleid));
 				submodulepermission.setSubmoduleid(new Integer(submoduleid));
 				submodulepermission.setPermission(submodulePermission);
-				
 				permissionManagementService.saveSubmodulepermission(submodulepermission);
 			}
 		}
