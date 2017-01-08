@@ -1188,5 +1188,20 @@
         </put-attribute>
     </definition>
   	<!-- Inventory Management Module END -->
-  	
+  	<!-- Demo Management Module Start -->
+  	<definition name="listBuyProduct" extends="main_template">  
+        <put-attribute name="title" value="List Demo Product" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="List Demo Product" />
+        		<put-attribute name="heading-description" value="To view demo product." />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/demomanagement/listProduct.jsp">
+        			</definition>
+        		</put-attribute>
+        	</definition>
+        </put-attribute>
+    </definition>
+  	<!-- Demo Management Module End -->
 </tiles-definitions>  

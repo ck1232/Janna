@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 	  http.csrf()//.ignoringAntMatchers("/product/product/saveNewProduct")
-	  	.and()
+	  	.and().csrf().ignoringAntMatchers("/invoice/**").and()
 	  	.authorizeRequests()
 	  	.accessDecisionManager(accessDecisionManager())
 //	  	.antMatchers("/login").anonymous()
