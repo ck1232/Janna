@@ -46,6 +46,9 @@ public class InvoiceManagementService {
 			if(invoiceList != null && invoiceList.size() > 0){
 				invoice.setDtecreated(null);
 				invoiceMapper.updateByPrimaryKeySelective(invoice);
+			}else{
+				invoice.setDtecreated(new Date());
+				invoiceMapper.insertSelective(invoice);
 			}
 		}
 	}
