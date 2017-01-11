@@ -44,6 +44,7 @@ import com.JJ.model.Productcategory;
 import com.JJ.model.ProductimageWithBLOBs;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsubcategory;
+import com.JJ.service.paypal.PayPalService;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
@@ -60,13 +61,16 @@ public class ProductManagementController {
     private ProductOptionManagementService productOptionManagementService;
     private ProductVo newProduct;
     private OptionVo selectedOption;
+    private PayPalService paypalService;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
-			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
+			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService,
+			PayPalService paypalService){
 		this.productService = productService;
 		this.productCategoryManagementService = productCategoryManagementService;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productOptionManagementService = productOptionManagementService;
+		this.paypalService = paypalService;
 	}
 	
 	public List<Productcategory> getProductCategoryList(){
@@ -331,6 +335,18 @@ public class ProductManagementController {
 		}
 		
 		productService.saveProduct(product);
+		if(product.getPaypalProductButtonId() == null){
+			String paypalId = null;
+			if(product.getId() != null){
+				paypalId = paypalService.createCartButton(product.getProductName(), product.getId().toString(), product.getUnitPrice().doubleValue(), "");
+			}else{
+				paypalId = paypalService.createCartButton(product.getProductName(), product.getGeneratedId().toString(), product.getUnitPrice().doubleValue(), "");
+			}
+			product.setPaypalProductButtonId(paypalId);
+			productService.updateProductPaypalId(product);
+		}else{
+			
+		}
 		redirectAttributes.addFlashAttribute("css", "success");
 		if(product.getId() != null){
 			redirectAttributes.addFlashAttribute("msg", "Product saved successfully!");

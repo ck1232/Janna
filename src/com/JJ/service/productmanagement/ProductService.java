@@ -393,6 +393,7 @@ public class ProductService {
 			productMapper.updateByPrimaryKeySelective(product);
 		}else{
 			productMapper.insertSelective(product);
+			productVo.setGeneratedId(product.getProductid());
 		}
 		//option
 		saveOption(productVo, product.getProductid());
@@ -403,7 +404,19 @@ public class ProductService {
 		//tags
 		saveProductTags(productVo, product.getProductid());
 	}
-	
+	public void updateProductPaypalId(ProductVo productVo){
+		Product product = new Product();
+		if(productVo.getPaypalProductButtonId() == null || (productVo.getGeneratedId() == null && productVo.getId() == null)){
+			return;
+		}
+		if(productVo.getId() != null){
+			product.setProductid(productVo.getId());
+		}else{
+			product.setProductid(productVo.getGeneratedId());
+		}
+		product.setPaypalid(productVo.getPaypalProductButtonId());
+		productMapper.updateByPrimaryKeySelective(product);
+	}
 	private void saveProductTags(ProductVo productVo, Integer productid) {
 		//delete all tags not in tags list
 		ProducttagsExample deleteExample = new ProducttagsExample();

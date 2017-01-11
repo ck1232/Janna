@@ -21,6 +21,7 @@ public class GeneralUtils {
 	public static final String IS_NOT_PARENT = "N";
 	public static final String ALLOW_DISPLAY = "Y";
 	public static final String NOT_ALLOW_DISPLAY = "N";
+	public static final String SUCCESS = "SUCCESS";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){

@@ -12,7 +12,7 @@ import com.JJ.model.Batchstockintake;
 import com.JJ.model.BatchstockintakeExample;
 
 @Service
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class BatchIntakeManagementService {
 	
 	private BatchstockintakeMapper batchStockIntakeMapper;

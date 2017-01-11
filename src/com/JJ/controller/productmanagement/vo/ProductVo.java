@@ -10,6 +10,7 @@ import com.JJ.model.FileMeta;
 public class ProductVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private Integer generatedId;
 	private String productName;
 	private Integer weight;
 	private List<OptionVo> optionList;
@@ -18,6 +19,7 @@ public class ProductVo implements Serializable {
 	private String productInfo;
 	private BigDecimal unitPrice;
 	private List<String> tags;
+	private String paypalProductButtonId;
 	public Integer getId() {
 		return id;
 	}
@@ -71,6 +73,30 @@ public class ProductVo implements Serializable {
 	}
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+	/**
+	 * @return the generatedId
+	 */
+	public Integer getGeneratedId() {
+		return generatedId;
+	}
+	/**
+	 * @param generatedId the generatedId to set
+	 */
+	public void setGeneratedId(Integer generatedId) {
+		this.generatedId = generatedId;
+	}
+	/**
+	 * @return the paypalProductButtonId
+	 */
+	public String getPaypalProductButtonId() {
+		return paypalProductButtonId;
+	}
+	/**
+	 * @param paypalProductButtonId the paypalProductButtonId to set
+	 */
+	public void setPaypalProductButtonId(String paypalProductButtonId) {
+		this.paypalProductButtonId = paypalProductButtonId;
 	}
 	
 	

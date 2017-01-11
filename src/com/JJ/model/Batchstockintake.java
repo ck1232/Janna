@@ -5,6 +5,11 @@ import java.util.Date;
 
 public class Batchstockintake extends Base{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Batchstockintake() {
 		super();
 	}
