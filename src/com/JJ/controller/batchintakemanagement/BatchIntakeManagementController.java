@@ -129,7 +129,7 @@ public class BatchIntakeManagementController {
 			}
 			batchIntake.setAdditionalcost(addcost);
 			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
-			batchIntakeManagementService.saveBatchstockintake(batchIntake);
+			List<BatchproductRs> batchProductList = new ArrayList<BatchproductRs>();
 			if(batchIntakeProductList != null) {
 				for(BatchIntakeProduct product: batchIntakeProductList){
 					//find if exist in db
@@ -146,7 +146,7 @@ public class BatchIntakeManagementController {
 						batchProductRs.setUnitcost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
 						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);
-						batchProductRSManagementService.saveBatchproduct(batchProductRs);
+						batchProductList.add(batchProductRs);
 					//else invalid
 					}else{
 						redirectAttributes.addFlashAttribute("css", "danger");
@@ -155,6 +155,7 @@ public class BatchIntakeManagementController {
 					}
 				}
 			}
+			batchIntakeManagementService.createBatchstockintake(batchIntake, batchProductList);
 			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");
@@ -376,7 +377,7 @@ public class BatchIntakeManagementController {
 			}
 			batchIntake.setAdditionalcost(addcost);
 			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
-			batchIntakeManagementService.updateBatchstockintake(batchIntake);
+//			batchIntakeManagementService.updateBatchstockintake(batchIntake);
 			List<Integer> idList = new ArrayList<Integer>();
 			if(batchIntakeProductList != null) {
 				for(BatchIntakeProduct product: batchIntakeProductList) {
@@ -385,7 +386,8 @@ public class BatchIntakeManagementController {
 					}
 				}
 			}
-			batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchIntake.getBatchid(), idList);
+//			batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchIntake.getBatchid(), idList);
+			List<BatchproductRs> batchProductList = new ArrayList<BatchproductRs>();
 			if(batchIntakeProductList != null) {
 				for(BatchIntakeProduct product: batchIntakeProductList){
 					BatchproductRs batchProductRs = batchProductRSManagementService.findById(product.getBatchProductId());
@@ -406,7 +408,8 @@ public class BatchIntakeManagementController {
 						batchProductRs.setUnitcost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
 						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);
-						batchProductRSManagementService.saveBatchproduct(batchProductRs);
+						batchProductList.add(batchProductRs);
+//						batchProductRSManagementService.saveBatchproduct(batchProductRs);
 					}else{
 						batchProductRs.setUnitcost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
@@ -415,6 +418,7 @@ public class BatchIntakeManagementController {
 					}
 				}
 			}
+			batchIntakeManagementService.editBatchstockintake(batchIntake, idList, batchProductList);
 			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Batch intake updated successfully!");

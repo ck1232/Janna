@@ -8,18 +8,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.dao.BatchstockintakeMapper;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.BatchproductRs;
 import com.JJ.model.Batchstockintake;
 import com.JJ.model.BatchstockintakeExample;
+import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
 
 @Service
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class BatchIntakeManagementService {
 	
 	private BatchstockintakeMapper batchStockIntakeMapper;
-	
+	private BatchProductRSManagementService batchProductRSManagementService;
 	@Autowired
-	public BatchIntakeManagementService(BatchstockintakeMapper batchStockIntakeMapper) {
+	public BatchIntakeManagementService(BatchstockintakeMapper batchStockIntakeMapper, BatchProductRSManagementService batchProductRSManagementService) {
 		this.batchStockIntakeMapper = batchStockIntakeMapper;
+		this.batchProductRSManagementService = batchProductRSManagementService;
 	}
 	
 	public Batchstockintake findById(Integer id) {
@@ -31,7 +34,15 @@ public class BatchIntakeManagementService {
 		batchStockIntakeExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		return batchStockIntakeMapper.selectByExample(batchStockIntakeExample);
 	}
-	
+	public void createBatchstockintake(Batchstockintake batchStockIntake, List<BatchproductRs> batchProductList){
+		saveBatchstockintake(batchStockIntake);
+		if(batchProductList != null && batchProductList.size() > 0){
+			for(BatchproductRs batchProduct : batchProductList){
+				batchProduct.setBatchid(batchStockIntake.getBatchid());
+				batchProductRSManagementService.saveBatchproduct(batchProduct);
+			}
+		}
+	}
 	public void saveBatchstockintake(Batchstockintake batchStockIntake) {
 		batchStockIntakeMapper.insert(batchStockIntake);
 	}
@@ -55,6 +66,17 @@ public class BatchIntakeManagementService {
 	public void updateBatchstockintake(Batchstockintake batchStockIntake) {
 		if(batchStockIntake.getDeleteind().equals(GeneralUtils.NOT_DELETED))
 			batchStockIntakeMapper.updateByPrimaryKeySelective(batchStockIntake);
+	}
+	
+	public void editBatchstockintake(Batchstockintake batchStockIntake, List<Integer> idList , List<BatchproductRs> batchProductList){
+		updateBatchstockintake(batchStockIntake);
+		batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchStockIntake.getBatchid(), idList);
+		if(batchProductList != null && batchProductList.size() > 0){
+			for(BatchproductRs batchProduct : batchProductList){
+				batchProduct.setBatchid(batchStockIntake.getBatchid());
+				batchProductRSManagementService.saveBatchproduct(batchProduct);
+			}
+		}
 	}
 	
 }
