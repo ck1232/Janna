@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.JJ.model.FileMeta;
+import com.JJ.model.Productsubcategory;
 
 public class ProductVo implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,8 @@ public class ProductVo implements Serializable {
 	private BigDecimal unitPrice;
 	private List<String> tags;
 	private String paypalProductButtonId;
+	
+	private Productsubcategory productSubCategory;
 	public Integer getId() {
 		return id;
 	}
@@ -97,6 +100,18 @@ public class ProductVo implements Serializable {
 	 */
 	public void setPaypalProductButtonId(String paypalProductButtonId) {
 		this.paypalProductButtonId = paypalProductButtonId;
+	}
+	/**
+	 * @return the productSubCategory
+	 */
+	public Productsubcategory getProductSubCategory() {
+		return productSubCategory;
+	}
+	/**
+	 * @param productSubCategory the productSubCategory to set
+	 */
+	public void setProductSubCategory(Productsubcategory productSubCategory) {
+		this.productSubCategory = productSubCategory;
 	}
 	
 	

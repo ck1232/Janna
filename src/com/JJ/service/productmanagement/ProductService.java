@@ -96,15 +96,27 @@ public class ProductService {
 		ProductExample productExample = new ProductExample();
 		productExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Product> productList = productMapper.selectByExample(productExample);
-		Map<Integer, Productsubcategory> subcategoryMap =  getProductsubcategoryMap();
+		return productList;
+	}
+	
+	public List<ProductVo> getAllProductsVo(){
+		List<ProductVo> productVoList = new ArrayList<ProductVo>(); 
+		List<Product> productList = getAllProducts();
 		if(productList != null && productList.size() > 0){
-			for(Product product : productList){
-				if(product.getSubcategoryid() != null && product.getSubcategoryid().intValue() > 0){
-					product.setSubCategory(subcategoryMap.get(product.getSubcategoryid()));
-				}
+			Map<Integer, Productsubcategory> subcategoryMap =  getProductsubcategoryMap();
+			for(Product product: productList){
+				ProductVo productVo = new ProductVo();
+				productVo.setId(product.getProductid());
+				productVo.setPaypalProductButtonId(product.getPaypalid());
+				productVo.setProductName(product.getProductname());
+				productVo.setSubcategoryId(product.getSubcategoryid());
+				productVo.setUnitPrice(product.getUnitprice());
+				productVo.setWeight(product.getWeight());
+				productVo.setProductSubCategory(subcategoryMap.get(product.getSubcategoryid()));
+				productVoList.add(productVo);
 			}
 		}
-		return productList;
+		return productVoList;
 	}
 	
 	public Product getProductsById(Integer productId) {
@@ -203,10 +215,7 @@ public class ProductService {
 		Map<Integer, Productsubcategory> subcategoryMap =  getProductsubcategoryMap();
 		if(productList != null && productList.size() > 0){
 			for(Product product : productList){
-				//set category
-				if(product.getSubcategoryid() != null && product.getSubcategoryid().intValue() > 0){
-					product.setSubCategory(subcategoryMap.get(product.getSubcategoryid()));
-				}
+				
 				//getProductImage
 				List<ProductimageWithBLOBs> productImage = getProductImage(Arrays.asList(product.getProductid()));
 				
@@ -219,7 +228,7 @@ public class ProductService {
 				//get ProductTags
 				List<String> tagsList = getProductTags(product.getProductid());
 				//convert To productVo
-				productVoList.add(convertToProductVo(product, productImage, productInfo, optionVoList, tagsList));
+				productVoList.add(convertToProductVo(product, productImage, productInfo, optionVoList, tagsList, subcategoryMap));
 			}
 		}
 		return productVoList;
@@ -324,7 +333,7 @@ public class ProductService {
 		}
 		return productImageList;
 	}
-	private ProductVo convertToProductVo(Product product, List<ProductimageWithBLOBs> productImageList, Productspecification productInfo, List<OptionVo> optionVoList, List<String> productTagsList){
+	private ProductVo convertToProductVo(Product product, List<ProductimageWithBLOBs> productImageList, Productspecification productInfo, List<OptionVo> optionVoList, List<String> productTagsList, Map<Integer, Productsubcategory> subcategoryMap){
 		ProductVo productVo = new ProductVo();
 		if(product != null){
 			productVo.setId(product.getProductid());
@@ -336,6 +345,7 @@ public class ProductService {
 			productVo.setImages(convertToFileMetaList(productImageList));
 			productVo.setOptionList(optionVoList);
 			productVo.setTags(productTagsList);
+			productVo.setProductSubCategory(subcategoryMap.get(product.getSubcategoryid()));
 		}
 		return productVo;
 	}
