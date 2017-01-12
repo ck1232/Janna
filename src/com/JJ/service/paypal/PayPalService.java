@@ -13,7 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import urn.ebay.api.PayPalAPI.BMCreateButtonReq;
 import urn.ebay.api.PayPalAPI.BMCreateButtonRequestType;
 import urn.ebay.api.PayPalAPI.BMCreateButtonResponseType;
+import urn.ebay.api.PayPalAPI.BMUpdateButtonReq;
+import urn.ebay.api.PayPalAPI.BMUpdateButtonRequestType;
+import urn.ebay.api.PayPalAPI.BMUpdateButtonResponseType;
 import urn.ebay.api.PayPalAPI.PayPalAPIInterfaceServiceService;
+import urn.ebay.apis.eBLBaseComponents.AckCodeType;
 import urn.ebay.apis.eBLBaseComponents.ButtonCodeType;
 import urn.ebay.apis.eBLBaseComponents.ButtonTypeType;
 
@@ -29,7 +33,7 @@ public class PayPalService {
 		payPalAPIInterfaceService = new PayPalAPIInterfaceServiceService(getDevCustomConfigurationMap());
 	}
 	
-	public String createCartButton(String productName, String productId, Double amount, String url){
+	public String createCartButton(String productName, String productId, Double amount, String url) throws Exception{
 		BMCreateButtonReq request = new BMCreateButtonReq();
 		BMCreateButtonRequestType reqType = new BMCreateButtonRequestType();
 		
@@ -50,13 +54,59 @@ public class PayPalService {
 		try {
 			BMCreateButtonResponseType resp = payPalAPIInterfaceService.bMCreateButton(request);
 			if(resp != null){
-				if(resp.getAck().toString().equals(GeneralUtils.SUCCESS)){
+				if(resp.getAck().toString().equals(AckCodeType.SUCCESS)){
 					return resp.getHostedButtonID();
+				}else{
+					throw new PayPalErrorException(resp.getErrors());
 				}
 			}
 		} catch (Exception e) {
-			logger.debug(e.getMessage());
+			if(e instanceof PayPalErrorException){
+				logger.error(((PayPalErrorException)e).getPayPalErrorMsg());
+			}else{
+				logger.error(e.getMessage());
+			}
 			e.printStackTrace();
+			throw e;
+		}
+		return null;
+	}
+	
+	public String updateCartButton(String productName, String productId, Double amount, String url, String buttonId) throws Exception{
+		BMUpdateButtonReq  request = new BMUpdateButtonReq ();
+		BMUpdateButtonRequestType reqType = new BMUpdateButtonRequestType();
+		
+		reqType.setButtonType(ButtonTypeType.CART);
+		reqType.setButtonCode(ButtonCodeType.HOSTED);
+		DecimalFormat df = new DecimalFormat("#.00"); 
+		
+		List<String> lst = new ArrayList<String>();
+		lst.add("item_name=" + productName);
+		lst.add("item_number=" + productId);
+		lst.add("currency_code="+"SGD");
+		lst.add("business=" + "behchoonkeat-facilitator@hotmail.com");
+		lst.add("amount=" + df.format(amount));
+		lst.add("notify_url=" + url);
+		reqType.setButtonVar(lst);
+		reqType.setHostedButtonID(buttonId);
+		request.setBMUpdateButtonRequest(reqType);
+		try {
+			BMUpdateButtonResponseType resp = payPalAPIInterfaceService.bMUpdateButton(request);
+			if(resp != null){
+				if(resp.getAck().toString().equals(GeneralUtils.SUCCESS)){
+					return resp.getHostedButtonID();
+				}else{
+					throw new PayPalErrorException(resp.getErrors());
+				}
+			}
+		} catch (Exception e) {
+			if(e instanceof PayPalErrorException){
+				logger.error(((PayPalErrorException)e).getPayPalErrorMsg());
+			}else{
+				logger.error(e.getMessage());
+			}
+			e.printStackTrace();
+			throw e;
 		}
 		return null;
 	}

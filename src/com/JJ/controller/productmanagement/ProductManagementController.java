@@ -44,6 +44,7 @@ import com.JJ.model.Productcategory;
 import com.JJ.model.ProductimageWithBLOBs;
 import com.JJ.model.Productoption;
 import com.JJ.model.Productsubcategory;
+import com.JJ.service.paypal.PayPalErrorException;
 import com.JJ.service.paypal.PayPalService;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productmanagement.ProductService;
@@ -334,24 +335,22 @@ public class ProductManagementController {
 			}
 		}
 		
-		productService.saveProduct(product);
-		if(product.getPaypalProductButtonId() == null){
-			String paypalId = null;
+		
+		try{
+			productService.saveProduct(product);
+			redirectAttributes.addFlashAttribute("css", "success");
 			if(product.getId() != null){
-				paypalId = paypalService.createCartButton(product.getProductName(), product.getId().toString(), product.getUnitPrice().doubleValue(), "");
+				redirectAttributes.addFlashAttribute("msg", "Product saved successfully!");
 			}else{
-				paypalId = paypalService.createCartButton(product.getProductName(), product.getGeneratedId().toString(), product.getUnitPrice().doubleValue(), "");
+				redirectAttributes.addFlashAttribute("msg", "Product added successfully!");
 			}
-			product.setPaypalProductButtonId(paypalId);
-			productService.updateProductPaypalId(product);
-		}else{
-			
-		}
-		redirectAttributes.addFlashAttribute("css", "success");
-		if(product.getId() != null){
-			redirectAttributes.addFlashAttribute("msg", "Product saved successfully!");
-		}else{
-			redirectAttributes.addFlashAttribute("msg", "Product added successfully!");
+		}catch(Exception ex){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			if(ex instanceof PayPalErrorException){
+				redirectAttributes.addFlashAttribute("msg", ((PayPalErrorException)ex).getPayPalErrorMsg());
+			}else{
+				redirectAttributes.addFlashAttribute("msg", ex.getMessage());
+			}
 		}
 		return "redirect:listProduct";
 	}

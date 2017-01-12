@@ -53,6 +53,7 @@ import com.JJ.model.ProductsuboptionRs;
 import com.JJ.model.ProductsuboptionRsExample;
 import com.JJ.model.Producttags;
 import com.JJ.model.ProducttagsExample;
+import com.JJ.service.paypal.PayPalService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
@@ -70,6 +71,7 @@ public class ProductService {
 	private ProductSubOptionManagementService productSubOptionManagementService;
 	private ProductsuboptionRsMapper productSuboptionRsMapper;
 	private ProducttagsMapper productTagsMapper;
+	private PayPalService paypalService;
 	private final static int thumbnail_width = 200;
 	private final static int thumbnail_height = 200;
 	@Autowired
@@ -79,7 +81,8 @@ public class ProductService {
 			ProductOptionManagementService productOptionManagementService, ProducttagsMapper productTagsMapper,
 			ProductSubOptionManagementService productSubOptionManagementService,
 			ProductSubCategoryManagementService productSubCategoryManagementService,
-			ProductsuboptionRsMapper productSuboptionRsMapper){
+			ProductsuboptionRsMapper productSuboptionRsMapper,
+			PayPalService paypalService){
 		this.productMapper = productMapper;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productImageMapper = productImageMapper;
@@ -90,6 +93,7 @@ public class ProductService {
 		this.productTagsMapper = productTagsMapper;
 		this.productSubOptionManagementService = productSubOptionManagementService;
 		this.productSuboptionRsMapper = productSuboptionRsMapper;
+		this.paypalService = paypalService;
 	}
 	
 	public List<Product> getAllProducts() {
@@ -176,7 +180,7 @@ public class ProductService {
 				vo.setProductName(product.getProductname());
 				vo.setProductInfo(product.getDesciption());
 				vo.setUnitPrice(product.getUnitprice());
-				
+				vo.setPaypalProductButtonId(product.getPaypalid());
 				productVoList.add(vo);
 			}
 			
@@ -346,6 +350,7 @@ public class ProductService {
 			productVo.setOptionList(optionVoList);
 			productVo.setTags(productTagsList);
 			productVo.setProductSubCategory(subcategoryMap.get(product.getSubcategoryid()));
+			productVo.setPaypalProductButtonId(product.getPaypalid());
 		}
 		return productVo;
 	}
@@ -396,7 +401,7 @@ public class ProductService {
 //		imageStagingService.deleteImageStaging(stagingId);
 	}
 	
-	public void saveProduct(ProductVo productVo){
+	public void saveProduct(ProductVo productVo) throws Exception{
 		Product product = convertToProduct(productVo);
 		//insert into product table
 		if(product.getProductid() != null){
@@ -413,6 +418,23 @@ public class ProductService {
 		saveProductImage(productVo, product.getProductid());
 		//tags
 		saveProductTags(productVo, product.getProductid());
+		//fill in buttonId
+		String buttonId = getProductButtonId(productVo.getId()==null ? productVo.getGeneratedId() :productVo.getId());
+		productVo.setPaypalProductButtonId(buttonId);
+		
+		if(productVo.getPaypalProductButtonId() == null){
+			String paypalId = null;
+			if(productVo.getId() != null){
+				paypalId = paypalService.createCartButton(productVo.getProductName(), productVo.getId().toString(), productVo.getUnitPrice().doubleValue(), "");
+			}else{
+				paypalId = paypalService.createCartButton(productVo.getProductName(), productVo.getGeneratedId().toString(), productVo.getUnitPrice().doubleValue(), "");
+			}
+			productVo.setPaypalProductButtonId(paypalId);
+			updateProductPaypalId(productVo);
+		}else{
+			paypalService.updateCartButton(productVo.getProductName(), productVo.getId().toString(),
+					productVo.getUnitPrice().doubleValue(), "", productVo.getPaypalProductButtonId());
+		}
 	}
 	public void updateProductPaypalId(ProductVo productVo){
 		Product product = new Product();
@@ -455,7 +477,18 @@ public class ProductService {
 				productTagsMapper.insert(dbTags);
 			}
 		}
-		
+	}
+	
+	private String getProductButtonId(Integer productId){
+		ProductExample example = new ProductExample();
+		example.createCriteria().andProductidEqualTo(productId);
+		List<Product> productList = productMapper.selectByExample(example);
+		if(productList != null && productList.size() == 1){
+			if(productList.get(0).getPaypalid() != null && !productList.get(0).getPaypalid().trim().isEmpty()){
+				return productList.get(0).getPaypalid();
+			}
+		}
+		return null;
 	}
 	
 	private List<Producttags> convertToProductTags(List<String> tagsList, Integer productId){
