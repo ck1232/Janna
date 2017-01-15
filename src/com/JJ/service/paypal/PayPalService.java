@@ -54,7 +54,7 @@ public class PayPalService {
 		try {
 			BMCreateButtonResponseType resp = payPalAPIInterfaceService.bMCreateButton(request);
 			if(resp != null){
-				if(resp.getAck().toString().equals(AckCodeType.SUCCESS)){
+				if(resp.getAck().toString().equals(AckCodeType.SUCCESS.name())){
 					return resp.getHostedButtonID();
 				}else{
 					throw new PayPalErrorException(resp.getErrors());
@@ -93,7 +93,7 @@ public class PayPalService {
 		try {
 			BMUpdateButtonResponseType resp = payPalAPIInterfaceService.bMUpdateButton(request);
 			if(resp != null){
-				if(resp.getAck().toString().equals(GeneralUtils.SUCCESS)){
+				if(resp.getAck().toString().equals(AckCodeType.SUCCESS.name())){
 					return resp.getHostedButtonID();
 				}else{
 					throw new PayPalErrorException(resp.getErrors());

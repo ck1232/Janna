@@ -1197,7 +1197,7 @@
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/demomanagement/listProduct.jsp">
         				<put-attribute name="datatable">
-		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        			<definition template = "/WEB-INF/jsp/template/formlessDatatable.jsp">
 		        				<put-attribute name="table-title" value="All Product" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/demomanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="" />

@@ -26,6 +26,7 @@ $(function () {
           var rowId = data[0];
           $(row).find('input[type="checkbox"]').prop('value', data.productid);
           $(row).find('button[name="editBtn"]').prop('value', data.productid);
+          $(row).find('input[name="hosted_button_id"]').prop('value', data.paypalid);
           $(row).find('img[name="img"]').prop('src', "./getProductImage/"+data.productid);
        }
     });
