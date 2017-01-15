@@ -82,7 +82,7 @@ public class BatchProductRSManagementService {
 	}*/
 	
 	public int saveBatchproduct(BatchproductRs batchproductRs) {
-		return batchproductRsMapper.insert(batchproductRs);
+		return batchproductRsMapper.insertSelective(batchproductRs);
 	}
 	
 	public void deleteBatchproduct(Integer id) {
