@@ -1,14 +1,18 @@
 package com.JJ.service.inventorymanagement;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.dao.ProductinventoryMapper;
 import com.JJ.dao.ViewProductInventoryLocationMapper;
 import com.JJ.dao.ViewProductInventoryMapper;
 import com.JJ.dao.ViewProductSuboptionInventoryMapper;
+import com.JJ.model.Module;
+import com.JJ.model.Productinventory;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryExample;
 import com.JJ.model.ViewProductInventoryLocation;
@@ -23,14 +27,17 @@ public class InventoryProductManagementService {
 	private ViewProductInventoryMapper productInventoryMapper;
 	private ViewProductInventoryLocationMapper productInventoryLocationMapper;
 	private ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper;
+	private ProductinventoryMapper inventoryMapper;
 	
 	@Autowired
 	public InventoryProductManagementService(ViewProductInventoryMapper productInventoryMapper,
 			ViewProductInventoryLocationMapper productInventoryLocationMapper,
-			ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper) {
+			ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper,
+			ProductinventoryMapper inventoryMapper) {
 		this.productInventoryMapper = productInventoryMapper;
 		this.productInventoryLocationMapper = productInventoryLocationMapper;
 		this.productSuboptionInventoryMapper = productSuboptionInventoryMapper;
+		this.inventoryMapper = inventoryMapper;
 	}
 	
 	/* Inventory Products START */
@@ -52,6 +59,7 @@ public class InventoryProductManagementService {
 	public List<ViewProductInventoryLocation> getAllInventoryProductLocations(int suboption1Id, int suboption2Id, int suboption3Id) {
 		ViewProductInventoryLocationExample productInventoryLocationExample = new ViewProductInventoryLocationExample();
 		ViewProductInventoryLocationExample.Criteria criteria = productInventoryLocationExample.createCriteria();
+		criteria.andQtyGreaterThan(BigDecimal.ZERO);
 		productInventoryLocationExample.setOrderByClause("location");
 		if(suboption1Id != 0){
 			criteria.andSuboption1idEqualTo(suboption1Id);
@@ -69,8 +77,9 @@ public class InventoryProductManagementService {
 	/* Inventory Products Location END */
 	
 	/* Inventory Products SubOption START */
-	public List<ViewProductSuboptionInventory> getAllInventoryProductQuantity() {
+	public List<ViewProductSuboptionInventory> getInventoryProductAllQuantity(Integer id) {
 		ViewProductSuboptionInventoryExample productSuboptionInventoryExample = new ViewProductSuboptionInventoryExample();
+		productSuboptionInventoryExample.createCriteria().andProductidEqualTo(id);
 		List<ViewProductSuboptionInventory> productSuboptionInventoryList = productSuboptionInventoryMapper.selectByExample(productSuboptionInventoryExample);
 		return productSuboptionInventoryList;
 	}
@@ -97,6 +106,15 @@ public class InventoryProductManagementService {
 		if(storageLocation.getDeleteind().equals(GeneralUtils.NOT_DELETED))
 			productInventoryMapper.updateByPrimaryKeySelective(storageLocation);
 	}*/
+	
+	public void saveInventory(Productinventory inventory) {
+		inventoryMapper.insert(inventory);
+	}
+	
+	public void saveInventoryList(List<Productinventory> inventoryList) {
+		for(Productinventory productinventory : inventoryList)
+			inventoryMapper.insert(productinventory);
+	}
 	 
 	
 	

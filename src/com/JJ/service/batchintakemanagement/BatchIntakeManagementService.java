@@ -11,7 +11,9 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.BatchproductRs;
 import com.JJ.model.Batchstockintake;
 import com.JJ.model.BatchstockintakeExample;
+import com.JJ.model.Productinventory;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
+import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 
 @Service
 @Transactional(rollbackFor=Exception.class)
@@ -19,10 +21,15 @@ public class BatchIntakeManagementService {
 	
 	private BatchstockintakeMapper batchStockIntakeMapper;
 	private BatchProductRSManagementService batchProductRSManagementService;
+	private InventoryProductManagementService inventoryService;
+	
 	@Autowired
-	public BatchIntakeManagementService(BatchstockintakeMapper batchStockIntakeMapper, BatchProductRSManagementService batchProductRSManagementService) {
+	public BatchIntakeManagementService(BatchstockintakeMapper batchStockIntakeMapper, 
+			BatchProductRSManagementService batchProductRSManagementService,
+			InventoryProductManagementService inventoryService) {
 		this.batchStockIntakeMapper = batchStockIntakeMapper;
 		this.batchProductRSManagementService = batchProductRSManagementService;
+		this.inventoryService = inventoryService;
 	}
 	
 	public Batchstockintake findById(Integer id) {
@@ -34,8 +41,14 @@ public class BatchIntakeManagementService {
 		batchStockIntakeExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		return batchStockIntakeMapper.selectByExample(batchStockIntakeExample);
 	}
-	public void createBatchstockintake(Batchstockintake batchStockIntake, List<BatchproductRs> batchProductList){
+	public void createBatchstockintake(Batchstockintake batchStockIntake, List<Productinventory> inventoryList,
+			List<BatchproductRs> batchProductList){
 		saveBatchstockintake(batchStockIntake);
+		for(Productinventory i: inventoryList) {
+			i.setMode(GeneralUtils.MODE_BATCH);
+			i.setReferenceid(batchStockIntake.getBatchid());
+			inventoryService.saveInventory(i);
+		}
 		if(batchProductList != null && batchProductList.size() > 0){
 			for(BatchproductRs batchProduct : batchProductList){
 				batchProduct.setBatchid(batchStockIntake.getBatchid());
@@ -68,7 +81,7 @@ public class BatchIntakeManagementService {
 			batchStockIntakeMapper.updateByPrimaryKeySelective(batchStockIntake);
 	}
 	
-	public void editBatchstockintake(Batchstockintake batchStockIntake, List<Integer> idList , List<BatchproductRs> batchProductList){
+	public void editBatchstockintake(Batchstockintake batchStockIntake, List<Integer> idList , List<BatchproductRs> batchProductList, List<Productinventory> productInventoryList){
 		updateBatchstockintake(batchStockIntake);
 		batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchStockIntake.getBatchid(), idList);
 		if(batchProductList != null && batchProductList.size() > 0){
@@ -77,6 +90,17 @@ public class BatchIntakeManagementService {
 				batchProductRSManagementService.saveBatchproduct(batchProduct);
 			}
 		}
+		for(Productinventory inventory: productInventoryList) {
+			inventory.setMode(GeneralUtils.MODE_BATCH);
+			inventory.setReferenceid(batchStockIntake.getBatchid());
+		}
+		inventoryService.saveInventoryList(productInventoryList);
+	}
+
+	public void deleteBatch(List<Integer> ids) {
+		deleteBatchstockintake(ids);
+		batchProductRSManagementService.deleteBatchproduct(ids);
+		
 	}
 	
 }

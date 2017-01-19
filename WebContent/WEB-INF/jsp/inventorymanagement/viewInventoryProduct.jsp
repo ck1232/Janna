@@ -13,7 +13,7 @@
                     	<h3 class="box-title">Product Information</h3>
                     </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="get" action="<c:url value="/storagelocation/listStorageLocation" />"></form>
+                    <form id="backToListButton" method="get" action="<c:url value="/inventory/listInventoryProduct" />"></form>
                     <!--/.FORM-->
 		             	<div class="box-body">
 			              	<div class="row">

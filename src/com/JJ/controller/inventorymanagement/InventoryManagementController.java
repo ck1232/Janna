@@ -79,9 +79,9 @@ public class InventoryManagementController {
 	
 	
 	@RequestMapping(value = "/getInventoryProductQuantityList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getInventoryProductQuantityList() {
+	public @ResponseBody String getInventoryProductQuantityList(@RequestParam("productid") String id) {
 		logger.debug("getting inventory product quantity list");
-		List<ViewProductSuboptionInventory> productQuantityList = inventoryProductManagementService.getAllInventoryProductQuantity();
+		List<ViewProductSuboptionInventory> productQuantityList = inventoryProductManagementService.getInventoryProductAllQuantity(Integer.parseInt(id));
 		return GeneralUtils.convertListToJSONString(productQuantityList);
 	}
 	
