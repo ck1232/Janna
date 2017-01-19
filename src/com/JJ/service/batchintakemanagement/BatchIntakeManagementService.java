@@ -35,6 +35,12 @@ public class BatchIntakeManagementService {
 	public Batchstockintake findById(Integer id) {
 		return batchStockIntakeMapper.selectByPrimaryKey(id);
 	}
+	
+	public List<Batchstockintake> findByIdList(List<Integer> idList) {
+		BatchstockintakeExample batchStockIntakeExample = new BatchstockintakeExample();
+		batchStockIntakeExample.createCriteria().andBatchidIn(idList).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		return batchStockIntakeMapper.selectByExample(batchStockIntakeExample);
+	}
 
 	public List<Batchstockintake> getAllBatchstockintakes() {
 		BatchstockintakeExample batchStockIntakeExample = new BatchstockintakeExample();
@@ -44,11 +50,7 @@ public class BatchIntakeManagementService {
 	public void createBatchstockintake(Batchstockintake batchStockIntake, List<Productinventory> inventoryList,
 			List<BatchproductRs> batchProductList){
 		saveBatchstockintake(batchStockIntake);
-		for(Productinventory i: inventoryList) {
-			i.setMode(GeneralUtils.MODE_BATCH);
-			i.setReferenceid(batchStockIntake.getBatchid());
-			inventoryService.saveInventory(i);
-		}
+		inventoryService.saveInventoryList(inventoryList);
 		if(batchProductList != null && batchProductList.size() > 0){
 			for(BatchproductRs batchProduct : batchProductList){
 				batchProduct.setBatchid(batchStockIntake.getBatchid());
@@ -90,17 +92,13 @@ public class BatchIntakeManagementService {
 				batchProductRSManagementService.saveBatchproduct(batchProduct);
 			}
 		}
-		for(Productinventory inventory: productInventoryList) {
-			inventory.setMode(GeneralUtils.MODE_BATCH);
-			inventory.setReferenceid(batchStockIntake.getBatchid());
-		}
 		inventoryService.saveInventoryList(productInventoryList);
 	}
 
-	public void deleteBatch(List<Integer> ids) {
+	public void deleteBatch(List<Integer> ids, List<Productinventory> productInventoryList) {
 		deleteBatchstockintake(ids);
 		batchProductRSManagementService.deleteBatchproduct(ids);
-		
+		inventoryService.saveInventoryList(productInventoryList);
 	}
 	
 }

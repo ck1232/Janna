@@ -52,6 +52,19 @@ public class Productinventory extends Base{
 		this.remarks = remarks;
 	}
 
+	public Productinventory(Integer productsuboptionid, Integer transferfrom, Integer transferto, Boolean plusorminus,
+			Integer qty, String remarks, String mode, Integer referenceid) {
+		super();
+		this.productsuboptionid = productsuboptionid;
+		this.transferfrom = transferfrom;
+		this.transferto = transferto;
+		this.plusorminus = plusorminus;
+		this.qty = qty;
+		this.remarks = remarks;
+		this.mode = mode;
+		this.referenceid = referenceid;
+	}
+
 	public Productinventory() {
 		super();
 	}

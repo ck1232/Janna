@@ -182,7 +182,15 @@ public class BatchIntakeManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
 			return "redirect:listBatchIntake";
 		}
-		batchIntakeManagementService.deleteBatch(ids);
+		List<Productinventory> inventoryList = new ArrayList<Productinventory>();
+		List<Batchstockintake> batchList = batchIntakeManagementService.findByIdList(ids);
+		for(Batchstockintake batch : batchList) {
+			List<BatchproductRs> originalList = batchProductRSManagementService.getBatchproductByBatchId(batch.getBatchid());
+			inventoryList.addAll(this.compareBatchProductsQtyDifference(batch, originalList, new ArrayList<BatchproductRs>()));
+		}
+		
+		batchIntakeManagementService.deleteBatch(ids, inventoryList);
+		
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Batch Intake(s) deleted successfully!");
 		return "redirect:listBatchIntake";
@@ -362,7 +370,7 @@ public class BatchIntakeManagementController {
 	}
 	
 	
-	private List<Productinventory> compareBatchProductsQtyDifference(Integer locationId, List<BatchproductRs> originalList, List<BatchproductRs> newList){
+	private List<Productinventory> compareBatchProductsQtyDifference(Batchstockintake batch, List<BatchproductRs> originalList, List<BatchproductRs> newList){
 		List<Productinventory> productInventoryList = new ArrayList<Productinventory>();
 		if(newList != null && originalList != null) {
 			Map<Integer, BatchproductRs> newProductRsMap = new HashMap<Integer, BatchproductRs>();
@@ -377,22 +385,22 @@ public class BatchIntakeManagementController {
 				BatchproductRs newProductRs = newProductRsMap.get(originalProduct.getProductsuboptionid());
 				if(newProductRs == null){
 					//old product kena deleted
-					Productinventory inventory = new Productinventory(originalProduct.getProductsuboptionid(), locationId, 
+					Productinventory inventory = new Productinventory(originalProduct.getProductsuboptionid(), batch.getStoragelocation(), 
 							null, false,
-							originalProduct.getQty(), null);
+							originalProduct.getQty(), null, GeneralUtils.MODE_BATCH, batch.getBatchid());
 					productInventoryList.add(inventory);
 				}else{
 					//check qty difference
 					String remark = "old: " + originalProduct.getQty() + ", new: " + newProductRs.getQty();
 					if(originalProduct.getQty().compareTo(newProductRs.getQty()) > 0) {
 						Productinventory inventory = new Productinventory(newProductRs.getProductsuboptionid(), null, 
-								locationId, false,
-								originalProduct.getQty() - newProductRs.getQty(), remark);
+								batch.getStoragelocation(), false,
+								originalProduct.getQty() - newProductRs.getQty(), remark, GeneralUtils.MODE_BATCH, batch.getBatchid());
 						productInventoryList.add(inventory);
 					}else if(originalProduct.getQty().compareTo(newProductRs.getQty()) < 0){
 						Productinventory inventory = new Productinventory(newProductRs.getProductsuboptionid(), null, 
-								locationId, true,
-								newProductRs.getQty() - originalProduct.getQty(), remark);
+								batch.getStoragelocation(), true,
+								newProductRs.getQty() - originalProduct.getQty(), remark, GeneralUtils.MODE_BATCH, batch.getBatchid());
 						productInventoryList.add(inventory);
 					}
 				}
@@ -403,8 +411,8 @@ public class BatchIntakeManagementController {
 				if(oldProductRs == null){
 					//new product added
 					Productinventory inventory = new Productinventory(prdSuboptionId, null, 
-							locationId, true,
-							newProductRsMap.get(prdSuboptionId).getQty(), null);
+							batch.getStoragelocation(), true,
+							newProductRsMap.get(prdSuboptionId).getQty(), null, GeneralUtils.MODE_BATCH, batch.getBatchid());
 					productInventoryList.add(inventory);
 				}
 			}
@@ -482,7 +490,7 @@ public class BatchIntakeManagementController {
 				}
 			}
 			
-			List<Productinventory> productInventoryList = compareBatchProductsQtyDifference(batchIntake.getStoragelocation(), originalList, batchProductRsList);
+			List<Productinventory> productInventoryList = compareBatchProductsQtyDifference(batchIntake, originalList, batchProductRsList);
 			batchIntakeManagementService.editBatchstockintake(batchIntake, idList, batchProductList, productInventoryList);
 			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
 			redirectAttributes.addFlashAttribute("css", "success");
