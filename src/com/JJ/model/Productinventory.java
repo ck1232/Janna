@@ -2,6 +2,8 @@ package com.JJ.model;
 
 import java.math.BigDecimal;
 
+import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
+
 public class Productinventory extends Base{
     private Integer productinventoryid;
 
@@ -24,8 +26,97 @@ public class Productinventory extends Base{
     private Integer referenceid;
 
     private String deleteremarks;
+    
+    /*non db fields start*/
+    
+    private String product;
+    
+    private ProductSubOptionRsVo productSuboption;
+    
+    private Storagelocation fromLocation;
+    
+    private Storagelocation toLocation;
+    
+    private String location;
+    
+    public String getProduct() {
+		return product;
+	}
+    
+    public void setProduct() {
+    	this.product = this.productSuboption.getProduct().getProductName();
+    	if(this.productSuboption.getSuboption1id() != null) 
+    		this.product = this.product + ", " + this.productSuboption.getSubOption1().getSubOptionList().get(0).getSubOptionName();	
+    	else
+    		return;
+    	
+    	
+    	if(this.productSuboption.getSuboption2id() != null) 
+    		this.product = this.product + ", " + this.productSuboption.getSubOption2().getSubOptionList().get(0).getSubOptionName();	
+    	else
+    		return;
+    	
+    	
+    	if(this.productSuboption.getSuboption3id() != null) 
+    		this.product = this.product + ", " + this.productSuboption.getSubOption3().getSubOptionList().get(0).getSubOptionName();	
+    	else
+    		return;
+    	
+	}
 
-    public Integer getProductinventoryid() {
+	public void setProduct(String product) {
+		this.product = product;
+	}
+
+	public ProductSubOptionRsVo getProductSuboption() {
+		return productSuboption;
+	}
+
+	public void setProductSuboption(ProductSubOptionRsVo productSuboption) {
+		this.productSuboption = productSuboption;
+	}
+
+	public Storagelocation getFromLocation() {
+		return fromLocation;
+	}
+
+	public void setFromLocation(Storagelocation fromLocation) {
+		this.fromLocation = fromLocation;
+	}
+	
+	public Storagelocation getToLocation() {
+		return toLocation;
+	}
+
+	public void setToLocation(Storagelocation toLocation) {
+		this.toLocation = toLocation;
+	}
+
+	public String getLocation() {
+    	return this.location;
+	}
+
+	public void setLocation() {
+		if(transferfrom == null && transferto != null) 
+			this.location = "Added to " + toLocation.getLocationname();
+    	
+		else if(transferfrom != null && transferto == null) 
+    		this.location = "Deleted from " + fromLocation.getLocationname();
+    	
+		else if(transferfrom != null && transferto != null)
+    		this.location = "From " + fromLocation.getLocationname() + " to " + toLocation.getLocationname();
+		
+		else
+			this.location = "";
+	}
+	
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	/*non db fields end*/
+
+
+	public Integer getProductinventoryid() {
         return productinventoryid;
     }
 
@@ -140,4 +231,6 @@ public class Productinventory extends Base{
     public void setDeleteremarks(String deleteremarks) {
         this.deleteremarks = deleteremarks;
     }
+    
+    
 }

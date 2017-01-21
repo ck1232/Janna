@@ -1189,4 +1189,36 @@
     </definition>
   	<!-- Inventory Management Module END -->
   	
+  	<!-- Inventory History Module START -->
+ 	<definition name="listInventoryHistory" extends="main_template">  
+        <put-attribute name="title" value="Inventory History Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Inventory History Listing" />
+        		<put-attribute name="heading-description" value="To view all the inventory history." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/inventoryhistorymanagement/listInventoryHistory.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Inventory History" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/inventoryhistorymanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/inventoryhistorymanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/inventoryhistory/getInventoryHistoryList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/inventoryhistorymanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/inventoryhistorymanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    <!-- Inventory History Module END -->
+  	
 </tiles-definitions>  

@@ -181,16 +181,7 @@ public class ProductService {
 	}
 	//-------------- END
 	
-	public ProductVo getProductVoById(Integer id) {
-		ProductVo product = new ProductVo();
-		List<ProductVo> productList = getAllProductVo(id);
-		if(productList != null && productList.size() > 0){
-			product = productList.get(0); 
-		}
-		return product;
-	}
-		
-	public List<ProductVo> getAllProductVo(Integer id) {
+	public List<Product> getAllProduct(Integer id) {
 		ProductExample productExample = new ProductExample();
 		ProductExample.Criteria criteria = productExample.createCriteria();
 		if(id != null){
@@ -198,6 +189,22 @@ public class ProductService {
 		}
 		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Product> productList = productMapper.selectByExample(productExample);
+		return productList;
+	}
+	
+	
+	
+	public ProductVo getProductVoById(Integer id) {
+		ProductVo product = new ProductVo();
+		List<ProductVo> productList = getAllProductVo(id);
+		if(productList != null && productList.size() > 0){
+			product = productList.get(0);  
+		}
+		return product;
+	}
+		
+	public List<ProductVo> getAllProductVo(Integer id) {
+		List<Product> productList = getAllProduct(id);
 		List<ProductVo> productVoList = new ArrayList<ProductVo>();
 		
 		Map<Integer, Productsubcategory> subcategoryMap =  getProductsubcategoryMap();
@@ -990,6 +997,80 @@ public class ProductService {
 			return vo;
 		}
 		return new ProductSubOptionRsVo();
+	}
+	
+	public List<ProductSubOptionRsVo> getAllProductSubOptionVo(){
+		ProductsuboptionRsExample selectExample = new ProductsuboptionRsExample();
+		selectExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		List<ProductsuboptionRs> result = productSuboptionRsMapper.selectByExample(selectExample);
+		
+		List<ProductSubOptionRsVo> voList = new ArrayList<ProductSubOptionRsVo>();
+		
+		
+		if(result != null && result.size() > 0){
+			for(ProductsuboptionRs obj : result) {
+				ProductSubOptionRsVo vo = new ProductSubOptionRsVo();
+				
+				vo.setProductsuboptionid(obj.getProductsuboptionid());
+				vo.setProductid(obj.getProductid());
+				vo.setSuboption1id(obj.getSuboption1id());
+				vo.setSuboption2id(obj.getSuboption2id());
+				vo.setSuboption3id(obj.getSuboption3id());
+				List<OptionVo> allOptionVo = getOptionVoList(obj.getProductid());
+				if(vo.getSuboption1id() != null && allOptionVo != null && allOptionVo.size() > 0){
+					for(OptionVo option: allOptionVo){
+						if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+							for(SubOptionVo suboptionVo :option.getSubOptionList()){
+								if(suboptionVo.getSubOptionId().equals(vo.getSuboption1id())){
+									OptionVo option1 = new OptionVo();
+									option1.setOptionId(option.getOptionId());
+									option1.setOptionName(option.getOptionName());
+									option1.setSubOptionList(Arrays.asList(suboptionVo));
+									vo.setSubOption1(option1);
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				if(vo.getSuboption2id() != null && allOptionVo != null && allOptionVo.size() > 0){
+					for(OptionVo option: allOptionVo){
+						if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+							for(SubOptionVo suboptionVo :option.getSubOptionList()){
+								if(suboptionVo.getSubOptionId().equals(vo.getSuboption2id())){
+									OptionVo option2 = new OptionVo();
+									option2.setOptionId(option.getOptionId());
+									option2.setOptionName(option.getOptionName());
+									option2.setSubOptionList(Arrays.asList(suboptionVo));
+									vo.setSubOption2(option2);
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				if(vo.getSuboption3id() != null && allOptionVo != null && allOptionVo.size() > 0){
+					for(OptionVo option: allOptionVo){
+						if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+							for(SubOptionVo suboptionVo :option.getSubOptionList()){
+								if(suboptionVo.getSubOptionId().equals(vo.getSuboption3id())){
+									OptionVo option3 = new OptionVo();
+									option3.setOptionId(option.getOptionId());
+									option3.setOptionName(option.getOptionName());
+									option3.setSubOptionList(Arrays.asList(suboptionVo));
+									vo.setSubOption1(option3);
+									break;
+								}
+							}
+						}
+					}
+				}
+				voList.add(vo);
+			}
+		}
+		return voList;
 	}
 	
 	public ProductsuboptionRs getProductsuboptionRsById(Integer productsuboptionid) {

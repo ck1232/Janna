@@ -11,8 +11,10 @@ import com.JJ.dao.ProductinventoryMapper;
 import com.JJ.dao.ViewProductInventoryLocationMapper;
 import com.JJ.dao.ViewProductInventoryMapper;
 import com.JJ.dao.ViewProductSuboptionInventoryMapper;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
 import com.JJ.model.Productinventory;
+import com.JJ.model.ProductinventoryExample;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryExample;
 import com.JJ.model.ViewProductInventoryLocation;
@@ -107,6 +109,16 @@ public class InventoryProductManagementService {
 			productInventoryMapper.updateByPrimaryKeySelective(storageLocation);
 	}*/
 	
+	
+	/* Product inventory table START */
+	public List<Productinventory> getAllProductInventory() {
+		ProductinventoryExample productInventoryExample = new ProductinventoryExample();
+		productInventoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		List<Productinventory> productInventoryList = inventoryMapper.selectByExample(productInventoryExample);
+		return productInventoryList;
+	}
+	
+	
 	public void saveInventory(Productinventory inventory) {
 		inventoryMapper.insert(inventory);
 	}
@@ -115,7 +127,7 @@ public class InventoryProductManagementService {
 		for(Productinventory productinventory : inventoryList)
 			inventoryMapper.insert(productinventory);
 	}
-	 
+	/* Product inventory table END */
 	
 	
 }
