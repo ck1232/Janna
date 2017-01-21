@@ -7,3 +7,5 @@
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/storagelocation/deleteStorageLocation" />"><i class="fa fa-user-times"></i> Search</button>
 	</div>
 </div>
+
+<tiles:insertAttribute name="filter"/>
