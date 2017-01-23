@@ -17,22 +17,56 @@ import urn.ebay.api.PayPalAPI.BMUpdateButtonReq;
 import urn.ebay.api.PayPalAPI.BMUpdateButtonRequestType;
 import urn.ebay.api.PayPalAPI.BMUpdateButtonResponseType;
 import urn.ebay.api.PayPalAPI.PayPalAPIInterfaceServiceService;
+import urn.ebay.api.PayPalAPI.TransactionSearchReq;
+import urn.ebay.api.PayPalAPI.TransactionSearchRequestType;
+import urn.ebay.api.PayPalAPI.TransactionSearchResponseType;
 import urn.ebay.apis.eBLBaseComponents.AckCodeType;
 import urn.ebay.apis.eBLBaseComponents.ButtonCodeType;
 import urn.ebay.apis.eBLBaseComponents.ButtonTypeType;
+import urn.ebay.apis.eBLBaseComponents.PaymentTransactionSearchResultType;
 
-import com.JJ.helper.GeneralUtils;
+import com.paypal.base.rest.APIContext;
+import com.paypal.core.credential.ICredential;
+import com.paypal.core.credential.SignatureCredential;
 
 @Service
 @Transactional(rollbackFor=Exception.class)
 public class PayPalService {
 	private static final Logger logger = Logger.getLogger(PayPalService.class);
-	private PayPalAPIInterfaceServiceService payPalAPIInterfaceService;
-
+	private urn.ebay.api.PayPalAPI.PayPalAPIInterfaceServiceService payPalAPIInterfaceService;
+	private APIContext context;
+	private static final String clientId = "AYGAYAk8fs7Eh6zKWsI5abiJvMxHUrTilIq5nFgq2RoXlFzytcEottHuNPHDMaWKVGAVfP-DVh94Y9t0";
+	private static final String clientSecret = "EPPIS-aHr10t5vgDKAfvlr9Wpy-xzPavjPJuBUj0gvZXzUQ7Geg5G4Ldzlo1oidTnOsFjdEJdb5uyx4L";
 	public PayPalService(){
 		payPalAPIInterfaceService = new PayPalAPIInterfaceServiceService(getDevCustomConfigurationMap());
+		context = new APIContext(clientId, clientSecret, "sandbox");
 	}
 	
+	public void searchTransaction(){
+		TransactionSearchReq txnreq = new TransactionSearchReq();
+		TransactionSearchRequestType requestType = new TransactionSearchRequestType();
+
+		requestType.setStartDate("2015-10-04T00:00:00.000Z");
+		requestType.setVersion("94.0");
+		
+		txnreq.setTransactionSearchRequest(requestType);
+		String userName = getDevCustomConfigurationMap().get("acct1.UserName");
+		String pwd = getDevCustomConfigurationMap().get("acct1.Password");
+		String signature = getDevCustomConfigurationMap().get("acct1.Signature");
+		ICredential credential = new SignatureCredential(userName, pwd, signature);
+		try {
+			TransactionSearchResponseType txnres = payPalAPIInterfaceService.transactionSearch(txnreq, credential);
+			List<PaymentTransactionSearchResultType> transactionList = txnres.getPaymentTransactions();
+			if(txnres.getAck().equals(AckCodeType.SUCCESS) && transactionList != null && transactionList.size() > 0){
+				for(PaymentTransactionSearchResultType transaction : transactionList){
+					logger.debug(transaction.getGrossAmount().getValue());
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public String createCartButton(String productName, String productId, Double amount, String url) throws Exception{
 		BMCreateButtonReq request = new BMCreateButtonReq();
 		BMCreateButtonRequestType reqType = new BMCreateButtonRequestType();
@@ -52,7 +86,8 @@ public class PayPalService {
 		
 		request.setBMCreateButtonRequest(reqType);
 		try {
-			BMCreateButtonResponseType resp = payPalAPIInterfaceService.bMCreateButton(request);
+			BMCreateButtonResponseType resp = null;
+//					payPalAPIInterfaceService.bMCreateButton(request);
 			if(resp != null){
 				if(resp.getAck().toString().equals(AckCodeType.SUCCESS.name())){
 					return resp.getHostedButtonID();
@@ -91,7 +126,8 @@ public class PayPalService {
 		reqType.setHostedButtonID(buttonId);
 		request.setBMUpdateButtonRequest(reqType);
 		try {
-			BMUpdateButtonResponseType resp = payPalAPIInterfaceService.bMUpdateButton(request);
+			BMUpdateButtonResponseType resp = null;
+//			payPalAPIInterfaceService.bMUpdateButton(request);
 			if(resp != null){
 				if(resp.getAck().toString().equals(AckCodeType.SUCCESS.name())){
 					return resp.getHostedButtonID();

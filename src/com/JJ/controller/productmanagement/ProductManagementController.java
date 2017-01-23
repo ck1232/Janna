@@ -101,6 +101,7 @@ public class ProductManagementController {
     	logger.debug("loading listProduct");
     	List<Product> productList = productService.getAllProducts();
     	model.addAttribute("productList", productList);
+    	paypalService.searchTransaction();
         return "listProduct";  
     } 
 	
