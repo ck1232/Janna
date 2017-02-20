@@ -36,6 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.productmanagement.vo.OptionVo;
 import com.JJ.controller.productmanagement.vo.ProductVo;
+import com.JJ.controller.productmanagement.vo.SubOptionVo;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.FileMeta;
 import com.JJ.model.JsonResponse;
@@ -60,6 +61,7 @@ public class ProductManagementController {
     private ProductOptionManagementService productOptionManagementService;
     private ProductVo newProduct;
     private OptionVo selectedOption;
+    private static final int code_limit = 6;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
 			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
@@ -239,6 +241,68 @@ public class ProductManagementController {
 		}
 		return productOptionList;
 	}
+	private String generateCode(String name){
+		String code = "";
+		if(name == null || name.trim().isEmpty()){
+			return code;
+		}
+		
+		//split by spacebar
+		String[] splitName = name.split(" ");
+		if(splitName.length > 1){
+			//take the first character of each word
+			for(String word : splitName){
+				code += word.charAt(0);
+			}
+			
+			//if code more than limit, substring it
+			if(code.length() > code_limit){
+				code = code.substring(0, code_limit);
+			}else{
+				//use the last word to fill up the remaining length
+				int shortFor = code_limit - code.length();
+				//if last word is less than shortFor, use whole word
+				String lastWord = splitName[splitName.length - 1];
+				if(lastWord.length() <= shortFor){
+					code += lastWord.substring(1);
+				}else{
+					//take the last few characters equals to shortFor
+					code += lastWord.substring(lastWord.length()- shortFor, lastWord.length());
+				}
+			}
+			
+		}else{
+			code = splitName[0];
+			if(code.length() > code_limit){
+				code = code.substring(code.length() - code_limit);
+			}
+		}
+		return code;
+	}
+	private OptionVo generateSubOptionCode(OptionVo option){
+		if(option != null && option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
+			for(SubOptionVo subOption : option.getSubOptionList()){
+				String name = subOption.getSubOptionName();
+				subOption.setCode(generateCode(name));
+			}
+		}
+		return option;
+	}
+	
+	private ProductVo generateProductCode(ProductVo product){
+		if(product.getProductCode() == null || product.getProductCode().trim().isEmpty()){
+			product.setProductCode(generateCode(product.getProductName()));
+		}
+		//TODO check for duplicate, add running number if duplicate
+		//generate suboption code
+		if(product.getOptionList() != null && product.getOptionList().size() > 0){
+			for(OptionVo option : product.getOptionList()){
+				option = generateSubOptionCode(option);
+			}
+		}
+		
+		return product;
+	}
 	
 	@RequestMapping(value = "/saveAddOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponse saveAddOption(@RequestBody OptionVo option) {
@@ -265,7 +329,6 @@ public class ProductManagementController {
 				}
 			}
 		}
-		
 		if(selectedOption != null){
 			selectedOption.setOptionName(option.getOptionName());
 			selectedOption.setOptionId(option.getOptionId());
@@ -318,7 +381,9 @@ public class ProductManagementController {
 	
 	@RequestMapping(value = "/saveProduct", method = RequestMethod.POST)
 	public String saveProduct(@ModelAttribute("productForm") ProductVo product, final RedirectAttributes redirectAttributes) {
+		
 		product.setOptionList(newProduct.getOptionList());
+		product = generateProductCode(product);
 		reshuffleImage(newProduct.getImages());
 		product.setImages(newProduct.getImages());
 		

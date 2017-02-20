@@ -9,6 +9,7 @@ public class SubOptionVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer subOptionId;
 	private String subOptionName;
+	private String code;
 	private boolean display;
 	private String optionName;
 	private int seq;
@@ -41,6 +42,18 @@ public class SubOptionVo implements Serializable {
 	}
 	public void setSeq(int seq) {
 		this.seq = seq;
+	}
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
 	}
 	@Override
 	public int hashCode() {

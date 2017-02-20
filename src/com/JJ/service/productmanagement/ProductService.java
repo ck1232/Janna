@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.productmanagement.vo.OptionVo;
@@ -58,7 +59,7 @@ import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementS
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ProductService {
 	private ProductMapper productMapper;
 	private ProductoptionMapper productOptionMapper;
@@ -336,6 +337,7 @@ public class ProductService {
 			productVo.setImages(convertToFileMetaList(productImageList));
 			productVo.setOptionList(optionVoList);
 			productVo.setTags(productTagsList);
+			productVo.setProductCode(product.getProductcode());
 		}
 		return productVo;
 	}
@@ -591,6 +593,7 @@ public class ProductService {
 			if(productSubOptionList == null || productSubOptionList.size() == 0){
 				Productsuboption productSubOption = new Productsuboption();
 				productSubOption.setDeleteind(GeneralUtils.NOT_DELETED);
+				productSubOption.setCode(" ");
 				productSubOption.setProductid(productId);
 				productSubOption.setProductoptionid(0);
 				productSubOptionMapper.insert(productSubOption);
@@ -724,6 +727,7 @@ public class ProductService {
 	private Product convertToProduct(ProductVo productVo){
 		Product product = new Product();
 		product.setProductid(productVo.getId());
+		product.setProductcode(productVo.getProductCode());
 		product.setUnitprice(productVo.getUnitPrice());
 		product.setWeight(productVo.getWeight());
 		product.setProductname(productVo.getProductName());
@@ -756,6 +760,7 @@ public class ProductService {
 				Productsuboption productSubOption = new Productsuboption();
 				productSubOption.setProductsuboptionid(subOption.getSubOptionId());
 				productSubOption.setProductid(productId);
+				productSubOption.setCode(subOption.getCode());
 				productSubOption.setProductoptionid(optionId);
 				productSubOption.setName(subOption.getSubOptionName());
 				productSubOption.setDeleteind(GeneralUtils.NOT_DELETED);

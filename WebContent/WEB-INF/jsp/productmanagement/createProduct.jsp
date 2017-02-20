@@ -181,6 +181,17 @@
 				              		
 				              		<div class="row">
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Code:</label>
+											<div class="col-sm-10 input-group">
+												<form:input path="productCode" type="text" class="form-control"
+								                                id="productCode" placeholder="Enter product code" />
+												<form:errors path="productCode" class="text-danger" />
+											</div>
+									  	</div>
+				              		</div>
+				              		
+				              		<div class="row">
+					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Category:</label>
 											<div class="col-sm-10 input-group">
 												<form:select path="subcategoryId" type="text" class="form-control" id="subcategory" >
