@@ -509,10 +509,10 @@ public class ProductService {
 				for(Productoption productOption : productOptionList){
 					OptionVo optionVo = optionMap.get(productOption.getName());
 					//reset all optionId
-					optionVo.setOptionId(null);
-					/*if(optionVo != null && productOption.getSequence().compareTo(optionVo.getSequence())== 0){
+//					optionVo.setOptionId(null);
+					if(optionVo != null){
 						optionVo.setOptionId(productOption.getProductoptionid());
-					}*/
+					}
 				}
 			}
 			//find non exist productoption

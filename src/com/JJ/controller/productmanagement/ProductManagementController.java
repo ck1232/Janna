@@ -246,7 +246,11 @@ public class ProductManagementController {
 		if(name == null || name.trim().isEmpty()){
 			return code;
 		}
-		
+		String noSpaceName = name.replace(" ", "");
+		if(noSpaceName.length() <= code_limit){
+			code = noSpaceName;
+			return code;
+		}
 		//split by spacebar
 		String[] splitName = name.split(" ");
 		if(splitName.length > 1){
@@ -292,6 +296,14 @@ public class ProductManagementController {
 	private ProductVo generateProductCode(ProductVo product){
 		if(product.getProductCode() == null || product.getProductCode().trim().isEmpty()){
 			product.setProductCode(generateCode(product.getProductName()));
+		}else{
+			String noSpaceName = product.getProductName().replace(" ", "");
+			if(noSpaceName.length() > code_limit){
+				product.setProductCode(noSpaceName.substring(0, code_limit));
+			}else{
+				product.setProductCode(noSpaceName);
+			}
+			
 		}
 		//TODO check for duplicate, add running number if duplicate
 		//generate suboption code

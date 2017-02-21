@@ -183,7 +183,7 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Code:</label>
 											<div class="col-sm-10 input-group">
-												<form:input path="productCode" type="text" class="form-control"
+												<form:input path="productCode" type="text" class="form-control" maxlength="6"
 								                                id="productCode" placeholder="Enter product code" />
 												<form:errors path="productCode" class="text-danger" />
 											</div>
