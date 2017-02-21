@@ -37,6 +37,7 @@ import com.JJ.dao.ProductspecificationMapper;
 import com.JJ.dao.ProductsuboptionMapper;
 import com.JJ.dao.ProductsuboptionRsMapper;
 import com.JJ.dao.ProducttagsMapper;
+import com.JJ.dao.ViewItemCodeMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.FileMeta;
 import com.JJ.model.Product;
@@ -70,6 +71,7 @@ public class ProductService {
 	private ProductOptionManagementService productOptionManagementService;
 	private ProductSubOptionManagementService productSubOptionManagementService;
 	private ProductsuboptionRsMapper productSuboptionRsMapper;
+	private ViewItemCodeMapper viewItemCodeMapper;
 	private ProducttagsMapper productTagsMapper;
 	private final static int thumbnail_width = 200;
 	private final static int thumbnail_height = 200;
@@ -601,11 +603,11 @@ public class ProductService {
 		}
 		
 		//maintain productsuboption_rs
-		/*productVo.setId(productId);
-		saveProductSubOptionRs(productVo);*/
+		productVo.setId(productId);
+		saveProductSubOptionRs(productVo);
 	}
 	
-	/*private void saveProductSubOptionRs(ProductVo productVo) {
+	private void saveProductSubOptionRs(ProductVo productVo) {
 		
 		//find if product suboption rs exists
 		//set delete ind to true for all suboption
@@ -722,7 +724,7 @@ public class ProductService {
 			obj.setDeleteind(GeneralUtils.NOT_DELETED);
 			productSuboptionRsMapper.insertSelective(obj);
 		}
-	}*/
+	}
 
 	private Product convertToProduct(ProductVo productVo){
 		Product product = new Product();
@@ -999,5 +1001,18 @@ public class ProductService {
 	
 	public ProductsuboptionRs getProductsuboptionRsById(Integer productsuboptionid) {
 		return productSuboptionRsMapper.selectByPrimaryKey(productsuboptionid);
+	}
+	
+	public List<String> getExisitingProductCode(){
+		List<String> productCodeList = new ArrayList<String>();
+		ProductExample productExample = new ProductExample();
+		productExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		List<Product> productList = productMapper.selectByExample(productExample);
+		if(productList != null && productList.size() > 0){
+			for(Product product : productList){
+				productCodeList.add(product.getProductcode());
+			}
+		}
+		return productCodeList;
 	}
 }

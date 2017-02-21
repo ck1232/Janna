@@ -297,7 +297,7 @@ public class ProductManagementController {
 		if(product.getProductCode() == null || product.getProductCode().trim().isEmpty()){
 			product.setProductCode(generateCode(product.getProductName()));
 		}else{
-			String noSpaceName = product.getProductName().replace(" ", "");
+			String noSpaceName = product.getProductCode().replace(" ", "");
 			if(noSpaceName.length() > code_limit){
 				product.setProductCode(noSpaceName.substring(0, code_limit));
 			}else{
@@ -306,6 +306,13 @@ public class ProductManagementController {
 			
 		}
 		//TODO check for duplicate, add running number if duplicate
+		List<String> productCodeList = productService.getExisitingProductCode();
+		int counter = 1;
+		String productCode = product.getProductCode();
+		while(productCodeList.contains(productCode)){
+			productCode = product.getProductCode()+counter++;
+		}
+		product.setProductCode(productCode);
 		//generate suboption code
 		if(product.getOptionList() != null && product.getOptionList().size() > 0){
 			for(OptionVo option : product.getOptionList()){
