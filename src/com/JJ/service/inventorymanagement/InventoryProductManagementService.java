@@ -1,18 +1,21 @@
 package com.JJ.service.inventorymanagement;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.inventorymanagement.InventoryHistorySearchCriteria;
 import com.JJ.dao.ProductinventoryMapper;
 import com.JJ.dao.ViewProductInventoryLocationMapper;
 import com.JJ.dao.ViewProductInventoryMapper;
 import com.JJ.dao.ViewProductSuboptionInventoryMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Module;
 import com.JJ.model.Productinventory;
 import com.JJ.model.ProductinventoryExample;
 import com.JJ.model.ViewProductInventory;
@@ -21,6 +24,9 @@ import com.JJ.model.ViewProductInventoryLocation;
 import com.JJ.model.ViewProductInventoryLocationExample;
 import com.JJ.model.ViewProductSuboptionInventory;
 import com.JJ.model.ViewProductSuboptionInventoryExample;
+import com.JJ.service.productmanagement.ProductService;
+import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
+import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
 
 @Service
 @Transactional
@@ -30,16 +36,25 @@ public class InventoryProductManagementService {
 	private ViewProductInventoryLocationMapper productInventoryLocationMapper;
 	private ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper;
 	private ProductinventoryMapper inventoryMapper;
+	private ProductService productService;
+	private ProductSubOptionManagementService productSubOptionManagementService;
+	private StorageLocationManagementService storageLocationManagementService;
 	
 	@Autowired
 	public InventoryProductManagementService(ViewProductInventoryMapper productInventoryMapper,
 			ViewProductInventoryLocationMapper productInventoryLocationMapper,
 			ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper,
-			ProductinventoryMapper inventoryMapper) {
+			ProductinventoryMapper inventoryMapper,
+			ProductService productService,
+			StorageLocationManagementService storageLocationManagementService,
+			ProductSubOptionManagementService productSubOptionManagementService) {
 		this.productInventoryMapper = productInventoryMapper;
 		this.productInventoryLocationMapper = productInventoryLocationMapper;
 		this.productSuboptionInventoryMapper = productSuboptionInventoryMapper;
 		this.inventoryMapper = inventoryMapper;
+		this.productService = productService;
+		this.storageLocationManagementService = storageLocationManagementService;
+		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
 	/* Inventory Products START */
@@ -86,29 +101,7 @@ public class InventoryProductManagementService {
 		return productSuboptionInventoryList;
 	}
 	
-	/* Inventory Products SubOption END */
-	
-	
-	
-	
-	
-	/*public void saveStorageLocation(Storagelocation storageLocation) {
-		productInventoryMapper.insert(storageLocation);
-	}
-	
-	public void deleteStorageLocation(Integer id) {
-		Storagelocation storageLocation = findById(id);
-		if(storageLocation.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			storageLocation.setDeleteind(GeneralUtils.DELETED);
-			productInventoryMapper.updateByPrimaryKey(storageLocation);
-		}
-	}
-	
-	public void updateStorageLocation(Storagelocation storageLocation) {
-		if(storageLocation.getDeleteind().equals(GeneralUtils.NOT_DELETED))
-			productInventoryMapper.updateByPrimaryKeySelective(storageLocation);
-	}*/
-	
+	/* Inventory Products SubOption END */	
 	
 	/* Product inventory table START */
 	public List<Productinventory> getAllProductInventory() {
@@ -116,6 +109,30 @@ public class InventoryProductManagementService {
 		productInventoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Productinventory> productInventoryList = inventoryMapper.selectByExample(productInventoryExample);
 		return productInventoryList;
+	}
+	
+	public List<Productinventory> searchProductInventory(InventoryHistorySearchCriteria searchCriteria) {
+		List<Productinventory> productInventoryList = this.getAllProductInventory();
+		List<Productinventory> filteredList = new ArrayList<Productinventory>();
+		for(Productinventory productinventory : productInventoryList) {
+			if(!searchCriteria.getMode().equals("NONE") && !searchCriteria.getMode().equals(productinventory.getMode())) continue;
+			if(!searchCriteria.getLocation().equals("NONE") && 
+					!(Integer.valueOf(searchCriteria.getLocation()) == productinventory.getTransferfrom() 
+							|| Integer.valueOf(searchCriteria.getLocation()) == productinventory.getTransferto())) continue;
+			String createdby = searchCriteria.getCreatedby().trim().toLowerCase();
+			if(!createdby.equals("") && !productinventory.getCreatedby().contains(createdby)) continue;
+			if(!searchCriteria.getCreateddate().equals("")){
+				try {
+					if(null == productinventory.getCreatedon()) continue;
+					String date = new SimpleDateFormat("MM/dd/yyyy").format(productinventory.getCreatedon());
+					if(!date.equals(searchCriteria.getCreateddate())) continue; 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			filteredList.add(productinventory);
+		}
+		return filteredList;
 	}
 	
 	

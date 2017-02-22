@@ -2,12 +2,16 @@ package com.JJ.controller.inventorymanagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +39,12 @@ public class InventoryHistoryManagementController {
 	private ProductService productService;
 	private StorageLocationManagementService storageLocationManagementService;
 	
+	boolean searchBefore;
+	List<Productinventory> productInventoryList;
+	Map<String,String> modeList;
+	Map<String,String> locationList;
+	InventoryHistorySearchCriteria searchCriteria;
+	
 	@Autowired
 	public InventoryHistoryManagementController(InventoryProductManagementService inventoryProductManagementService,
 			ProductService productService,
@@ -46,10 +56,31 @@ public class InventoryHistoryManagementController {
 	
 	
 	@RequestMapping(value = "/listInventoryHistory", method = RequestMethod.GET)  
-    public String listInventoryHistory() {  
+    public String listInventoryHistory(Model model) {  
     	logger.debug("loading listInventoryHistory");
+    	initSearchData();
+    	model.addAttribute("inventoryHistoryForm", searchCriteria);
+    	model.addAttribute("modeList", modeList);
+    	model.addAttribute("locationList", locationList);
         return "listInventoryHistory";  
-    }  
+    }
+	
+	private void initSearchData(){
+		productInventoryList = new ArrayList<Productinventory>();
+    	if(null == searchCriteria) {
+    		searchCriteria = new InventoryHistorySearchCriteria();
+    	}
+		searchBefore = false;
+    	modeList = new LinkedHashMap<String,String>();
+    	modeList.put("BATCH", "Batch Intake");
+    	modeList.put("ADHOC", "Adhoc Creation");
+    	
+    	locationList = new LinkedHashMap<String,String>();
+    	List<Storagelocation> storageLocationList = storageLocationManagementService.getAllStoragelocations();
+    	for(Storagelocation storageLocation : storageLocationList) {
+    		locationList.put(String.valueOf(storageLocation.getLocationid()), storageLocation.getLocationname());
+    	}
+	}
 	
 	private HashMap<Integer, Product> convertToHashMapForProduct(List<Product> productList) {
 		HashMap<Integer, Product> productHash = new HashMap<Integer, Product>();
@@ -101,7 +132,9 @@ public class InventoryHistoryManagementController {
 	@RequestMapping(value = "/getInventoryHistoryList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getInventoryProductList() {
 		logger.debug("getting inventory history list");
-		List<Productinventory> productInventoryList = inventoryProductManagementService.getAllProductInventory();
+		if(productInventoryList.isEmpty() && !searchBefore) {
+			productInventoryList = inventoryProductManagementService.getAllProductInventory();
+		}
 		
 		List<Product> productList = productService.getAllProducts();
 		List<ProductSubOptionRsVo> productSuboptionList = productService.getAllProductSubOptionVo();
@@ -110,6 +143,19 @@ public class InventoryHistoryManagementController {
 		productInventoryList = combineProductInventoryInfo(productInventoryList, productList, productSuboptionList, storageLocationList);
 		
 		return GeneralUtils.convertListToJSONString(productInventoryList);
+	}
+	
+	@RequestMapping(value = "/searchInventoryHistoryList", method = RequestMethod.POST)
+	public String searchInventoryHistoryList(@ModelAttribute("inventoryHistoryForm") InventoryHistorySearchCriteria searchCriteria, 
+			Model model) {
+		logger.debug("searching inventory history list");
+		//search from db
+		productInventoryList = inventoryProductManagementService.searchProductInventory(searchCriteria);
+		searchBefore = true;
+		model.addAttribute("inventoryHistoryForm", searchCriteria);
+    	model.addAttribute("modeList", modeList);
+    	model.addAttribute("locationList", locationList);
+		return "listInventoryHistory";
 	}
 
 	

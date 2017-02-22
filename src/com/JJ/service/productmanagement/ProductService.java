@@ -107,16 +107,30 @@ public class ProductService {
 		return productList;
 	}
 	
+	public List<Product> getProductsByName(String productName) {
+		ProductExample productExample = new ProductExample();
+		ProductExample.Criteria criteria = productExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		if(productName != null){
+			criteria.andProductnameLike(productName);
+			List<Product> productList = productMapper.selectByExample(productExample);
+			if(productList != null && productList.size() > 0){
+				return productList;
+			}
+		}
+		return new ArrayList<Product>();
+	}
+	
 	public Product getProductsById(Integer productId) {
 		ProductExample productExample = new ProductExample();
 		ProductExample.Criteria criteria = productExample.createCriteria();
 		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		if(productId != null){
 			criteria.andProductidEqualTo(productId);
-		}
-		List<Product> productList = productMapper.selectByExample(productExample);
-		if(productList != null && productList.size() > 0){
-			return productList.get(0);
+			List<Product> productList = productMapper.selectByExample(productExample);
+			if(productList != null && productList.size() > 0){
+				return productList.get(0);
+			}
 		}
 		return new Product();
 	}

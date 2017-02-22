@@ -1,14 +1,19 @@
 package com.JJ.service.productsuboptionmanagement;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.productmanagement.vo.SubOptionVo;
+import com.JJ.dao.ProductMapper;
 import com.JJ.dao.ProductsuboptionMapper;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.Product;
+import com.JJ.model.ProductExample;
 import com.JJ.model.Productsuboption;
 import com.JJ.model.ProductsuboptionExample;
 
@@ -17,10 +22,13 @@ import com.JJ.model.ProductsuboptionExample;
 public class ProductSubOptionManagementService {
 	
 	private ProductsuboptionMapper productsuboptionMapper;
+	private ProductMapper productMapper;
 	
 	@Autowired
-	public ProductSubOptionManagementService(ProductsuboptionMapper productsuboptionMapper) {
+	public ProductSubOptionManagementService(ProductsuboptionMapper productsuboptionMapper,
+		 ProductMapper productMapper) {
 		this.productsuboptionMapper = productsuboptionMapper;
+		this.productMapper = productMapper;
 	}
 	
 	public Productsuboption findById(Integer id) {
@@ -39,6 +47,15 @@ public class ProductSubOptionManagementService {
 		productsuboptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED)
 												.andDisplayindEqualTo(true)
 												.andProductidEqualTo(productid);
+		List<Productsuboption> productsuboptionList = productsuboptionMapper.selectByExample(productsuboptionExample);
+		return productsuboptionList;
+	}
+	
+	public List<Productsuboption> getAllProductsuboptionsByProductIdList(List<Integer> productid) {
+		ProductsuboptionExample productsuboptionExample = new ProductsuboptionExample();
+		productsuboptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED)
+												.andDisplayindEqualTo(true)
+												.andProductidIn(productid);
 		List<Productsuboption> productsuboptionList = productsuboptionMapper.selectByExample(productsuboptionExample);
 		return productsuboptionList;
 	}
@@ -73,7 +90,5 @@ public class ProductSubOptionManagementService {
 		vo.setSubOptionName(suboption.getName());
 		return vo;
 	}
-	 
-	
 	
 }

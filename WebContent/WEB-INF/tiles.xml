@@ -1198,14 +1198,11 @@
         		<put-attribute name="heading-description" value="To view all the inventory history." />
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/inventoryhistorymanagement/listInventoryHistory.jsp">
+        				<put-attribute name="filter" value="/WEB-INF/jsp/inventoryhistorymanagement/filter.jsp" />
         				<put-attribute name="datatable">
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
 		        				<put-attribute name="table-title" value="All Inventory History" />
-		        				<put-attribute name="options">
-		        					<definition template = "/WEB-INF/jsp/inventoryhistorymanagement/options.jsp">
-		        						<put-attribute name="filter" value="/WEB-INF/jsp/inventoryhistorymanagement/filter.jsp" />
-		        					</definition>
-		        				</put-attribute>
+		        				<put-attribute name="options" value="/WEB-INF/jsp/inventoryhistorymanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
 		        					<definition template="/WEB-INF/jsp/inventoryhistorymanagement/datatable-script.jsp" >

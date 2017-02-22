@@ -4,8 +4,6 @@
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/storagelocation/deleteStorageLocation" />"><i class="fa fa-user-times"></i> Search</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="" />"><i class="fa fa-user-times"></i> Add</button>
 	</div>
 </div>
-
-<tiles:insertAttribute name="filter"/>

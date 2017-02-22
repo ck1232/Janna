@@ -10,37 +10,70 @@
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
       </div>
 	</div>
-	
-	<div class="box-body">
-	    <div class="row">
-	      <div class="col-md-6">
-	      	 <div class="form-group">
-                <label>Minimal</label>
-                <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                  <option selected="selected">Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
-              </div>
-	      </div>
-	      <div class="col-md-6">
-	      	<div class="form-group">
-                <label>Disabled</label>
-                <select class="form-control select2 select2-hidden-accessible" disabled="" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                  <option selected="selected">Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
-              </div>
-	      </div>
+	<c:url var="post_url" value="/inventoryhistory/searchInventoryHistoryList" />
+	<form:form id = "searchListForm" method = "post" modelAttribute = "inventoryHistoryForm" action="${post_url}">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		<div class="box-body">
+		    <div class="row">
+		      <div class="col-md-4">
+		      	 <div class="form-group">
+	                <label>Product Name</label>
+	                <form:input path="productname" type="text" class="form-control"
+						      id="productname" placeholder="" />
+	              </div>
+		      </div>
+		      <div class="col-md-4">
+		      	<div class="form-group">
+	                <label>Mode</label>
+					<form:select path="mode" class="form-control" id="mode">
+						<form:option value="NONE" label="--- Select ---"/>
+   						<form:options items="${modeList}" />
+					</form:select>
+	              </div>
+		      </div>
+		      <div class="col-md-4">
+		      	 <div class="form-group">
+	                <label>Location</label>
+	                <form:select path="location" class="form-control" id="location">
+						<form:option value="NONE" label="--- Select ---"/>
+   						<form:options items="${locationList}" />
+					</form:select>
+	              </div>
+		      </div>
+		    </div>
+		    <div class="row">
+		      <div class="col-md-4">
+		      	 <div class="form-group">
+	                <label>Created By</label>
+	                <form:input path="createdby" type="text" class="form-control"
+						      id="createdby" placeholder="" />
+	              </div>
+		      </div>
+		      <div class="col-md-4">
+		      	 <div class="form-group">
+	                <label>Created Date</label>
+	                <form:input path="createddate" type="text" class="form-control"
+						      id="createddate"  />
+	              </div>
+		      </div>
+		   </div>
 	    </div>
-    </div>
+    </form:form>
+    <div class="margin">
+		<div class="btn-grp">
+			<button class="btn btn-primary pull-right" type="submit" form="searchListForm"><i class="fa fa-search"></i> Search</button>
+		</div>
+	</div>
+	<br>
+	<br>
 </div>
+
+<script> 	
+    $( function() {
+    	$('#createddate').datepicker(
+    	{
+    		dateFormat: 'dd/MM/yyyy',
+	      	autoclose: true
+	    });
+    });
+</script>
