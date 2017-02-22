@@ -11,6 +11,7 @@ public class ProductVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String productName;
+	private String productCode;
 	private Integer weight;
 	private List<OptionVo> optionList;
 	private Integer subcategoryId;
@@ -71,6 +72,18 @@ public class ProductVo implements Serializable {
 	}
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+	/**
+	 * @return the productCode
+	 */
+	public String getProductCode() {
+		return productCode;
+	}
+	/**
+	 * @param productCode the productCode to set
+	 */
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 	
 	

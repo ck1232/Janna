@@ -1,9 +1,13 @@
 package com.JJ.model;
 
-import java.util.Date;
 
-public class Productsuboption extends Base{
-    private Integer productsuboptionid;
+public class Productsuboption extends Base {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Integer productsuboptionid;
 
     private Integer productid;
 
@@ -11,20 +15,10 @@ public class Productsuboption extends Base{
 
     private String name;
 
+    private String code;
+
     private Boolean displayind;
-
-    private String deleteind;
-
-    private String createdby;
-
-    private Date createdon;
-
-    private String updatedby;
-
-    private Date updatedon;
-
-    private Integer version;
-
+    
     public Integer getProductsuboptionid() {
         return productsuboptionid;
     }
@@ -57,59 +51,19 @@ public class Productsuboption extends Base{
         this.name = name;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Boolean getDisplayind() {
         return displayind;
     }
 
     public void setDisplayind(Boolean displayind) {
         this.displayind = displayind;
-    }
-
-    public String getDeleteind() {
-        return deleteind;
-    }
-
-    public void setDeleteind(String deleteind) {
-        this.deleteind = deleteind;
-    }
-
-    public String getCreatedby() {
-        return createdby;
-    }
-
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
-    }
-
-    public Date getCreatedon() {
-        return createdon;
-    }
-
-    public void setCreatedon(Date createdon) {
-        this.createdon = createdon;
-    }
-
-    public String getUpdatedby() {
-        return updatedby;
-    }
-
-    public void setUpdatedby(String updatedby) {
-        this.updatedby = updatedby;
-    }
-
-    public Date getUpdatedon() {
-        return updatedon;
-    }
-
-    public void setUpdatedon(Date updatedon) {
-        this.updatedon = updatedon;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 }

@@ -6,6 +6,7 @@
     <result column="productId" jdbcType="INTEGER" property="productid" />
     <result column="productoptionId" jdbcType="INTEGER" property="productoptionid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="displayInd" jdbcType="BIT" property="displayind" />
     <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
     <result column="createdby" jdbcType="VARCHAR" property="createdby" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    productSubOptionId, productId, productoptionId, name, displayInd, deleteInd, createdby, 
-    createdon, updatedby, updatedon, version
+    productSubOptionId, productId, productoptionId, name, code, displayInd, deleteInd, 
+    createdby, createdon, updatedby, updatedon, version
   </sql>
   <select id="selectByExample" parameterType="com.JJ.model.ProductsuboptionExample" resultMap="BaseResultMap">
     select
@@ -106,17 +107,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.JJ.model.Productsuboption" useGeneratedKeys="true" keyProperty="productsuboptionid" keyColumn="productSubOptionId">
+  <insert id="insert" parameterType="com.JJ.model.Productsuboption" useGeneratedKeys="true" keyColumn="productSubOptionId" keyProperty="productsuboptionid">
     insert into productsuboption (productSubOptionId, productId, productoptionId, 
-      name, displayInd, deleteInd, 
-      createdby, createdon, updatedby, 
-      updatedon, version)
+      name, code, displayInd, 
+      deleteInd, createdby, createdon, 
+      updatedby, updatedon, version
+      )
     values (#{productsuboptionid,jdbcType=INTEGER}, #{productid,jdbcType=INTEGER}, #{productoptionid,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{displayind,jdbcType=BIT}, #{deleteind,jdbcType=CHAR}, 
-      #{createdby,jdbcType=VARCHAR}, #{createdon,jdbcType=TIMESTAMP}, #{updatedby,jdbcType=VARCHAR}, 
-      #{updatedon,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+      #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{displayind,jdbcType=BIT}, 
+      #{deleteind,jdbcType=CHAR}, #{createdby,jdbcType=VARCHAR}, #{createdon,jdbcType=TIMESTAMP}, 
+      #{updatedby,jdbcType=VARCHAR}, #{updatedon,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.JJ.model.Productsuboption" useGeneratedKeys="true" keyProperty="productsuboptionid" keyColumn="productSubOptionId">
+  <insert id="insertSelective" parameterType="com.JJ.model.Productsuboption" useGeneratedKeys="true" keyColumn="productSubOptionId" keyProperty="productsuboptionid">
     insert into productsuboption
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productsuboptionid != null">
@@ -130,6 +133,9 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+      <if test="code != null">
+        code,
       </if>
       <if test="displayind != null">
         displayInd,
@@ -165,6 +171,9 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
       </if>
       <if test="displayind != null">
         #{displayind,jdbcType=BIT},
@@ -210,6 +219,9 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
       <if test="record.displayind != null">
         displayInd = #{record.displayind,jdbcType=BIT},
       </if>
@@ -242,6 +254,7 @@
       productId = #{record.productid,jdbcType=INTEGER},
       productoptionId = #{record.productoptionid,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
       displayInd = #{record.displayind,jdbcType=BIT},
       deleteInd = #{record.deleteind,jdbcType=CHAR},
       createdby = #{record.createdby,jdbcType=VARCHAR},
@@ -264,6 +277,9 @@
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
       </if>
       <if test="displayind != null">
         displayInd = #{displayind,jdbcType=BIT},
@@ -294,6 +310,7 @@
     set productId = #{productid,jdbcType=INTEGER},
       productoptionId = #{productoptionid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
       displayInd = #{displayind,jdbcType=BIT},
       deleteInd = #{deleteind,jdbcType=CHAR},
       createdby = #{createdby,jdbcType=VARCHAR},

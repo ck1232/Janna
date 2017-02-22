@@ -1,7 +1,12 @@
 package com.JJ.model;
 
 public class Productoption extends Base {
-    private Integer productoptionid;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Integer productoptionid;
 
     private String name;
 
