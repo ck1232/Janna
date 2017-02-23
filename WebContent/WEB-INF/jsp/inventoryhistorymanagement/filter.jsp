@@ -23,12 +23,10 @@
 	              </div>
 		      </div>
 		      <div class="col-md-4">
-		      	<div class="form-group">
-	                <label>Mode</label>
-					<form:select path="mode" class="form-control" id="mode">
-						<form:option value="NONE" label="--- Select ---"/>
-   						<form:options items="${modeList}" />
-					</form:select>
+		      	 <div class="form-group">
+	                <label>Product Code</label>
+	                <form:input path="itemcode" type="text" class="form-control"
+						      id="itemcode" placeholder="" />
 	              </div>
 		      </div>
 		      <div class="col-md-4">
@@ -43,17 +41,37 @@
 		    </div>
 		    <div class="row">
 		      <div class="col-md-4">
-		      	 <div class="form-group">
-	                <label>Created By</label>
-	                <form:input path="createdby" type="text" class="form-control"
-						      id="createdby" placeholder="" />
+		      	<div class="form-group">
+	                <label>Mode</label>
+					<form:select path="mode" class="form-control" id="mode">
+						<form:option value="NONE" label="--- Select ---"/>
+   						<form:options items="${modeList}" />
+					</form:select>
 	              </div>
 		      </div>
 		      <div class="col-md-4">
 		      	 <div class="form-group">
-	                <label>Created Date</label>
-	                <form:input path="createddate" type="text" class="form-control"
-						      id="createddate"  />
+	                <label>Created Date From</label>
+	                <form:input path="createddatefrom" type="text" class="form-control"
+						      id="createddatefrom"  />
+					<form:errors path="createddatefrom" class="text-danger" />
+	              </div>
+		      </div>
+		      <div class="col-md-4">
+		      	 <div class="form-group">
+		      	 	<label>Created Date To</label>
+	                <form:input path="createddateto" type="text" class="form-control"
+						      id="createddateto"  />
+					<form:errors path="createddateto" class="text-danger" />
+	              </div>
+		      </div>
+		   </div>
+		   <div class="row">
+		     <div class="col-md-4">
+		      	 <div class="form-group">
+	                <label>Created By</label>
+	                <form:input path="createdby" type="text" class="form-control"
+						      id="createdby" placeholder="" />
 	              </div>
 		      </div>
 		   </div>
@@ -70,7 +88,12 @@
 
 <script> 	
     $( function() {
-    	$('#createddate').datepicker(
+    	$('#createddatefrom').datepicker(
+    	{
+    		dateFormat: 'dd/MM/yyyy',
+	      	autoclose: true
+	    });
+    	$('#createddateto').datepicker(
     	{
     		dateFormat: 'dd/MM/yyyy',
 	      	autoclose: true

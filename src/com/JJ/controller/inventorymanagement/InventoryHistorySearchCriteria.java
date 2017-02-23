@@ -1,12 +1,10 @@
 package com.JJ.controller.inventorymanagement;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class InventoryHistorySearchCriteria{
 	
 	private String productname;
+	
+	private String itemcode;
 	
 	private String mode;
 	
@@ -14,7 +12,9 @@ public class InventoryHistorySearchCriteria{
 	
 	private String createdby;
 	
-	private String createddate;
+	private String createddatefrom;
+	
+	private String createddateto;
 
 	public String getProductname() {
 		return productname;
@@ -22,6 +22,14 @@ public class InventoryHistorySearchCriteria{
 
 	public void setProductname(String productname) {
 		this.productname = productname;
+	}
+
+	public String getItemcode() {
+		return itemcode;
+	}
+
+	public void setItemcode(String itemcode) {
+		this.itemcode = itemcode;
 	}
 
 	public String getMode() {
@@ -48,14 +56,20 @@ public class InventoryHistorySearchCriteria{
 		this.createdby = createdby;
 	}
 
-	public String getCreateddate() {
-		return createddate;
+	public String getCreateddatefrom() {
+		return createddatefrom;
 	}
 
-	public void setCreateddate(String createddate) {
-		this.createddate = createddate;
+	public void setCreateddatefrom(String createddatefrom) {
+		this.createddatefrom = createddatefrom;
 	}
 
+	public String getCreateddateto() {
+		return createddateto;
+	}
 
+	public void setCreateddateto(String createddateto) {
+		this.createddateto = createddateto;
+	}
 	
 }

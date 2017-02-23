@@ -39,6 +39,8 @@ public class Productinventory extends Base{
     
     private String location;
     
+    private String itemCode;
+    
     public String getProduct() {
 		return product;
 	}
@@ -115,6 +117,14 @@ public class Productinventory extends Base{
 	}
 	/*non db fields end*/
 
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
 
 	public Integer getProductinventoryid() {
         return productinventoryid;

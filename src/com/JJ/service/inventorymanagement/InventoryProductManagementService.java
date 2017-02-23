@@ -3,7 +3,9 @@ package com.JJ.service.inventorymanagement;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.inventorymanagement.InventoryHistorySearchCriteria;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
+import com.JJ.controller.productmanagement.vo.ProductVo;
 import com.JJ.dao.ProductinventoryMapper;
 import com.JJ.dao.ViewProductInventoryLocationMapper;
 import com.JJ.dao.ViewProductInventoryMapper;
 import com.JJ.dao.ViewProductSuboptionInventoryMapper;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.Product;
 import com.JJ.model.Productinventory;
 import com.JJ.model.ProductinventoryExample;
+import com.JJ.model.Storagelocation;
+import com.JJ.model.ViewItemCode;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryExample;
 import com.JJ.model.ViewProductInventoryLocation;
@@ -108,24 +115,105 @@ public class InventoryProductManagementService {
 		ProductinventoryExample productInventoryExample = new ProductinventoryExample();
 		productInventoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Productinventory> productInventoryList = inventoryMapper.selectByExample(productInventoryExample);
+		
+		List<Product> productList = productService.getAllProducts();
+		List<ViewItemCode> itemCodeList = productService.getAllItemCode();
+		List<ProductSubOptionRsVo> productSuboptionList = productService.getAllProductSubOptionVo();
+		List<Storagelocation> storageLocationList = storageLocationManagementService.getAllStoragelocations();
+		
+		productInventoryList = combineProductInventoryInfo(productInventoryList, productList, itemCodeList, productSuboptionList, storageLocationList);
 		return productInventoryList;
+	}
+	
+	private List<Productinventory> combineProductInventoryInfo(List<Productinventory> productInventoryList, 
+			List<Product> productList,
+			List<ViewItemCode> itemCodeList,
+			List<ProductSubOptionRsVo> productSuboptionList,
+			List<Storagelocation> storageLocationList){
+		
+		HashMap<Integer, Product> productHash = convertToHashMapForProduct(productList);
+		HashMap<Integer, ViewItemCode> itemCodeHash = convertToHashMapForItemCode(itemCodeList);
+		HashMap<Integer, ProductSubOptionRsVo> productSuboptionHash = convertToHashMapForProductSubOption(productSuboptionList);
+		HashMap<Integer, Storagelocation> locationHash = convertToHashMapForStoragelocation(storageLocationList);
+		for(Productinventory productInventory : productInventoryList) {
+			productInventory.setProductSuboption(productSuboptionHash.get(productInventory.getProductsuboptionid()));
+			Product product = productHash.get(productInventory.getProductSuboption().getProductid());
+			ProductVo productvo = new ProductVo();
+			productvo.setProductName(product.getProductname());
+			productInventory.setItemCode(itemCodeHash.get(productInventory.getProductsuboptionid()).getItemCode());
+			productInventory.getProductSuboption().setProduct(productvo);
+			productInventory.setFromLocation(locationHash.get(productInventory.getTransferfrom()));
+			productInventory.setToLocation(locationHash.get(productInventory.getTransferto()));
+			productInventory.setLocation();
+			productInventory.setProduct();
+		}
+		
+		return productInventoryList;
+	}
+	
+	private HashMap<Integer, Product> convertToHashMapForProduct(List<Product> productList) {
+		HashMap<Integer, Product> productHash = new HashMap<Integer, Product>();
+		for(Product product : productList) {
+			productHash.put(product.getProductid(), product);
+		}
+		return productHash;
+	}
+	
+	private HashMap<Integer, ViewItemCode> convertToHashMapForItemCode(List<ViewItemCode> itemCodeList) {
+		HashMap<Integer, ViewItemCode> itemCodeHash = new HashMap<Integer, ViewItemCode>();
+		for(ViewItemCode itemCode : itemCodeList) {
+			itemCodeHash.put(itemCode.getProductsuboptionrsid(), itemCode);
+		}
+		return itemCodeHash;
+	}
+	
+	private HashMap<Integer, ProductSubOptionRsVo> convertToHashMapForProductSubOption(List<ProductSubOptionRsVo> voList) {
+		HashMap<Integer, ProductSubOptionRsVo> voHash = new HashMap<Integer, ProductSubOptionRsVo>();
+		for(ProductSubOptionRsVo vo : voList) {
+			voHash.put(vo.getProductsuboptionid(), vo);
+		}
+		return voHash;
+	}
+	
+	private HashMap<Integer, Storagelocation> convertToHashMapForStoragelocation(List<Storagelocation> locationList) {
+		HashMap<Integer, Storagelocation> locationHash = new HashMap<Integer, Storagelocation>();
+		for(Storagelocation location : locationList) {
+			locationHash.put(location.getLocationid(), location);
+		}
+		return locationHash;
 	}
 	
 	public List<Productinventory> searchProductInventory(InventoryHistorySearchCriteria searchCriteria) {
 		List<Productinventory> productInventoryList = this.getAllProductInventory();
 		List<Productinventory> filteredList = new ArrayList<Productinventory>();
 		for(Productinventory productinventory : productInventoryList) {
+			String name = productinventory.getProductSuboption().getProduct().getProductName().toLowerCase();
+			if(!searchCriteria.getProductname().trim().isEmpty() && !name.contains(searchCriteria.getProductname().trim().toLowerCase())) continue;
+			String itemCode = productinventory.getItemCode().toLowerCase();
+			if(!searchCriteria.getItemcode().trim().isEmpty() && !itemCode.contains(searchCriteria.getItemcode().trim().toLowerCase())) continue;
 			if(!searchCriteria.getMode().equals("NONE") && !searchCriteria.getMode().equals(productinventory.getMode())) continue;
 			if(!searchCriteria.getLocation().equals("NONE") && 
 					!(Integer.valueOf(searchCriteria.getLocation()) == productinventory.getTransferfrom() 
 							|| Integer.valueOf(searchCriteria.getLocation()) == productinventory.getTransferto())) continue;
 			String createdby = searchCriteria.getCreatedby().trim().toLowerCase();
 			if(!createdby.equals("") && !productinventory.getCreatedby().contains(createdby)) continue;
-			if(!searchCriteria.getCreateddate().equals("")){
+			if(!searchCriteria.getCreateddatefrom().isEmpty()){
 				try {
 					if(null == productinventory.getCreatedon()) continue;
-					String date = new SimpleDateFormat("MM/dd/yyyy").format(productinventory.getCreatedon());
-					if(!date.equals(searchCriteria.getCreateddate())) continue; 
+					Date datefrom = new SimpleDateFormat("MM/dd/yyyy").parse(searchCriteria.getCreateddatefrom());
+					if(productinventory.getCreatedon().compareTo(datefrom) < 0) continue; 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if(!searchCriteria.getCreateddateto().isEmpty()){
+				try {
+					if(null == productinventory.getCreatedon()) continue;
+					Date dateto = new SimpleDateFormat("MM/dd/yyyy").parse(searchCriteria.getCreateddateto());
+					Calendar c = Calendar.getInstance();
+					c.setTime(dateto);
+					c.add(Calendar.DATE, 1);
+					if(productinventory.getCreatedon().compareTo(c.getTime()) > 0) continue; 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

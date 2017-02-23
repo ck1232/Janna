@@ -55,6 +55,8 @@ import com.JJ.model.ProductsuboptionRs;
 import com.JJ.model.ProductsuboptionRsExample;
 import com.JJ.model.Producttags;
 import com.JJ.model.ProducttagsExample;
+import com.JJ.model.ViewItemCode;
+import com.JJ.model.ViewItemCodeExample;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
@@ -82,7 +84,8 @@ public class ProductService {
 			ProductOptionManagementService productOptionManagementService, ProducttagsMapper productTagsMapper,
 			ProductSubOptionManagementService productSubOptionManagementService,
 			ProductSubCategoryManagementService productSubCategoryManagementService,
-			ProductsuboptionRsMapper productSuboptionRsMapper){
+			ProductsuboptionRsMapper productSuboptionRsMapper,
+			ViewItemCodeMapper viewItemCodeMapper){
 		this.productMapper = productMapper;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productImageMapper = productImageMapper;
@@ -93,6 +96,7 @@ public class ProductService {
 		this.productTagsMapper = productTagsMapper;
 		this.productSubOptionManagementService = productSubOptionManagementService;
 		this.productSuboptionRsMapper = productSuboptionRsMapper;
+		this.viewItemCodeMapper = viewItemCodeMapper;
 	}
 	
 	public List<Product> getAllProducts() {
@@ -1109,5 +1113,11 @@ public class ProductService {
 			}
 		}
 		return productCodeList;
+	}
+	
+	public List<ViewItemCode> getAllItemCode() {
+		ViewItemCodeExample viewItemCodeExample = new ViewItemCodeExample();
+		List<ViewItemCode> itemCodeList = viewItemCodeMapper.selectByExample(viewItemCodeExample);
+		return itemCodeList;
 	}
 }
