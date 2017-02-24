@@ -110,17 +110,15 @@ public class InventoryHistoryManagementController {
 	public String searchInventoryHistoryList(@ModelAttribute("inventoryHistoryForm") @Validated InventoryHistorySearchCriteria searchCriteria, 
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("searching inventory history list");
-		if (result.hasErrors()) {
-			return "listInventoryHistory";
-		} else {
+		if (!result.hasErrors()) {
 			//search from db
 			productInventoryList = inventoryProductManagementService.searchProductInventory(searchCriteria);
 			searchBefore = true;
-			model.addAttribute("inventoryHistoryForm", searchCriteria);
-	    	model.addAttribute("modeList", modeList);
-	    	model.addAttribute("locationList", locationList);
-	    	return "listInventoryHistory";
 		}
+		model.addAttribute("inventoryHistoryForm", searchCriteria);
+    	model.addAttribute("modeList", modeList);
+    	model.addAttribute("locationList", locationList);
+    	return "listInventoryHistory";
 	}
 
 	
