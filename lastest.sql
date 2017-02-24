@@ -375,6 +375,7 @@ CREATE TABLE `product` (
   `unitPrice` decimal(7,2) NOT NULL DEFAULT '0.00',
   `weight` int(5) NOT NULL DEFAULT '0',
   `subcategoryId` int(11) DEFAULT NULL,
+  `productCode` varchar(10) NOT NULL,
   `desciption` varchar(1000) DEFAULT NULL,
   `paypalId` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
@@ -384,7 +385,7 @@ CREATE TABLE `product` (
   `updatedon` datetime DEFAULT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productId`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,7 +394,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,NULL,'Y','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1),(18,'testing',123.00,500,2,NULL,NULL,'Y',NULL,NULL,NULL,NULL,0),(19,'testing1',23.00,23,3,NULL,NULL,'Y',NULL,NULL,NULL,NULL,0),(20,'testing1',23.00,23,3,NULL,NULL,'Y',NULL,NULL,NULL,NULL,0),(21,'testing1',23.00,23,3,NULL,NULL,'Y',NULL,NULL,NULL,NULL,0),(22,'testing',123.00,456,2,NULL,NULL,'N',NULL,NULL,NULL,NULL,0),(23,'product3',100.00,1,2,NULL,NULL,'N',NULL,NULL,'ck1232','2017-01-11 00:15:19',1),(24,'Iphone',51.00,26,2,NULL,'CWZRY2MNRJWYA','N',NULL,NULL,'ck1232','2017-01-12 22:58:49',1),(25,'paypal',12.00,456,2,NULL,NULL,'N',NULL,NULL,NULL,NULL,0),(26,'paypal',12.00,456,2,NULL,NULL,'N',NULL,NULL,NULL,NULL,0),(27,'paypal',12.00,12,2,NULL,NULL,'N',NULL,NULL,NULL,NULL,0),(28,'paypal',12.00,12,2,NULL,NULL,'N',NULL,NULL,NULL,NULL,0),(29,'IPHONE testing',108.00,500,3,NULL,'PGLBLB2Q4RMBU','N','ck1232','2017-01-11 22:41:44','ck1232','2017-01-12 22:52:08',1);
+INSERT INTO `product` VALUES (36,'apple',123.00,123,2,'apple',NULL,NULL,'N','ck1232','2017-02-21 21:33:43','ck1232','2017-02-21 22:49:27',1),(37,'testing',123.00,12,2,'testin',NULL,NULL,'N','ck1232','2017-02-21 22:02:24','ck1232','2017-02-21 22:34:38',1),(38,'',0.00,0,NULL,'',NULL,NULL,'Y','ck1232','2017-02-21 22:09:38','ck1232','2017-02-21 22:09:38',1),(39,'apple1',12.00,12,2,'apple3',NULL,NULL,'N','ck1232','2017-02-21 23:00:54','ck1232','2017-02-21 23:05:26',1),(40,'apple10',56.00,56,2,'apple2',NULL,NULL,'N','ck1232','2017-02-21 23:01:37','ck1232','2017-02-21 23:04:57',1),(41,'appleok',66.00,66,3,'apple1',NULL,NULL,'N','ck1232','2017-02-21 23:05:55','ck1232','2017-02-21 23:05:55',1),(42,'apple again',12.00,43,5,'apple4',NULL,NULL,'N','ck1232','2017-02-21 23:06:25','ck1232','2017-02-21 23:06:25',1);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -550,7 +551,7 @@ CREATE TABLE `productoption` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productoptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -559,7 +560,7 @@ CREATE TABLE `productoption` (
 
 LOCK TABLES `productoption` WRITE;
 /*!40000 ALTER TABLE `productoption` DISABLE KEYS */;
-INSERT INTO `productoption` VALUES (1,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(3,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(9,'No Option','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(17,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(18,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(19,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(20,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(21,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(22,'ckbehbeh','','N','euphona','2016-12-20 22:36:35','euphona','2016-12-20 22:36:52',2),(23,'kns','','N','ck1232','2016-12-26 15:22:42','ck1232','2016-12-26 15:22:42',1),(24,'Memory','','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(25,'Color','','N','ck1232','2016-12-26 17:49:00','ck1232','2016-12-26 17:49:00',1),(26,'Memory','','N','ck1232','2016-12-26 17:49:00','ck1232','2016-12-26 17:49:00',1),(27,'Color','','N','ck1232','2017-01-11 00:04:44','ck1232','2017-01-11 00:04:44',1),(28,'Memory','','N','ck1232','2017-01-11 00:04:44','ck1232','2017-01-11 00:04:44',1),(29,'Color','','N','ck1232','2017-01-11 00:14:27','ck1232','2017-01-11 00:14:27',1),(30,'Memory','','N','ck1232','2017-01-11 00:14:27','ck1232','2017-01-11 00:14:27',1),(31,'Color','','N','ck1232','2017-01-11 00:15:19','ck1232','2017-01-11 00:15:19',1),(32,'Type','','N','ck1232','2017-01-11 00:15:19','ck1232','2017-01-11 00:15:19',1),(33,'Color','','N','ck1232','2017-01-11 00:19:11','ck1232','2017-01-11 00:19:11',1),(34,'Memory','','N','ck1232','2017-01-11 00:19:11','ck1232','2017-01-11 00:19:11',1),(35,'Color','','N','ck1232','2017-01-12 22:14:27','ck1232','2017-01-12 22:14:27',1),(36,'Memory','','N','ck1232','2017-01-12 22:14:27','ck1232','2017-01-12 22:14:27',1),(37,'Color','','N','ck1232','2017-01-12 22:58:49','ck1232','2017-01-12 22:58:49',1),(38,'Memory','','N','ck1232','2017-01-12 22:58:49','ck1232','2017-01-12 22:58:49',1);
+INSERT INTO `productoption` VALUES (1,'Color','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(4,'Type','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(9,'No Option','','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(16,'testck','','N','euphona','2016-12-05 23:21:28','euphona','2016-12-05 23:21:28',1),(19,'it works32','','N','euphona','2016-12-05 23:25:16','euphona','2016-12-05 23:25:16',1),(23,'kns','','N','ck1232','2016-12-26 15:22:42','ck1232','2016-12-26 15:22:42',1),(24,'Memory','','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1);
 /*!40000 ALTER TABLE `productoption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -581,7 +582,7 @@ CREATE TABLE `productspecification` (
   `updatedon` datetime DEFAULT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSpecificationId`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -590,7 +591,7 @@ CREATE TABLE `productspecification` (
 
 LOCK TABLES `productspecification` WRITE;
 /*!40000 ALTER TABLE `productspecification` DISABLE KEYS */;
-INSERT INTO `productspecification` VALUES (11,17,'<p>sddsad</p>\r\n','N',NULL,NULL,NULL,NULL,0),(12,18,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(13,19,'<p>asdas123</p>\r\n','N',NULL,NULL,NULL,NULL,0),(14,20,'<p>asdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(15,21,'<p>asdas1</p>\r\n','N',NULL,NULL,NULL,NULL,0),(16,22,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(17,23,'<p>Ck is shit</p>\r\n','N',NULL,NULL,NULL,NULL,0),(18,24,'<p>iphone lo</p>\r\n','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(19,25,'','N','ck1232','2017-01-10 22:26:53','ck1232','2017-01-10 22:26:53',1),(20,26,'','N','ck1232','2017-01-10 22:29:06','ck1232','2017-01-10 22:29:06',1),(21,27,'','N','ck1232','2017-01-10 22:32:46','ck1232','2017-01-10 22:32:46',1),(22,28,'','N','ck1232','2017-01-10 22:34:54','ck1232','2017-01-10 22:34:54',1),(23,29,'<p>xasdasd</p>\r\n','N','ck1232','2017-01-11 22:41:44','ck1232','2017-01-11 22:41:44',1);
+INSERT INTO `productspecification` VALUES (11,17,'<p>sddsad</p>\r\n','N',NULL,NULL,NULL,NULL,0),(12,18,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(13,19,'<p>asdas123</p>\r\n','N',NULL,NULL,NULL,NULL,0),(14,20,'<p>asdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(15,21,'<p>asdas1</p>\r\n','N',NULL,NULL,NULL,NULL,0),(16,22,'<p>dasdas</p>\r\n','N',NULL,NULL,NULL,NULL,0),(17,23,'<p>Ck is shit</p>\r\n','N',NULL,NULL,NULL,NULL,0),(18,24,'<p>iphone lo</p>\r\n','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(19,25,'','N','ck1232','2017-01-10 22:26:53','ck1232','2017-01-10 22:26:53',1),(20,26,'','N','ck1232','2017-01-10 22:29:06','ck1232','2017-01-10 22:29:06',1),(21,27,'','N','ck1232','2017-01-10 22:32:46','ck1232','2017-01-10 22:32:46',1),(22,28,'','N','ck1232','2017-01-10 22:34:54','ck1232','2017-01-10 22:34:54',1),(23,29,'<p>xasdasd</p>\r\n','N','ck1232','2017-01-11 22:41:44','ck1232','2017-01-11 22:41:44',1),(24,30,'','N','ck1232','2017-01-19 23:24:23','ck1232','2017-01-19 23:24:23',1),(25,33,'','N','ck1232','2017-02-20 23:13:51','ck1232','2017-02-20 23:13:51',1),(26,35,'','N','ck1232','2017-02-21 21:25:02','ck1232','2017-02-21 21:25:02',1),(27,36,'','N','ck1232','2017-02-21 21:33:44','ck1232','2017-02-21 21:33:44',1),(28,37,'','N','ck1232','2017-02-21 22:02:27','ck1232','2017-02-21 22:02:27',1),(29,38,'','N','ck1232','2017-02-21 22:09:38','ck1232','2017-02-21 22:09:38',1),(30,39,'','N','ck1232','2017-02-21 23:00:54','ck1232','2017-02-21 23:00:54',1),(31,40,'','N','ck1232','2017-02-21 23:01:38','ck1232','2017-02-21 23:01:38',1),(32,41,'','N','ck1232','2017-02-21 23:05:55','ck1232','2017-02-21 23:05:55',1),(33,42,'','N','ck1232','2017-02-21 23:06:25','ck1232','2017-02-21 23:06:25',1);
 /*!40000 ALTER TABLE `productspecification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -638,6 +639,7 @@ CREATE TABLE `productsuboption` (
   `productId` int(11) DEFAULT NULL,
   `productoptionId` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `code` varchar(10) NOT NULL,
   `displayInd` bit(1) DEFAULT b'1',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   `createdby` varchar(255) NOT NULL,
@@ -646,7 +648,7 @@ CREATE TABLE `productsuboption` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productSubOptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -655,7 +657,7 @@ CREATE TABLE `productsuboption` (
 
 LOCK TABLES `productsuboption` WRITE;
 /*!40000 ALTER TABLE `productsuboption` DISABLE KEYS */;
-INSERT INTO `productsuboption` VALUES (10,17,0,NULL,NULL,'N','ck1232','2016-11-23 22:02:03','ck1232','2016-11-23 22:02:03',1),(11,18,0,NULL,NULL,'N','ck1232','2016-11-23 22:22:19','ck1232','2016-11-23 22:22:19',1),(12,19,1,'1','','N','ck1232','2016-11-25 23:31:34','ck1232','2016-11-25 23:31:34',1),(13,21,1,'1','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(14,21,1,'2','','N','ck1232','2016-11-25 23:28:44','ck1232','2016-11-25 23:28:44',1),(15,22,4,'1','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(16,22,2,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(17,22,2,'2','','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(18,22,2,'123','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(19,22,4,'1','\0','Y','ck1232','2016-11-25 23:41:34','ck1232','2016-11-25 23:41:34',1),(20,22,6,'1','','N','ck1232','2016-11-25 23:41:34','ck1232','2016-12-26 17:39:22',1),(21,23,6,'Long','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(22,23,6,'Short','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(23,23,6,'Round','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(24,23,6,'Square','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(25,23,6,'Rectangle','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(26,23,6,'Pentagon','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(27,23,3,'white','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(28,23,3,'red','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(29,23,3,'yellow','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(30,23,3,'blue','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(31,23,3,'green','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(32,23,3,'pink','','N','euphona','2016-11-27 13:34:19','ck1232','2017-01-11 00:15:19',1),(34,24,3,'Rose gold','','N','ck1232','2016-12-26 17:17:01','ck1232','2017-01-12 22:58:49',1),(35,24,3,'Silver','','N','ck1232','2016-12-26 17:17:01','ck1232','2017-01-12 22:58:49',1),(36,24,3,'Space Grey','','N','ck1232','2016-12-26 17:17:01','ck1232','2017-01-12 22:58:49',1),(37,24,3,'Black','','N','ck1232','2016-12-26 17:17:01','ck1232','2017-01-12 22:58:49',1),(41,24,24,'16 gb','','N','ck1232','2016-12-26 17:21:24','ck1232','2017-01-12 22:58:49',1),(42,24,24,'64 gb','','N','ck1232','2016-12-26 17:21:24','ck1232','2017-01-12 22:58:49',1),(43,24,24,'128 gb','','N','ck1232','2016-12-26 17:21:24','ck1232','2017-01-12 22:58:49',1),(44,25,0,NULL,NULL,'N','ck1232','2017-01-10 22:26:53','ck1232','2017-01-10 22:26:53',1),(45,26,0,NULL,NULL,'N','ck1232','2017-01-10 22:29:06','ck1232','2017-01-10 22:29:06',1),(46,27,0,NULL,NULL,'N','ck1232','2017-01-10 22:32:46','ck1232','2017-01-10 22:32:46',1),(47,28,0,NULL,NULL,'N','ck1232','2017-01-10 22:34:54','ck1232','2017-01-10 22:34:54',1),(48,29,0,NULL,NULL,'Y','ck1232','2017-01-11 22:41:44','ck1232','2017-01-11 22:41:44',1);
+INSERT INTO `productsuboption` VALUES (63,36,24,'32 GB','32GB','','N','ck1232','2017-02-21 21:33:44','ck1232','2017-02-21 22:49:27',1),(64,36,24,'64 GB','64GB','','N','ck1232','2017-02-21 21:33:44','ck1232','2017-02-21 22:49:27',1),(65,37,0,NULL,' ',NULL,'Y','ck1232','2017-02-21 22:02:27','ck1232','2017-02-21 22:02:27',1),(66,38,0,NULL,' ',NULL,'N','ck1232','2017-02-21 22:09:38','ck1232','2017-02-21 22:09:38',1),(67,36,1,'rose gold','rgold','','N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(68,36,1,'silver','silver','','N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(69,36,1,'space grey','sgrey','','N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(70,39,0,NULL,' ',NULL,'Y','ck1232','2017-02-21 23:00:54','ck1232','2017-02-21 23:00:54',1),(71,40,0,NULL,' ',NULL,'Y','ck1232','2017-02-21 23:01:37','ck1232','2017-02-21 23:01:37',1),(72,41,0,NULL,' ',NULL,'N','ck1232','2017-02-21 23:05:55','ck1232','2017-02-21 23:05:55',1),(73,42,0,NULL,' ',NULL,'N','ck1232','2017-02-21 23:06:25','ck1232','2017-02-21 23:06:25',1);
 /*!40000 ALTER TABLE `productsuboption` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -679,7 +681,7 @@ CREATE TABLE `productsuboption_rs` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`productsuboptionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -688,7 +690,7 @@ CREATE TABLE `productsuboption_rs` (
 
 LOCK TABLES `productsuboption_rs` WRITE;
 /*!40000 ALTER TABLE `productsuboption_rs` DISABLE KEYS */;
-INSERT INTO `productsuboption_rs` VALUES (38,24,35,41,NULL,'N','ck1232','2016-12-26 17:31:28','ck1232','2016-12-26 17:31:28',1),(39,24,35,42,NULL,'N','ck1232','2016-12-26 17:36:35','ck1232','2016-12-26 17:36:35',1),(40,25,NULL,NULL,NULL,'N','ck1232','2016-12-26 17:38:49','ck1232','2016-12-26 17:38:49',1),(41,22,20,NULL,NULL,'N','euphona','2016-12-30 15:14:39','euphona','2016-12-30 15:14:39',1),(42,23,27,21,NULL,'N','euphona','2016-12-30 15:17:22','euphona','2016-12-30 15:17:22',1),(43,24,36,43,NULL,'N','ck1232','2017-01-11 21:34:14','ck1232','2017-01-11 21:34:14',1),(44,24,34,41,NULL,'N','ck1232','2017-01-11 21:41:35','ck1232','2017-01-11 21:41:35',1),(45,24,35,43,NULL,'N','ck1232','2017-01-11 21:50:27','ck1232','2017-01-11 21:50:27',1);
+INSERT INTO `productsuboption_rs` VALUES (38,24,35,41,NULL,'N','ck1232','2016-12-26 17:31:28','ck1232','2016-12-26 17:31:28',1),(39,24,35,42,NULL,'N','ck1232','2016-12-26 17:36:35','ck1232','2016-12-26 17:36:35',1),(40,25,NULL,NULL,NULL,'N','ck1232','2016-12-26 17:38:49','ck1232','2016-12-26 17:38:49',1),(41,22,20,NULL,NULL,'N','euphona','2016-12-30 15:14:39','euphona','2016-12-30 15:14:39',1),(42,23,27,21,NULL,'N','euphona','2016-12-30 15:17:22','euphona','2016-12-30 15:17:22',1),(43,24,36,43,NULL,'N','ck1232','2017-01-11 21:34:14','ck1232','2017-01-11 21:34:14',1),(44,24,34,41,NULL,'N','ck1232','2017-01-11 21:41:35','ck1232','2017-01-11 21:41:35',1),(45,24,35,43,NULL,'N','ck1232','2017-01-11 21:50:27','ck1232','2017-01-11 21:50:27',1),(48,37,NULL,NULL,NULL,'N','ck1232','2017-02-21 22:34:38','ck1232','2017-02-21 22:34:38',1),(49,36,63,67,NULL,'N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(50,36,64,67,NULL,'N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(51,36,63,68,NULL,'N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(52,36,64,68,NULL,'N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(53,36,63,69,NULL,'N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(54,36,64,69,NULL,'N','ck1232','2017-02-21 22:49:27','ck1232','2017-02-21 22:49:27',1),(55,39,NULL,NULL,NULL,'N','ck1232','2017-02-21 23:00:54','ck1232','2017-02-21 23:00:54',1),(56,40,NULL,NULL,NULL,'N','ck1232','2017-02-21 23:01:38','ck1232','2017-02-21 23:01:38',1),(57,41,NULL,NULL,NULL,'N','ck1232','2017-02-21 23:05:55','ck1232','2017-02-21 23:05:55',1),(58,42,NULL,NULL,NULL,'N','ck1232','2017-02-21 23:06:25','ck1232','2017-02-21 23:06:25',1);
 /*!40000 ALTER TABLE `productsuboption_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -710,7 +712,7 @@ CREATE TABLE `producttags` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tagsId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -719,7 +721,7 @@ CREATE TABLE `producttags` (
 
 LOCK TABLES `producttags` WRITE;
 /*!40000 ALTER TABLE `producttags` DISABLE KEYS */;
-INSERT INTO `producttags` VALUES (1,30,'23','N','ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25',1),(2,30,'fsd','Y','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(3,30,'testing','N','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(4,24,'iphone','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(5,24,'apple','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(6,25,'testing','N','ck1232','2017-01-10 22:26:53','ck1232','2017-01-10 22:26:53',1),(7,26,'testing','N','ck1232','2017-01-10 22:29:06','ck1232','2017-01-10 22:29:06',1),(8,27,'12','N','ck1232','2017-01-10 22:32:46','ck1232','2017-01-10 22:32:46',1),(9,28,'12','N','ck1232','2017-01-10 22:34:54','ck1232','2017-01-10 22:34:54',1),(10,29,'iphone','N','ck1232','2017-01-11 22:41:44','ck1232','2017-01-11 22:41:44',1);
+INSERT INTO `producttags` VALUES (1,30,'23','Y','ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25',1),(2,30,'fsd','Y','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(3,30,'testing','Y','ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33',1),(4,24,'iphone','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(5,24,'apple','N','ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01',1),(6,25,'testing','N','ck1232','2017-01-10 22:26:53','ck1232','2017-01-10 22:26:53',1),(7,26,'testing','N','ck1232','2017-01-10 22:29:06','ck1232','2017-01-10 22:29:06',1),(8,27,'12','N','ck1232','2017-01-10 22:32:46','ck1232','2017-01-10 22:32:46',1),(9,28,'12','N','ck1232','2017-01-10 22:34:54','ck1232','2017-01-10 22:34:54',1),(10,29,'iphone','N','ck1232','2017-01-11 22:41:44','ck1232','2017-01-11 22:41:44',1),(11,30,'12','N','ck1232','2017-01-19 23:24:23','ck1232','2017-01-19 23:24:23',1),(12,33,'12','N','ck1232','2017-02-20 23:13:51','ck1232','2017-02-20 23:13:51',1),(13,35,'1','N','ck1232','2017-02-21 21:25:03','ck1232','2017-02-21 21:25:03',1),(14,35,'2','N','ck1232','2017-02-21 21:25:03','ck1232','2017-02-21 21:25:03',1),(15,36,'123','N','ck1232','2017-02-21 21:33:44','ck1232','2017-02-21 21:33:44',1),(16,37,'1','N','ck1232','2017-02-21 22:02:28','ck1232','2017-02-21 22:02:28',1),(17,37,'2','N','ck1232','2017-02-21 22:02:28','ck1232','2017-02-21 22:02:28',1),(18,39,'32','N','ck1232','2017-02-21 23:00:54','ck1232','2017-02-21 23:00:54',1),(19,40,'56','N','ck1232','2017-02-21 23:01:38','ck1232','2017-02-21 23:01:38',1),(20,41,'66','N','ck1232','2017-02-21 23:05:55','ck1232','2017-02-21 23:05:55',1),(21,42,'34','N','ck1232','2017-02-21 23:06:25','ck1232','2017-02-21 23:06:25',1);
 /*!40000 ALTER TABLE `producttags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -942,6 +944,308 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `transaction`
+--
+
+DROP TABLE IF EXISTS `transaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction` (
+  `transactionid` varchar(50) NOT NULL,
+  `timestamp` datetime DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `payer` varchar(1024) DEFAULT NULL,
+  `payerName` varchar(512) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `grossAmt` decimal(8,2) DEFAULT NULL,
+  `feeAmt` decimal(8,2) DEFAULT NULL,
+  `netAmt` decimal(8,2) DEFAULT NULL,
+  `createdon` datetime NOT NULL,
+  PRIMARY KEY (`transactionid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES ('3P686428PS175860K','2017-01-15 15:40:22','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',115.00,-4.41,110.59,'2017-02-23 23:18:51'),('3T74227216132964X','2017-01-21 21:37:49','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',12.00,-0.91,11.09,'2017-02-23 23:18:41'),('49914600TE0335029','2017-01-21 23:37:23','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',24.00,-1.32,22.68,'2017-02-23 23:18:10'),('66266208D7997321F','2017-01-21 22:24:16','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',12.00,-0.91,11.09,'2017-02-23 23:18:27'),('95B0478079270524E','2017-01-15 15:30:38','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',27.00,-1.42,25.58,'2017-02-23 23:18:57');
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_coupon_detail`
+--
+
+DROP TABLE IF EXISTS `transaction_coupon_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_coupon_detail` (
+  `transactionId` varchar(50) NOT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `id` varchar(255) DEFAULT NULL,
+  `amount` decimal(6,2) DEFAULT NULL,
+  `amountcurrency` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionCouponDetailFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_coupon_detail`
+--
+
+LOCK TABLES `transaction_coupon_detail` WRITE;
+/*!40000 ALTER TABLE `transaction_coupon_detail` DISABLE KEYS */;
+INSERT INTO `transaction_coupon_detail` VALUES ('3P686428PS175860K',NULL,NULL,NULL,NULL,'2017-02-23 23:18:51'),('3T74227216132964X',NULL,NULL,NULL,NULL,'2017-02-23 23:18:41'),('49914600TE0335029',NULL,NULL,NULL,NULL,'2017-02-23 23:18:09'),('66266208D7997321F',NULL,NULL,NULL,NULL,'2017-02-23 23:18:26'),('95B0478079270524E',NULL,NULL,NULL,NULL,'2017-02-23 23:18:57');
+/*!40000 ALTER TABLE `transaction_coupon_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_detail`
+--
+
+DROP TABLE IF EXISTS `transaction_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_detail` (
+  `transactionId` varchar(50) NOT NULL,
+  `tplreferenceId` varchar(255) DEFAULT NULL,
+  `giftmessage` varchar(512) DEFAULT NULL,
+  `giftreceipt` varchar(255) DEFAULT NULL,
+  `giftwrapname` varchar(255) DEFAULT NULL,
+  `buyeremailoptin` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionDetailFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_detail`
+--
+
+LOCK TABLES `transaction_detail` WRITE;
+/*!40000 ALTER TABLE `transaction_detail` DISABLE KEYS */;
+INSERT INTO `transaction_detail` VALUES ('3P686428PS175860K',NULL,NULL,'0',NULL,NULL,'2017-02-23 23:18:51'),('3T74227216132964X',NULL,NULL,'0',NULL,NULL,'2017-02-23 23:18:41'),('49914600TE0335029',NULL,NULL,'0',NULL,NULL,'2017-02-23 23:18:09'),('66266208D7997321F',NULL,NULL,'0',NULL,NULL,'2017-02-23 23:18:26'),('95B0478079270524E',NULL,NULL,'0',NULL,NULL,'2017-02-23 23:18:57');
+/*!40000 ALTER TABLE `transaction_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payer_address`
+--
+
+DROP TABLE IF EXISTS `transaction_payer_address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payer_address` (
+  `transactionId` varchar(50) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `name` varchar(512) DEFAULT NULL,
+  `street1` varchar(300) DEFAULT NULL,
+  `street2` varchar(300) DEFAULT NULL,
+  `cityname` varchar(120) DEFAULT NULL,
+  `stateorprovince` varchar(120) DEFAULT NULL,
+  `country` varchar(2) DEFAULT NULL,
+  `countryname` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `postalcode` varchar(45) DEFAULT NULL,
+  `addressId` varchar(255) DEFAULT NULL,
+  `addressowner` varchar(50) DEFAULT NULL,
+  `externalAddressId` varchar(255) DEFAULT NULL,
+  `addressstatus` varchar(45) DEFAULT NULL,
+  `addressnormalizationstatus` varchar(45) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`,`type`),
+  CONSTRAINT `transactionPayerAddressFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payer_address`
+--
+
+LOCK TABLES `transaction_payer_address` WRITE;
+/*!40000 ALTER TABLE `transaction_payer_address` DISABLE KEYS */;
+INSERT INTO `transaction_payer_address` VALUES ('3P686428PS175860K','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-23 23:18:51'),('3T74227216132964X','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-23 23:18:41'),('49914600TE0335029','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-23 23:18:09'),('66266208D7997321F','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-23 23:18:26'),('95B0478079270524E','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-23 23:18:57');
+/*!40000 ALTER TABLE `transaction_payer_address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payer_info`
+--
+
+DROP TABLE IF EXISTS `transaction_payer_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payer_info` (
+  `transactionId` varchar(50) NOT NULL,
+  `payer` varchar(255) DEFAULT NULL,
+  `payerId` varchar(50) DEFAULT NULL,
+  `payerStatus` varchar(45) DEFAULT NULL,
+  `payerName` varchar(512) DEFAULT NULL,
+  `payerCountry` varchar(45) DEFAULT NULL,
+  `payerBusiness` varchar(255) DEFAULT NULL,
+  `contactPhone` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionPayerInfoFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payer_info`
+--
+
+LOCK TABLES `transaction_payer_info` WRITE;
+/*!40000 ALTER TABLE `transaction_payer_info` DISABLE KEYS */;
+INSERT INTO `transaction_payer_info` VALUES ('3P686428PS175860K','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('3T74227216132964X','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('49914600TE0335029','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('66266208D7997321F','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('95B0478079270524E','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL);
+/*!40000 ALTER TABLE `transaction_payer_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payment_info`
+--
+
+DROP TABLE IF EXISTS `transaction_payment_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payment_info` (
+  `transactionId` varchar(50) NOT NULL,
+  `ebaytransactionId` varchar(255) DEFAULT NULL,
+  `parenttransactionId` varchar(50) DEFAULT NULL,
+  `receiptId` varchar(45) DEFAULT NULL,
+  `transactiontype` varchar(45) DEFAULT NULL,
+  `paymenttype` varchar(45) DEFAULT NULL,
+  `refundsourcecodetype` varchar(45) DEFAULT NULL,
+  `expectedecheckclearDate` varchar(100) DEFAULT NULL,
+  `paymentDate` varchar(100) DEFAULT NULL,
+  `grossAmount` decimal(6,2) DEFAULT NULL,
+  `feeAmount` decimal(6,2) DEFAULT NULL,
+  `financingFeeAmount` decimal(6,2) DEFAULT NULL,
+  `financingTotalCost` decimal(6,2) DEFAULT NULL,
+  `financingMonthlyPayment` decimal(6,2) DEFAULT NULL,
+  `isfinancing` varchar(10) DEFAULT NULL,
+  `settleAmount` decimal(6,2) DEFAULT NULL,
+  `taxAmount` decimal(6,2) DEFAULT NULL,
+  `exchangeRate` varchar(45) DEFAULT NULL,
+  `paymentStatus` varchar(255) DEFAULT NULL,
+  `invoiceId` varchar(255) DEFAULT NULL,
+  `custom` varchar(255) DEFAULT NULL,
+  `memo` varchar(255) DEFAULT NULL,
+  `salesTax` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionPaymentInfoFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payment_info`
+--
+
+LOCK TABLES `transaction_payment_info` WRITE;
+/*!40000 ALTER TABLE `transaction_payment_info` DISABLE KEYS */;
+INSERT INTO `transaction_payment_info` VALUES ('3P686428PS175860K',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-15T07:40:22Z',115.00,4.41,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-23 23:18:51'),('3T74227216132964X',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-21T13:37:49Z',12.00,0.91,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-23 23:18:41'),('49914600TE0335029',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-21T15:37:23Z',24.00,1.32,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-23 23:18:09'),('66266208D7997321F',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-21T14:24:16Z',12.00,0.91,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-23 23:18:26'),('95B0478079270524E',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-15T07:30:38Z',27.00,1.42,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-23 23:18:57');
+/*!40000 ALTER TABLE `transaction_payment_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payment_info_option`
+--
+
+DROP TABLE IF EXISTS `transaction_payment_info_option`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payment_info_option` (
+  `transactionId` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `optionName` varchar(255) DEFAULT NULL,
+  `optionValue` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`,`name`),
+  CONSTRAINT `transactionPaymentInfoOptionFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payment_info_option`
+--
+
+LOCK TABLES `transaction_payment_info_option` WRITE;
+/*!40000 ALTER TABLE `transaction_payment_info_option` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction_payment_info_option` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payment_item`
+--
+
+DROP TABLE IF EXISTS `transaction_payment_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payment_item` (
+  `transactionId` varchar(255) NOT NULL,
+  `ebayItemTxnId` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `number` varchar(255) NOT NULL,
+  `quantity` varchar(255) DEFAULT NULL,
+  `shippingAmount` decimal(6,2) DEFAULT NULL,
+  `handlingAmount` decimal(6,2) DEFAULT NULL,
+  `couponID` varchar(255) DEFAULT NULL,
+  `couponAmount` varchar(255) DEFAULT NULL,
+  `couponAmountCurrency` varchar(255) DEFAULT NULL,
+  `loyaltyCardDiscountAmount` varchar(255) DEFAULT NULL,
+  `loyaltyCardDiscountCurrency` varchar(255) DEFAULT NULL,
+  `amount` decimal(6,2) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`,`number`),
+  CONSTRAINT `transactionPaymentItemFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payment_item`
+--
+
+LOCK TABLES `transaction_payment_item` WRITE;
+/*!40000 ALTER TABLE `transaction_payment_item` DISABLE KEYS */;
+INSERT INTO `transaction_payment_item` VALUES ('3P686428PS175860K',NULL,'paypal 1','33','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,15.00,'2017-02-23 23:18:51'),('3P686428PS175860K',NULL,'jiacin product','34','2',0.00,0.00,NULL,NULL,NULL,NULL,NULL,100.00,'2017-02-23 23:18:51'),('3T74227216132964X',NULL,'te','30','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-23 23:18:41'),('49914600TE0335029',NULL,'te','30','2',0.00,0.00,NULL,NULL,NULL,NULL,NULL,24.00,'2017-02-23 23:18:09'),('66266208D7997321F',NULL,'te','30','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-23 23:18:26'),('95B0478079270524E',NULL,'paypal testing button','32','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-23 23:18:57'),('95B0478079270524E',NULL,'paypal 1','33','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,15.00,'2017-02-23 23:18:57');
+/*!40000 ALTER TABLE `transaction_payment_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_shipping_option`
+--
+
+DROP TABLE IF EXISTS `transaction_shipping_option`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_shipping_option` (
+  `transactionId` varchar(50) NOT NULL,
+  `shippingcalculationmode` varchar(255) DEFAULT NULL,
+  `insuranceoptionselected` varchar(255) DEFAULT NULL,
+  `shippingoptionisdefault` varchar(255) DEFAULT NULL,
+  `shippingoptionamount` decimal(6,2) DEFAULT NULL,
+  `shippingoptionname` varchar(512) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionShippingOptionFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_shipping_option`
+--
+
+LOCK TABLES `transaction_shipping_option` WRITE;
+/*!40000 ALTER TABLE `transaction_shipping_option` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction_shipping_option` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -1011,6 +1315,46 @@ LOCK TABLES `user_role` WRITE;
 INSERT INTO `user_role` VALUES (1,1,'N','euphona','2016-11-14 00:29:43','euphona','2016-11-14 00:29:43',1),(2,1,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,2,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,5,'N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(8,1,'N','euphona','2017-01-05 22:29:18','euphona','2017-01-05 22:29:18',1),(8,2,'N','euphona','2017-01-05 22:29:18','euphona','2017-01-05 22:29:18',1),(8,5,'N','euphona','2017-01-05 22:29:18','euphona','2017-01-05 22:29:18',1),(8,6,'N','euphona','2017-01-05 22:29:18','euphona','2017-01-05 22:29:18',1);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `view_item_code`
+--
+
+DROP TABLE IF EXISTS `view_item_code`;
+/*!50001 DROP VIEW IF EXISTS `view_item_code`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_item_code` AS SELECT 
+ 1 AS `productId`,
+ 1 AS `productName`,
+ 1 AS `suboption1Name`,
+ 1 AS `subOption1Id`,
+ 1 AS `suboption2Name`,
+ 1 AS `subOption2Id`,
+ 1 AS `suboption3Name`,
+ 1 AS `subOption3Id`,
+ 1 AS `item_code`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `view_latest_transaction`
+--
+
+DROP TABLE IF EXISTS `view_latest_transaction`;
+/*!50001 DROP VIEW IF EXISTS `view_latest_transaction`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_latest_transaction` AS SELECT 
+ 1 AS `transactionid`,
+ 1 AS `timestamp`,
+ 1 AS `type`,
+ 1 AS `payer`,
+ 1 AS `payerName`,
+ 1 AS `status`,
+ 1 AS `grossAmt`,
+ 1 AS `feeAmt`,
+ 1 AS `netAmt`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Temporary view structure for view `view_product_inventory`
@@ -1167,6 +1511,42 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `view_item_code`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_item_code`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_item_code` AS select `rs`.`productId` AS `productId`,`p`.`productName` AS `productName`,`sopt1`.`name` AS `suboption1Name`,`rs`.`suboption1Id` AS `subOption1Id`,`sopt2`.`name` AS `suboption2Name`,`rs`.`suboption2Id` AS `subOption2Id`,`sopt3`.`name` AS `suboption3Name`,`rs`.`suboption3Id` AS `subOption3Id`,concat(`p`.`productCode`,(case when (`sopt1`.`name` is not null) then concat('-',`sopt1`.`code`) else '' end),(case when (`sopt2`.`name` is not null) then concat('-',`sopt2`.`code`) else '' end),(case when (`sopt3`.`name` is not null) then concat('-',`sopt3`.`code`) else '' end)) AS `item_code` from ((((`productsuboption_rs` `rs` join `product` `p` on((`rs`.`productId` = `p`.`productId`))) left join `productsuboption` `sopt1` on((`rs`.`suboption1Id` = `sopt1`.`productSubOptionId`))) left join `productsuboption` `sopt2` on((`rs`.`suboption2Id` = `sopt2`.`productSubOptionId`))) left join `productsuboption` `sopt3` on((`rs`.`suboption3Id` = `sopt3`.`productSubOptionId`))) where (`rs`.`deleteInd` = 'N') group by `rs`.`productId`,`p`.`productName`,`rs`.`suboption1Id`,`rs`.`suboption2Id`,`rs`.`suboption3Id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_latest_transaction`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_latest_transaction`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_latest_transaction` AS select `transaction`.`transactionid` AS `transactionid`,`transaction`.`timestamp` AS `timestamp`,`transaction`.`type` AS `type`,`transaction`.`payer` AS `payer`,`transaction`.`payerName` AS `payerName`,`transaction`.`status` AS `status`,`transaction`.`grossAmt` AS `grossAmt`,`transaction`.`feeAmt` AS `feeAmt`,`transaction`.`netAmt` AS `netAmt` from `transaction` order by `transaction`.`timestamp` desc limit 1 */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `view_product_inventory`
 --
 
@@ -1229,4 +1609,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-13 23:11:50
+-- Dump completed on 2017-02-25  7:57:29
