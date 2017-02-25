@@ -22,6 +22,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            <div class="dataTables_wrapper form-inline dt-bootstrap">
             <form:form id="datatableForm" method="post">
             	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
               <table id="datatable1" class="table table-bordered table-hover display select">
@@ -34,6 +35,7 @@
               </table>
               <tiles:insertAttribute name = "datatable-options" />
               </form:form>
+            </div>
             </div>
             <!-- /.box-body -->
 	    </div>
