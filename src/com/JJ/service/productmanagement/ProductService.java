@@ -1102,10 +1102,14 @@ public class ProductService {
 		return productSuboptionRsMapper.selectByPrimaryKey(productsuboptionid);
 	}
 	
-	public List<String> getExisitingProductCode(){
+	public List<String> getExisitingProductCode(Integer excludeProductId){
 		List<String> productCodeList = new ArrayList<String>();
 		ProductExample productExample = new ProductExample();
-		productExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		ProductExample.Criteria criteria = productExample.createCriteria();
+		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		if(excludeProductId != null){
+			criteria.andProductidNotEqualTo(excludeProductId);
+		}
 		List<Product> productList = productMapper.selectByExample(productExample);
 		if(productList != null && productList.size() > 0){
 			for(Product product : productList){

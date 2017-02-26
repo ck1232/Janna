@@ -306,7 +306,7 @@ public class ProductManagementController {
 			
 		}
 		//TODO check for duplicate, add running number if duplicate
-		List<String> productCodeList = productService.getExisitingProductCode();
+		List<String> productCodeList = productService.getExisitingProductCode(product.getId());
 		int counter = 1;
 		String productCode = product.getProductCode();
 		while(productCodeList.contains(productCode)){
