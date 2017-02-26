@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: jj
+-- Host: localhost    Database: jj
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.9-MariaDB
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -301,6 +301,39 @@ SET character_set_client = utf8;
  1 AS `transferTo`,
  1 AS `qty`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `invoice`
+--
+
+DROP TABLE IF EXISTS `invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invoice` (
+  `invoiceId` int(11) NOT NULL DEFAULT '0',
+  `messenger` varchar(512) NOT NULL DEFAULT 'NIL',
+  `invoiceDate` datetime DEFAULT NULL,
+  `totalPrice` decimal(7,2) NOT NULL DEFAULT '0.00',
+  `chequeId` int(11) DEFAULT NULL,
+  `paymentMode` varchar(255) DEFAULT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'UNPAID',
+  `createdon` datetime DEFAULT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedon` datetime DEFAULT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  PRIMARY KEY (`invoiceId`),
+  UNIQUE KEY `invoiceId_UNIQUE` (`invoiceId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice`
+--
+
+LOCK TABLES `invoice` WRITE;
+/*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `module`
@@ -917,6 +950,281 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `transaction`
+--
+
+DROP TABLE IF EXISTS `transaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction` (
+  `transactionid` varchar(50) NOT NULL,
+  `timestamp` datetime DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `payer` varchar(1024) DEFAULT NULL,
+  `payerName` varchar(512) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `grossAmt` decimal(8,2) DEFAULT NULL,
+  `feeAmt` decimal(8,2) DEFAULT NULL,
+  `netAmt` decimal(8,2) DEFAULT NULL,
+  `createdon` datetime NOT NULL,
+  PRIMARY KEY (`transactionid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES ('0DS650234C847503P','2017-02-25 16:53:32','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',12.00,-0.91,11.09,'2017-02-26 23:06:00'),('3P686428PS175860K','2017-01-15 15:40:22','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',115.00,-4.41,110.59,'2017-02-26 23:06:07'),('3T74227216132964X','2017-01-21 21:37:49','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',12.00,-0.91,11.09,'2017-02-26 23:06:05'),('49914600TE0335029','2017-01-21 23:37:23','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',24.00,-1.32,22.68,'2017-02-26 23:06:01'),('66266208D7997321F','2017-01-21 22:24:16','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',12.00,-0.91,11.09,'2017-02-26 23:06:03'),('95B0478079270524E','2017-01-15 15:30:38','Payment','behchoonkeat-buyer@hotmail.com','buyer test','Completed',27.00,-1.42,25.58,'2017-02-26 23:06:08');
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_coupon_detail`
+--
+
+DROP TABLE IF EXISTS `transaction_coupon_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_coupon_detail` (
+  `transactionId` varchar(50) NOT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `id` varchar(255) DEFAULT NULL,
+  `amount` decimal(6,2) DEFAULT NULL,
+  `amountcurrency` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionCouponDetailFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_coupon_detail`
+--
+
+LOCK TABLES `transaction_coupon_detail` WRITE;
+/*!40000 ALTER TABLE `transaction_coupon_detail` DISABLE KEYS */;
+INSERT INTO `transaction_coupon_detail` VALUES ('0DS650234C847503P',NULL,NULL,NULL,NULL,'2017-02-26 23:06:00'),('3P686428PS175860K',NULL,NULL,NULL,NULL,'2017-02-26 23:06:07'),('3T74227216132964X',NULL,NULL,NULL,NULL,'2017-02-26 23:06:05'),('49914600TE0335029',NULL,NULL,NULL,NULL,'2017-02-26 23:06:01'),('66266208D7997321F',NULL,NULL,NULL,NULL,'2017-02-26 23:06:03'),('95B0478079270524E',NULL,NULL,NULL,NULL,'2017-02-26 23:06:08');
+/*!40000 ALTER TABLE `transaction_coupon_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_detail`
+--
+
+DROP TABLE IF EXISTS `transaction_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_detail` (
+  `transactionId` varchar(50) NOT NULL,
+  `tplreferenceId` varchar(255) DEFAULT NULL,
+  `giftmessage` varchar(512) DEFAULT NULL,
+  `giftreceipt` varchar(255) DEFAULT NULL,
+  `giftwrapname` varchar(255) DEFAULT NULL,
+  `buyeremailoptin` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionDetailFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_detail`
+--
+
+LOCK TABLES `transaction_detail` WRITE;
+/*!40000 ALTER TABLE `transaction_detail` DISABLE KEYS */;
+INSERT INTO `transaction_detail` VALUES ('0DS650234C847503P',NULL,NULL,'0',NULL,NULL,'2017-02-26 23:06:00'),('3P686428PS175860K',NULL,NULL,'0',NULL,NULL,'2017-02-26 23:06:07'),('3T74227216132964X',NULL,NULL,'0',NULL,NULL,'2017-02-26 23:06:05'),('49914600TE0335029',NULL,NULL,'0',NULL,NULL,'2017-02-26 23:06:01'),('66266208D7997321F',NULL,NULL,'0',NULL,NULL,'2017-02-26 23:06:03'),('95B0478079270524E',NULL,NULL,'0',NULL,NULL,'2017-02-26 23:06:08');
+/*!40000 ALTER TABLE `transaction_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payer_address`
+--
+
+DROP TABLE IF EXISTS `transaction_payer_address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payer_address` (
+  `transactionId` varchar(50) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `name` varchar(512) DEFAULT NULL,
+  `street1` varchar(300) DEFAULT NULL,
+  `street2` varchar(300) DEFAULT NULL,
+  `cityname` varchar(120) DEFAULT NULL,
+  `stateorprovince` varchar(120) DEFAULT NULL,
+  `country` varchar(2) DEFAULT NULL,
+  `countryname` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `postalcode` varchar(45) DEFAULT NULL,
+  `addressId` varchar(255) DEFAULT NULL,
+  `addressowner` varchar(50) DEFAULT NULL,
+  `externalAddressId` varchar(255) DEFAULT NULL,
+  `addressstatus` varchar(45) DEFAULT NULL,
+  `addressnormalizationstatus` varchar(45) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`,`type`),
+  CONSTRAINT `transactionPayerAddressFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payer_address`
+--
+
+LOCK TABLES `transaction_payer_address` WRITE;
+/*!40000 ALTER TABLE `transaction_payer_address` DISABLE KEYS */;
+INSERT INTO `transaction_payer_address` VALUES ('0DS650234C847503P','PRIMARY','choon keat beh','blk 522C Tampines Central 7',NULL,NULL,NULL,'SG','Singapore',NULL,'523522',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-26 23:06:00'),('3P686428PS175860K','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-26 23:06:07'),('3T74227216132964X','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-26 23:06:05'),('49914600TE0335029','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-26 23:06:01'),('66266208D7997321F','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-26 23:06:03'),('95B0478079270524E','PRIMARY','buyer test','123 Thomson Rd. ',NULL,'Singapore',NULL,'SG','Singapore',NULL,'308123',NULL,'PayPal',NULL,'Unconfirmed',NULL,'2017-02-26 23:06:08');
+/*!40000 ALTER TABLE `transaction_payer_address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payer_info`
+--
+
+DROP TABLE IF EXISTS `transaction_payer_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payer_info` (
+  `transactionId` varchar(50) NOT NULL,
+  `payer` varchar(255) DEFAULT NULL,
+  `payerId` varchar(50) DEFAULT NULL,
+  `payerStatus` varchar(45) DEFAULT NULL,
+  `payerName` varchar(512) DEFAULT NULL,
+  `payerCountry` varchar(45) DEFAULT NULL,
+  `payerBusiness` varchar(255) DEFAULT NULL,
+  `contactPhone` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionPayerInfoFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payer_info`
+--
+
+LOCK TABLES `transaction_payer_info` WRITE;
+/*!40000 ALTER TABLE `transaction_payer_info` DISABLE KEYS */;
+INSERT INTO `transaction_payer_info` VALUES ('0DS650234C847503P','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('3P686428PS175860K','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('3T74227216132964X','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('49914600TE0335029','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('66266208D7997321F','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL),('95B0478079270524E','behchoonkeat-buyer@hotmail.com','PTBPY5FDJV2NN','verified','null buyer test','SG',NULL,NULL);
+/*!40000 ALTER TABLE `transaction_payer_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payment_info`
+--
+
+DROP TABLE IF EXISTS `transaction_payment_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payment_info` (
+  `transactionId` varchar(50) NOT NULL,
+  `ebaytransactionId` varchar(255) DEFAULT NULL,
+  `parenttransactionId` varchar(50) DEFAULT NULL,
+  `receiptId` varchar(45) DEFAULT NULL,
+  `transactiontype` varchar(45) DEFAULT NULL,
+  `paymenttype` varchar(45) DEFAULT NULL,
+  `refundsourcecodetype` varchar(45) DEFAULT NULL,
+  `expectedecheckclearDate` varchar(100) DEFAULT NULL,
+  `paymentDate` varchar(100) DEFAULT NULL,
+  `grossAmount` decimal(6,2) DEFAULT NULL,
+  `feeAmount` decimal(6,2) DEFAULT NULL,
+  `financingFeeAmount` decimal(6,2) DEFAULT NULL,
+  `financingTotalCost` decimal(6,2) DEFAULT NULL,
+  `financingMonthlyPayment` decimal(6,2) DEFAULT NULL,
+  `isfinancing` varchar(10) DEFAULT NULL,
+  `settleAmount` decimal(6,2) DEFAULT NULL,
+  `taxAmount` decimal(6,2) DEFAULT NULL,
+  `exchangeRate` varchar(45) DEFAULT NULL,
+  `paymentStatus` varchar(255) DEFAULT NULL,
+  `invoiceId` varchar(255) DEFAULT NULL,
+  `custom` varchar(255) DEFAULT NULL,
+  `memo` varchar(255) DEFAULT NULL,
+  `salesTax` varchar(255) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionPaymentInfoFK` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payment_info`
+--
+
+LOCK TABLES `transaction_payment_info` WRITE;
+/*!40000 ALTER TABLE `transaction_payment_info` DISABLE KEYS */;
+INSERT INTO `transaction_payment_info` VALUES ('0DS650234C847503P',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-02-25T08:53:32Z',12.00,0.91,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,'this is a special message','0.00','2017-02-26 23:06:00'),('3P686428PS175860K',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-15T07:40:22Z',115.00,4.41,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-26 23:06:07'),('3T74227216132964X',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-21T13:37:49Z',12.00,0.91,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-26 23:06:05'),('49914600TE0335029',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-21T15:37:23Z',24.00,1.32,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-26 23:06:01'),('66266208D7997321F',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-21T14:24:16Z',12.00,0.91,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-26 23:06:03'),('95B0478079270524E',NULL,NULL,NULL,'cart','instant',NULL,NULL,'2017-01-15T07:30:38Z',27.00,1.42,NULL,NULL,NULL,NULL,NULL,0.00,NULL,'Completed',NULL,NULL,NULL,'0.00','2017-02-26 23:06:08');
+/*!40000 ALTER TABLE `transaction_payment_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_payment_item`
+--
+
+DROP TABLE IF EXISTS `transaction_payment_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_payment_item` (
+  `transactionId` varchar(255) NOT NULL,
+  `ebayItemTxnId` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `number` varchar(255) NOT NULL,
+  `quantity` varchar(255) DEFAULT NULL,
+  `shippingAmount` decimal(6,2) DEFAULT NULL,
+  `handlingAmount` decimal(6,2) DEFAULT NULL,
+  `couponID` varchar(255) DEFAULT NULL,
+  `couponAmount` varchar(255) DEFAULT NULL,
+  `couponAmountCurrency` varchar(255) DEFAULT NULL,
+  `loyaltyCardDiscountAmount` varchar(255) DEFAULT NULL,
+  `loyaltyCardDiscountCurrency` varchar(255) DEFAULT NULL,
+  `amount` decimal(6,2) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`,`number`),
+  CONSTRAINT `transactionPaymentItemFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_payment_item`
+--
+
+LOCK TABLES `transaction_payment_item` WRITE;
+/*!40000 ALTER TABLE `transaction_payment_item` DISABLE KEYS */;
+INSERT INTO `transaction_payment_item` VALUES ('0DS650234C847503P',NULL,'te','30','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-26 23:06:00'),('3P686428PS175860K',NULL,'paypal 1','33','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,15.00,'2017-02-26 23:06:07'),('3P686428PS175860K',NULL,'jiacin product','34','2',0.00,0.00,NULL,NULL,NULL,NULL,NULL,100.00,'2017-02-26 23:06:07'),('3T74227216132964X',NULL,'te','30','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-26 23:06:05'),('49914600TE0335029',NULL,'te','30','2',0.00,0.00,NULL,NULL,NULL,NULL,NULL,24.00,'2017-02-26 23:06:01'),('66266208D7997321F',NULL,'te','30','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-26 23:06:03'),('95B0478079270524E',NULL,'paypal testing button','32','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,12.00,'2017-02-26 23:06:08'),('95B0478079270524E',NULL,'paypal 1','33','1',0.00,0.00,NULL,NULL,NULL,NULL,NULL,15.00,'2017-02-26 23:06:08');
+/*!40000 ALTER TABLE `transaction_payment_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction_shipping_option`
+--
+
+DROP TABLE IF EXISTS `transaction_shipping_option`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction_shipping_option` (
+  `transactionId` varchar(50) NOT NULL,
+  `shippingcalculationmode` varchar(255) DEFAULT NULL,
+  `insuranceoptionselected` varchar(255) DEFAULT NULL,
+  `shippingoptionisdefault` varchar(255) DEFAULT NULL,
+  `shippingoptionamount` decimal(6,2) DEFAULT NULL,
+  `shippingoptionname` varchar(512) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  CONSTRAINT `transactionShippingOptionFk` FOREIGN KEY (`transactionId`) REFERENCES `transaction` (`transactionid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_shipping_option`
+--
+
+LOCK TABLES `transaction_shipping_option` WRITE;
+/*!40000 ALTER TABLE `transaction_shipping_option` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction_shipping_option` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -1009,6 +1317,27 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Temporary view structure for view `view_latest_transaction`
+--
+
+DROP TABLE IF EXISTS `view_latest_transaction`;
+/*!50001 DROP VIEW IF EXISTS `view_latest_transaction`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_latest_transaction` AS SELECT 
+ 1 AS `transactionid`,
+ 1 AS `timestamp`,
+ 1 AS `type`,
+ 1 AS `payer`,
+ 1 AS `payerName`,
+ 1 AS `status`,
+ 1 AS `grossAmt`,
+ 1 AS `feeAmt`,
+ 1 AS `netAmt`,
+ 1 AS `createdon`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Temporary view structure for view `view_product_inventory`
 --
 
@@ -1063,6 +1392,14 @@ SET character_set_client = utf8;
  1 AS `subOption3Id`,
  1 AS `qty`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping events for database 'jj'
+--
+
+--
+-- Dumping routines for database 'jj'
+--
 
 --
 -- Final view structure for view `inventory_from`
@@ -1173,6 +1510,24 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `view_latest_transaction`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_latest_transaction`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_latest_transaction` AS select `transaction`.`transactionid` AS `transactionid`,`transaction`.`timestamp` AS `timestamp`,`transaction`.`type` AS `type`,`transaction`.`payer` AS `payer`,`transaction`.`payerName` AS `payerName`,`transaction`.`status` AS `status`,`transaction`.`grossAmt` AS `grossAmt`,`transaction`.`feeAmt` AS `feeAmt`,`transaction`.`netAmt` AS `netAmt`,`transaction`.`createdon` AS `createdon` from `transaction` order by `transaction`.`timestamp` desc limit 1 */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `view_product_inventory`
 --
 
@@ -1235,4 +1590,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-26 21:53:12
+-- Dump completed on 2017-02-26 23:08:53
