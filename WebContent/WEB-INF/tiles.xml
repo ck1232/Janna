@@ -1221,5 +1221,38 @@
         </put-attribute>
     </definition>
     <!-- Inventory History Module END -->
+    
+    <!-- Invoice Module START -->
+ 	<definition name="listInvoice" extends="main_template">  
+        <put-attribute name="title" value="Invoice Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Invoice Listing" />
+        		<put-attribute name="heading-description" value="To view all the invoice." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/invoicemanagement/listInvoice.jsp">
+        				<put-attribute name="upload" value="/WEB-INF/jsp/invoicemanagement/uploadfile.jsp" />
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Invoice" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/invoicemanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/invoicemanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/invoice/getInvoiceList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/invoicemanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/invoicemanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    <!-- Inventory History Module END -->
   	
 </tiles-definitions>  

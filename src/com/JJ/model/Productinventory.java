@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
 
 public class Productinventory extends Base{
+	
+	private static final long serialVersionUID = 1L;
+	
     private Integer productinventoryid;
 
     private Integer productsuboptionid;

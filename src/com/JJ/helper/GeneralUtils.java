@@ -23,6 +23,7 @@ public class GeneralUtils {
 	public static final String NOT_ALLOW_DISPLAY = "N";
 	public static final String MODE_BATCH = "BATCH";
 	public static final String MODE_ADHOC = "ADHOC";
+	public static final String STATUS_PENDING = "PENDING";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){
