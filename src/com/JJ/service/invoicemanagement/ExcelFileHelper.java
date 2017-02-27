@@ -2,6 +2,7 @@ package com.JJ.service.invoicemanagement;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -26,7 +27,8 @@ public class ExcelFileHelper {
 		try {
             is = new ByteArrayInputStream(file);
             Workbook workbook = WorkbookFactory.create(is);
-            Sheet sheet = workbook.getSheetAt(0);
+            Sheet sheet = workbook.getSheet("Sheet1");
+
             
             /* Getting Messenger */
             int[] messengerIndex = findIndex(sheet, "Messrs");
@@ -55,9 +57,22 @@ public class ExcelFileHelper {
             /* Getting Invoice Date */
             int[] dateIndex = findIndex(sheet, "Date:");
             Cell invoiceDate = sheet.getRow(dateIndex[0]).getCell(dateIndex[1]+1);
-            Date celldatevalue = invoiceDate.getDateCellValue();
-            logger.info(celldatevalue);
-            invoice.setInvoicedate(celldatevalue);
+            try{
+            	Date celldatevalue = invoiceDate.getDateCellValue();
+            	logger.info(celldatevalue);
+                invoice.setInvoicedate(celldatevalue);
+            }catch(Exception e) {
+            	logger.info("Error getting date");
+//            	e.printStackTrace();
+            	try{
+	            	cellvalue = invoiceDate.getRichStringCellValue().getString();
+	            	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+	            	invoice.setInvoicedate(formatter.parse(cellvalue));
+            	}catch(Exception ex){
+            		logger.info("Error getting date again");
+            	}
+            }
+            
             
             /* Getting Invoice Total Price */
             int[] totalPriceIndex = findIndex(sheet, "TOTAL");
