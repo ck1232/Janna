@@ -1232,6 +1232,7 @@
         		<put-attribute name="content">
         			<definition template="/WEB-INF/jsp/invoicemanagement/listInvoice.jsp">
         				<put-attribute name="upload" value="/WEB-INF/jsp/invoicemanagement/uploadfile.jsp" />
+        				<put-attribute name="export" value="/WEB-INF/jsp/invoicemanagement/export.jsp" />
         				<put-attribute name="datatable">
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
 		        				<put-attribute name="table-title" value="All Invoice" />

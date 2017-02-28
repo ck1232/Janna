@@ -1,21 +1,30 @@
 package com.JJ.controller.invoicemanagement;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +40,7 @@ import com.JJ.model.FileMeta;
 import com.JJ.model.Invoice;
 import com.JJ.model.JsonResponse;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
+import com.JJ.validator.InvoiceSearchValidator;
 
 
 @Controller  
@@ -40,12 +50,17 @@ public class InvoiceManagementController {
 	private static final Logger logger = Logger.getLogger(InvoiceManagementController.class);
 	
 	private InvoiceManagementService invoiceManagementService;
+	private InvoiceSearchValidator invoiceSearchValidator;
 	List<Invoice> invoiceList;
 	InvoiceVo invoiceVo;
+	InvoiceSearchCriteria searchCriteria;
+	Map<String,String> statusList;
 	
 	@Autowired
-	public InvoiceManagementController(InvoiceManagementService invoiceManagementService) {
+	public InvoiceManagementController(InvoiceManagementService invoiceManagementService,
+			InvoiceSearchValidator invoiceSearchValidator) {
 		this.invoiceManagementService = invoiceManagementService;
+		this.invoiceSearchValidator = invoiceSearchValidator;
 	}
 	
 	
@@ -54,7 +69,15 @@ public class InvoiceManagementController {
     	logger.debug("loading listInvoice");
     	
     	invoiceVo = new InvoiceVo();
+    	searchCriteria = new InvoiceSearchCriteria();
+    	
+    	statusList = new LinkedHashMap<String,String>();
+    	statusList.put("PAID", "Paid");
+    	statusList.put("PENDING", "Pending");
+    	
     	model.addAttribute("invoiceForm", invoiceVo);
+    	model.addAttribute("exportForm", searchCriteria);
+    	model.addAttribute("statusList", statusList);
         return "listInvoice";  
     }
 
@@ -181,6 +204,64 @@ public class InvoiceManagementController {
 		redirectAttributes.addFlashAttribute("msg", "Invoice(s) deleted successfully!");
 		return "redirect:listInvoice";
 	}
+	
+	@InitBinder("exportForm")
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(invoiceSearchValidator);
+	}
+	
+	@RequestMapping(value="/downloadExcel", method = RequestMethod.POST)
+    public String downloadExcel(@ModelAttribute("exportForm") @Validated InvoiceSearchCriteria searchCriteria, 
+    		BindingResult result, Model model, HttpServletRequest request, HttpServletResponse response,
+    		final RedirectAttributes redirectAttributes) {
+		if (!result.hasErrors()) {
+			List<Invoice> invoiceList = invoiceManagementService.searchInvoice(searchCriteria);
+			if(invoiceList != null && !invoiceList.isEmpty()){
+				downloadExcel(invoiceList, request, response);
+				return null;
+			}
+			else{
+				redirectAttributes.addFlashAttribute("css", "danger");
+				redirectAttributes.addFlashAttribute("msg", "No invoice result is found!");
+				statusList = new LinkedHashMap<String,String>();
+		    	statusList.put("PAID", "Paid");
+		    	statusList.put("PENDING", "Pending");
+		    	
+		    	model.addAttribute("invoiceForm", invoiceVo);
+		    	model.addAttribute("exportForm", searchCriteria);
+		    	model.addAttribute("statusList", statusList);
+				return "redirect:listInvoice";
+			}
+				
+		}
+		statusList = new LinkedHashMap<String,String>();
+    	statusList.put("PAID", "Paid");
+    	statusList.put("PENDING", "Pending");
+    	
+    	model.addAttribute("invoiceForm", invoiceVo);
+    	model.addAttribute("exportForm", searchCriteria);
+    	model.addAttribute("statusList", statusList);
+        return "listInvoice"; 
+    }
+	
+	public void downloadExcel(List<Invoice> invoiceList, HttpServletRequest request, HttpServletResponse response) {
+		String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/template/");
+        File file = new File(dataDirectory+"/invoice_summary_template.xls");
+        HSSFWorkbook wb = invoiceManagementService.writeToFile(file, invoiceList);
+        if(wb != null){
+        	response.setContentType("application/vnd.ms-excel");
+            response.addHeader("Content-Disposition", "attachment; filename=invoice_summary.xls");
+            try{
+            	wb.write(response.getOutputStream());
+                response.getOutputStream().flush();
+            } 
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+	
+	
 	
 	
 	class FileCompare implements Comparator<FileMeta>{

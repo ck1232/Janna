@@ -45,8 +45,8 @@ public class InventoryHistorySearchValidator implements Validator {
 		
 		if(validDate && !"".equals(searchCriteria.getCreateddatefrom()) && !"".equals(searchCriteria.getCreateddateto())){
 			if(datefrom.compareTo(dateto) > 0){
-				errors.rejectValue("createddatefrom", "error.promotionform.createddatefrom.later.than.createddateto");
-				errors.rejectValue("createddateto", "error.promotionform.createddateto.earlier.than.createddatefrom");
+				errors.rejectValue("createddatefrom", "error.inventoryhistoryform.createddatefrom.later.than.createddateto");
+				errors.rejectValue("createddateto", "error.inventoryhistoryform.createddateto.earlier.than.createddatefrom");
 			}
 		}
 

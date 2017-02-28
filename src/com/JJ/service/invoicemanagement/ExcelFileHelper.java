@@ -1,11 +1,16 @@
 package com.JJ.service.invoicemanagement;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -142,6 +147,56 @@ public class ExcelFileHelper {
             }
         }
         return cell[1];
+	}
+	
+	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList){
+		try {
+			FileInputStream file = new FileInputStream(inputfile);
+			HSSFWorkbook workbook = new HSSFWorkbook(file);
+			HSSFSheet sheet = workbook.getSheet("Sheet1");
+			Cell cell = null;
+			cell = sheet.getRow(5).getCell(2);
+			cell.setCellValue("Company name");;
+			
+			/* Writing Messenger */
+			int[] messengerIndex = findIndex(sheet, "Messrs");
+            int messengerContent = getLastCell(sheet, messengerIndex);
+            cell = sheet.getRow(messengerIndex[0]).getCell(messengerContent+1);
+            cell.setCellValue(invoiceList.get(0).getMessenger());
+            
+            /* Writing Statement of Account As Of */
+            int[] statementDateIndex = findIndexWithPattern(sheet, "Statement of Account as of");
+            cell = sheet.getRow(statementDateIndex[0]).getCell(statementDateIndex[1]);
+            cell.setCellValue("Statement of Account as of " + "31 Dec 2016");
+            
+            /* Writing content */
+            int[] dateHeaderIndex = findIndex(sheet, "Date");
+            int[] invoiceNoHeaderIndex = findIndex(sheet, "Invoice");
+            int[] amountHeaderIndex = findIndex(sheet, "($)    Amount");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM");
+            int row = dateHeaderIndex[0] + 1;
+            Double totalAmount = 0.0;
+            for(Invoice invoice : invoiceList) {
+            	cell = sheet.getRow(row).getCell(dateHeaderIndex[1]);
+            	cell.setCellValue(formatter.format(invoice.getInvoicedate()));
+            	cell = sheet.getRow(row).getCell(invoiceNoHeaderIndex[1]);
+            	cell.setCellValue(invoice.getInvoiceid());
+            	cell = sheet.getRow(row).getCell(amountHeaderIndex[1]);
+            	cell.setCellValue(invoice.getTotalprice().doubleValue());
+            	totalAmount += invoice.getTotalprice().doubleValue();
+            	row++;
+            }
+            
+            /* Writing Invoice Total Price */
+            int[] totalPriceIndex = findIndex(sheet, "TOTAL");
+            cell = sheet.getRow(totalPriceIndex[0]).getCell(totalPriceIndex[1]+1);
+            cell.setCellValue(totalAmount);
+            
+			return workbook;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	
