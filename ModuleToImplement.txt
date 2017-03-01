@@ -1,0 +1,16 @@
+salary module - cpf(low pirority)
+reporting module - 
+expense module (expense)
+income module
+payment module
+
+
+----------------------------------------
+invoice module, export as at date for pending only
+
+invoice status - all,
+
+excel show status
+
+------------------------------------------
+
