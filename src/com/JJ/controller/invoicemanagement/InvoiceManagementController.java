@@ -178,7 +178,7 @@ public class InvoiceManagementController {
 	public String saveInvoice(final RedirectAttributes redirectAttributes) {
 		if(invoiceVo == null || invoiceVo.getInvoiceList() == null || invoiceVo.getInvoiceList().isEmpty()) {
 			redirectAttributes.addFlashAttribute("css", "danger");
-			redirectAttributes.addFlashAttribute("msg", "Please upload at least one file!");
+			redirectAttributes.addFlashAttribute("msg", "Please upload at least one excel file!");
 		}else{
 			
 			int fileUploadCount = invoiceManagementService.saveInvoiceFromUploadFile(invoiceVo);
