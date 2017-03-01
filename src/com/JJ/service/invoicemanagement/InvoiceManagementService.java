@@ -87,6 +87,14 @@ public class InvoiceManagementService {
 		invoiceMapper.insert(invoice);
 	}
 	
+	public void updateInvoice(Invoice invoice) {
+		Invoice savedInvoice = getInvoiceById(invoice.getInvoiceid());
+		savedInvoice.setMessenger(invoice.getMessenger());
+		savedInvoice.setInvoicedate(invoice.getInvoicedate());
+		savedInvoice.setTotalprice(invoice.getTotalprice());
+		invoiceMapper.updateByPrimaryKey(savedInvoice);
+	}
+	
 	public void saveInvoiceList(List<Invoice> invoiceList) {
 		for(Invoice invoice : invoiceList)
 			saveInvoice(invoice);
@@ -109,8 +117,12 @@ public class InvoiceManagementService {
 			invoicedata = excelFileHelper.readFromFile(file.getBytes());
 			if(invoicedata != null){
 				invoicedata.setStatus(GeneralUtils.STATUS_PENDING);
-				if(invoicedata.getInvoiceid() != null && getInvoiceById(invoicedata.getInvoiceid()) == null) {
+				Invoice savedInvoice = getInvoiceById(invoicedata.getInvoiceid());
+				if(invoicedata.getInvoiceid() != null && savedInvoice == null) {
 					saveInvoice(invoicedata);
+					fileUploadCount++;
+				}else if(invoicedata.getInvoiceid() != null && savedInvoice != null){
+					updateInvoice(invoicedata);
 					fileUploadCount++;
 				}
 			}
