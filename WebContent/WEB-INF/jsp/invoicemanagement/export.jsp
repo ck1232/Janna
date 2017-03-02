@@ -27,7 +27,7 @@
 		      	 <div class="form-group">
 	                <label>Invoice Status</label>
 	                <form:select path="status" class="form-control" id="status">
-						<form:option value="" label="--- Select ---"/>
+						<form:option value="ALL" label="All"/>
    						<form:options items="${statusList}" />
 					</form:select>
 					<form:errors path="status" class="text-danger" />

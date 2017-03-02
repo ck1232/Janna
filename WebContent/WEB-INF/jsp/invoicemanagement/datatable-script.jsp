@@ -1,13 +1,13 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 $(function () {
-	var rows_selected = [];
+	
 	table = $('#datatable1').DataTable({
       "paging": true,
       "pageLength": 10,
       "responsive" : true,
       "lengthChange": false,
-      "searching": false,
+      "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": false,

@@ -55,7 +55,7 @@ public class InvoiceManagementService {
 		
 		for(Invoice invoice : invoiceList) {
 			if(!searchCriteria.getMessenger().trim().equalsIgnoreCase(invoice.getMessenger())) continue;
-			if(!searchCriteria.getStatus().trim().equalsIgnoreCase(invoice.getStatus())) continue;
+			if(!searchCriteria.getStatus().equalsIgnoreCase("ALL")&& !searchCriteria.getStatus().trim().equalsIgnoreCase(invoice.getStatus())) continue;
 			if(!searchCriteria.getInvoicedatefrom().isEmpty()){
 				try {
 					if(null == invoice.getInvoicedate()) continue;
