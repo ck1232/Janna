@@ -130,9 +130,9 @@ public class InvoiceManagementService {
 		return fileUploadCount;
 	}
 	
-	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList) {
+	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList, String statementPeriod) {
 		excelFileHelper = new ExcelFileHelper();
-		HSSFWorkbook wb = excelFileHelper.writeToFile(inputfile, invoiceList);
+		HSSFWorkbook wb = excelFileHelper.writeToFile(inputfile, invoiceList, statementPeriod);
 		return wb;
 	}
 	
