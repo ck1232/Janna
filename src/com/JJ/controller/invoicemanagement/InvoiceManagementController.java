@@ -2,8 +2,10 @@ package com.JJ.controller.invoicemanagement;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -217,7 +219,8 @@ public class InvoiceManagementController {
 		if (!result.hasErrors()) {
 			List<Invoice> invoiceList = invoiceManagementService.searchInvoice(searchCriteria);
 			if(invoiceList != null && !invoiceList.isEmpty()){
-				downloadExcel(invoiceList, request, response);
+				String statementPeriod = getStatementPeriod(searchCriteria);
+				downloadExcel(invoiceList, statementPeriod, request, response);
 				return null;
 			}
 			else{
@@ -244,10 +247,43 @@ public class InvoiceManagementController {
         return "listInvoice"; 
     }
 	
-	public void downloadExcel(List<Invoice> invoiceList, HttpServletRequest request, HttpServletResponse response) {
+	private String getStatementPeriod(InvoiceSearchCriteria searchCriteria) {
+		SimpleDateFormat sdfWithoutSlash = new SimpleDateFormat("dd MMM yyyy");
+		SimpleDateFormat sdfWithSlash = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = new Date();
+		String dateFrom;
+		String dateTo;
+		
+		try{
+			if(!searchCriteria.getInvoicedatefrom().equals("")) {
+				dateFrom = sdfWithoutSlash.format(sdfWithSlash.parse(searchCriteria.getInvoicedatefrom()));
+			}else{
+				dateFrom = sdfWithoutSlash.format(date);
+			}
+			
+			if(!searchCriteria.getInvoicedateto().equals("")) {
+				dateTo = sdfWithoutSlash.format(sdfWithSlash.parse(searchCriteria.getInvoicedateto()));
+			}else{
+				dateTo = sdfWithoutSlash.format(date);
+			}
+			
+			if(dateFrom.equals(dateTo)) {
+				return "of " + dateTo;
+			}else if(!dateFrom.equals(dateTo)) {
+				return "from " + dateFrom + " to " + dateTo;
+			}
+			
+		}catch(Exception e) {
+			logger.info("Error formatting statement period for invoice exporting.");
+		}
+		return "";
+	}
+	
+	public void downloadExcel(List<Invoice> invoiceList, String statementPeriod, 
+			HttpServletRequest request, HttpServletResponse response) {
 		String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/template/");
         File file = new File(dataDirectory+"/invoice_summary_template.xls");
-        HSSFWorkbook wb = invoiceManagementService.writeToFile(file, invoiceList);
+        HSSFWorkbook wb = invoiceManagementService.writeToFile(file, invoiceList, statementPeriod);
         if(wb != null){
         	response.setContentType("application/vnd.ms-excel");
             response.addHeader("Content-Disposition", "attachment; filename=invoice_summary.xls");

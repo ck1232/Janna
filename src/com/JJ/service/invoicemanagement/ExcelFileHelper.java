@@ -149,7 +149,7 @@ public class ExcelFileHelper {
         return cell[1];
 	}
 	
-	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList){
+	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList, String statementPeriod){
 		try {
 			FileInputStream file = new FileInputStream(inputfile);
 			HSSFWorkbook workbook = new HSSFWorkbook(file);
@@ -167,11 +167,13 @@ public class ExcelFileHelper {
             /* Writing Statement of Account As Of */
             int[] statementDateIndex = findIndexWithPattern(sheet, "Statement of Account as of");
             cell = sheet.getRow(statementDateIndex[0]).getCell(statementDateIndex[1]);
-            cell.setCellValue("Statement of Account as of " + "31 Dec 2016");
+            cell.setCellValue("Statement of Account as " + statementPeriod);
             
             /* Writing content */
             int[] dateHeaderIndex = findIndex(sheet, "Date");
             int[] invoiceNoHeaderIndex = findIndex(sheet, "Invoice");
+            int[] statusHeaderIndex = findIndex(sheet, "Status");
+            int[] chequeNoHeaderIndex = findIndex(sheet, "Cheque No.");
             int[] amountHeaderIndex = findIndex(sheet, "($)    Amount");
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM");
             int row = dateHeaderIndex[0] + 1;
@@ -179,10 +181,21 @@ public class ExcelFileHelper {
             for(Invoice invoice : invoiceList) {
             	cell = sheet.getRow(row).getCell(dateHeaderIndex[1]);
             	cell.setCellValue(formatter.format(invoice.getInvoicedate()));
+            	
             	cell = sheet.getRow(row).getCell(invoiceNoHeaderIndex[1]);
             	cell.setCellValue(invoice.getInvoiceid());
+            	
+            	cell = sheet.getRow(row).getCell(statusHeaderIndex[1]);
+            	cell.setCellValue(invoice.getStatus());
+            	
+            	if(invoice.getChequeid() != null) {
+            		cell = sheet.getRow(row).getCell(chequeNoHeaderIndex[1]);
+            		cell.setCellValue(invoice.getChequeid());
+            	}
+            	
             	cell = sheet.getRow(row).getCell(amountHeaderIndex[1]);
             	cell.setCellValue(invoice.getTotalprice().doubleValue());
+            	
             	totalAmount += invoice.getTotalprice().doubleValue();
             	row++;
             }
