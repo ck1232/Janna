@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: jj
+-- Host: 127.0.0.1    Database: jj
 -- ------------------------------------------------------
--- Server version	5.6.21
+-- Server version	5.5.5-10.1.16-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -265,7 +265,14 @@ CREATE TABLE `employee` (
   `dob` date DEFAULT NULL,
   `nationality` varchar(255) NOT NULL,
   `basicSalary` decimal(8,2) NOT NULL DEFAULT '0.00',
-  `defunctInd` char(1) NOT NULL DEFAULT 'N',
+  `employStartDate` date DEFAULT NULL,
+  `employEndDate` date DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `cdacInd` char(1) NOT NULL DEFAULT 'Y',
+  `createdon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
   PRIMARY KEY (`employeeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -277,6 +284,129 @@ CREATE TABLE `employee` (
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `employee_bonus`
+--
+
+DROP TABLE IF EXISTS `employee_bonus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employee_bonus` (
+  `bonusId` int(11) NOT NULL AUTO_INCREMENT,
+  `bonusDate` date NOT NULL,
+  `employeeId` int(11) NOT NULL,
+  `bonusAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
+  `employeeCPF` decimal(8,2) DEFAULT NULL,
+  `employerCDF` decimal(8,2) DEFAULT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `updatedon` datetime NOT NULL,
+  PRIMARY KEY (`bonusId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `employee_bonus`
+--
+
+LOCK TABLES `employee_bonus` WRITE;
+/*!40000 ALTER TABLE `employee_bonus` DISABLE KEYS */;
+/*!40000 ALTER TABLE `employee_bonus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `employee_salary`
+--
+
+DROP TABLE IF EXISTS `employee_salary`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employee_salary` (
+  `salaryId` int(11) NOT NULL AUTO_INCREMENT,
+  `salaryDate` date NOT NULL,
+  `overtimeAmount` decimal(8,2) DEFAULT NULL,
+  `overtimeHours` decimal(6,2) DEFAULT NULL,
+  `allowance` decimal(8,2) DEFAULT NULL,
+  `employeeCPF` decimal(8,2) DEFAULT NULL,
+  `employerCPF` decimal(8,2) DEFAULT NULL,
+  `cdacAmount` decimal(4,2) DEFAULT NULL,
+  `sdlAmount` decimal(6,2) DEFAULT NULL,
+  `fwLevy` decimal(6,2) DEFAULT NULL,
+  `createdon` datetime DEFAULT NULL,
+  `updatedon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`salaryId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `employee_salary`
+--
+
+LOCK TABLES `employee_salary` WRITE;
+/*!40000 ALTER TABLE `employee_salary` DISABLE KEYS */;
+/*!40000 ALTER TABLE `employee_salary` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `expense`
+--
+
+DROP TABLE IF EXISTS `expense`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `expense` (
+  `expenseId` int(11) NOT NULL AUTO_INCREMENT,
+  `expenseTypeId` int(11) NOT NULL,
+  `expenseDate` date NOT NULL,
+  `supplier` varchar(255) NOT NULL,
+  `totalAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdon` datetime NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  PRIMARY KEY (`expenseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `expense`
+--
+
+LOCK TABLES `expense` WRITE;
+/*!40000 ALTER TABLE `expense` DISABLE KEYS */;
+/*!40000 ALTER TABLE `expense` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `expense_type`
+--
+
+DROP TABLE IF EXISTS `expense_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `expense_type` (
+  `expenseTypeId` int(11) NOT NULL AUTO_INCREMENT,
+  `expenseType` varchar(255) NOT NULL,
+  PRIMARY KEY (`expenseTypeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `expense_type`
+--
+
+LOCK TABLES `expense_type` WRITE;
+/*!40000 ALTER TABLE `expense_type` DISABLE KEYS */;
+INSERT INTO `expense_type` VALUES (1,'Stock'),(2,'Sub-Con'),(3,'Vehicle-Fuel'),(4,'Vehicle-Road Tax'),(5,'Vehicle-Repair'),(6,'Vehicle-Car Parking and ERP'),(7,'Vehicle-Insurance'),(8,'Office Expenses'),(9,'Asset-Equipment'),(10,'Asset-Vehicle'),(11,'Rent Expenses'),(12,'Meal Expenses'),(13,'Entertainment'),(14,'Fees and Taxes');
+/*!40000 ALTER TABLE `expense_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -375,8 +505,6 @@ CREATE TABLE `invoice` (
   `messenger` varchar(512) NOT NULL DEFAULT 'NIL',
   `invoiceDate` datetime DEFAULT NULL,
   `totalPrice` decimal(7,2) NOT NULL DEFAULT '0.00',
-  `chequeId` int(11) DEFAULT NULL,
-  `paymentMode` int(11) DEFAULT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'UNPAID',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   `createdon` datetime NOT NULL,
@@ -394,7 +522,7 @@ CREATE TABLE `invoice` (
 
 LOCK TABLES `invoice` WRITE;
 /*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
-INSERT INTO `invoice` VALUES (5354,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2015-03-01 00:00:00',3310.00,NULL,NULL,'PENDING','N','2017-02-27 22:33:50','ck1232','2017-02-27 22:33:50','ck1232'),(6246,'mu interior pte ltd','2017-01-05 00:00:00',415.00,NULL,NULL,'PENDING','N','2017-03-01 00:07:42','ck1232','2017-03-01 00:10:28','ck1232'),(6247,'WJM FURNITURE PTE LTD','2017-01-07 00:00:00',541.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6248,'Kar Lee Electrical Engineering ','2017-01-09 00:00:00',946.00,NULL,NULL,'PENDING','N','2017-02-27 21:58:49','ck1232','2017-03-01 00:08:31','ck1232'),(6249,'JAMES KING PTE LTD','2017-01-14 00:00:00',13079.00,NULL,NULL,'PENDING','N','2017-02-27 21:59:31','ck1232','2017-03-01 00:08:31','ck1232'),(6250,'mu interior pte ltd','2017-01-16 00:00:00',800.00,NULL,NULL,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6251,'mu interior pte ltd','2017-01-18 00:00:00',540.00,NULL,NULL,'PENDING','N','2017-02-27 21:59:51','ck1232','2017-03-01 00:08:31','ck1232'),(6252,'mu interior pte ltd','2017-02-02 00:00:00',725.00,NULL,NULL,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6253,'Liberty Furniture Pte Ltd','2017-01-24 00:00:00',2530.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6254,'ASTIQUE DESIGN PTE LTD','2017-01-13 00:00:00',90.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6255,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-02 00:00:00',1370.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6256,'JAMES KING PTE LTD','2017-02-02 00:00:00',209.00,NULL,NULL,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6257,'Precise International Pte Ltd','2017-02-02 00:00:00',200.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6258,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,NULL,NULL,'PENDING','N','2017-02-27 22:07:09','ck1232','2017-03-01 00:08:31','ck1232'),(6259,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6260,'Precise International Pte Ltd','2017-02-03 00:00:00',400.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6261,'Precise International Pte Ltd','2017-02-09 00:00:00',100.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6262,'Precise International Pte Ltd','2017-02-10 00:00:00',1170.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6263,'Precise International Pte Ltd','2017-02-10 00:00:00',1480.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6264,'Precise International Pte Ltd','2017-02-10 00:00:00',5270.00,NULL,NULL,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6265,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-06 00:00:00',124.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6266,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-07 00:00:00',220.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6267,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-09 00:00:00',118.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6268,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-10 00:00:00',60.00,NULL,NULL,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6269,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-11 00:00:00',67.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6270,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-12 00:00:00',66.00,NULL,NULL,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6271,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-21 00:00:00',187.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6272,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-22 00:00:00',60.00,NULL,NULL,'PENDING','N','2017-02-27 22:13:59','ck1232','2017-03-01 00:08:31','ck1232'),(6273,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-17 00:00:00',50.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6274,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-02-09 00:00:00',170.00,NULL,NULL,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232');
+INSERT INTO `invoice` VALUES (5354,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2015-03-01 00:00:00',3310.00,'PENDING','N','2017-02-27 22:33:50','ck1232','2017-02-27 22:33:50','ck1232'),(6246,'mu interior pte ltd','2017-01-05 00:00:00',415.00,'PENDING','N','2017-03-01 00:07:42','ck1232','2017-03-01 00:10:28','ck1232'),(6247,'WJM FURNITURE PTE LTD','2017-01-07 00:00:00',541.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6248,'Kar Lee Electrical Engineering ','2017-01-09 00:00:00',946.00,'PENDING','N','2017-02-27 21:58:49','ck1232','2017-03-01 00:08:31','ck1232'),(6249,'JAMES KING PTE LTD','2017-01-14 00:00:00',13079.00,'PENDING','N','2017-02-27 21:59:31','ck1232','2017-03-01 00:08:31','ck1232'),(6250,'mu interior pte ltd','2017-01-16 00:00:00',800.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6251,'mu interior pte ltd','2017-01-18 00:00:00',540.00,'PENDING','N','2017-02-27 21:59:51','ck1232','2017-03-01 00:08:31','ck1232'),(6252,'mu interior pte ltd','2017-02-02 00:00:00',725.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6253,'Liberty Furniture Pte Ltd','2017-01-24 00:00:00',2530.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6254,'ASTIQUE DESIGN PTE LTD','2017-01-13 00:00:00',90.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6255,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-02 00:00:00',1370.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6256,'JAMES KING PTE LTD','2017-02-02 00:00:00',209.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6257,'Precise International Pte Ltd','2017-02-02 00:00:00',200.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6258,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,'PENDING','N','2017-02-27 22:07:09','ck1232','2017-03-01 00:08:31','ck1232'),(6259,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6260,'Precise International Pte Ltd','2017-02-03 00:00:00',400.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6261,'Precise International Pte Ltd','2017-02-09 00:00:00',100.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6262,'Precise International Pte Ltd','2017-02-10 00:00:00',1170.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6263,'Precise International Pte Ltd','2017-02-10 00:00:00',1480.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6264,'Precise International Pte Ltd','2017-02-10 00:00:00',5270.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6265,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-06 00:00:00',124.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6266,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-07 00:00:00',220.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6267,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-09 00:00:00',118.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6268,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-10 00:00:00',60.00,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6269,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-11 00:00:00',67.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6270,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-12 00:00:00',66.00,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6271,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-21 00:00:00',187.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6272,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-22 00:00:00',60.00,'PENDING','N','2017-02-27 22:13:59','ck1232','2017-03-01 00:08:31','ck1232'),(6273,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-17 00:00:00',50.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6274,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-02-09 00:00:00',170.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232');
 /*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -451,6 +579,68 @@ LOCK TABLES `payment_mode` WRITE;
 /*!40000 ALTER TABLE `payment_mode` DISABLE KEYS */;
 INSERT INTO `payment_mode` VALUES (1,'Cash'),(2,'Cheque'),(3,'Pay By Director'),(4,'Bad Debt'),(5,'GIRO');
 /*!40000 ALTER TABLE `payment_mode` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_rs`
+--
+
+DROP TABLE IF EXISTS `payment_rs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payment_rs` (
+  `paymentRSId` int(11) NOT NULL AUTO_INCREMENT,
+  `referenceType` varchar(255) NOT NULL,
+  `referenceId` int(11) NOT NULL,
+  `paymentDetailId` int(11) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  `createdon` datetime NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  PRIMARY KEY (`paymentRSId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_rs`
+--
+
+LOCK TABLES `payment_rs` WRITE;
+/*!40000 ALTER TABLE `payment_rs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment_rs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `paymentdetail`
+--
+
+DROP TABLE IF EXISTS `paymentdetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `paymentdetail` (
+  `ipaymentDetailId` int(11) NOT NULL AUTO_INCREMENT,
+  `paymentDate` date NOT NULL,
+  `paymentMode` int(11) NOT NULL,
+  `paymentAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
+  `chequeNum` varchar(45) DEFAULT NULL,
+  `bounceChqInd` char(1) DEFAULT NULL,
+  `createdon` datetime NOT NULL,
+  `updatedon` datetime NOT NULL,
+  `createdby` varchar(255) NOT NULL,
+  `updatedby` varchar(255) NOT NULL,
+  `deleteInd` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`ipaymentDetailId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `paymentdetail`
+--
+
+LOCK TABLES `paymentdetail` WRITE;
+/*!40000 ALTER TABLE `paymentdetail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `paymentdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1508,14 +1698,6 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Dumping events for database 'jj'
---
-
---
--- Dumping routines for database 'jj'
---
-
---
 -- Final view structure for view `inventory_from`
 --
 
@@ -1704,4 +1886,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-02 23:43:09
+-- Dump completed on 2017-03-04 22:49:37
