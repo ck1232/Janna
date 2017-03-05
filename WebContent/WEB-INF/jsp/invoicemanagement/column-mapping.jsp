@@ -9,6 +9,6 @@
 {"data": "invoiceid"},
 {"data": "messenger"},
 {"data": "totalprice"},
-{"data": "chequeid"},
+{"data": "status"},
 {"data": "status"},
 {"data": "invoicedate"},
