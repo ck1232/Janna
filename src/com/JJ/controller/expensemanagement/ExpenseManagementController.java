@@ -1,6 +1,5 @@
 package com.JJ.controller.expensemanagement;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.model.Expense;
-import com.JJ.model.Promotion;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.validator.ExpenseFormValidator;
 
@@ -91,11 +89,6 @@ public class ExpenseManagementController {
     public String showAddExpenseForm(Model model) {  
     	logger.debug("loading showAddExpenseForm");
     	Expense expense = new Expense();
-    	Date now = new Date();
-    	Date date = new Date(now.getYear(), now.getMonth(), now.getDate());
-    	if(expense.getExpensedate() == null){
-    		expense.setExpensedate(date);
-    	}
     	Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
     	model.addAttribute("expenseForm", expense);
     	model.addAttribute("expenseTypeList", expenseTypeList);
@@ -104,15 +97,12 @@ public class ExpenseManagementController {
 	
 	@InitBinder("expenseForm")
 	protected void initBinder(WebDataBinder binder) {
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    	binder.registerCustomEditor(Date.class, "expensedate", new CustomDateEditor(dateFormat, false));
 		binder.setValidator(expenseFormValidator);
 	}
 	
 	@RequestMapping(value = "/createExpense", method = RequestMethod.POST)
     public String saveExpense(@ModelAttribute("expenseForm") @Validated Expense expense, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		
 		expense.setDeleteind(GeneralUtils.NOT_DELETED);
 		logger.debug("saveExpense() : " + expense.toString());
 		if (result.hasErrors()) {
@@ -120,14 +110,71 @@ public class ExpenseManagementController {
 	    	model.addAttribute("expenseTypeList", expenseTypeList);
 			return "createExpense";
 		} else {
+			try{
+				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
+			}catch(Exception e) {
+				logger.info("Error parsing expense date string");
+			}
 			expenseManagementService.saveExpense(expense);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Expense added successfully!");
 		}
-		
-		
         return "redirect:listExpense";  
     }  
+	
+	@RequestMapping(value = "/viewExpense", method = RequestMethod.POST)
+	public String viewExpense(@RequestParam("viewBtn") String id, Model model) {
+		logger.debug("id = " + id);
+		Expense expense = expenseManagementService.findById(new Integer(id));
+		if (expense == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Expense not found");
+		}else{
+			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
+			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
+			model.addAttribute("expense", expense);
+		}
+		return "viewExpense";
+
+	}
+	
+	@RequestMapping(value = "/updateExpense", method = RequestMethod.POST)
+	public String getExpenseToUpdate(@RequestParam("editBtn") String id, Model model) {
+		
+		Expense expense = expenseManagementService.findById(new Integer(id));
+		logger.debug("Loading update expense page for " + expense.toString());
+		expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
+		
+		Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
+    	model.addAttribute("expenseTypeList", expenseTypeList);
+		model.addAttribute("expenseForm", expense);
+		return "updateExpense";
+	}
+	
+	@RequestMapping(value = "/updateExpenseToDb", method = RequestMethod.POST)
+	public String updateExpense(@ModelAttribute("expenseForm") @Validated Expense expense,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		logger.debug("updateExpense() : " + expense.toString());
+		
+		if (result.hasErrors()) {
+			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
+	    	model.addAttribute("expenseTypeList", expenseTypeList);
+			return "updateExpense";
+		} else {
+			try{
+				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
+			}catch(Exception e) {
+				logger.info("Error parsing expense date string");
+			}
+			expenseManagementService.updateExpense(expense);
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Expense updated successfully!");
+		}
+		
+		return "redirect:listExpense";
+	}
+	
 	
 
 }

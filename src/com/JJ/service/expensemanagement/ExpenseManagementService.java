@@ -10,6 +10,7 @@ import com.JJ.dao.ExpenseMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
 import com.JJ.model.ExpenseExample;
+import com.JJ.model.Promotion;
 
 @Service
 @Transactional
@@ -29,7 +30,7 @@ public class ExpenseManagementService {
 		return expenseList;
 	}
 	
-	public Expense getExpenseById(Integer id) {
+	public Expense findById(Integer id) {
 		ExpenseExample example = new ExpenseExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andExpenseidEqualTo(id);
 		List<Expense> expenseList = expenseMapper.selectByExample(example);
@@ -55,6 +56,11 @@ public class ExpenseManagementService {
 	public void deleteExpenseList(List<Integer> idList) {
 		for(Integer id : idList)
 			deleteExpense(id);
+	}
+	
+	public void updateExpense(Expense expense) {
+		if(expense.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+			expenseMapper.updateByPrimaryKeySelective(expense);
 	}
 	/* Expense END */
 	

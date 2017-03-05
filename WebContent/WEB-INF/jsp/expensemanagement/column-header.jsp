@@ -5,4 +5,5 @@
   <th>Amount</th>
   <th>Supplier</th>
   <th>Description</th>
+  <th>Action</th>
 </tr>

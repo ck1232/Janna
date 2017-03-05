@@ -16,6 +16,8 @@ public class Expense extends Base{
     private String description;
 
     private Date expensedate;
+    
+    private String expensedateString;
 
     private String supplier;
 
@@ -63,7 +65,15 @@ public class Expense extends Base{
         this.expensedate = expensedate;
     }
 
-    public String getSupplier() {
+    public String getExpensedateString() {
+		return expensedateString;
+	}
+
+	public void setExpensedateString(String expensedateString) {
+		this.expensedateString = expensedateString;
+	}
+
+	public String getSupplier() {
         return supplier;
     }
 

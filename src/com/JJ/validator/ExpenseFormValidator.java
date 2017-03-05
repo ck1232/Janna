@@ -1,6 +1,7 @@
 package com.JJ.validator;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
@@ -25,25 +26,21 @@ public class ExpenseFormValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expensetypeid", "error.notempty.expenseform.expensetype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "supplier", "error.notempty.expenseform.supplier");
 		
-		if(expense.getExpensedate()==null){
-			errors.rejectValue("expensedate", "error.notempty.expenseform.expensedate");
+		if(expense.getExpensedateString() == null || expense.getExpensedateString().trim().isEmpty()){
+			errors.rejectValue("expensedateString", "error.notempty.expenseform.expensedate");
+		}else{
+			try{
+				new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString());
+			}catch(Exception e) {
+				errors.rejectValue("expensedateString", "error.notvalid.expenseform.expensedate");
+			}
 		}
 		
 		if(expense.getTotalamount()==null){
 			errors.rejectValue("totalamount", "error.notempty.expenseform.totalamount");
 		}else if(expense.getTotalamount().compareTo(BigDecimal.ZERO) <= 0){
 			errors.rejectValue("totalamount", "error.notvalid.expenseform.totalamount");
-		}
-		
-		
-		if(!errors.hasErrors()){
-			try{
-				Assert.isInstanceOf(Date.class, expense.getExpensedate());
-			}catch(Exception e){
-				errors.rejectValue("expensedate", "error.notvalid.expenseform.expensedate");
-			}
-		}
-		
+		}		
 	}
 	
 }

@@ -1298,6 +1298,30 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+    <definition name="updateExpense" extends="main_template">  
+        <put-attribute name="title" value="Update Expense" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Update Expense" />
+        		<put-attribute name="heading-description" value="To update expense." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/expensemanagement/updateExpense.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="viewExpense" extends="main_template">  
+        <put-attribute name="title" value="View Expense" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Expense" />
+        		<put-attribute name="heading-description" value="To view expense." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/expensemanagement/viewExpense.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
     <!-- Expense Module END -->
   	
 </tiles-definitions>  

@@ -22,9 +22,9 @@
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Expense Date</label>
 										<div class="col-sm-5">
-					                  		<form:input path="expensedate" type="text" class="form-control" 
-					                  			  id="expensedate" placeholder="Press to select date"/>
-					                  		<form:errors path="expensedate" class="text-danger" />
+					                  		<form:input path="expensedateString" type="text" class="form-control" 
+					                  			  id="expensedateString" placeholder="Press to select date"/>
+					                  		<form:errors path="expensedateString" class="text-danger" />
 					                	</div>
 						              </div>
 					            </div>
@@ -123,20 +123,6 @@
 		    });	
 
 		  loadExpenseType();
-
-		  var day = date.getUTCDate();
-		  var month = date.getUTCMonth();
-		  var year = date.getUTCFullYear();
-
-		  if (document.getElementById("expensedate").value == '') {			
-				$("#expensedate").datepicker("setDate", new Date(year, month, day));
-		    }
-			
-		  $("#addExpenseBtn").click(function(){
-		    	if (document.getElementById("expensedate").value == '') {			
-					$("#expensedate").datepicker("setDate", new Date(year, month, day));
-			    }
-			});   
 		   
 	 } );
 
