@@ -138,6 +138,9 @@ public class InventoryProductManagementService {
 		for(Productinventory productInventory : productInventoryList) {
 			productInventory.setProductSuboption(productSuboptionHash.get(productInventory.getProductsuboptionid()));
 			Product product = productHash.get(productInventory.getProductSuboption().getProductid());
+			if(product == null){
+				continue;
+			}
 			ProductVo productvo = new ProductVo();
 			productvo.setProductName(product.getProductname());
 			productInventory.setItemCode(itemCodeHash.get(productInventory.getProductsuboptionid()).getItemCode());

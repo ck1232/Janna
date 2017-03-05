@@ -2,7 +2,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
 
@@ -11,8 +11,21 @@
     	  queryTokenizer: Bloodhound.tokenizers.whitespace,
     	  prefetch: '<c:url context="/JJ" value="/batchintake/getProductList" />'
     	}); 
+
+     var locationList = new Bloodhound({
+      	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationFrom'),
+      	  queryTokenizer: Bloodhound.tokenizers.whitespace,
+      	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
+      	}); 
  	
     $( function() {
+
+    	$('#date').datepicker(
+ 	    	{
+ 	    		format: 'dd/mm/yyyy',
+ 		      	autoclose: true,
+ 		    });
+    	        
     	$('#addProductNameDiv .typeahead').keyup(function(){
    			$("#productId").val("");
    	    	$("#quantity").val("");
@@ -88,7 +101,7 @@
 		$("#productModal").hide();
 	}
 
-    function saveAddIntakeProduct(){
+    function saveAddInventoryProduct(){
     	var productName = $("#name").val();
     	var productId = $("#productId").val();
     	var productData = {
@@ -177,15 +190,38 @@
 							</div>
 							<div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Initial Location</label>
-											<div class="col-sm-10" id="addLocationNameDiv">
+										<label class="col-sm-2 control-label">Location From</label>
+											<div class="col-sm-10" id="addLocationFromDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
-						                  			  path="storagelocationname" id="storagelocationname" />
-						                  		<form:input path="storagelocation" id="storagelocation" type="hidden"/>
-						                  		<form:errors path="storagelocation" class="text-danger" />
+						                  			  path="locationFrom" id="locationFrom" />
+						                  		<form:errors path="locationFrom" class="text-danger" />
 						                	</div>
-						              </div>
-					            </div>
+						           </div>
+					       </div>
+					       
+					       <div class="row">
+						            <div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Location To</label>
+											<div class="col-sm-10" id="addLocationToDiv">
+						                  		<form:input type="text" class="form-control typeahead" 
+						                  			  path="locationTo" id="locationTo" />
+						                  		<form:errors path="locationTo" class="text-danger" />
+						                	</div>
+						           </div>
+					       </div>
+					       
+					       <div class="row">
+								  	<div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Date</label>
+										<div class="col-sm-10">
+										<fmt:formatDate var="fmtDate" value="${inventoryProductForm.date}" pattern="dd/MM/yyyy"/>
+											<form:input path="date" type="text" class="form-control"
+						                                id="date" placeholder="Press to select date" value="${fmtDate}"/>
+						                                
+											<form:errors path="date" class="text-danger" />
+										</div>
+								  	</div>
+								</div>
 					            <br/><br/>
 		            	</div>
 		            	<tiles:insertAttribute name = "productList" />

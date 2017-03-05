@@ -1205,7 +1205,7 @@
 				        				<put-attribute name="datatable-options" value="" />
 				        				<put-attribute name="datatable-script">
 				        					<definition template="/WEB-INF/jsp/inventorymanagement/product/datatable-script.jsp" >
-				        						<put-attribute name="data-list" value="/JJ/batchintake/getInventoryProductList" />
+				        						<put-attribute name="data-list" value="/JJ/inventory/getAddInventoryProductList" />
 				        						<put-attribute name="datatable-data" value="" />
 				        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/inventorymanagement/product/column-mapping.jsp" />
 				        					</definition>

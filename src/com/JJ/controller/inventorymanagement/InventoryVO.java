@@ -2,8 +2,10 @@ package com.JJ.controller.inventorymanagement;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-import com.JJ.model.Storagelocation;
+import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
+import com.JJ.controller.batchintakemanagement.BatchProductVo;
 
 public class InventoryVO implements Serializable{
 
@@ -12,42 +14,29 @@ public class InventoryVO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String remarks;
-	private Storagelocation locationTo;
-	private Storagelocation locationFrom;
-	private int qty;
-	private double unitCost;
+	private String locationTo;
+	private String locationFrom;
 	private String mode = "AD-HOC";
 	private String deleteInd;
 	private Date date;
+	private List<BatchIntakeProduct> productItems;
 	public String getRemarks() {
 		return remarks;
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	public Storagelocation getLocationTo() {
+	public String getLocationTo() {
 		return locationTo;
 	}
-	public void setLocationTo(Storagelocation locationTo) {
+	public void setLocationTo(String locationTo) {
 		this.locationTo = locationTo;
 	}
-	public Storagelocation getLocationFrom() {
+	public String getLocationFrom() {
 		return locationFrom;
 	}
-	public void setLocationFrom(Storagelocation locationFrom) {
+	public void setLocationFrom(String locationFrom) {
 		this.locationFrom = locationFrom;
-	}
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-	public double getUnitCost() {
-		return unitCost;
-	}
-	public void setUnitCost(double unitCost) {
-		this.unitCost = unitCost;
 	}
 	public String getMode() {
 		return mode;
@@ -63,6 +52,12 @@ public class InventoryVO implements Serializable{
 	}
 	public void setDeleteInd(String deleteInd) {
 		this.deleteInd = deleteInd;
+	}
+	public List<BatchIntakeProduct> getProductItems() {
+		return productItems;
+	}
+	public void setProductItems(List<BatchIntakeProduct> productItems) {
+		this.productItems = productItems;
 	}
 	
 	
