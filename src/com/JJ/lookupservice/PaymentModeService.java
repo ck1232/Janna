@@ -1,4 +1,4 @@
-package com.JJ.service.paymentmode;
+package com.JJ.lookupservice;
 
 import java.util.List;
 
