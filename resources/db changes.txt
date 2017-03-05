@@ -1,0 +1,52 @@
+bonus table
+- bonusId
+- bonusDate
+- employeeId
+- bonus amount
+- Employee CPF
+- Employer CPF
+- deleteInd
+- createdon
+- createdby
+- updatedby
+- updatedon
+
+Salary table
+- SalaryId
+- SalaryDate
+- Overtime
+- allowance
+- Employee CPF
+- Employer CPF
+- CDAC amount
+- SDL amount
+- FW Levy
+- createdby
+- createdon
+- updateby
+- updateon
+- deleteInd
+
+Payment table
+- reftype
+- refid
+- paymentdetailid
+- deleteInd
+
+Payment detail
+- paymentDate
+- paymentMode
+- paymentAmount
+- chequeNo
+- paymentId 
+- bounceChqInd
+
+
+payment for
+- salary
+- bonus
+- expense
+
+income from
+- invoice
+- others

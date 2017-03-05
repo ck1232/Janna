@@ -74,9 +74,8 @@ public class InvoiceManagementController {
     	searchCriteria = new InvoiceSearchCriteria();
     	
     	statusList = new LinkedHashMap<String,String>();
-    	statusList.put("PAID", "Paid");
-    	statusList.put("PENDING", "Pending");
-    	
+    	statusList.put(InvoiceStatus.PAID.toString(), InvoiceStatus.PAID.getStatus());
+    	statusList.put(InvoiceStatus.PENDING.toString(), InvoiceStatus.PENDING.getStatus());
     	model.addAttribute("invoiceForm", invoiceVo);
     	model.addAttribute("exportForm", searchCriteria);
     	model.addAttribute("statusList", statusList);
@@ -227,8 +226,8 @@ public class InvoiceManagementController {
 				redirectAttributes.addFlashAttribute("css", "danger");
 				redirectAttributes.addFlashAttribute("msg", "No invoice result is found!");
 				statusList = new LinkedHashMap<String,String>();
-		    	statusList.put("PAID", "Paid");
-		    	statusList.put("PENDING", "Pending");
+				statusList.put(InvoiceStatus.PAID.toString(), InvoiceStatus.PAID.getStatus());
+		    	statusList.put(InvoiceStatus.PENDING.toString(), InvoiceStatus.PENDING.getStatus());
 		    	
 		    	model.addAttribute("invoiceForm", invoiceVo);
 		    	model.addAttribute("exportForm", searchCriteria);
@@ -238,8 +237,8 @@ public class InvoiceManagementController {
 				
 		}
 		statusList = new LinkedHashMap<String,String>();
-    	statusList.put("PAID", "Paid");
-    	statusList.put("PENDING", "Pending");
+		statusList.put(InvoiceStatus.PAID.toString(), InvoiceStatus.PAID.getStatus());
+    	statusList.put(InvoiceStatus.PENDING.toString(), InvoiceStatus.PENDING.getStatus());
     	
     	model.addAttribute("invoiceForm", invoiceVo);
     	model.addAttribute("exportForm", searchCriteria);
