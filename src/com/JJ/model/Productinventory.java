@@ -1,6 +1,7 @@
 package com.JJ.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
 
@@ -29,6 +30,8 @@ public class Productinventory extends Base{
     private Integer referenceid;
 
     private String deleteremarks;
+    
+    private Date date;
     
     /*non db fields start*/
     
@@ -244,6 +247,14 @@ public class Productinventory extends Base{
     public void setDeleteremarks(String deleteremarks) {
         this.deleteremarks = deleteremarks;
     }
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
     
     
 }

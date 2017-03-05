@@ -1,6 +1,5 @@
 package com.JJ.controller.inventorymanagement;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
 import com.JJ.controller.productmanagement.vo.ProductVo;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Batchstockintake;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryLocation;
 import com.JJ.model.ViewProductSuboptionInventory;
@@ -92,9 +90,11 @@ public class InventoryManagementController {
 	}
 	
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String createInventoryProduct() {
+	public @ResponseBody String createInventoryProduct(Model model) {
 		logger.debug("loading createInventoryProduct");
-    	
+    	InventoryVO inventoryVO = new InventoryVO();
+    	inventoryVO.setDate(new Date());
+    	model.addAttribute("inventoryProductForm", inventoryVO);
         return "createInventoryProduct"; 
 	}
 	
