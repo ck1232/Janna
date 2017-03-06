@@ -111,7 +111,7 @@ public class InventoryManagementController {
 	public @ResponseBody String getBatchProductList() {
 		if(inventoryVO.getProductItems() != null){
 			for(BatchIntakeProduct batchIntakeProduct : inventoryVO.getProductItems() ){
-//				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
+				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
 			}
 			return GeneralUtils.convertListToJSONString(inventoryVO.getProductItems());
 		}
@@ -190,4 +190,53 @@ public class InventoryManagementController {
 		inventoryVO.getProductItems().add(product);
 		return new JsonResponse("success");
 	}
+	
+	@RequestMapping(value = "/deleteInventoryProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse deleteBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("delete inventory product");
+		if(inventoryVO.getProductItems() != null) {
+			Iterator<BatchIntakeProduct> iterator = inventoryVO.getProductItems().iterator();
+			while(iterator.hasNext()){
+				BatchIntakeProduct inventoryProduct = iterator.next();
+				if(inventoryProduct.hashCode() == product.getHashCode()){
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value="/editBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody BatchIntakeProduct editBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+		if(inventoryVO.getProductItems() != null && inventoryVO.getProductItems().size() > 0){
+			for(BatchIntakeProduct batchIntakeProduct : inventoryVO.getProductItems()){
+				if(batchIntakeProduct.getHashCode() == product.getHashCode()){
+					return batchIntakeProduct;
+				}
+			}
+		}
+		return new BatchIntakeProduct();
+	}
+	
+	@RequestMapping(value = "/saveEditProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse saveEditProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("save edit product");
+		if(inventoryVO.getProductItems() != null) {
+			for(BatchIntakeProduct batchproduct: inventoryVO.getProductItems()){
+				if((batchproduct.getHashCode()) == product.getHashCode()) {
+					batchproduct.setUnitcost(product.getUnitcost());
+					batchproduct.setQty(product.getQty());
+					break;
+				}
+			}
+		}
+		return new JsonResponse("success");
+	}
+	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
+	public String saveInventoryProduct(@RequestParam("date") String date, @RequestParam("locationTo") String locationTo,
+			@RequestParam("locationFrom") String locationFrom,@RequestParam("remarks") String remarks) {
+		return "";
+	}
+	
 }

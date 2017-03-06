@@ -53,7 +53,7 @@
 		var data = {hashCode : hashCode};
 		var deleteBatchIntakeProductAjax = $.ajax({
 	  		  type: "POST",
-	  		  url: "deleteBatchIntakeProduct",
+	  		  url: "deleteInventoryProduct",
 	  		  data: JSON.stringify(data),
 	  		  contentType:"application/json; charset=utf-8",
 			  beforeSend: function( xhr ) {
