@@ -112,7 +112,7 @@
     
     <script>
       $( function() {
-    	  $('#expensedate').datepicker({
+    	  $('#expensedateString').datepicker({
 	    		format: 'dd/mm/yyyy',
 		      	autoclose: true
 		    });

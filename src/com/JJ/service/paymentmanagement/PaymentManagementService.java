@@ -16,7 +16,9 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
 import com.JJ.model.ExpenseExample;
 import com.JJ.model.PaymentRs;
+import com.JJ.model.PaymentRsExample;
 import com.JJ.model.Paymentdetail;
+import com.JJ.model.PaymentdetailExample;
 import com.JJ.model.Promotion;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.lookup.PaymentModeLookup;
@@ -67,6 +69,26 @@ public class PaymentManagementService {
 				expenseManagementService.updateExpense(expense);
 			}
 		}
+	}
+	
+	public List<Paymentdetail> getAllPaymentByRefTypeAndRefId(String refType, Integer refId) {
+		List<Paymentdetail> paymentdetailList = new ArrayList<Paymentdetail>();
+		PaymentRsExample rsExample = new PaymentRsExample();
+		rsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED)
+								.andReferencetypeEqualTo(refType)
+								.andReferenceidEqualTo(refId);
+		List<PaymentRs> paymentRsList = paymentRsMapper.selectByExample(rsExample);
+		List<Integer> idList = new ArrayList<Integer>();
+		if(paymentRsList != null && paymentRsList.size() > 0) {
+			for(PaymentRs paymentRs : paymentRsList) {
+				idList.add(paymentRs.getPaymentdetailid());
+			}
+			PaymentdetailExample example = new PaymentdetailExample();
+			example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andPaymentdetailidIn(idList);
+			example.setOrderByClause("paymentDate desc, paymentMode asc, chequeNum asc");				
+			paymentdetailList = paymentDetailMapper.selectByExample(example);
+		}
+		return paymentdetailList;
 	}
 	
 		

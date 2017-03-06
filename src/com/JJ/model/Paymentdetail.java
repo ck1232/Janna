@@ -82,5 +82,26 @@ public class Paymentdetail extends Base {
 				+ paymentmode + ", paymentamount=" + paymentamount + ", chequenum=" + chequenum + ", bouncechqind="
 				+ bouncechqind + "]";
 	}
+	
+	//non db fields
+	private String paymentmodeString;
+	
+	private String paymentdateString;
+	
+	public String getPaymentmodeString() {
+		return paymentmodeString;
+	}
+
+	public void setPaymentmodeString(String paymentmodeString) {
+		this.paymentmodeString = paymentmodeString;
+	}
+
+	public String getPaymentdateString() {
+		return paymentdateString;
+	}
+
+	public void setPaymentdateString(String paymentdateString) {
+		this.paymentdateString = paymentdateString;
+	}
 
 }

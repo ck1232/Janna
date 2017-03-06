@@ -22,8 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
+import com.JJ.lookup.PaymentModeLookup;
 import com.JJ.model.Expense;
+import com.JJ.model.Paymentdetail;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
+import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.validator.ExpenseFormValidator;
 
 
@@ -34,14 +37,20 @@ public class ExpenseManagementController {
 	private static final Logger logger = Logger.getLogger(ExpenseManagementController.class);
 	
 	private ExpenseManagementService expenseManagementService;
+	private PaymentManagementService paymentManagementService;
 	private ExpenseTypeLookup expenseTypeLookup;
+	private PaymentModeLookup paymentModeLookup;
 	private ExpenseFormValidator expenseFormValidator;
 	@Autowired
 	public ExpenseManagementController(ExpenseManagementService expenseManagementService, 
+			PaymentManagementService paymentManagementService,
 			ExpenseTypeLookup expenseTypeLookup,
+			PaymentModeLookup paymentModeLookup,
 			ExpenseFormValidator expenseFormValidator) {
 		this.expenseManagementService = expenseManagementService;
+		this.paymentManagementService = paymentManagementService;
 		this.expenseTypeLookup = expenseTypeLookup;
+		this.paymentModeLookup = paymentModeLookup;
 		this.expenseFormValidator = expenseFormValidator;
 	}
 	
@@ -131,6 +140,14 @@ public class ExpenseManagementController {
 			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
 			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
 			model.addAttribute("expense", expense);
+			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expense.getExpenseid());
+			if(paymentList != null && paymentList.size() > 0){
+				for(Paymentdetail payment : paymentList) {
+					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
+					payment.setPaymentmodeString(paymentModeLookup.getPaymentModeById(payment.getPaymentmode()));
+				}
+			}
+			model.addAttribute("paymentList", paymentList);
 		}
 		return "viewExpense";
 
