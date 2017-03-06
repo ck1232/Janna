@@ -1,12 +1,10 @@
 package com.JJ.controller.expensemanagement;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -103,7 +101,7 @@ public class ExpenseManagementController {
 	@RequestMapping(value = "/createExpense", method = RequestMethod.POST)
     public String saveExpense(@ModelAttribute("expenseForm") @Validated Expense expense, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		expense.setDeleteind(GeneralUtils.NOT_DELETED);
+		
 		logger.debug("saveExpense() : " + expense.toString());
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();

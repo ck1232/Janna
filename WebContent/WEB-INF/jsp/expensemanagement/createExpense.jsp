@@ -127,7 +127,7 @@
 	 } );
 
   	 function loadExpenseType(){
-  		var expensetypeid = $("select#expensetypeid").val();
+  		var expensetypeid = $("select#expensetypeid").checked;
 		if(expensetypeid != "1") {
 	      	$("#invoicediv").css("display","none");
 		}else{

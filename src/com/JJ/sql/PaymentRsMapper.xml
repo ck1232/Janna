@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.PaymentRsMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.PaymentRs">
+    <id column="paymentRSId" jdbcType="INTEGER" property="paymentrsid" />
+    <result column="referenceType" jdbcType="VARCHAR" property="referencetype" />
+    <result column="referenceId" jdbcType="INTEGER" property="referenceid" />
+    <result column="paymentDetailId" jdbcType="INTEGER" property="paymentdetailid" />
+    <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
+    <result column="createdon" jdbcType="TIMESTAMP" property="createdon" />
+    <result column="updatedon" jdbcType="TIMESTAMP" property="updatedon" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="updatedby" jdbcType="VARCHAR" property="updatedby" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    paymentRSId, referenceType, referenceId, paymentDetailId, deleteInd, createdon, updatedon, 
+    createdby, updatedby
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.PaymentRsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from payment_rs
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from payment_rs
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from payment_rs
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.PaymentRsExample">
+    delete from payment_rs
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.PaymentRs">
+    insert into payment_rs (paymentRSId, referenceType, referenceId, 
+      paymentDetailId, deleteInd, createdon, 
+      updatedon, createdby, updatedby
+      )
+    values (#{paymentrsid,jdbcType=INTEGER}, #{referencetype,jdbcType=VARCHAR}, #{referenceid,jdbcType=INTEGER}, 
+      #{paymentdetailid,jdbcType=INTEGER}, #{deleteind,jdbcType=CHAR}, #{createdon,jdbcType=TIMESTAMP}, 
+      #{updatedon,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, #{updatedby,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.PaymentRs">
+    insert into payment_rs
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paymentrsid != null">
+        paymentRSId,
+      </if>
+      <if test="referencetype != null">
+        referenceType,
+      </if>
+      <if test="referenceid != null">
+        referenceId,
+      </if>
+      <if test="paymentdetailid != null">
+        paymentDetailId,
+      </if>
+      <if test="deleteind != null">
+        deleteInd,
+      </if>
+      <if test="createdon != null">
+        createdon,
+      </if>
+      <if test="updatedon != null">
+        updatedon,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="updatedby != null">
+        updatedby,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paymentrsid != null">
+        #{paymentrsid,jdbcType=INTEGER},
+      </if>
+      <if test="referencetype != null">
+        #{referencetype,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceid != null">
+        #{referenceid,jdbcType=INTEGER},
+      </if>
+      <if test="paymentdetailid != null">
+        #{paymentdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="deleteind != null">
+        #{deleteind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedon != null">
+        #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedby != null">
+        #{updatedby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.PaymentRsExample" resultType="java.lang.Integer">
+    select count(*) from payment_rs
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update payment_rs
+    <set>
+      <if test="record.paymentrsid != null">
+        paymentRSId = #{record.paymentrsid,jdbcType=INTEGER},
+      </if>
+      <if test="record.referencetype != null">
+        referenceType = #{record.referencetype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.referenceid != null">
+        referenceId = #{record.referenceid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paymentdetailid != null">
+        paymentDetailId = #{record.paymentdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="record.deleteind != null">
+        deleteInd = #{record.deleteind,jdbcType=CHAR},
+      </if>
+      <if test="record.createdon != null">
+        createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedon != null">
+        updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdby != null">
+        createdby = #{record.createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedby != null">
+        updatedby = #{record.updatedby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update payment_rs
+    set paymentRSId = #{record.paymentrsid,jdbcType=INTEGER},
+      referenceType = #{record.referencetype,jdbcType=VARCHAR},
+      referenceId = #{record.referenceid,jdbcType=INTEGER},
+      paymentDetailId = #{record.paymentdetailid,jdbcType=INTEGER},
+      deleteInd = #{record.deleteind,jdbcType=CHAR},
+      createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      createdby = #{record.createdby,jdbcType=VARCHAR},
+      updatedby = #{record.updatedby,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.PaymentRs">
+    update payment_rs
+    <set>
+      <if test="referencetype != null">
+        referenceType = #{referencetype,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceid != null">
+        referenceId = #{referenceid,jdbcType=INTEGER},
+      </if>
+      <if test="paymentdetailid != null">
+        paymentDetailId = #{paymentdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="deleteind != null">
+        deleteInd = #{deleteind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        createdon = #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedon != null">
+        updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedby != null">
+        updatedby = #{updatedby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.PaymentRs">
+    update payment_rs
+    set referenceType = #{referencetype,jdbcType=VARCHAR},
+      referenceId = #{referenceid,jdbcType=INTEGER},
+      paymentDetailId = #{paymentdetailid,jdbcType=INTEGER},
+      deleteInd = #{deleteind,jdbcType=CHAR},
+      createdon = #{createdon,jdbcType=TIMESTAMP},
+      updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      updatedby = #{updatedby,jdbcType=VARCHAR}
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
+  </update>
+</mapper>

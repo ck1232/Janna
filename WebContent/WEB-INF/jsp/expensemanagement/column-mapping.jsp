@@ -4,13 +4,14 @@
     "className":      '',
     "orderable":      false,
     "data":           "",
-    "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
+    "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
 {"data": "expensedate"},
 {"data": "expensetype"},
+{"data": "description"},
 {"data": "totalamount"},
 {"data": "supplier"},
-{"data": "description"},
+{"data": "status"},
 {
     "className":      '',
     "orderable":      false,

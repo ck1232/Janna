@@ -369,6 +369,7 @@ CREATE TABLE `expense` (
   `expenseDate` date NOT NULL,
   `supplier` varchar(255) NOT NULL,
   `totalAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
+  `status` varchar(255) NOT NULL DEFAULT 'UNPAID',
   `remark` varchar(255) DEFAULT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   `createdby` varchar(255) NOT NULL,
@@ -376,7 +377,7 @@ CREATE TABLE `expense` (
   `updatedon` datetime NOT NULL,
   `updatedby` varchar(255) NOT NULL,
   PRIMARY KEY (`expenseId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +386,7 @@ CREATE TABLE `expense` (
 
 LOCK TABLES `expense` WRITE;
 /*!40000 ALTER TABLE `expense` DISABLE KEYS */;
-INSERT INTO `expense` VALUES (1,2,NULL,'desc','2017-03-05','supplier',50.00,NULL,'N','euphona','2017-03-05 17:02:51','2017-03-05 17:02:51','euphona');
+INSERT INTO `expense` VALUES (1,2,'','desc','2017-03-15','supplier',50.00,'UNPAID','','N','euphona','2017-03-05 17:02:51','2017-03-05 23:24:55','euphona'),(2,1,'','','2017-02-05','supplier',10.00,'PAID','','N','euphona','2017-03-05 21:54:05','2017-03-06 20:53:30','euphona'),(3,1,'','desc','2016-03-05','supplier',5.00,'PAID','','N','euphona','2017-03-05 21:54:51','2017-03-06 20:53:31','euphona'),(4,1,'','desc','2017-03-30','supplier',5.00,'UNPAID','','N','euphona','2017-03-05 21:55:51','2017-03-05 21:55:51','euphona');
 /*!40000 ALTER TABLE `expense` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -603,7 +604,7 @@ CREATE TABLE `payment_rs` (
   `createdby` varchar(255) NOT NULL,
   `updatedby` varchar(255) NOT NULL,
   PRIMARY KEY (`paymentRSId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -612,6 +613,7 @@ CREATE TABLE `payment_rs` (
 
 LOCK TABLES `payment_rs` WRITE;
 /*!40000 ALTER TABLE `payment_rs` DISABLE KEYS */;
+INSERT INTO `payment_rs` VALUES (1,'expense',2,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(2,'expense',3,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(3,'expense',2,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(4,'expense',3,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona');
 /*!40000 ALTER TABLE `payment_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -623,7 +625,7 @@ DROP TABLE IF EXISTS `paymentdetail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `paymentdetail` (
-  `ipaymentDetailId` int(11) NOT NULL AUTO_INCREMENT,
+  `paymentDetailId` int(11) NOT NULL AUTO_INCREMENT,
   `paymentDate` date NOT NULL,
   `paymentMode` int(11) NOT NULL,
   `paymentAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
@@ -634,8 +636,8 @@ CREATE TABLE `paymentdetail` (
   `createdby` varchar(255) NOT NULL,
   `updatedby` varchar(255) NOT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`ipaymentDetailId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`paymentDetailId`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -644,6 +646,7 @@ CREATE TABLE `paymentdetail` (
 
 LOCK TABLES `paymentdetail` WRITE;
 /*!40000 ALTER TABLE `paymentdetail` DISABLE KEYS */;
+INSERT INTO `paymentdetail` VALUES (3,'2017-03-06',1,8.00,'',NULL,'2017-03-06 20:53:10','2017-03-06 20:53:10','euphona','euphona','N'),(4,'2017-03-06',2,7.00,'2353','N','2017-03-06 20:53:27','2017-03-06 20:53:27','euphona','euphona','N');
 /*!40000 ALTER TABLE `paymentdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1890,4 +1893,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-05 21:18:54
+-- Dump completed on 2017-03-06 21:16:59

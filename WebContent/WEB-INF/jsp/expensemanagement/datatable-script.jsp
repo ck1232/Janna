@@ -11,6 +11,8 @@ $(function () {
       "ordering": true,
       "info": true,
       "autoWidth": false,
+      "sScrollX": "100%",
+      "sScrollXInner": "110%",
       "ajax":{
           "url":'<tiles:getAsString name="data-list" />',
           "data":{
@@ -27,6 +29,11 @@ $(function () {
           $(row).find('input[type="checkbox"]').prop('value', data.expenseid);
           $(row).find('button[name="editBtn"]').prop('value', data.expenseid);
           $(row).find('button[name="viewBtn"]').prop('value', data.expenseid);
+          if(data.status == "PAID"){
+        	  $(row).find('div[name="statusDiv"]').css("display","none");
+          }else{
+        	 $(row).find('div[name="statusDiv"]').css("display","");
+          }
        }
     });
 

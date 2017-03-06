@@ -54,4 +54,8 @@ public class PaymentModeLookup {
 	public void setPaymentModeByIdMap(Map<Integer, PaymentMode> paymentModeByIdMap) {
 		this.paymentModeByIdMap = paymentModeByIdMap;
 	}
+	
+	public String getPaymentModeById(Integer id){
+		return paymentModeByIdMap.get(id).getMode();
+	}
 }
