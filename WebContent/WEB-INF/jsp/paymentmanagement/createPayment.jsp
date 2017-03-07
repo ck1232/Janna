@@ -16,8 +16,8 @@
 	<div class="box-body">
 		<tiles:insertAttribute name = "paymentoption" />
 		<form:form id="savePaymentToDbForm" method="post" modelAttribute="paymentForm" action="${posturl}">
-			<c:forEach var="expenseId" items="${idList}">
-				<input type = "hidden" name = "expenseIds" value="${expenseId}" />
+			<c:forEach var="referenceId" items="${idList}">
+				<input type = "hidden" name = "referenceIds" value="${referenceId}" />
 			</c:forEach>
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="row">

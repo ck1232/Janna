@@ -4,11 +4,16 @@
     "className":      '',
     "orderable":      false,
     "data":           "",
-    "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
+    "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
 {"data": "invoiceid"},
 {"data": "messenger"},
 {"data": "totalprice"},
 {"data": "status"},
-{"data": "status"},
 {"data": "invoicedate"},
+{
+    "className":      '',
+    "orderable":      false,
+    "data":           null,
+    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button>'
+},

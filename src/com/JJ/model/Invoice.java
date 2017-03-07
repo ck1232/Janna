@@ -3,8 +3,11 @@ package com.JJ.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Invoice {
-    private Integer invoiceid;
+public class Invoice extends Base{
+
+	private static final long serialVersionUID = 1L;
+
+	private Integer invoiceid;
 
     private String messenger;
 
@@ -13,16 +16,6 @@ public class Invoice {
     private BigDecimal totalprice;
 
     private String status;
-
-    private String deleteind;
-
-    private Date createdon;
-
-    private String createdby;
-
-    private Date updatedon;
-
-    private String updatedby;
 
     public Integer getInvoiceid() {
         return invoiceid;
@@ -63,44 +56,16 @@ public class Invoice {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    //non db fields
+    
+	private String invoicedateString;
+	
+	public String getInvoicedateString() {
+		return invoicedateString;
+	}
 
-    public String getDeleteind() {
-        return deleteind;
-    }
-
-    public void setDeleteind(String deleteind) {
-        this.deleteind = deleteind;
-    }
-
-    public Date getCreatedon() {
-        return createdon;
-    }
-
-    public void setCreatedon(Date createdon) {
-        this.createdon = createdon;
-    }
-
-    public String getCreatedby() {
-        return createdby;
-    }
-
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
-    }
-
-    public Date getUpdatedon() {
-        return updatedon;
-    }
-
-    public void setUpdatedon(Date updatedon) {
-        this.updatedon = updatedon;
-    }
-
-    public String getUpdatedby() {
-        return updatedby;
-    }
-
-    public void setUpdatedby(String updatedby) {
-        this.updatedby = updatedby;
-    }
+	public void setInvoicedateString(String invoicedateString) {
+		this.invoicedateString = invoicedateString;
+	}
 }

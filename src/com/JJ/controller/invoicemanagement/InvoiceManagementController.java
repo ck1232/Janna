@@ -38,10 +38,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
+import com.JJ.lookup.PaymentModeLookup;
+import com.JJ.model.Expense;
 import com.JJ.model.FileMeta;
 import com.JJ.model.Invoice;
 import com.JJ.model.JsonResponse;
+import com.JJ.model.Paymentdetail;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
+import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.validator.InvoiceSearchValidator;
 
 
@@ -52,7 +56,9 @@ public class InvoiceManagementController {
 	private static final Logger logger = Logger.getLogger(InvoiceManagementController.class);
 	
 	private InvoiceManagementService invoiceManagementService;
+	private PaymentManagementService paymentManagementService;
 	private InvoiceSearchValidator invoiceSearchValidator;
+	private PaymentModeLookup paymentModeLookup;
 	List<Invoice> invoiceList;
 	InvoiceVo invoiceVo;
 	InvoiceSearchCriteria searchCriteria;
@@ -60,9 +66,13 @@ public class InvoiceManagementController {
 	
 	@Autowired
 	public InvoiceManagementController(InvoiceManagementService invoiceManagementService,
-			InvoiceSearchValidator invoiceSearchValidator) {
+			PaymentManagementService paymentManagementService,
+			InvoiceSearchValidator invoiceSearchValidator,
+			PaymentModeLookup paymentModeLookup) {
 		this.invoiceManagementService = invoiceManagementService;
+		this.paymentManagementService = paymentManagementService;
 		this.invoiceSearchValidator = invoiceSearchValidator;
+		this.paymentModeLookup = paymentModeLookup;
 	}
 	
 	
@@ -88,6 +98,29 @@ public class InvoiceManagementController {
 		logger.debug("getting inventory history list");
 		invoiceList = invoiceManagementService.getAllInvoice();
 		return GeneralUtils.convertListToJSONString(invoiceList);
+	}
+	
+	@RequestMapping(value = "/viewInvoice", method = RequestMethod.POST)
+	public String viewInvoice(@RequestParam("viewBtn") String id, Model model) {
+		logger.debug("id = " + id);
+		Invoice invoice = invoiceManagementService.getInvoiceById(new Integer(id));
+		if (invoice == null) {
+			model.addAttribute("css", "danger");
+			model.addAttribute("msg", "Invoice not found");
+		}else{
+			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
+			model.addAttribute("invoice", invoice);
+			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("invoice", invoice.getInvoiceid());
+			if(paymentList != null && paymentList.size() > 0){
+				for(Paymentdetail payment : paymentList) {
+					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
+					payment.setPaymentmodeString(paymentModeLookup.getPaymentModeById(payment.getPaymentmode()));
+				}
+			}
+			model.addAttribute("paymentList", paymentList);
+		}
+		return "viewInvoice";
+
 	}
 	
 	private boolean checkFileFormat(String filename) {

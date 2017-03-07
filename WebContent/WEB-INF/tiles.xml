@@ -1254,6 +1254,39 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+    <definition name="viewInvoice" extends="main_template">  
+        <put-attribute name="title" value="View Invoice" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Invoice" />
+        		<put-attribute name="heading-description" value="To view invoice." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/invoicemanagement/viewInvoice.jsp">
+        				<put-attribute name="paymentdetail" value="/WEB-INF/jsp/paymentmanagement/paymenttable.jsp" />
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createPayInvoice" extends="main_template">  
+        <put-attribute name="title" value="Invoice Payment" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Invoice Payment" />
+        		<put-attribute name="heading-description" value="To pay selected invoices." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/paymentmanagement/createPayment.jsp">
+        				<put-attribute name="billtable" value="/WEB-INF/jsp/invoicemanagement/invoiceforpayment/listInvoiceToPay.jsp" />
+        				<put-attribute name="paymentoption" value="/WEB-INF/jsp/invoicemanagement/invoiceforpayment/paymentoption.jsp" />
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
     <!-- Inventory History Module END -->
     
     <!-- Expense Module START -->
@@ -1317,7 +1350,11 @@
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="View Expense" />
         		<put-attribute name="heading-description" value="To view expense." />
-        		<put-attribute name="content" value="/WEB-INF/jsp/expensemanagement/viewExpense.jsp" />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/expensemanagement/viewExpense.jsp">
+        				<put-attribute name="paymentdetail" value="/WEB-INF/jsp/paymentmanagement/paymenttable.jsp" />
+        			</definition>
+        		</put-attribute>
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>
