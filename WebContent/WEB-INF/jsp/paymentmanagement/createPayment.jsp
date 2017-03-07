@@ -19,6 +19,8 @@
 			<c:forEach var="referenceId" items="${idList}">
 				<input type = "hidden" name = "referenceIds" value="${referenceId}" />
 			</c:forEach>
+			<input type ="hidden" name = "totalamount" value="${totalamount}" />
+			<input type ="hidden" name = "lastdate" value="${lastdate}" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="row">
 				<div class="form-group ${status.error ? 'has-error' : ''}">

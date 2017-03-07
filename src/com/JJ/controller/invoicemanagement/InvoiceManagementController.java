@@ -39,7 +39,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.PaymentModeLookup;
-import com.JJ.model.Expense;
 import com.JJ.model.FileMeta;
 import com.JJ.model.Invoice;
 import com.JJ.model.JsonResponse;

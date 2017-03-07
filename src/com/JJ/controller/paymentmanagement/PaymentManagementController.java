@@ -1,7 +1,10 @@
 package com.JJ.controller.paymentmanagement;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,15 +71,19 @@ public class PaymentManagementController {
 			idList.add(Integer.valueOf(id));
 		}
 		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(idList);
+		BigDecimal totalamount = BigDecimal.ZERO;
 		for(Expense expense : expenseList) {
 			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
 			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
+			totalamount = totalamount.add(expense.getTotalamount());
 		}
 		
 		PaymentVo paymentvo = new PaymentVo();
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("expenseList", expenseList);
 		model.addAttribute("idList", idList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", expenseList.get(expenseList.size()-1).getExpensedateString());
 		model.addAttribute("posturl", "/JJ/payment/createExpensePayment");
 		return "createPayExpense";
 	}
@@ -89,34 +96,55 @@ public class PaymentManagementController {
 	@RequestMapping(value = "/createExpensePayment", method = RequestMethod.POST)
     public String saveExpensePayment(
     		@RequestParam(value = "referenceIds", required=false) List<Integer> expenseIdList,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
     		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveExpensePayment() : " + paymentVo.toString());
-		if (result.hasErrors()) {
-			List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
-			for(Expense expense : expenseList) {
-				expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-				expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
+		if (!result.hasErrors()) {
+			boolean hasErrors = false;
+			if(!validateInputAmount(totalamount, paymentVo)){
+				hasErrors = true;
+				result.rejectValue("cashamount", "error.notequal.paymentform.expensetotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");
 			}
-			model.addAttribute("paymentForm", paymentVo);
-			model.addAttribute("expenseList", expenseList);
-			model.addAttribute("idList", expenseIdList);
-			model.addAttribute("posturl", "/JJ/payment/createExpensePayment");
-			return "createPayExpense";
-		} else {
-			paymentVo.setReferenceType("expense");
-			try{ 
-				paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
-				if(paymentVo.getPaymentmodecash())
-					paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
-			}catch(Exception e) {
-				logger.info("Error parsing date string");
+			if(!validateInputDate(lastdate, paymentVo.getPaymentdateString())){
+				hasErrors = true;
+				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.expenselastdate");
 			}
-			paymentManagementService.saveExpensePayment(paymentVo, expenseIdList);
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
-	        return "redirect:/expense/listExpense";  
+			
+			if(!validateInputDate(lastdate, paymentVo.getChequedateString())){
+				hasErrors = true;
+				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.expenselastdate");
+			}
+			
+			if(!hasErrors){
+				paymentVo.setReferenceType("expense");
+				try{ 
+					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					if(paymentVo.getPaymentmodecash())
+						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+				}catch(Exception e) {
+					logger.info("Error parsing date string");
+				}
+				paymentManagementService.saveExpensePayment(paymentVo, expenseIdList);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
+		        return "redirect:/expense/listExpense";  
+			}
 		}
+		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
+		for(Expense expense : expenseList) {
+			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
+			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
+		}
+		model.addAttribute("paymentForm", paymentVo);
+		model.addAttribute("expenseList", expenseList);
+		model.addAttribute("idList", expenseIdList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", expenseList.get(expenseList.size()-1).getExpensedateString());
+		model.addAttribute("posturl", "/JJ/payment/createExpensePayment");
+		return "createPayExpense";
     }  
 	
 	/* Expense Payment End */
@@ -137,13 +165,17 @@ public class PaymentManagementController {
 			idList.add(Integer.valueOf(id));
 		}
 		List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(idList);
+		BigDecimal totalamount = BigDecimal.ZERO;
 		for(Invoice invoice : invoiceList) {
 			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
+			totalamount = totalamount.add(invoice.getTotalprice());
 		}
 		
 		PaymentVo paymentvo = new PaymentVo();
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("invoiceList", invoiceList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", invoiceList.get(invoiceList.size()-1).getInvoicedateString());
 		model.addAttribute("idList", idList);
 		model.addAttribute("posturl", "/JJ/payment/createInvoicePayment");
 		return "createPayInvoice";
@@ -152,34 +184,84 @@ public class PaymentManagementController {
 	@RequestMapping(value = "/createInvoicePayment", method = RequestMethod.POST)
     public String saveInvoicePayment(
     		@RequestParam(value = "referenceIds", required=false) List<Integer> invoiceIdList,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
     		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveInvoicePayment() : " + paymentVo.toString());
-		if (result.hasErrors()) {
-			List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceIdList);
-			for(Invoice invoice : invoiceList) {
-				invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
+		if (!result.hasErrors()) {
+			boolean hasErrors = false;
+			if(!validateInputAmount(totalamount, paymentVo)){
+				hasErrors = true;
+				result.rejectValue("cashamount", "error.notequal.paymentform.invoicetotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
 			}
-			model.addAttribute("paymentForm", paymentVo);
-			model.addAttribute("invoiceList", invoiceList);
-			model.addAttribute("idList", invoiceIdList);
-			model.addAttribute("posturl", "/JJ/payment/createInvoicePayment");
-			return "createPayInvoice";
-		} else {
-			paymentVo.setReferenceType("invoice");
-			try{ 
-				paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
-				if(paymentVo.getPaymentmodecash())
-					paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
-			}catch(Exception e) {
-				logger.info("Error parsing date string");
+			if(!validateInputDate(lastdate, paymentVo.getPaymentdateString())){
+				hasErrors = true;
+				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
-			paymentManagementService.saveInvoicePayment(paymentVo, invoiceIdList);
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
-	        return "redirect:/invoice/listInvoice";  
+			
+			if(!validateInputDate(lastdate, paymentVo.getChequedateString())){
+				hasErrors = true;
+				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
+			}
+			
+			if(!hasErrors){
+				paymentVo.setReferenceType("invoice");
+				try{ 
+					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					if(paymentVo.getPaymentmodecash())
+						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+				}catch(Exception e) {
+					logger.info("Error parsing date string");
+				}
+				paymentManagementService.saveInvoicePayment(paymentVo, invoiceIdList);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
+		        return "redirect:/invoice/listInvoice"; 
+			}
 		}
+		List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceIdList);
+		for(Invoice invoice : invoiceList) {
+			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
+		}
+		model.addAttribute("paymentForm", paymentVo);
+		model.addAttribute("invoiceList", invoiceList);
+		model.addAttribute("idList", invoiceIdList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", invoiceList.get(invoiceList.size()-1).getInvoicedateString());
+		model.addAttribute("posturl", "/JJ/payment/createInvoicePayment");
+		return "createPayInvoice";
+		
     }  
+	
+	private boolean validateInputAmount(BigDecimal totalamount, PaymentVo paymentVo) {
+		BigDecimal inputAmount = BigDecimal.ZERO;
+		if(paymentVo.getPaymentmodecash()) {
+			inputAmount = inputAmount.add(paymentVo.getCashamount());
+		}
+		if(paymentVo.getPaymentmodecheque()) {
+			inputAmount = inputAmount.add(paymentVo.getChequeamount());
+		}
+		if(totalamount.compareTo(inputAmount) == 0){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean validateInputDate(String lastdateString, String dateString) {
+		try {
+			Date lastdate = new SimpleDateFormat("dd/MM/yyyy").parse(lastdateString);
+			Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+			
+			if(date.compareTo(lastdate) >= 0) {
+				return true;
+			}
+		} catch (ParseException e) {
+			logger.info("Error parsing date.");
+		}
+		return false;
+	}
 	
 	/* Invoice Payment End */
 

@@ -44,6 +44,7 @@ public class InvoiceManagementService {
 	public List<Invoice> getAllInvoiceByIdList(List<Integer> idList) {
 		InvoiceExample example = new InvoiceExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andInvoiceidIn(idList);
+		example.setOrderByClause("invoiceDate desc");
 		List<Invoice> invoiceList = invoiceMapper.selectByExample(example);
 		return invoiceList;
 	}

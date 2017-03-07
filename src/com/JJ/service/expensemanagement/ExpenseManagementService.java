@@ -11,7 +11,6 @@ import com.JJ.dao.ExpenseMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
 import com.JJ.model.ExpenseExample;
-import com.JJ.model.Promotion;
 
 @Service
 @Transactional
@@ -34,6 +33,7 @@ public class ExpenseManagementService {
 	public List<Expense> getAllExpenseByIdList(List<Integer> idList) {
 		ExpenseExample example = new ExpenseExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andExpenseidIn(idList);
+		example.setOrderByClause("expenseDate desc");
 		List<Expense> expenseList = expenseMapper.selectByExample(example);
 		return expenseList;
 	}

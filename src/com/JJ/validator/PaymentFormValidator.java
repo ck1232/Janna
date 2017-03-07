@@ -5,13 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.JJ.controller.paymentmanagement.PaymentVo;
-import com.JJ.model.Expense;
 
 @Component
 public class PaymentFormValidator implements Validator {
