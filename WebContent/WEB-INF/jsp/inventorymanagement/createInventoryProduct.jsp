@@ -13,7 +13,7 @@
     	}); 
 
      var locationList = new Bloodhound({
-      	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationFrom'),
+      	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationname'),
       	  queryTokenizer: Bloodhound.tokenizers.whitespace,
       	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
       	}); 
@@ -44,6 +44,20 @@
     	$('#addProductNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
         	$("#productId").val(item.productid);
     		getList(item);
+    	});
+
+    	$('#addLocationFromDiv.typeahead').keyup(function(){
+    		$("#locationFromId").val("");
+		});
+
+    	$('#addLocationFromDiv.typeahead').typeahead(null, {
+   		 name: 'locationList',
+   		 display: 'locationname',
+   		source: locationList
+		});
+
+    	$('#addLocationFromDiv.typeahead').on('typeahead:selected', function(evt, item) {
+        	$("#locationFromHidden").val(item.locationid);
     	});
 	 } );
 
@@ -251,6 +265,7 @@
 											<div class="col-sm-10" id="addLocationFromDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
 						                  			  path="locationFrom" id="locationFrom" />
+						                  		<form:input path="locationFromId" id="locationFromHidden" type="hidden"/>
 						                  		<form:errors path="locationFrom" class="text-danger" />
 						                	</div>
 						           </div>
@@ -262,6 +277,7 @@
 											<div class="col-sm-10" id="addLocationToDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
 						                  			  path="locationTo" id="locationTo" />
+						                  		<form:input path="locationToId" id="locationToHidden" type="hidden"/>
 						                  		<form:errors path="locationTo" class="text-danger" />
 						                	</div>
 						           </div>
@@ -272,10 +288,10 @@
 										<label class="col-sm-2 control-label">Date</label>
 										<div class="col-sm-10">
 										<fmt:formatDate var="fmtDate" value="${inventoryProductForm.date}" pattern="dd/MM/yyyy"/>
-											<form:input path="date" type="text" class="form-control"
+											<form:input path="dateString" type="text" class="form-control"
 						                                id="date" placeholder="Press to select date" value="${fmtDate}"/>
 						                                
-											<form:errors path="date" class="text-danger" />
+											<form:errors path="dateString" class="text-danger" />
 										</div>
 								  	</div>
 								</div>

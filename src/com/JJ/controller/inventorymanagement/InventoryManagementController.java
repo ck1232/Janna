@@ -1,21 +1,27 @@
 package com.JJ.controller.inventorymanagement;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
 import com.JJ.controller.batchintakemanagement.BatchProductVo;
@@ -24,6 +30,7 @@ import com.JJ.controller.productmanagement.vo.SubOptionVo;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.JsonResponse;
 import com.JJ.model.Product;
+import com.JJ.model.Storagelocation;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryLocation;
 import com.JJ.model.ViewProductSuboptionInventory;
@@ -40,10 +47,11 @@ public class InventoryManagementController {
 	
 	private InventoryProductManagementService inventoryProductManagementService;
 	private ProductService productService;
-	
-	private List<BatchIntakeProduct> inventoryProductList; 
+
 	private InventoryVO inventoryVO;
 	private ProductVo productVo;
+	
+	private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	@Autowired
 	public InventoryManagementController(InventoryProductManagementService inventoryProductManagementService,
 			ProductService productService) {
@@ -234,9 +242,40 @@ public class InventoryManagementController {
 		return new JsonResponse("success");
 	}
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
-	public String saveInventoryProduct(@RequestParam("date") String date, @RequestParam("locationTo") String locationTo,
-			@RequestParam("locationFrom") String locationFrom,@RequestParam("remarks") String remarks) {
-		return "";
+	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") InventoryVO inventoryVO, 
+			final RedirectAttributes redirectAttributes) {
+		inventoryVO.setProductItems(this.inventoryVO.getProductItems());
+		try{
+			List<Storagelocation> locationList = inventoryProductManagementService.getAllStorageLocation();
+			Map<String, Storagelocation> locationMap = new HashMap<String, Storagelocation>();
+			if(locationList != null && locationList.size() > 0){
+				for(Storagelocation location:locationList){
+					locationMap.put(location.getLocationname(), location);
+				}
+			}
+			Date date = df.parse(inventoryVO.getDateString());
+			inventoryVO.setDate(date);
+			Storagelocation locationTo = locationMap.get(inventoryVO.getLocationFrom());
+			Storagelocation locationFrom = locationMap.get(inventoryVO.getLocationTo());
+			if(locationTo != null){
+				inventoryVO.setLocationToId(locationTo.getLocationid());
+			}
+			
+			if(locationFrom != null){
+				inventoryVO.setLocationFromId(locationFrom.getLocationid());
+			}
+			
+			
+			inventoryProductManagementService.saveInventoryRecord(inventoryVO);
+			
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");
+		}catch(Exception ex){
+			ex.printStackTrace();
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Invalid date input.");
+		}
+		return "redirect:listInventoryProduct";
 	}
 	
 }

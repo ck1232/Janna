@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
-import com.JJ.controller.batchintakemanagement.BatchProductVo;
 
 public class InventoryVO implements Serializable{
 
@@ -15,10 +14,12 @@ public class InventoryVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String remarks;
 	private String locationTo;
+	private Integer locationToId;
+	private Integer locationFromId;
 	private String locationFrom;
 	private String mode = "AD-HOC";
-	private String deleteInd;
 	private Date date;
+	private String dateString;
 	private List<BatchIntakeProduct> productItems;
 	public String getRemarks() {
 		return remarks;
@@ -47,17 +48,47 @@ public class InventoryVO implements Serializable{
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public String getDeleteInd() {
-		return deleteInd;
-	}
-	public void setDeleteInd(String deleteInd) {
-		this.deleteInd = deleteInd;
-	}
 	public List<BatchIntakeProduct> getProductItems() {
 		return productItems;
 	}
 	public void setProductItems(List<BatchIntakeProduct> productItems) {
 		this.productItems = productItems;
+	}
+	/**
+	 * @return the dateString
+	 */
+	public String getDateString() {
+		return dateString;
+	}
+	/**
+	 * @param dateString the dateString to set
+	 */
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+	/**
+	 * @return the locationToId
+	 */
+	public Integer getLocationToId() {
+		return locationToId;
+	}
+	/**
+	 * @param locationToId the locationToId to set
+	 */
+	public void setLocationToId(Integer locationToId) {
+		this.locationToId = locationToId;
+	}
+	/**
+	 * @return the locationFromId
+	 */
+	public Integer getLocationFromId() {
+		return locationFromId;
+	}
+	/**
+	 * @param locationFromId the locationFromId to set
+	 */
+	public void setLocationFromId(Integer locationFromId) {
+		this.locationFromId = locationFromId;
 	}
 	
 	
