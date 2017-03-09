@@ -101,9 +101,14 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveExpensePayment() : " + paymentVo.toString());
+		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
+		for(Expense expense : expenseList) {
+			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
+			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
+		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
-			if(!validateInputAmount(totalamount, paymentVo)){
+			if(!expenseList.get(0).getexpensetype().toLowerCase().contains("china")&& !validateInputAmount(totalamount, paymentVo)){
 				hasErrors = true;
 				result.rejectValue("cashamount", "error.notequal.paymentform.expensetotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");
@@ -113,7 +118,7 @@ public class PaymentManagementController {
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.expenselastdate");
 			}
 			
-			if(!validateInputDate(lastdate, paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.expenselastdate");
 			}
@@ -122,7 +127,7 @@ public class PaymentManagementController {
 				paymentVo.setReferenceType("expense");
 				try{ 
 					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
-					if(paymentVo.getPaymentmodecash())
+					if(paymentVo.getPaymentmodecheque())
 						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
@@ -132,11 +137,6 @@ public class PaymentManagementController {
 				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
 		        return "redirect:/expense/listExpense";  
 			}
-		}
-		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
-		for(Expense expense : expenseList) {
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
 		}
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("expenseList", expenseList);

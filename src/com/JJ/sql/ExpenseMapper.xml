@@ -109,7 +109,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.JJ.model.Expense">
+  <insert id="insert" parameterType="com.JJ.model.Expense" useGeneratedKeys="true" keyProperty="expenseid" keyColumn="expenseId">
     insert into expense (expenseId, expenseTypeId, invoiceno, 
       description, expenseDate, supplier, 
       totalAmount, status, remark, 

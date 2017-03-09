@@ -1,6 +1,7 @@
 package com.JJ.controller.expensemanagement;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.lookup.PaymentModeLookup;
@@ -38,12 +40,14 @@ public class ExpenseManagementController {
 	
 	private ExpenseManagementService expenseManagementService;
 	private PaymentManagementService paymentManagementService;
+	private PaymentManagementController paymentManagementController;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentModeLookup paymentModeLookup;
 	private ExpenseFormValidator expenseFormValidator;
 	@Autowired
 	public ExpenseManagementController(ExpenseManagementService expenseManagementService, 
 			PaymentManagementService paymentManagementService,
+			PaymentManagementController paymentManagementController,
 			ExpenseTypeLookup expenseTypeLookup,
 			PaymentModeLookup paymentModeLookup,
 			ExpenseFormValidator expenseFormValidator) {
@@ -52,6 +56,7 @@ public class ExpenseManagementController {
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.paymentModeLookup = paymentModeLookup;
 		this.expenseFormValidator = expenseFormValidator;
+		this.paymentManagementController = paymentManagementController;
 	}
 	
 	
@@ -127,6 +132,27 @@ public class ExpenseManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Expense added successfully!");
 		}
         return "redirect:listExpense";  
+    }  
+	
+	@RequestMapping(value = "/createExpenseAndPay", method = RequestMethod.POST)
+    public String saveExpenseAndPay(@ModelAttribute("expenseForm") @Validated Expense expense, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		List<String> idList = new ArrayList<String>();
+		logger.debug("saveExpense() : " + expense.toString());
+		if (result.hasErrors()) {
+			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
+	    	model.addAttribute("expenseTypeList", expenseTypeList);
+			return "createExpense";
+		} else {
+			try{
+				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
+			}catch(Exception e) {
+				logger.info("Error parsing expense date string");
+			}
+			expenseManagementService.saveExpense(expense);			
+			idList.add(expense.getExpenseid().toString());
+		}
+		return paymentManagementController.createPayExpense(idList, redirectAttributes, model);
     }  
 	
 	@RequestMapping(value = "/viewExpense", method = RequestMethod.POST)

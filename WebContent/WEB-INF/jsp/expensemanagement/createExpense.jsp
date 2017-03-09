@@ -97,6 +97,7 @@
 									<label class="col-sm-2 control-label"></label>
 									<div class="col-sm-10">
 										<button id="addExpenseBtn" type="submit" class="btn btn-primary" form ="createExpenseForm">Add</button>
+										<button id="addExpenseAndPayBtn" type="submit" class="btn btn-primary" form ="createExpenseForm" formaction="<c:url value="/expense/createExpenseAndPay" />">Add and Pay</button>
 					                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
 									</div>
 								</div>

@@ -24,6 +24,7 @@ import com.JJ.model.PaymentdetailExample;
 import com.JJ.model.Promotion;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
+import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.lookup.PaymentModeLookup;
 
 @Service
@@ -32,16 +33,18 @@ public class PaymentManagementService {
 	
 	private PaymentRsMapper paymentRsMapper;
 	private PaymentdetailMapper paymentDetailMapper;
+	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentModeLookup paymentModeLookup;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
 	
 	@Autowired
 	public PaymentManagementService(PaymentRsMapper paymentRsMapper, PaymentdetailMapper paymentDetailMapper,
-			PaymentModeLookup paymentModeLookup, ExpenseManagementService expenseManagementService,
-			InvoiceManagementService invoiceManagementService) {
+			ExpenseTypeLookup expenseTypeLookup, PaymentModeLookup paymentModeLookup, 
+			ExpenseManagementService expenseManagementService, InvoiceManagementService invoiceManagementService) {
 		this.paymentRsMapper = paymentRsMapper;
 		this.paymentDetailMapper = paymentDetailMapper;
+		this.expenseTypeLookup = expenseTypeLookup;
 		this.paymentModeLookup = paymentModeLookup;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
@@ -52,13 +55,16 @@ public class PaymentManagementService {
 		
 		for(Paymentdetail paymentdetail : paymentDetailList) {
 			for(Expense expense : expenseList) {
+				expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
 				PaymentRs paymentrs = new PaymentRs();
 				paymentrs.setReferencetype("expense");
 				paymentrs.setReferenceid(expense.getExpenseid());
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
 				paymentRsMapper.insert(paymentrs);
-				
-				expense.setStatus(ExpenseStatus.PAID.toString());
+				if(expense.getexpensetype().toLowerCase().contains("china"))
+					expense.setStatus(ExpenseStatus.UNPAID.toString());
+				else
+					expense.setStatus(ExpenseStatus.PAID.toString());
 				expenseManagementService.updateExpense(expense);
 			}
 		}
