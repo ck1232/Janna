@@ -188,10 +188,10 @@ public class ExcelFileHelper {
             	cell = sheet.getRow(row).getCell(statusHeaderIndex[1]);
             	cell.setCellValue(invoice.getStatus());
             	
-            	if(invoice.getChequeid() != null) {
+            	/*if(invoice.getChequeid() != null) {
             		cell = sheet.getRow(row).getCell(chequeNoHeaderIndex[1]);
             		cell.setCellValue(invoice.getChequeid());
-            	}
+            	}*/
             	
             	cell = sheet.getRow(row).getCell(amountHeaderIndex[1]);
             	cell.setCellValue(invoice.getTotalprice().doubleValue());

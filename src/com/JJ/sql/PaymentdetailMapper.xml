@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.PaymentdetailMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.Paymentdetail">
+    <id column="paymentDetailId" jdbcType="INTEGER" property="paymentdetailid" />
+    <result column="paymentDate" jdbcType="DATE" property="paymentdate" />
+    <result column="paymentMode" jdbcType="INTEGER" property="paymentmode" />
+    <result column="paymentAmount" jdbcType="DECIMAL" property="paymentamount" />
+    <result column="chequeNum" jdbcType="VARCHAR" property="chequenum" />
+    <result column="bounceChqInd" jdbcType="CHAR" property="bouncechqind" />
+    <result column="createdon" jdbcType="TIMESTAMP" property="createdon" />
+    <result column="updatedon" jdbcType="TIMESTAMP" property="updatedon" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="updatedby" jdbcType="VARCHAR" property="updatedby" />
+    <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    paymentDetailId, paymentDate, paymentMode, paymentAmount, chequeNum, bounceChqInd, 
+    createdon, updatedon, createdby, updatedby, deleteInd
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.PaymentdetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from paymentdetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from paymentdetail
+    where paymentDetailId = #{paymentdetailid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from paymentdetail
+    where paymentDetailId = #{paymentdetailid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.PaymentdetailExample">
+    delete from paymentdetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.Paymentdetail" useGeneratedKeys="true" keyProperty="paymentdetailid" keyColumn="paymentDetailId">
+    insert into paymentdetail (paymentDetailId, paymentDate, paymentMode, 
+      paymentAmount, chequeNum, bounceChqInd, 
+      createdon, updatedon, createdby, 
+      updatedby, deleteInd)
+    values (#{paymentdetailid,jdbcType=INTEGER}, #{paymentdate,jdbcType=DATE}, #{paymentmode,jdbcType=INTEGER}, 
+      #{paymentamount,jdbcType=DECIMAL}, #{chequenum,jdbcType=VARCHAR}, #{bouncechqind,jdbcType=CHAR}, 
+      #{createdon,jdbcType=TIMESTAMP}, #{updatedon,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, 
+      #{updatedby,jdbcType=VARCHAR}, #{deleteind,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.Paymentdetail">
+    insert into paymentdetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paymentdetailid != null">
+        paymentDetailId,
+      </if>
+      <if test="paymentdate != null">
+        paymentDate,
+      </if>
+      <if test="paymentmode != null">
+        paymentMode,
+      </if>
+      <if test="paymentamount != null">
+        paymentAmount,
+      </if>
+      <if test="chequenum != null">
+        chequeNum,
+      </if>
+      <if test="bouncechqind != null">
+        bounceChqInd,
+      </if>
+      <if test="createdon != null">
+        createdon,
+      </if>
+      <if test="updatedon != null">
+        updatedon,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="updatedby != null">
+        updatedby,
+      </if>
+      <if test="deleteind != null">
+        deleteInd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paymentdetailid != null">
+        #{paymentdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="paymentdate != null">
+        #{paymentdate,jdbcType=DATE},
+      </if>
+      <if test="paymentmode != null">
+        #{paymentmode,jdbcType=INTEGER},
+      </if>
+      <if test="paymentamount != null">
+        #{paymentamount,jdbcType=DECIMAL},
+      </if>
+      <if test="chequenum != null">
+        #{chequenum,jdbcType=VARCHAR},
+      </if>
+      <if test="bouncechqind != null">
+        #{bouncechqind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedon != null">
+        #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedby != null">
+        #{updatedby,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteind != null">
+        #{deleteind,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.PaymentdetailExample" resultType="java.lang.Integer">
+    select count(*) from paymentdetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update paymentdetail
+    <set>
+      <if test="record.paymentdetailid != null">
+        paymentDetailId = #{record.paymentdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paymentdate != null">
+        paymentDate = #{record.paymentdate,jdbcType=DATE},
+      </if>
+      <if test="record.paymentmode != null">
+        paymentMode = #{record.paymentmode,jdbcType=INTEGER},
+      </if>
+      <if test="record.paymentamount != null">
+        paymentAmount = #{record.paymentamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.chequenum != null">
+        chequeNum = #{record.chequenum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bouncechqind != null">
+        bounceChqInd = #{record.bouncechqind,jdbcType=CHAR},
+      </if>
+      <if test="record.createdon != null">
+        createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedon != null">
+        updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdby != null">
+        createdby = #{record.createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedby != null">
+        updatedby = #{record.updatedby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleteind != null">
+        deleteInd = #{record.deleteind,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update paymentdetail
+    set paymentDetailId = #{record.paymentdetailid,jdbcType=INTEGER},
+      paymentDate = #{record.paymentdate,jdbcType=DATE},
+      paymentMode = #{record.paymentmode,jdbcType=INTEGER},
+      paymentAmount = #{record.paymentamount,jdbcType=DECIMAL},
+      chequeNum = #{record.chequenum,jdbcType=VARCHAR},
+      bounceChqInd = #{record.bouncechqind,jdbcType=CHAR},
+      createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      createdby = #{record.createdby,jdbcType=VARCHAR},
+      updatedby = #{record.updatedby,jdbcType=VARCHAR},
+      deleteInd = #{record.deleteind,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.Paymentdetail">
+    update paymentdetail
+    <set>
+      <if test="paymentdate != null">
+        paymentDate = #{paymentdate,jdbcType=DATE},
+      </if>
+      <if test="paymentmode != null">
+        paymentMode = #{paymentmode,jdbcType=INTEGER},
+      </if>
+      <if test="paymentamount != null">
+        paymentAmount = #{paymentamount,jdbcType=DECIMAL},
+      </if>
+      <if test="chequenum != null">
+        chequeNum = #{chequenum,jdbcType=VARCHAR},
+      </if>
+      <if test="bouncechqind != null">
+        bounceChqInd = #{bouncechqind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        createdon = #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedon != null">
+        updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedby != null">
+        updatedby = #{updatedby,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteind != null">
+        deleteInd = #{deleteind,jdbcType=CHAR},
+      </if>
+    </set>
+    where paymentDetailId = #{paymentdetailid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.Paymentdetail">
+    update paymentdetail
+    set paymentDate = #{paymentdate,jdbcType=DATE},
+      paymentMode = #{paymentmode,jdbcType=INTEGER},
+      paymentAmount = #{paymentamount,jdbcType=DECIMAL},
+      chequeNum = #{chequenum,jdbcType=VARCHAR},
+      bounceChqInd = #{bouncechqind,jdbcType=CHAR},
+      createdon = #{createdon,jdbcType=TIMESTAMP},
+      updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      updatedby = #{updatedby,jdbcType=VARCHAR},
+      deleteInd = #{deleteind,jdbcType=CHAR}
+    where paymentDetailId = #{paymentdetailid,jdbcType=INTEGER}
+  </update>
+</mapper>

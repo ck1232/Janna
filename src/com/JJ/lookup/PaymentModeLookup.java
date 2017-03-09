@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.JJ.lookupservice.PaymentModeService;
 import com.JJ.model.PaymentMode;
-import com.JJ.service.paymentmode.PaymentModeService;
 @Lazy
 @Component
 public class PaymentModeLookup {
@@ -53,5 +53,9 @@ public class PaymentModeLookup {
 	}
 	public void setPaymentModeByIdMap(Map<Integer, PaymentMode> paymentModeByIdMap) {
 		this.paymentModeByIdMap = paymentModeByIdMap;
+	}
+	
+	public String getPaymentModeById(Integer id){
+		return paymentModeByIdMap.get(id).getMode();
 	}
 }

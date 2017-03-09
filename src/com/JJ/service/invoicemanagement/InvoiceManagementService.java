@@ -16,6 +16,8 @@ import com.JJ.controller.invoicemanagement.InvoiceSearchCriteria;
 import com.JJ.controller.invoicemanagement.InvoiceVo;
 import com.JJ.dao.InvoiceMapper;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.Expense;
+import com.JJ.model.ExpenseExample;
 import com.JJ.model.FileMeta;
 import com.JJ.model.Invoice;
 import com.JJ.model.InvoiceExample;
@@ -36,6 +38,14 @@ public class InvoiceManagementService {
 		InvoiceExample invoiceExample = new InvoiceExample();
 		invoiceExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Invoice> invoiceList = invoiceMapper.selectByExample(invoiceExample);
+		return invoiceList;
+	}
+	
+	public List<Invoice> getAllInvoiceByIdList(List<Integer> idList) {
+		InvoiceExample example = new InvoiceExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andInvoiceidIn(idList);
+		example.setOrderByClause("invoiceDate desc");
+		List<Invoice> invoiceList = invoiceMapper.selectByExample(example);
 		return invoiceList;
 	}
 	
@@ -92,6 +102,7 @@ public class InvoiceManagementService {
 		savedInvoice.setMessenger(invoice.getMessenger());
 		savedInvoice.setInvoicedate(invoice.getInvoicedate());
 		savedInvoice.setTotalprice(invoice.getTotalprice());
+		savedInvoice.setStatus(invoice.getStatus());
 		invoiceMapper.updateByPrimaryKey(savedInvoice);
 	}
 	

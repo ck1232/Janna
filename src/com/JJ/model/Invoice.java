@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Invoice extends Base{
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private Integer invoiceid;
@@ -14,10 +14,6 @@ public class Invoice extends Base{
     private Date invoicedate;
 
     private BigDecimal totalprice;
-
-    private Integer chequeid;
-
-    private String paymentmode;
 
     private String status;
 
@@ -53,22 +49,6 @@ public class Invoice extends Base{
         this.totalprice = totalprice;
     }
 
-    public Integer getChequeid() {
-        return chequeid;
-    }
-
-    public void setChequeid(Integer chequeid) {
-        this.chequeid = chequeid;
-    }
-
-    public String getPaymentmode() {
-        return paymentmode;
-    }
-
-    public void setPaymentmode(String paymentmode) {
-        this.paymentmode = paymentmode;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -76,11 +56,16 @@ public class Invoice extends Base{
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    //non db fields
+    
+	private String invoicedateString;
+	
+	public String getInvoicedateString() {
+		return invoicedateString;
+	}
 
-	@Override
-	public String toString() {
-		return "Invoice [invoiceid=" + invoiceid + ", messenger=" + messenger + ", invoicedate=" + invoicedate
-				+ ", totalprice=" + totalprice + ", chequeid=" + chequeid + ", paymentmode=" + paymentmode + ", status="
-				+ status + "]";
+	public void setInvoicedateString(String invoicedateString) {
+		this.invoicedateString = invoicedateString;
 	}
 }

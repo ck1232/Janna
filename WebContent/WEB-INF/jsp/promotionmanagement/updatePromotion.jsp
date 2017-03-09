@@ -58,7 +58,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-10">
-			                  <button type="submit" class="btn btn-primary" form="updatePromotionToDbForm">Update
+			                  <button id="updatePromotionBtn" type="submit" class="btn btn-primary" form="updatePromotionToDbForm">Update
 			                  </button>
 			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
 			            </button>
@@ -97,7 +97,7 @@
 			$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
 	    }
 
-	    $("#addPromotionBtn").click(function(){
+	    $("#updatePromotionBtn").click(function(){
 	    	if (document.getElementById("promotionstartdate").value == '') {			
 				$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
 		    }

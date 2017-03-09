@@ -6,14 +6,16 @@
     "data":           "",
     "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "invoiceid"},
-{"data": "messenger"},
-{"data": "totalprice"},
+{"data": "expensedate"},
+{"data": "expensetype"},
+{"data": "description"},
+{"data": "totalamount"},
+{"data": "supplier"},
 {"data": "status"},
-{"data": "invoicedate"},
 {
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button>'
+    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewExpenseForm">View</button>'+
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateExpenseForm"><i class="fa fa-pencil"></i> Edit</button>'
 },

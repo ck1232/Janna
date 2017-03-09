@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.JJ.dao.InvoiceMapper">
-  <resultMap id="BaseResultMap" type="com.JJ.model.Invoice">
-    <id column="invoiceId" jdbcType="INTEGER" property="invoiceid" />
-    <result column="messenger" jdbcType="VARCHAR" property="messenger" />
-    <result column="invoiceDate" jdbcType="TIMESTAMP" property="invoicedate" />
-    <result column="totalPrice" jdbcType="DECIMAL" property="totalprice" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+<mapper namespace="com.JJ.dao.PaymentRsMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.PaymentRs">
+    <id column="paymentRSId" jdbcType="INTEGER" property="paymentrsid" />
+    <result column="referenceType" jdbcType="VARCHAR" property="referencetype" />
+    <result column="referenceId" jdbcType="INTEGER" property="referenceid" />
+    <result column="paymentDetailId" jdbcType="INTEGER" property="paymentdetailid" />
     <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
     <result column="createdon" jdbcType="TIMESTAMP" property="createdon" />
-    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
     <result column="updatedon" jdbcType="TIMESTAMP" property="updatedon" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
     <result column="updatedby" jdbcType="VARCHAR" property="updatedby" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -72,16 +71,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    invoiceId, messenger, invoiceDate, totalPrice, status, deleteInd, createdon, createdby, 
-    updatedon, updatedby
+    paymentRSId, referenceType, referenceId, paymentDetailId, deleteInd, createdon, updatedon, 
+    createdby, updatedby
   </sql>
-  <select id="selectByExample" parameterType="com.JJ.model.InvoiceExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.JJ.model.PaymentRsExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from invoice
+    from payment_rs
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,46 +91,43 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from invoice
-    where invoiceId = #{invoiceid,jdbcType=INTEGER}
+    from payment_rs
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from invoice
-    where invoiceId = #{invoiceid,jdbcType=INTEGER}
+    delete from payment_rs
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.JJ.model.InvoiceExample">
-    delete from invoice
+  <delete id="deleteByExample" parameterType="com.JJ.model.PaymentRsExample">
+    delete from payment_rs
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.JJ.model.Invoice">
-    insert into invoice (invoiceId, messenger, invoiceDate, 
-      totalPrice, status, deleteInd, 
-      createdon, createdby, updatedon, 
-      updatedby)
-    values (#{invoiceid,jdbcType=INTEGER}, #{messenger,jdbcType=VARCHAR}, #{invoicedate,jdbcType=TIMESTAMP}, 
-      #{totalprice,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, #{deleteind,jdbcType=CHAR}, 
-      #{createdon,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, #{updatedon,jdbcType=TIMESTAMP}, 
-      #{updatedby,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.JJ.model.PaymentRs">
+    insert into payment_rs (paymentRSId, referenceType, referenceId, 
+      paymentDetailId, deleteInd, createdon, 
+      updatedon, createdby, updatedby
+      )
+    values (#{paymentrsid,jdbcType=INTEGER}, #{referencetype,jdbcType=VARCHAR}, #{referenceid,jdbcType=INTEGER}, 
+      #{paymentdetailid,jdbcType=INTEGER}, #{deleteind,jdbcType=CHAR}, #{createdon,jdbcType=TIMESTAMP}, 
+      #{updatedon,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, #{updatedby,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.JJ.model.Invoice">
-    insert into invoice
+  <insert id="insertSelective" parameterType="com.JJ.model.PaymentRs">
+    insert into payment_rs
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="invoiceid != null">
-        invoiceId,
+      <if test="paymentrsid != null">
+        paymentRSId,
       </if>
-      <if test="messenger != null">
-        messenger,
+      <if test="referencetype != null">
+        referenceType,
       </if>
-      <if test="invoicedate != null">
-        invoiceDate,
+      <if test="referenceid != null">
+        referenceId,
       </if>
-      <if test="totalprice != null">
-        totalPrice,
-      </if>
-      <if test="status != null">
-        status,
+      <if test="paymentdetailid != null">
+        paymentDetailId,
       </if>
       <if test="deleteind != null">
         deleteInd,
@@ -139,31 +135,28 @@
       <if test="createdon != null">
         createdon,
       </if>
-      <if test="createdby != null">
-        createdby,
-      </if>
       <if test="updatedon != null">
         updatedon,
+      </if>
+      <if test="createdby != null">
+        createdby,
       </if>
       <if test="updatedby != null">
         updatedby,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="invoiceid != null">
-        #{invoiceid,jdbcType=INTEGER},
+      <if test="paymentrsid != null">
+        #{paymentrsid,jdbcType=INTEGER},
       </if>
-      <if test="messenger != null">
-        #{messenger,jdbcType=VARCHAR},
+      <if test="referencetype != null">
+        #{referencetype,jdbcType=VARCHAR},
       </if>
-      <if test="invoicedate != null">
-        #{invoicedate,jdbcType=TIMESTAMP},
+      <if test="referenceid != null">
+        #{referenceid,jdbcType=INTEGER},
       </if>
-      <if test="totalprice != null">
-        #{totalprice,jdbcType=DECIMAL},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+      <if test="paymentdetailid != null">
+        #{paymentdetailid,jdbcType=INTEGER},
       </if>
       <if test="deleteind != null">
         #{deleteind,jdbcType=CHAR},
@@ -171,40 +164,37 @@
       <if test="createdon != null">
         #{createdon,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdby != null">
-        #{createdby,jdbcType=VARCHAR},
-      </if>
       <if test="updatedon != null">
         #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
       </if>
       <if test="updatedby != null">
         #{updatedby,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.JJ.model.InvoiceExample" resultType="java.lang.Integer">
-    select count(*) from invoice
+  <select id="countByExample" parameterType="com.JJ.model.PaymentRsExample" resultType="java.lang.Integer">
+    select count(*) from payment_rs
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update invoice
+    update payment_rs
     <set>
-      <if test="record.invoiceid != null">
-        invoiceId = #{record.invoiceid,jdbcType=INTEGER},
+      <if test="record.paymentrsid != null">
+        paymentRSId = #{record.paymentrsid,jdbcType=INTEGER},
       </if>
-      <if test="record.messenger != null">
-        messenger = #{record.messenger,jdbcType=VARCHAR},
+      <if test="record.referencetype != null">
+        referenceType = #{record.referencetype,jdbcType=VARCHAR},
       </if>
-      <if test="record.invoicedate != null">
-        invoiceDate = #{record.invoicedate,jdbcType=TIMESTAMP},
+      <if test="record.referenceid != null">
+        referenceId = #{record.referenceid,jdbcType=INTEGER},
       </if>
-      <if test="record.totalprice != null">
-        totalPrice = #{record.totalprice,jdbcType=DECIMAL},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.paymentdetailid != null">
+        paymentDetailId = #{record.paymentdetailid,jdbcType=INTEGER},
       </if>
       <if test="record.deleteind != null">
         deleteInd = #{record.deleteind,jdbcType=CHAR},
@@ -212,11 +202,11 @@
       <if test="record.createdon != null">
         createdon = #{record.createdon,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createdby != null">
-        createdby = #{record.createdby,jdbcType=VARCHAR},
-      </if>
       <if test="record.updatedon != null">
         updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdby != null">
+        createdby = #{record.createdby,jdbcType=VARCHAR},
       </if>
       <if test="record.updatedby != null">
         updatedby = #{record.updatedby,jdbcType=VARCHAR},
@@ -227,35 +217,31 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update invoice
-    set invoiceId = #{record.invoiceid,jdbcType=INTEGER},
-      messenger = #{record.messenger,jdbcType=VARCHAR},
-      invoiceDate = #{record.invoicedate,jdbcType=TIMESTAMP},
-      totalPrice = #{record.totalprice,jdbcType=DECIMAL},
-      status = #{record.status,jdbcType=VARCHAR},
+    update payment_rs
+    set paymentRSId = #{record.paymentrsid,jdbcType=INTEGER},
+      referenceType = #{record.referencetype,jdbcType=VARCHAR},
+      referenceId = #{record.referenceid,jdbcType=INTEGER},
+      paymentDetailId = #{record.paymentdetailid,jdbcType=INTEGER},
       deleteInd = #{record.deleteind,jdbcType=CHAR},
       createdon = #{record.createdon,jdbcType=TIMESTAMP},
-      createdby = #{record.createdby,jdbcType=VARCHAR},
       updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      createdby = #{record.createdby,jdbcType=VARCHAR},
       updatedby = #{record.updatedby,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.Invoice">
-    update invoice
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.PaymentRs">
+    update payment_rs
     <set>
-      <if test="messenger != null">
-        messenger = #{messenger,jdbcType=VARCHAR},
+      <if test="referencetype != null">
+        referenceType = #{referencetype,jdbcType=VARCHAR},
       </if>
-      <if test="invoicedate != null">
-        invoiceDate = #{invoicedate,jdbcType=TIMESTAMP},
+      <if test="referenceid != null">
+        referenceId = #{referenceid,jdbcType=INTEGER},
       </if>
-      <if test="totalprice != null">
-        totalPrice = #{totalprice,jdbcType=DECIMAL},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+      <if test="paymentdetailid != null">
+        paymentDetailId = #{paymentdetailid,jdbcType=INTEGER},
       </if>
       <if test="deleteind != null">
         deleteInd = #{deleteind,jdbcType=CHAR},
@@ -263,29 +249,28 @@
       <if test="createdon != null">
         createdon = #{createdon,jdbcType=TIMESTAMP},
       </if>
-      <if test="createdby != null">
-        createdby = #{createdby,jdbcType=VARCHAR},
-      </if>
       <if test="updatedon != null">
         updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
       </if>
       <if test="updatedby != null">
         updatedby = #{updatedby,jdbcType=VARCHAR},
       </if>
     </set>
-    where invoiceId = #{invoiceid,jdbcType=INTEGER}
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.JJ.model.Invoice">
-    update invoice
-    set messenger = #{messenger,jdbcType=VARCHAR},
-      invoiceDate = #{invoicedate,jdbcType=TIMESTAMP},
-      totalPrice = #{totalprice,jdbcType=DECIMAL},
-      status = #{status,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.PaymentRs">
+    update payment_rs
+    set referenceType = #{referencetype,jdbcType=VARCHAR},
+      referenceId = #{referenceid,jdbcType=INTEGER},
+      paymentDetailId = #{paymentdetailid,jdbcType=INTEGER},
       deleteInd = #{deleteind,jdbcType=CHAR},
       createdon = #{createdon,jdbcType=TIMESTAMP},
-      createdby = #{createdby,jdbcType=VARCHAR},
       updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
       updatedby = #{updatedby,jdbcType=VARCHAR}
-    where invoiceId = #{invoiceid,jdbcType=INTEGER}
+    where paymentRSId = #{paymentrsid,jdbcType=INTEGER}
   </update>
 </mapper>
