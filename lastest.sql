@@ -300,6 +300,7 @@ CREATE TABLE `employee_bonus` (
   `bonusAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
   `employeeCPF` decimal(8,2) DEFAULT NULL,
   `employerCDF` decimal(8,2) DEFAULT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'UNPAID',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   `createdon` datetime NOT NULL,
   `createdby` varchar(255) NOT NULL,
@@ -336,6 +337,7 @@ CREATE TABLE `employee_salary` (
   `cdacAmount` decimal(4,2) DEFAULT NULL,
   `sdlAmount` decimal(6,2) DEFAULT NULL,
   `fwLevy` decimal(6,2) DEFAULT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'UNPAID',
   `createdon` datetime DEFAULT NULL,
   `updatedon` datetime NOT NULL,
   `createdby` varchar(255) NOT NULL,
@@ -377,7 +379,7 @@ CREATE TABLE `expense` (
   `updatedon` datetime NOT NULL,
   `updatedby` varchar(255) NOT NULL,
   PRIMARY KEY (`expenseId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -386,7 +388,7 @@ CREATE TABLE `expense` (
 
 LOCK TABLES `expense` WRITE;
 /*!40000 ALTER TABLE `expense` DISABLE KEYS */;
-INSERT INTO `expense` VALUES (1,2,'','desc','2017-03-15','supplier',50.00,'UNPAID','','N','euphona','2017-03-05 17:02:51','2017-03-05 23:24:55','euphona'),(2,1,'','','2017-02-05','supplier',10.00,'PAID','','N','euphona','2017-03-05 21:54:05','2017-03-06 20:53:30','euphona'),(3,1,'','desc','2016-03-05','supplier',5.00,'PAID','','N','euphona','2017-03-05 21:54:51','2017-03-06 20:53:31','euphona'),(4,1,'','desc','2017-03-30','supplier',5.00,'UNPAID','','N','euphona','2017-03-05 21:55:51','2017-03-05 21:55:51','euphona');
+INSERT INTO `expense` VALUES (1,2,'','desc','2017-03-15','supplier',20.00,'PAID','','N','euphona','2017-03-05 17:02:51','2017-03-06 22:27:53','euphona'),(2,1,'','','2017-02-05','supplier',10.00,'PAID','','N','euphona','2017-03-05 21:54:05','2017-03-06 20:53:30','euphona'),(3,1,'','desc','2016-03-05','supplier',5.00,'PAID','','N','euphona','2017-03-05 21:54:51','2017-03-06 20:53:31','euphona'),(4,1,'','desc','2017-03-30','supplier',5.00,'UNPAID','','N','euphona','2017-03-05 21:55:51','2017-03-05 21:55:51','euphona'),(5,6,'','','2017-03-14','LTA',20.00,'PAID','','N','euphona','2017-03-06 22:27:20','2017-03-07 22:54:27','euphona'),(6,9,'','desc','2017-03-07','equip pte ltd',100.00,'UNPAID','','N','euphona','2017-03-09 22:30:13','2017-03-09 22:30:13','euphona'),(7,13,'','desc','2017-03-07','supplier',100.00,'UNPAID','','N','euphona','2017-03-09 22:31:03','2017-03-09 22:31:03','euphona'),(8,9,'','desc','2017-03-15','supplier',100.00,'UNPAID','','N','euphona','2017-03-09 22:33:30','2017-03-09 22:33:30','euphona'),(9,7,'','desc','2017-03-14','supplier',100.00,'UNPAID','','N','euphona','2017-03-09 22:42:24','2017-03-09 22:42:24','euphona'),(10,5,'','desc','2017-03-14','supplier',100.00,'UNPAID','','N','euphona','2017-03-09 22:45:52','2017-03-09 22:45:52','euphona'),(11,10,'','desc','2017-03-09','supplier',100.00,'PAID','','N','euphona','2017-03-09 22:49:47','2017-03-09 22:50:00','euphona'),(12,15,'','from china','2017-03-16','dasdas',2000.00,'UNPAID','','N','euphona','2017-03-09 22:53:32','2017-03-09 22:53:32','euphona'),(13,15,'','dasdas','2017-03-21','adsda',20.00,'UNPAID','','N','euphona','2017-03-09 22:53:49','2017-03-09 23:22:49','euphona');
 /*!40000 ALTER TABLE `expense` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -401,7 +403,7 @@ CREATE TABLE `expense_type` (
   `expenseTypeId` int(11) NOT NULL AUTO_INCREMENT,
   `expenseType` varchar(255) NOT NULL,
   PRIMARY KEY (`expenseTypeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -410,7 +412,7 @@ CREATE TABLE `expense_type` (
 
 LOCK TABLES `expense_type` WRITE;
 /*!40000 ALTER TABLE `expense_type` DISABLE KEYS */;
-INSERT INTO `expense_type` VALUES (1,'Stock'),(2,'Sub-Con'),(3,'Vehicle-Fuel'),(4,'Vehicle-Road Tax'),(5,'Vehicle-Repair'),(6,'Vehicle-Car Parking and ERP'),(7,'Vehicle-Insurance'),(8,'Office Expenses'),(9,'Asset-Equipment'),(10,'Asset-Vehicle'),(11,'Rent Expenses'),(12,'Meal Expenses'),(13,'Entertainment'),(14,'Fees and Taxes');
+INSERT INTO `expense_type` VALUES (1,'Stock'),(2,'Sub-Con'),(3,'Vehicle-Fuel'),(4,'Vehicle-Road Tax'),(5,'Vehicle-Repair'),(6,'Vehicle-Car Parking and ERP'),(7,'Vehicle-Insurance'),(8,'Office Expenses'),(9,'Asset-Equipment'),(10,'Asset-Vehicle'),(11,'Rent Expenses'),(12,'Meal Expenses'),(13,'Entertainment'),(14,'Fees and Taxes'),(15,'Stock(China)');
 /*!40000 ALTER TABLE `expense_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -527,7 +529,7 @@ CREATE TABLE `invoice` (
 
 LOCK TABLES `invoice` WRITE;
 /*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
-INSERT INTO `invoice` VALUES (5354,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2015-03-01 00:00:00',3310.00,'PENDING','N','2017-02-27 22:33:50','ck1232','2017-02-27 22:33:50','ck1232'),(6246,'mu interior pte ltd','2017-01-05 00:00:00',415.00,'PENDING','N','2017-03-01 00:07:42','ck1232','2017-03-01 00:10:28','ck1232'),(6247,'WJM FURNITURE PTE LTD','2017-01-07 00:00:00',541.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6248,'Kar Lee Electrical Engineering ','2017-01-09 00:00:00',946.00,'PENDING','N','2017-02-27 21:58:49','ck1232','2017-03-01 00:08:31','ck1232'),(6249,'JAMES KING PTE LTD','2017-01-14 00:00:00',13079.00,'PENDING','N','2017-02-27 21:59:31','ck1232','2017-03-01 00:08:31','ck1232'),(6250,'mu interior pte ltd','2017-01-16 00:00:00',800.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6251,'mu interior pte ltd','2017-01-18 00:00:00',540.00,'PENDING','N','2017-02-27 21:59:51','ck1232','2017-03-01 00:08:31','ck1232'),(6252,'mu interior pte ltd','2017-02-02 00:00:00',725.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6253,'Liberty Furniture Pte Ltd','2017-01-24 00:00:00',2530.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6254,'ASTIQUE DESIGN PTE LTD','2017-01-13 00:00:00',90.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6255,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-02 00:00:00',1370.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6256,'JAMES KING PTE LTD','2017-02-02 00:00:00',209.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6257,'Precise International Pte Ltd','2017-02-02 00:00:00',200.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6258,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,'PENDING','N','2017-02-27 22:07:09','ck1232','2017-03-01 00:08:31','ck1232'),(6259,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6260,'Precise International Pte Ltd','2017-02-03 00:00:00',400.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6261,'Precise International Pte Ltd','2017-02-09 00:00:00',100.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6262,'Precise International Pte Ltd','2017-02-10 00:00:00',1170.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6263,'Precise International Pte Ltd','2017-02-10 00:00:00',1480.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6264,'Precise International Pte Ltd','2017-02-10 00:00:00',5270.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6265,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-06 00:00:00',124.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6266,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-07 00:00:00',220.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6267,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-09 00:00:00',118.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6268,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-10 00:00:00',60.00,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6269,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-11 00:00:00',67.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6270,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-12 00:00:00',66.00,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6271,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-21 00:00:00',187.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6272,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-22 00:00:00',60.00,'PENDING','N','2017-02-27 22:13:59','ck1232','2017-03-01 00:08:31','ck1232'),(6273,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-17 00:00:00',50.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6274,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-02-09 00:00:00',170.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232');
+INSERT INTO `invoice` VALUES (5354,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2015-03-01 00:00:00',3310.00,'PAID','N','2017-02-27 22:33:50','ck1232','2017-03-07 20:41:48','euphona'),(6246,'mu interior pte ltd','2017-01-05 00:00:00',415.00,'PAID','N','2017-03-01 00:07:42','ck1232','2017-03-07 20:41:48','euphona'),(6247,'WJM FURNITURE PTE LTD','2017-01-07 00:00:00',541.00,'PAID','N','2017-02-26 23:49:19','ck1232','2017-03-07 20:41:48','euphona'),(6248,'Kar Lee Electrical Engineering ','2017-01-09 00:00:00',946.00,'PAID','N','2017-02-27 21:58:49','ck1232','2017-03-07 20:51:30','euphona'),(6249,'JAMES KING PTE LTD','2017-01-14 00:00:00',13079.00,'PAID','N','2017-02-27 21:59:31','ck1232','2017-03-07 22:51:01','euphona'),(6250,'mu interior pte ltd','2017-01-16 00:00:00',800.00,'PAID','N','2017-02-27 22:00:03','ck1232','2017-03-07 22:51:01','euphona'),(6251,'mu interior pte ltd','2017-01-18 00:00:00',540.00,'PENDING','N','2017-02-27 21:59:51','ck1232','2017-03-01 00:08:31','ck1232'),(6252,'mu interior pte ltd','2017-02-02 00:00:00',725.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6253,'Liberty Furniture Pte Ltd','2017-01-24 00:00:00',2530.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6254,'ASTIQUE DESIGN PTE LTD','2017-01-13 00:00:00',90.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6255,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-02 00:00:00',1370.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6256,'JAMES KING PTE LTD','2017-02-02 00:00:00',209.00,'PENDING','N','2017-02-27 22:00:03','ck1232','2017-03-01 00:08:31','ck1232'),(6257,'Precise International Pte Ltd','2017-02-02 00:00:00',200.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6258,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,'PENDING','N','2017-02-27 22:07:09','ck1232','2017-03-01 00:08:31','ck1232'),(6259,'Precise International Pte Ltd','2017-02-03 00:00:00',200.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6260,'Precise International Pte Ltd','2017-02-03 00:00:00',400.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6261,'Precise International Pte Ltd','2017-02-09 00:00:00',100.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6262,'Precise International Pte Ltd','2017-02-10 00:00:00',1170.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6263,'Precise International Pte Ltd','2017-02-10 00:00:00',1480.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6264,'Precise International Pte Ltd','2017-02-10 00:00:00',5270.00,'PENDING','N','2017-02-27 22:08:43','ck1232','2017-03-01 00:08:31','ck1232'),(6265,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-06 00:00:00',124.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6266,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-07 00:00:00',220.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6267,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-09 00:00:00',118.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6268,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-10 00:00:00',60.00,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6269,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-11 00:00:00',67.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6270,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-12 00:00:00',66.00,'PENDING','N','2017-02-27 22:13:02','ck1232','2017-03-01 00:08:31','ck1232'),(6271,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-21 00:00:00',187.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6272,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-22 00:00:00',60.00,'PENDING','N','2017-02-27 22:13:59','ck1232','2017-03-01 00:08:31','ck1232'),(6273,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-01-17 00:00:00',50.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232'),(6274,'WOODHOUSE FURNITURE & CONSTRUCTION PTE LTD','2017-02-09 00:00:00',170.00,'PENDING','N','2017-02-26 23:49:19','ck1232','2017-03-01 00:08:31','ck1232');
 /*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -604,7 +606,7 @@ CREATE TABLE `payment_rs` (
   `createdby` varchar(255) NOT NULL,
   `updatedby` varchar(255) NOT NULL,
   PRIMARY KEY (`paymentRSId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -613,7 +615,7 @@ CREATE TABLE `payment_rs` (
 
 LOCK TABLES `payment_rs` WRITE;
 /*!40000 ALTER TABLE `payment_rs` DISABLE KEYS */;
-INSERT INTO `payment_rs` VALUES (1,'expense',2,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(2,'expense',3,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(3,'expense',2,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(4,'expense',3,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona');
+INSERT INTO `payment_rs` VALUES (1,'expense',2,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(2,'expense',3,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(3,'expense',2,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(4,'expense',3,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(5,'expense',1,5,'N','2017-03-06 22:24:18','2017-03-06 22:24:18','euphona','euphona'),(6,'invoice',5354,6,'N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona'),(7,'invoice',6246,6,'N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona'),(8,'invoice',6247,6,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(9,'invoice',5354,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(10,'invoice',6246,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(11,'invoice',6247,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(12,'invoice',6248,8,'N','2017-03-07 20:51:30','2017-03-07 20:51:30','euphona','euphona'),(13,'invoice',6250,9,'N','2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona'),(14,'invoice',6249,9,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(15,'invoice',6250,10,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(16,'invoice',6249,10,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(17,'expense',5,11,'N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona'),(18,'expense',5,12,'N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona'),(19,'expense',11,13,'N','2017-03-09 22:50:00','2017-03-09 22:50:00','euphona','euphona'),(21,'expense',13,15,'N','2017-03-09 23:22:49','2017-03-09 23:22:49','euphona','euphona');
 /*!40000 ALTER TABLE `payment_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -637,7 +639,7 @@ CREATE TABLE `paymentdetail` (
   `updatedby` varchar(255) NOT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`paymentDetailId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -646,7 +648,7 @@ CREATE TABLE `paymentdetail` (
 
 LOCK TABLES `paymentdetail` WRITE;
 /*!40000 ALTER TABLE `paymentdetail` DISABLE KEYS */;
-INSERT INTO `paymentdetail` VALUES (3,'2017-03-06',1,8.00,'',NULL,'2017-03-06 20:53:10','2017-03-06 20:53:10','euphona','euphona','N'),(4,'2017-03-06',2,7.00,'2353','N','2017-03-06 20:53:27','2017-03-06 20:53:27','euphona','euphona','N');
+INSERT INTO `paymentdetail` VALUES (3,'2017-03-05',1,8.00,'',NULL,'2017-03-06 20:53:10','2017-03-06 20:53:10','euphona','euphona','N'),(4,'2017-03-06',2,7.00,'2353','N','2017-03-06 20:53:27','2017-03-06 20:53:27','euphona','euphona','N'),(5,'2017-03-08',1,10.00,'',NULL,'2017-03-06 22:24:18','2017-03-06 22:24:18','euphona','euphona','N'),(6,'2017-03-07',1,956.00,'',NULL,'2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona','N'),(7,'2017-03-07',2,3310.00,'4324222','N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona','N'),(8,'2017-03-07',1,946.00,'',NULL,'2017-03-07 20:51:30','2017-03-07 20:51:30','euphona','euphona','N'),(9,'2017-03-13',1,800.00,'',NULL,'2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona','N'),(10,'2017-03-13',2,13079.00,'4324222','N','2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona','N'),(11,'2017-03-14',1,10.00,'',NULL,'2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona','N'),(12,'2017-03-14',2,10.00,'4324222','N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona','N'),(13,'2017-03-09',1,100.00,'',NULL,'2017-03-09 22:50:00','2017-03-09 22:50:00','euphona','euphona','N'),(15,'2017-03-28',1,100.00,'',NULL,'2017-03-09 23:22:49','2017-03-09 23:22:49','euphona','euphona','N');
 /*!40000 ALTER TABLE `paymentdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -682,7 +684,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,'Y','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1,'',NULL),(18,'testing',123.00,500,2,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(19,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(20,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(21,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(22,'testing',123.00,456,2,NULL,'Y',NULL,NULL,'euphona','2017-02-22 22:15:37',1,'esting1','P3SXMRT7JA672'),(23,'product3',100.00,1,2,NULL,'Y',NULL,NULL,'ck1232','2017-02-26 23:21:14',1,'Iphone1',NULL),(24,'Iphone',512.00,26,2,NULL,'Y',NULL,NULL,'ck1232','2017-02-26 23:20:46',1,'Iphone',NULL),(25,'IPHONE',12.00,123,2,NULL,'N','ck1232','2017-02-28 22:29:59','ck1232','2017-02-28 22:54:21',1,'test','7WY8XKT8FR58J');
+INSERT INTO `product` VALUES (17,'1',0.00,0,NULL,NULL,'Y','ck1232','2016-11-23 22:02:02','ck1232','2016-11-23 22:02:02',1,'',NULL),(18,'testing',123.00,500,2,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(19,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(20,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(21,'testing1',23.00,23,3,NULL,'Y',NULL,NULL,NULL,NULL,0,'',NULL),(22,'testing',123.00,456,2,NULL,'N',NULL,NULL,'euphona','2017-02-22 22:15:37',1,'esting1','P3SXMRT7JA672'),(23,'product3',100.00,1,2,NULL,'Y',NULL,NULL,'ck1232','2017-02-26 23:21:14',1,'Iphone1',NULL),(24,'Iphone',512.00,26,2,NULL,'N',NULL,NULL,'ck1232','2017-02-26 23:20:46',1,'Iphone',NULL),(25,'IPHONE',12.00,123,2,NULL,'N','ck1232','2017-02-28 22:29:59','ck1232','2017-02-28 22:54:21',1,'test','7WY8XKT8FR58J');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1893,4 +1895,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-06 21:16:59
+-- Dump completed on 2017-03-09 23:51:01
