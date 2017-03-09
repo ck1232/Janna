@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	ApplicationContext context;
 	
+	@Value("${jdbc.user}")
+    private String user;
+	
+	@Value("${jdbc.password}")
+    private String password;
+	
+	@Value("${jdbc.url}")
+    private String url;
+	
+	@Value("${jdbc.driver}")
+	private String driver;
+	
 	@Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(securityDataSource())
@@ -43,9 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public DriverManagerDataSource securityDataSource() {
 	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
 	    driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/jj");
-	    driverManagerDataSource.setUsername("root");
-	    driverManagerDataSource.setPassword("root");
+	    driverManagerDataSource.setUrl(url);
+	    driverManagerDataSource.setUsername(user);
+	    driverManagerDataSource.setPassword(password);
 	    return driverManagerDataSource;
 	}
 	

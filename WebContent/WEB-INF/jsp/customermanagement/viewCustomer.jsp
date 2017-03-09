@@ -87,7 +87,7 @@
 	                    <div class="box-header with-border">
 	                    	<h3 class="box-title">Address Details</h3>
 	                    </div>
-				            <div class="box-body no-padding">
+				            <div class="box-body no-padding" style="overflow-x:auto;">
 				              	<table class="table table-striped">
 				              		<c:if test="${addressList.size() < 10}">
 					              		<tr>
