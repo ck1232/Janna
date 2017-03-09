@@ -46,19 +46,41 @@
     		getList(item);
     	});
 
-    	$('#addLocationFromDiv.typeahead').keyup(function(){
+
+    	
+
+    	$('#addLocationFromDiv .typeahead').keyup(function(){
     		$("#locationFromId").val("");
 		});
 
-    	$('#addLocationFromDiv.typeahead').typeahead(null, {
+    	$('#addLocationFromDiv .typeahead').typeahead(null, {
    		 name: 'locationList',
    		 display: 'locationname',
    		source: locationList
 		});
 
-    	$('#addLocationFromDiv.typeahead').on('typeahead:selected', function(evt, item) {
+    	$('#addLocationFromDiv .typeahead').on('typeahead:selected', function(evt, item) {
         	$("#locationFromHidden").val(item.locationid);
     	});
+
+
+    	
+
+    	$('#addLocationToDiv .typeahead').keyup(function(){
+    		$("#locationToId").val("");
+		});
+
+    	$('#addLocationToDiv .typeahead').typeahead(null, {
+   		 name: 'locationList',
+   		 display: 'locationname',
+   		source: locationList
+		});
+
+    	$('#addLocationToDiv .typeahead').on('typeahead:selected', function(evt, item) {
+        	$("#locationToHidden").val(item.locationid);
+    	});
+
+    	
 	 } );
 
     function getList(item) {
