@@ -1,5 +1,9 @@
 package com.JJ.controller.common;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,11 +23,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Menu;
 import com.JJ.model.Module;
 import com.JJ.model.Submodule;
@@ -48,16 +57,18 @@ public class CommonController {
 	private UserManagementService userManagementService;
 	private PermissionManagementService permissionManagementService;
 	private CommonService commonService;
+	private BasicDataSource dataSource;
 	@Autowired
 	public CommonController(SubModuleManagementService subModuleManagementService, ModuleManagementService moduleManagementService,
 			RoleAssignmentService roleAssignmentService, UserManagementService userManagementService,
-			PermissionManagementService permissionManagementService, CommonService commonService){
+			PermissionManagementService permissionManagementService, CommonService commonService, BasicDataSource dataSource){
 		this.subModuleManagementService = subModuleManagementService;
 		this.moduleManagementService = moduleManagementService;
 		this.roleAssignmentService = roleAssignmentService;
 		this.userManagementService = userManagementService;
 		this.permissionManagementService = permissionManagementService;
 		this.commonService = commonService;
+		this.dataSource = dataSource;
 	}
 	
 	@RequestMapping(value={"/","/dashboard"})  
@@ -155,6 +166,59 @@ public class CommonController {
        request.getSession().setAttribute("menu", null);
        return "redirect:/login?logout";
     }
+	
+	@RequestMapping(value="/query", method = RequestMethod.GET)
+	public String querypage (Model model) {
+		return "query";
+	}
+	
+	@RequestMapping(value="/query", method = RequestMethod.POST)
+	public String runSqlpage (@RequestParam(value="sqlStatement", required=true) String sqlStatement, final RedirectAttributes redirectAttributes, Model model) {
+		Statement statement = null;
+		String message = null;
+		if(sqlStatement != null && !sqlStatement.trim().isEmpty()){
+			try{
+				sqlStatement = sqlStatement.trim();
+				if(sqlStatement.charAt(sqlStatement.length()-1) != ';'){
+					sqlStatement += ';';
+				}
+				Connection connection = dataSource.getConnection();
+				statement = connection.createStatement();
+				String sqlType = sqlStatement.substring(0, 6);
+				String sqlType2 = sqlStatement.substring(0, 4);
+				logger.debug("loading sql :"+ sqlStatement);
+				if (sqlType.equalsIgnoreCase("select") || sqlType2.equalsIgnoreCase("desc")){
+			         ResultSet resultSet = statement.executeQuery(sqlStatement);
+			         message =  GeneralUtils.getHtmlRows(resultSet);
+			         statement.close();
+			     }else{
+			    	 int i = statement.executeUpdate(sqlStatement);
+			    	 statement.close();
+			    	 message =  "<tr><td>" +
+		               "The statement executed successfully.<br>" +
+		               i + " row(s) affected." +
+		             "</td></tr>";
+			     }
+			}catch(Exception ex){
+				ex.printStackTrace();
+				logger.debug(ex.getMessage());
+				if(statement != null){
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				message =  "<tr><td>Error executing the SQL statement: <br>"+
+	               ex.getMessage()+
+	             "</td></tr>";
+			}
+		}
+		model.addAttribute("sqlStatement", sqlStatement);
+		redirectAttributes.addFlashAttribute("sqlStatement", sqlStatement);
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:query";
+	}
 	
 	private String getPrincipal(){
         String userName = null;
