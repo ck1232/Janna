@@ -329,6 +329,8 @@ DROP TABLE IF EXISTS `employee_salary`;
 CREATE TABLE `employee_salary` (
   `salaryId` int(11) NOT NULL AUTO_INCREMENT,
   `salaryDate` date NOT NULL,
+  `employeeId` int(11) NOT NULL,
+  `basicSalaryAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
   `overtimeAmount` decimal(8,2) DEFAULT NULL,
   `overtimeHours` decimal(6,2) DEFAULT NULL,
   `allowance` decimal(8,2) DEFAULT NULL,
@@ -551,7 +553,7 @@ CREATE TABLE `module` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -560,7 +562,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Product management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Promotion Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,'Customer Management','fa-users','N','euphona','2016-11-15 21:23:46','euphona','2016-11-15 21:23:46',1),(8,'Batch Management','fa-users','N','euphona','2016-11-26 20:11:59','euphona','2016-11-26 20:11:59',1),(9,'Inventory Management','fa-users','N','euphona','2017-01-05 21:16:30','euphona','2017-01-05 21:16:30',1),(10,'Demo Management','fa-users','N','euphona','2017-02-25 16:39:47','euphona','2017-02-25 16:39:47',1),(11,'Invoice Management','fa-users','N','euphona','2017-02-27 10:31:46','euphona','2017-02-27 10:31:53',1),(12,'Expense Management','fa-users','N','euphona','2017-03-05 15:47:20','euphona','2017-03-05 15:47:20',1);
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(5,'Product management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(6,'Promotion Management','fa-users','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(7,'Customer Management','fa-users','N','euphona','2016-11-15 21:23:46','euphona','2016-11-15 21:23:46',1),(8,'Batch Management','fa-users','N','euphona','2016-11-26 20:11:59','euphona','2016-11-26 20:11:59',1),(9,'Inventory Management','fa-users','N','euphona','2017-01-05 21:16:30','euphona','2017-01-05 21:16:30',1),(10,'Demo Management','fa-users','N','euphona','2017-02-25 16:39:47','euphona','2017-02-25 16:39:47',1),(11,'Invoice Management','fa-users','N','euphona','2017-02-27 10:31:46','euphona','2017-02-27 10:31:53',1),(12,'Expense Management','fa-users','N','euphona','2017-03-05 15:47:20','euphona','2017-03-05 15:47:20',1),(13,'Salary Bonus Management','fa-users','N','euphona','2017-03-11 10:52:41','euphona','2017-03-11 10:52:41',1);
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1135,7 +1137,7 @@ CREATE TABLE `submodule` (
   `updatedon` datetime NOT NULL,
   `version` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1144,7 +1146,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,1,'Module Management','fa-users','admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(21,1,'Role Management','fa-users','admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(22,1,'Permission Management','fa-users','admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,5,'Category Management','fa-users','product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,5,'Product Management','fa-users','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(30,5,'Product Option Management','fa-users','product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(31,7,'Customer Management','fa-users','customer/listCustomer','N','euphona','2016-11-15 21:24:32','euphona','2016-11-15 21:24:32',1),(32,8,'Batch Management','fa-users','/batchintake/listBatchIntake','N','euphona','2016-11-26 20:12:21','euphona','2016-11-26 20:12:21',1),(33,9,'Inventory Management','fa-users','/inventory/listInventoryProduct','N','euphona','2017-01-05 21:17:37','euphona','2017-01-05 21:17:56',1),(34,9,'Inventory History Management','fa-users','inventoryhistory/listInventoryHistory','N','euphona','2017-01-20 22:17:50','euphona','2017-01-21 08:30:20',1),(35,10,'Demo Management','fa-users','/demo/listProduct','N','euphona','2017-02-25 16:40:36','euphona','2017-02-25 16:40:36',1),(36,11,'Invoice Management','fa-users','invoice/listInvoice','N','euphona','2017-02-27 10:32:34','euphona','2017-02-27 10:32:34',1),(37,12,'Expense Management','fa-users','expense/listExpense','N','euphona','2017-03-05 15:48:12','euphona','2017-03-05 15:48:12',1);
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(2,1,'Module Management','fa-users','admin/listModule','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(21,1,'Role Management','fa-users','admin/listRole','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(22,1,'Permission Management','fa-users','admin/listPermission','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(24,5,'Category Management','fa-users','product/category/listProductCategory','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(26,5,'Product Management','fa-users','product/product/listProduct','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(29,6,'Discount Management','fa-users','product/discount/listDiscount','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(30,5,'Product Option Management','fa-users','product/option/listProductOption','N','','0000-00-00 00:00:00','','0000-00-00 00:00:00',0),(31,7,'Customer Management','fa-users','customer/listCustomer','N','euphona','2016-11-15 21:24:32','euphona','2016-11-15 21:24:32',1),(32,8,'Batch Management','fa-users','/batchintake/listBatchIntake','N','euphona','2016-11-26 20:12:21','euphona','2016-11-26 20:12:21',1),(33,9,'Inventory Management','fa-users','/inventory/listInventoryProduct','N','euphona','2017-01-05 21:17:37','euphona','2017-01-05 21:17:56',1),(34,9,'Inventory History Management','fa-users','inventoryhistory/listInventoryHistory','N','euphona','2017-01-20 22:17:50','euphona','2017-01-21 08:30:20',1),(35,10,'Demo Management','fa-users','/demo/listProduct','N','euphona','2017-02-25 16:40:36','euphona','2017-02-25 16:40:36',1),(36,11,'Invoice Management','fa-users','invoice/listInvoice','N','euphona','2017-02-27 10:32:34','euphona','2017-02-27 10:32:34',1),(37,12,'Expense Management','fa-users','expense/listExpense','N','euphona','2017-03-05 15:48:12','euphona','2017-03-05 15:48:12',1),(38,13,'Salary Bonus Management','fa-users','salarybonus/listSalaryBonus','N','euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23',1);
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1895,4 +1897,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-09 23:51:01
+-- Dump completed on 2017-03-11 11:00:27

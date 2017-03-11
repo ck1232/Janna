@@ -1377,5 +1377,37 @@
         </put-attribute>
     </definition>
     <!-- Expense Module END -->
+    
+    <!-- Salary Bonus Module START -->
+ 	<definition name="listSalaryBonus" extends="main_template">  
+        <put-attribute name="title" value="Salary / Bonus Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Salary / Bonus Listing" />
+        		<put-attribute name="heading-description" value="To view all the salary and bonus." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/salarybonusmanagement/listSalaryBonus.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Expense" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/salarybonusmanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/salarybonusmanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/salarybonus/getSalaryBonusList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/salarybonusmanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/salarybonusmanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+  	<!-- Salary Bonus Module END -->
   	
 </tiles-definitions>  

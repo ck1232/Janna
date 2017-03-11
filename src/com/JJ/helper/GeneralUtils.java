@@ -1,7 +1,9 @@
 package com.JJ.helper;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,8 @@ public class GeneralUtils {
 	public static final String STATUS_PENDING = "PENDING";
 	public static final String BOUNCED = "Y";
 	public static final String UNBOUNCED = "N";
+	public static final String TYPE_SALARY = "Salary";
+	public static final String TYPE_BONUS = "Bonus";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){
@@ -75,5 +79,15 @@ public class GeneralUtils {
 		   }   
 		   return map;
 		}
+	
+	public static String convertDateToString(Date date, String formatString){
+		String dateString = "";
+		try{
+			dateString = new SimpleDateFormat(formatString).format(date);
+		}catch(Exception e){
+			logger.info("Error converting date to string.");
+		}
+		return dateString;
+	}
 	
 }
