@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -23,6 +25,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 @Configuration
 @EnableWebSecurity
+@PropertySources({
+	@PropertySource(value = "classpath:/WEB-INF/admin-dev-config.properties", ignoreResourceNotFound = false),
+	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
+})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -55,10 +61,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	public DriverManagerDataSource securityDataSource() {
 	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-	    driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/jj?zeroDateTimeBehavior=convertToNull");
-	    driverManagerDataSource.setUsername("root");
-	    driverManagerDataSource.setPassword("root");
+	    driverManagerDataSource.setDriverClassName(driver);
+	    driverManagerDataSource.setUrl(url);
+	    driverManagerDataSource.setUsername(user);
+	    driverManagerDataSource.setPassword(password);
 	    return driverManagerDataSource;
 	}
 	
