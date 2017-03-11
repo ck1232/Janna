@@ -11,6 +11,8 @@ $(function () {
       "ordering": true,
       "info": true,
       "autoWidth": false,
+      "sScrollX": "100%",
+      "sScrollXInner": "110%",
       "ajax":{
           "url":'<tiles:getAsString name="data-list" />',
           "data":{
@@ -24,7 +26,7 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.id);
+          $(row).find('input[type="checkbox"]').prop('value', data.id+','+data.type);
        }
     });
 

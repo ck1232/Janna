@@ -121,6 +121,42 @@ public class SalaryBonusManagementService {
 		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
 		return bonusList;
 	}
+	
+	//delete salary and bonus from idList
+	public void deleteSalaryBonus(List<String> idList) {
+		for(String id : idList) {
+			String[] splitId = id.split(",");
+			if(splitId[0] != null && splitId[1] != null){
+				if(splitId[1].toLowerCase().equals("salary")) {
+					deleteSalary(Integer.valueOf(splitId[0]));
+				}else if(splitId[1].toLowerCase().equals("bonus")) {
+					deleteBonus(Integer.valueOf(splitId[0]));
+				}
+			}
+		}
+	}
+	
+	//delete salary by id
+	public void deleteSalary(Integer id) {
+		employeeSalaryMapper.deleteByPrimaryKey(id);
+	}
+	
+	//delete salary list by id list
+	public void deleteSalaryList(List<Integer> idList) {
+		for(Integer id : idList)
+			deleteSalary(id);
+	}
+	
+	//delete bonus by id
+	public void deleteBonus(Integer id) {
+		employeeBonusMapper.deleteByPrimaryKey(id);
+	}
+	
+	//delete bonus list by id list
+	public void deleteBonusList(List<Integer> idList) {
+		for(Integer id : idList)
+			deleteBonus(id);
+	}
 		
 	/* Expense START */
 	/*public List<Expense> getAllExpense() {
