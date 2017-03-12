@@ -12,15 +12,21 @@ $(function(){
 
 
 <form action="<c:url value="/query" />" method="post">
-	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <b>SQL statement:</b><br>
-    <textarea id = "sqlStatement" name="sqlStatement" cols=60 rows=8></textarea>
-    <br>
-    <br>
-    <input type="submit" value="Execute" />
+<div class="row">
+	
+	<div class="col-md-12">
+		<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	    <b>SQL statement:</b><br>
+	    <textarea id = "sqlStatement" style="overflow-y:auto; width:100%;" name="sqlStatement" rows=8></textarea>
+    </div>
+    <div class="col-md-12">
+    	<input type="submit" class="col-md-3" value="Execute" />
+    	<input type="submit" class="col-md-3" value="Export" />
+	</div>
+</div>
 </form>
 
 <b>SQL result:</b><br>
- <table cellpadding="5" border="1">
+ <table class="table table-striped">
    ${message}
  </table>

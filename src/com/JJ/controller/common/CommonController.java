@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,6 +50,10 @@ import com.JJ.service.usermanagement.UserManagementService;
 
 @Controller  
 @SessionAttributes
+@PropertySources({
+	@PropertySource(value = "classpath:/WEB-INF/admin-dev-config.properties", ignoreResourceNotFound = false),
+	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
+})
 @RequestMapping(value = "/")
 public class CommonController {
 	private static final Logger logger = Logger.getLogger(CommonController.class);
