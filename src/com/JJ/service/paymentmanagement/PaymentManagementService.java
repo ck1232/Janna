@@ -7,25 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.expensemanagement.ExpenseStatus;
-import com.JJ.controller.invoicemanagement.InvoiceStatus;
+import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
+import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
 import com.JJ.controller.paymentmanagement.PaymentVo;
-import com.JJ.dao.ExpenseMapper;
 import com.JJ.dao.PaymentRsMapper;
 import com.JJ.dao.PaymentdetailMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
-import com.JJ.model.ExpenseExample;
 import com.JJ.model.Invoice;
 import com.JJ.model.PaymentRs;
 import com.JJ.model.PaymentRsExample;
 import com.JJ.model.Paymentdetail;
 import com.JJ.model.PaymentdetailExample;
-import com.JJ.model.Promotion;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.lookup.ExpenseTypeLookup;
-import com.JJ.lookup.PaymentModeLookup;
 
 @Service
 @Transactional
@@ -34,18 +30,16 @@ public class PaymentManagementService {
 	private PaymentRsMapper paymentRsMapper;
 	private PaymentdetailMapper paymentDetailMapper;
 	private ExpenseTypeLookup expenseTypeLookup;
-	private PaymentModeLookup paymentModeLookup;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
 	
 	@Autowired
 	public PaymentManagementService(PaymentRsMapper paymentRsMapper, PaymentdetailMapper paymentDetailMapper,
-			ExpenseTypeLookup expenseTypeLookup, PaymentModeLookup paymentModeLookup, 
+			ExpenseTypeLookup expenseTypeLookup,  
 			ExpenseManagementService expenseManagementService, InvoiceManagementService invoiceManagementService) {
 		this.paymentRsMapper = paymentRsMapper;
 		this.paymentDetailMapper = paymentDetailMapper;
 		this.expenseTypeLookup = expenseTypeLookup;
-		this.paymentModeLookup = paymentModeLookup;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
 	}
@@ -62,9 +56,9 @@ public class PaymentManagementService {
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
 				paymentRsMapper.insert(paymentrs);
 				if(expense.getexpensetype().toLowerCase().contains("china"))
-					expense.setStatus(ExpenseStatus.UNPAID.toString());
+					expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
 				else
-					expense.setStatus(ExpenseStatus.PAID.toString());
+					expense.setStatus(ExpenseStatusEnum.PAID.toString());
 				expenseManagementService.updateExpense(expense);
 			}
 		}
@@ -82,7 +76,7 @@ public class PaymentManagementService {
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
 				paymentRsMapper.insert(paymentrs);
 				
-				invoice.setStatus(InvoiceStatus.PAID.toString());
+				invoice.setStatus(InvoiceStatusEnum.PAID.toString());
 				invoiceManagementService.updateInvoice(invoice);
 			}
 		}

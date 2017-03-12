@@ -30,50 +30,84 @@
 								</div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Employment Type</label>
-										<div class="col-sm-10">
-											<form:input path="promotionmessage" type="text" class="form-control"
-						                                id="promotionmessage" placeholder="Enter promotion message" />
-											<form:errors path="promotionmessage" class="text-danger" />
-										</div>
-										<label class="col-sm-2 control-label">Type</label>
+										<label class="col-sm-2 control-label">Employee Type</label>
 										<div class="col-sm-5">
-						                    <form:select path="expensetypeid" class="form-control" id="expensetypeid">
+						                    <form:select path="employmenttype" class="form-control" id="employmenttypeid">
 												<form:option value="" label="--- Select ---"/>
-						   						<form:options items="${expenseTypeList}" />
+						   						<form:options items="${employmentTypeList}" />
 											</form:select>            
-											<form:errors path="expensetypeid" class="text-danger" />
+											<form:errors path="employmenttype" class="text-danger" />
 										</div>
 								  	</div>
 								</div>
 					            <div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Promotion Period</label>
+										<label class="col-sm-2 control-label">Date of Birth</label>
 											<div class="col-sm-10">
-						                  		<form:input path="promotionperiod" type="text" class="form-control" 
-						                  			  id="promotionperiod" placeholder="Press to select date"/>
-						                  		<form:errors path="promotionperiod" class="text-danger" />
+						                  		<form:input path="dobString" type="text" class="form-control" 
+						                  			  id="dobString" placeholder="Press to select date"/>
+						                  		<form:errors path="dobString" class="text-danger" />
+						                	</div>
+						              </div>
+					            </div>
+					            <div class="row">
+								  	<div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Nationality</label>
+										<div class="col-sm-10">
+											<form:input path="nationality" type="text" class="form-control"
+						                                id="nationality" placeholder="Enter employee nationality" />
+											<form:errors path="nationality" class="text-danger" />
+										</div>
+								  	</div>
+								</div>
+								<div class="row">
+								  	<div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Basic Salary</label>
+										<div class="col-sm-10">
+											<form:input path="basicsalary" type="number" class="form-control"
+						                                id="basicsalary" placeholder="Enter employee basic salary" />
+											<form:errors path="basicsalary" class="text-danger" />
+										</div>
+								  	</div>
+								</div>
+								<div class="row">
+						            <div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Employee Start Date</label>
+											<div class="col-sm-10">
+						                  		<form:input path="employstartdateString" type="text" class="form-control" 
+						                  			  id="employstartdateString" placeholder="Press to select date"/>
+						                  		<form:errors path="employstartdateString" class="text-danger" />
+						                	</div>
+						              </div>
+					            </div>
+					            <div class="row">
+						            <div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Employee End Date</label>
+											<div class="col-sm-10">
+						                  		<form:input path="employenddateString" type="text" class="form-control" 
+						                  			  id="employenddateString" placeholder="Press to select date"/>
+						                  		<form:errors path="employenddateString" class="text-danger" />
 						                	</div>
 						              </div>
 					            </div>
 								<div class="row">		  
-							  	<div class="form-group ${status.error ? 'has-error' : ''}">
-									<label class="col-sm-2 control-label">Active</label>
-									<div class="col-sm-10">
-										<div class="checkbox">
-									  		<label><form:checkbox path="isactive" id="isactive" /></label>
-									     	<form:errors path="isactive" class="text-danger" />
+								  	<div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">CDAC Indicator</label>
+										<div class="col-sm-10">
+											<div class="checkbox">
+										  		<label><form:checkbox path="cdacindBoolean" id="cdacindBoolean" /></label>
+										     	<form:errors path="cdacindBoolean" class="text-danger" />
+											</div>
 										</div>
-									</div>
-							  	</div>
-							</div>
+								  	</div>
+								</div>
 							<br/>
 							<br/>
 								<div class="row">
 								<div class="form-group">
 									<label class="col-sm-2 control-label"></label>
 									<div class="col-sm-10">
-										<button id="addPromotionBtn" type="submit" class="btn btn-primary" form ="createPromotionForm">Add</button>
+										<button id="addEmployeeBtn" type="submit" class="btn btn-primary" form ="createEmployeeForm">Add</button>
 					                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
 									</div>
 								</div>
@@ -89,39 +123,20 @@
     
     <script>
       $( function() {
-    	//Date range picker with time picker
-    	$('#promotionperiod').daterangepicker(
-   	    	{
-   	    		timePicker: true,
-   	         	timePickerIncrement: 1,
-   	         	locale: {
-   	             format: 'DD/MM/YYYY h:mm A'
-   	 			}
-           	}, 
-   	    	function(start, end, label) {
-       	    	$("#promotionstartdate").prop("value", start.format('YYYY-MM-DD h:mm'));
-       	    	$("#promotionenddate").prop("value", end.format('YYYY-MM-DD h:mm'));
-        });
+    	  $('#dobString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
 
-	   	var date = new Date();
-		var day = date.getUTCDate();
-		var month = date.getUTCMonth();
-		var year = date.getUTCFullYear();
-	   if (document.getElementById("promotionstartdate").value == '') {			
-			$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
-	    }
-	   if (document.getElementById("promotionenddate").value == '') {			
-			$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
-	    }
+    	  $('#employstartdateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
 
-	    $("#addPromotionBtn").click(function(){
-	    	if (document.getElementById("promotionstartdate").value == '') {			
-				$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
-		    }
-		   if (document.getElementById("promotionenddate").value == '') {			
-				$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
-		    }
-		}); 
+    	  $('#employenddateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
 		   
 	 } );
 

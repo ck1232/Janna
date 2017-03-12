@@ -1,13 +1,13 @@
 package com.JJ.controller.expensemanagement;
 
-public enum ExpenseStatus {
+public enum ExpenseStatusEnum {
 	UNPAID("Unpaid"),
 	PAID("Paid"),
 	PAID_PARTIAL("PaidPartial"),
 	ALL("All");
 	private String status;
 	
-	ExpenseStatus(String status){
+	ExpenseStatusEnum(String status){
 		this.status = status;
 	}
 	public String getStatus(){

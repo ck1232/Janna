@@ -7,7 +7,7 @@
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
 {"data": "dateString"},
-{"data": "employee.name"},
+{"data": "name"},
 {"data": "grossamount"},
 {"data": "takehomeamount"},
 {"data": "bonusamount"},

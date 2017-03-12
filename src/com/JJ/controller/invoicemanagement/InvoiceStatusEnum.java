@@ -1,12 +1,12 @@
 package com.JJ.controller.invoicemanagement;
 
-public enum InvoiceStatus {
+public enum InvoiceStatusEnum {
 	PENDING("Pending"),
 	PAID("Paid"),
 	ALL("All");
 	private String status;
 	
-	InvoiceStatus(String status){
+	InvoiceStatusEnum(String status){
 		this.status = status;
 	}
 	public String getStatus(){

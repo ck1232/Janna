@@ -23,9 +23,10 @@ public class CommonService {
 	private RoleMapper roleMapper;
 	private SubmodulepermissiontypeMapper submodulepermissiontypeMapper;
 	private SubmodulepermissionMapper submodulepermissionMapper;
-	
 	@Autowired
-	public CommonService(RoleMapper roleMapper, SubmodulepermissiontypeMapper submodulepermissiontypeMapper, SubmodulepermissionMapper submodulepermissionMapper){
+	public CommonService(RoleMapper roleMapper, 
+			SubmodulepermissiontypeMapper submodulepermissiontypeMapper, 
+			SubmodulepermissionMapper submodulepermissionMapper){
 		this.roleMapper = roleMapper;
 		this.submodulepermissionMapper = submodulepermissionMapper;
 		this.submodulepermissiontypeMapper = submodulepermissiontypeMapper;
