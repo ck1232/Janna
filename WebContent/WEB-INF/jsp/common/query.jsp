@@ -1,13 +1,13 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <script type="text/javascript">
 $(function(){
 	var sql = '${sqlStatement}';
 	console.log(sql);
 	$("#sqlStatement").val(sql);
-})
-
+});
 </script>
 
 
@@ -21,12 +21,17 @@ $(function(){
     </div>
     <div class="col-md-12">
     	<input type="submit" class="col-md-3" value="Execute" />
-    	<input type="submit" class="col-md-3" value="Export" />
+    	<input type="submit" class="col-md-3" value="Export" formaction="<c:url value="/query/export" />" formmethod="POST"/>
 	</div>
 </div>
 </form>
 
-<b>SQL result:</b><br>
- <table class="table table-striped">
-   ${message}
- </table>
+<div class="row">
+	<p class="col-md-2"><b>SQL result:</b></p>
+	<div class="col-md-12" style="overflow-x:auto;">
+		<table class="table table-striped">
+		   ${message}
+		 </table>
+	</div>
+</div>
+ 

@@ -34,10 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	ApplicationContext context;
 	
-	@Value("${jdbc.user}")
+	@Value("${jdbc.admin.user}")
     private String user;
 	
-	@Value("${jdbc.password}")
+	@Value("${jdbc.admin.password}")
     private String password;
 	
 	@Value("${jdbc.url}")
