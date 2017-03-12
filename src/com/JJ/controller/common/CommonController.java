@@ -1,5 +1,6 @@
 package com.JJ.controller.common;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -173,7 +175,7 @@ public class CommonController {
        return "redirect:/login?logout";
     }
 	
-	@RequestMapping(value="/query", method = RequestMethod.GET)
+	@RequestMapping(value={"/query","/q"}, method = RequestMethod.GET)
 	public String querypage (Model model) {
 		return "query";
 	}
@@ -197,6 +199,67 @@ public class CommonController {
 			         ResultSet resultSet = statement.executeQuery(sqlStatement);
 			         message =  GeneralUtils.getHtmlRows(resultSet);
 			         statement.close();
+			     }else{
+			    	 int i = statement.executeUpdate(sqlStatement);
+			    	 statement.close();
+			    	 message =  "<tr><td>" +
+		               "The statement executed successfully.<br>" +
+		               i + " row(s) affected." +
+		             "</td></tr>";
+			     }
+			}catch(Exception ex){
+				ex.printStackTrace();
+				logger.debug(ex.getMessage());
+				if(statement != null){
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				message =  "<tr><td>Error executing the SQL statement: <br>"+
+	               ex.getMessage()+
+	             "</td></tr>";
+			}
+		}
+		model.addAttribute("sqlStatement", sqlStatement);
+		redirectAttributes.addFlashAttribute("sqlStatement", sqlStatement);
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:query";
+	}
+	
+	@RequestMapping(value="/query/export", method = RequestMethod.POST)
+	public String runSqlExportPage (@RequestParam(value="sqlStatement", required=true) String sqlStatement,
+			final RedirectAttributes redirectAttributes, Model model, HttpServletResponse response) {
+		Statement statement = null;
+		String message = null;
+		if(sqlStatement != null && !sqlStatement.trim().isEmpty()){
+			try{
+				sqlStatement = sqlStatement.trim();
+				if(sqlStatement.charAt(sqlStatement.length()-1) != ';'){
+					sqlStatement += ';';
+				}
+				Connection connection = dataSource.getConnection();
+				statement = connection.createStatement();
+				String sqlType = sqlStatement.substring(0, 6);
+				String sqlType2 = sqlStatement.substring(0, 4);
+				logger.debug("loading sql :"+ sqlStatement);
+				if (sqlType.equalsIgnoreCase("select") || sqlType2.equalsIgnoreCase("desc")){
+			         ResultSet resultSet = statement.executeQuery(sqlStatement);
+			         Workbook wb =  ExcelFileHelper.writeToFile(resultSet);
+			         statement.close();
+			         if(wb != null){
+			         	response.setContentType("application/vnd.ms-excel");
+			             response.addHeader("Content-Disposition", "attachment; filename=data.xls");
+			             try{
+			             	wb.write(response.getOutputStream());
+			                 response.getOutputStream().flush();
+			             } 
+			             catch (IOException ex) {
+			                 ex.printStackTrace();
+			             }
+			         }
+			         return null;
 			     }else{
 			    	 int i = statement.executeUpdate(sqlStatement);
 			    	 statement.close();

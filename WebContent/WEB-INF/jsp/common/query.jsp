@@ -21,7 +21,7 @@ $(function(){
     </div>
     <div class="col-md-12">
     	<input type="submit" class="col-md-3" value="Execute" />
-    	<input type="submit" class="col-md-3" value="Export" />
+    	<input type="submit" class="col-md-3" value="Export" formaction="<c:url value="/query/export" />" formmethod="POST"/>
 	</div>
 </div>
 </form>
