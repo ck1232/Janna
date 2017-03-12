@@ -7,58 +7,105 @@
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
-                    	<h3 class="box-title">Promotion Information</h3>
+                    	<h3 class="box-title">Employee Information</h3>
                     </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="get" action="<c:url value="/product/promotion/listPromotion" />"></form>
-                    <c:url var="post_url" value="/product/promotion/updatePromotionToDb" />
-                    <form:form id="updatePromotionToDbForm" method="post" modelAttribute="promotionForm" action="${post_url}">
+                    <form id="backToListButton" method="get" action="<c:url value="/employee/listEmployee" />"></form>
+                    <c:url var="post_url" value="/employee/updateEmployeeToDb" />
+                    <form:form id="updateEmployeeToDbForm" method="post" modelAttribute="employeeForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <form:input path="promotionstartdate" type="hidden" id="promotionstartdate"/>
-                    <form:input path="promotionenddate" type="hidden" id="promotionenddate"/>
-                    <form:input path="deleteind" type="hidden" id="deleteind"/>
+                    <form:input type="hidden" path="employeeid" id="employeeid"/>
 		              <div class="box-body">
-		              		<form:input path="promotionid" type="hidden" id="promotionid"/>
+		              <div class="row">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Name</label>
-							<div class="col-sm-10">
-								<form:input path="promotionname" type="text" class="form-control"
-				                                id="promotionname" placeholder="Enter promotion name" />
-								<form:errors path="promotionname" class="text-danger" />
+							<div class="col-sm-5">
+								<form:input path="name" type="text" class="form-control"
+				                                id="name" placeholder="Enter employee name" />
+								<form:errors path="name" class="text-danger" />
 							</div>
 						  </div>
-						  <div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Message</label>
-							<div class="col-sm-10">
-								<form:input path="promotionmessage" type="text" class="form-control"
-				                                id="promotionmessage" placeholder="Enter promotion message" />
-								<form:errors path="promotionmessage" class="text-danger" />
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Employment Type</label>
+							<div class="col-sm-5">
+								<form:select path="employmenttype" class="form-control" id="employmenttype">
+								<form:option value="" label="--- Select ---"/>
+		   						<form:options items="${employmentTypeList}" />
+								</form:select>            
+								<form:errors path="employmenttype" class="text-danger" />
 							</div>
-						  </div>
-						  <div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Promotion Period</label>
-							<div class="col-sm-10">
-								<form:input path="promotionperiod" type="text" class="form-control"
-				                                id="promotionperiod" placeholder="Press to select date" />
-								<form:errors path="promotionperiod" class="text-danger" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Date of Birth</label>
+							<div class="col-sm-5">
+								<form:input path="dobString" type="text" class="form-control" 
+			                  				id="dobString" placeholder="Press to select date"/>
+			                  	<form:errors path="dobString" class="text-danger" />
 							</div>
-						  </div>
-						  <div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Active</label>
-							<div class="col-sm-10">
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Nationality</label>
+							<div class="col-sm-5">
+								<form:input path="nationality" type="text" class="form-control"
+				                            id="nationality" placeholder="Enter employee nationality" />
+								<form:errors path="nationality" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Basic Salary</label>
+							<div class="col-sm-5">
+								<form:input path="basicsalary" type="text" class="form-control"
+				                                id="basicsalary" placeholder="Enter employee basic salary" />
+								<form:errors path="basicsalary" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Employee Start Date</label>
+							<div class="col-sm-5">
+								<form:input path="employstartdateString" type="text" class="form-control" 
+		                  			  		id="employstartdateString" placeholder="Press to select date"/>
+		                  		<form:errors path="employstartdateString" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Employee End Date</label>
+							<div class="col-sm-5">
+								<form:input path="employenddateString" type="text" class="form-control" 
+		                  			  		id="employenddateString" placeholder="Press to select date"/>
+		                  		<form:errors path="employenddateString" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">CDAC Indicator</label>
+							<div class="col-sm-5">
 								<div class="checkbox">
-							  		<label><form:checkbox path="isactive" id="isactive" /></label>
-							     	<form:errors path="isactive" class="text-danger" />
+							  		<label><form:checkbox path="cdacindBoolean" id="cdacindBoolean" /></label>
+							     	<form:errors path="cdacindBoolean" class="text-danger" />
 								</div>
 							</div>
-						  </div>
+						</div>
+					</div>
 						  
 						<br/>
 						<br/>
 						<div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-10">
-			                  <button id="updatePromotionBtn" type="submit" class="btn btn-primary" form="updatePromotionToDbForm">Update
+			                  <button id="updateEmployeeBtn" type="submit" class="btn btn-primary" form="updateEmployeeToDbForm">Update
 			                  </button>
 			                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel
 			            </button>
@@ -70,41 +117,22 @@
 		            <!--/.FORM-->
                 </div>
     		
-    		 <script>
+    <script>
       $( function() {
-    	//Date range picker with time picker
-    	$('#promotionperiod').daterangepicker(
-   	    	{
-   	    		timePicker: true,
-   	         	timePickerIncrement: 1,
-   	         	locale: {
-   	             format: 'DD/MM/YYYY h:mm A'
-   	 			}
-           	}, 
-   	    	function(start, end, label) {
-       	    	$("#promotionstartdate").prop("value", start.format('YYYY-MM-DD h:mm'));
-       	    	$("#promotionenddate").prop("value", end.format('YYYY-MM-DD h:mm'));
-        });
+    	  $('#dobString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
 
-	   	var date = new Date();
-		var day = date.getUTCDate();
-		var month = date.getUTCMonth();
-		var year = date.getUTCFullYear();
-	   if (document.getElementById("promotionstartdate").value == '') {			
-			$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
-	    }
-	   if (document.getElementById("promotionenddate").value == '') {			
-			$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
-	    }
+    	  $('#employstartdateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
 
-	    $("#updatePromotionBtn").click(function(){
-	    	if (document.getElementById("promotionstartdate").value == '') {			
-				$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
-		    }
-		   if (document.getElementById("promotionenddate").value == '') {			
-				$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
-		    }
-		}); 
+    	  $('#employenddateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
 		   
 	 } );
 

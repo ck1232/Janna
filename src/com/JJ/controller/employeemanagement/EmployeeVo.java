@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class EmployeeVo implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	
 	private Integer employeeid;
@@ -12,6 +13,8 @@ public class EmployeeVo implements Serializable {
     private String name;
 
     private String employmenttype;
+    
+    private String employmenttypeString;
 
     private Date dob;
     
@@ -57,6 +60,14 @@ public class EmployeeVo implements Serializable {
         this.employmenttype = employmenttype;
     }
     
+	public String getEmploymenttypeString() {
+		return employmenttypeString;
+	}
+
+	public void setEmploymenttypeString(String employmenttypeString) {
+		this.employmenttypeString = employmenttypeString;
+	}
+
 	public Date getDob() {
         return dob;
     }
@@ -137,5 +148,13 @@ public class EmployeeVo implements Serializable {
 		this.cdacindBoolean = cdacindBoolean;
 	}
 	
+	@Override
+	public String toString() {
+		return "EmployeeVo [employeeid=" + employeeid + ", name=" + name + ", employmenttype=" + employmenttype
+				+ ", dob=" + dob + ", dobString=" + dobString + ", nationality=" + nationality + ", basicsalary="
+				+ basicsalary + ", employstartdate=" + employstartdate + ", employstartdateString="
+				+ employstartdateString + ", employenddate=" + employenddate + ", employenddateString="
+				+ employenddateString + ", cdacind=" + cdacind + ", cdacindBoolean=" + cdacindBoolean + "]";
+	}
 	
 }

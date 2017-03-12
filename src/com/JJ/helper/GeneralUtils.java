@@ -104,6 +104,7 @@ public class GeneralUtils {
         htmlRows.append("</tr>");
         return htmlRows.toString();
 	}
+	
 	public static String convertDateToString(Date date, String formatString){
 		String dateString = "";
 		try{
@@ -112,6 +113,16 @@ public class GeneralUtils {
 			logger.info("Error converting date to string.");
 		}
 		return dateString;
+	}
+	
+	public static Date convertStringToDate(String dateString, String formatString){
+		Date date = null;
+		try{
+			date = new SimpleDateFormat(formatString).parse(dateString);
+		}catch(Exception e){
+			logger.info("Error converting string to date.");
+		}
+		return date;
 	}
 	
 }

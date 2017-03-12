@@ -16,11 +16,11 @@ public enum EmploymentTypeEnum {
 		return type;
 	}
 	
-	public static EmploymentTypeEnum getEnum(String enumString){
+	public static String getEnum(String enumString){
 		if(EmploymentTypeEnum.values() != null && EmploymentTypeEnum.values().length > 0){
 			for(EmploymentTypeEnum employmentEnum : EmploymentTypeEnum.values()){
 				if(employmentEnum.toString().equals(enumString)){
-					return employmentEnum;
+					return employmentEnum.getType();
 				}
 			}
 		}

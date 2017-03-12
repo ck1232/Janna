@@ -7,14 +7,14 @@
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
 {"data": "name"},
-{"data": "employmenttype"},
+{"data": "employmenttypeString"},
 {"data": "nationality"},
 {"data": "basicsalary"},
-{"data": "employstartdate"},
-{"data": "employenddate"},
 {
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="editBtn" class="btn btn-primary" type="submit" form="updateEmployeeForm"><i class="fa fa-pencil"></i> Edit</button>'
+    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewEmployeeForm">View</button>' + 
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateEmployeeForm"><i class="fa fa-pencil"></i> Edit</button>'
+    
 },

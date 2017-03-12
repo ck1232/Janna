@@ -21,7 +21,7 @@
 				              	<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Name</label>
-										<div class="col-sm-10">
+										<div class="col-sm-5">
 											<form:input path="name" type="text" class="form-control"
 						                                id="name" placeholder="Enter employee name" />
 											<form:errors path="name" class="text-danger" />
@@ -30,7 +30,7 @@
 								</div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Employee Type</label>
+										<label class="col-sm-2 control-label">Employment Type</label>
 										<div class="col-sm-5">
 						                    <form:select path="employmenttype" class="form-control" id="employmenttypeid">
 												<form:option value="" label="--- Select ---"/>
@@ -43,7 +43,7 @@
 					            <div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Date of Birth</label>
-											<div class="col-sm-10">
+											<div class="col-sm-5">
 						                  		<form:input path="dobString" type="text" class="form-control" 
 						                  			  id="dobString" placeholder="Press to select date"/>
 						                  		<form:errors path="dobString" class="text-danger" />
@@ -53,7 +53,7 @@
 					            <div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Nationality</label>
-										<div class="col-sm-10">
+										<div class="col-sm-5">
 											<form:input path="nationality" type="text" class="form-control"
 						                                id="nationality" placeholder="Enter employee nationality" />
 											<form:errors path="nationality" class="text-danger" />
@@ -63,7 +63,7 @@
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Basic Salary</label>
-										<div class="col-sm-10">
+										<div class="col-sm-5">
 											<form:input path="basicsalary" type="number" class="form-control"
 						                                id="basicsalary" placeholder="Enter employee basic salary" />
 											<form:errors path="basicsalary" class="text-danger" />
@@ -73,7 +73,7 @@
 								<div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Employee Start Date</label>
-											<div class="col-sm-10">
+											<div class="col-sm-5">
 						                  		<form:input path="employstartdateString" type="text" class="form-control" 
 						                  			  id="employstartdateString" placeholder="Press to select date"/>
 						                  		<form:errors path="employstartdateString" class="text-danger" />
@@ -83,7 +83,7 @@
 					            <div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Employee End Date</label>
-											<div class="col-sm-10">
+											<div class="col-sm-5">
 						                  		<form:input path="employenddateString" type="text" class="form-control" 
 						                  			  id="employenddateString" placeholder="Press to select date"/>
 						                  		<form:errors path="employenddateString" class="text-danger" />
@@ -93,7 +93,7 @@
 								<div class="row">		  
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">CDAC Indicator</label>
-										<div class="col-sm-10">
+										<div class="col-sm-5">
 											<div class="checkbox">
 										  		<label><form:checkbox path="cdacindBoolean" id="cdacindBoolean" /></label>
 										     	<form:errors path="cdacindBoolean" class="text-danger" />

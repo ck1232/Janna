@@ -21,10 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Employee;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
+import com.JJ.validator.EmployeeFormValidator;
 
 
 @Controller  
@@ -34,12 +33,15 @@ public class EmployeeManagementController {
 	private static final Logger logger = Logger.getLogger(EmployeeManagementController.class);
 	
 	private EmployeeManagementService employeeManagementService;
+	private EmployeeFormValidator employeeFormValidator;
 	
 	Map<String,String> employmentTypeList;
 	
 	@Autowired
-	public EmployeeManagementController(EmployeeManagementService employeeManagementService) {
+	public EmployeeManagementController(EmployeeManagementService employeeManagementService,
+			EmployeeFormValidator employeeFormValidator) {
 		this.employeeManagementService = employeeManagementService;
+		this.employeeFormValidator = employeeFormValidator;
 	}
 	
 	
@@ -80,15 +82,20 @@ public class EmployeeManagementController {
     public String showAddEmployeeForm(Model model) {  
     	logger.debug("loading showAddEmployeeForm");
     	EmployeeVo employeeVo = new EmployeeVo();
-    	employmentTypeList = new LinkedHashMap<String,String>();
-    	employmentTypeList.put(EmploymentTypeEnum.FULL_LOCAL.toString(), EmploymentTypeEnum.FULL_LOCAL.getType());
-    	employmentTypeList.put(EmploymentTypeEnum.FULL_FW.toString(), EmploymentTypeEnum.FULL_FW.getType());
-    	employmentTypeList.put(EmploymentTypeEnum.PART_LOCAL.toString(), EmploymentTypeEnum.PART_LOCAL.getType());
-    	employmentTypeList.put(EmploymentTypeEnum.PART_FW.toString(), EmploymentTypeEnum.PART_FW.getType());
+    	initData();
     	model.addAttribute("employeeForm", employeeVo);
     	model.addAttribute("employmentTypeList", employmentTypeList);
         return "createEmployee";  
     }  
+	
+	//initialise for employment type dropdown
+	private void initData(){
+		employmentTypeList = new LinkedHashMap<String,String>();
+    	employmentTypeList.put(EmploymentTypeEnum.FULL_LOCAL.toString(), EmploymentTypeEnum.FULL_LOCAL.getType());
+    	employmentTypeList.put(EmploymentTypeEnum.FULL_FW.toString(), EmploymentTypeEnum.FULL_FW.getType());
+    	employmentTypeList.put(EmploymentTypeEnum.PART_LOCAL.toString(), EmploymentTypeEnum.PART_LOCAL.getType());
+    	employmentTypeList.put(EmploymentTypeEnum.PART_FW.toString(), EmploymentTypeEnum.PART_FW.getType());
+	}
 	
 	@InitBinder("employeeForm")
 	protected void initBinder(WebDataBinder binder) {
@@ -96,88 +103,74 @@ public class EmployeeManagementController {
 	}
 	
 	@RequestMapping(value = "/createEmployee", method = RequestMethod.POST)
-    public String saveEmployee(@ModelAttribute("expenseForm") @Validated Employee employee, 
+    public String saveEmployee(@ModelAttribute("employeeForm") @Validated EmployeeVo employeeVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("saveEmployee() : " + employee.toString());
+		logger.debug("saveEmployee() : " + employeeVo.toString());
 		if (result.hasErrors()) {
-			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
-	    	model.addAttribute("expenseTypeList", expenseTypeList);
-			return "createExpense";
+			initData();
+	    	model.addAttribute("employmentTypeList", employmentTypeList);
+			return "createEmployee";
 		} else {
 			try{
-				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
+				employeeVo.setDob(GeneralUtils.convertStringToDate(employeeVo.getDobString(), "dd/MM/yyyy"));
+				employeeVo.setEmploystartdate(GeneralUtils.convertStringToDate(employeeVo.getEmploystartdateString(), "dd/MM/yyyy"));
+				employeeVo.setEmployenddate(GeneralUtils.convertStringToDate(employeeVo.getEmployenddateString(), "dd/MM/yyyy"));
+				employeeVo.setCdacind(employeeVo.getCdacindBoolean() == Boolean.TRUE ? "Y" : "N");
 			}catch(Exception e) {
-				logger.info("Error parsing expense date string");
+				logger.info("Error parsing date string");
 			}
-			expenseManagementService.saveExpense(expense);
+			employeeManagementService.saveEmployee(employeeVo);
 			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Expense added successfully!");
+			redirectAttributes.addFlashAttribute("msg", "Employee added successfully!");
 		}
-        return "redirect:listExpense";  
+        return "redirect:listEmployee";  
     }  
 	
-	/*
-	@RequestMapping(value = "/viewExpense", method = RequestMethod.POST)
-	public String viewExpense(@RequestParam("viewBtn") String id, Model model) {
+	
+	@RequestMapping(value = "/viewEmployee", method = RequestMethod.POST)
+	public String viewEmployee(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Expense expense = expenseManagementService.findById(new Integer(id));
-		if (expense == null) {
+		EmployeeVo employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
+		if (employeeVo == null) {
 			model.addAttribute("css", "danger");
-			model.addAttribute("msg", "Expense not found");
+			model.addAttribute("msg", "Employee not found");
 		}else{
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-			model.addAttribute("expense", expense);
-			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expense.getExpenseid());
-			if(paymentList != null && paymentList.size() > 0){
-				for(Paymentdetail payment : paymentList) {
-					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
-					payment.setPaymentmodeString(paymentModeLookup.getPaymentModeById(payment.getPaymentmode()));
-				}
-			}
-			model.addAttribute("paymentList", paymentList);
+			model.addAttribute("employee", employeeVo);
 		}
-		return "viewExpense";
+		return "viewEmployee";
 
 	}
 	
-	@RequestMapping(value = "/updateExpense", method = RequestMethod.POST)
-	public String getExpenseToUpdate(@RequestParam("editBtn") String id, Model model) {
+	@RequestMapping(value = "/updateEmployee", method = RequestMethod.POST)
+	public String getEmployeeToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Expense expense = expenseManagementService.findById(new Integer(id));
-		logger.debug("Loading update expense page for " + expense.toString());
-		expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-		
-		Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
-    	model.addAttribute("expenseTypeList", expenseTypeList);
-		model.addAttribute("expenseForm", expense);
-		return "updateExpense";
+		EmployeeVo employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
+		logger.debug("Loading update employee page for " + employeeVo.toString());
+		initData();
+		model.addAttribute("employmentTypeList", employmentTypeList);
+		model.addAttribute("employeeForm", employeeVo);
+		return "updateEmployee";
 	}
 	
-	@RequestMapping(value = "/updateExpenseToDb", method = RequestMethod.POST)
-	public String updateExpense(@ModelAttribute("expenseForm") @Validated Expense expense,
+	@RequestMapping(value = "/updateEmployeeToDb", method = RequestMethod.POST)
+	public String updateEmployee(@ModelAttribute("employeeForm") @Validated EmployeeVo employeeVo,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateExpense() : " + expense.toString());
+		logger.debug("updateEmployee() : " + employeeVo.toString());
 		
 		if (result.hasErrors()) {
-			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
-	    	model.addAttribute("expenseTypeList", expenseTypeList);
-			return "updateExpense";
+			initData();
+			model.addAttribute("employmentTypeList", employmentTypeList);
+			return "updateEmployee";
 		} else {
-			try{
-				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
-			}catch(Exception e) {
-				logger.info("Error parsing expense date string");
-			}
-			expenseManagementService.updateExpense(expense);
+			employeeManagementService.updateEmployee(employeeVo);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Expense updated successfully!");
 		}
 		
-		return "redirect:listExpense";
-	}*/
+		return "redirect:listEmployee";
+	}
 	
 	
 
