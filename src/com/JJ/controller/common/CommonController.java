@@ -2,6 +2,7 @@ package com.JJ.controller.common;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +20,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.security.core.Authentication;
@@ -66,6 +68,19 @@ public class CommonController {
 	private PermissionManagementService permissionManagementService;
 	private CommonService commonService;
 	private BasicDataSource dataSource;
+	
+	@Value("${jdbc.driver}")
+	private String driver;
+	
+	@Value("${jdbc.url}")
+    private String url;
+	
+	@Value("${jdbc.query.user}")
+    private String user;
+	
+	@Value("${jdbc.query.password}")
+    private String password;
+	
 	@Autowired
 	public CommonController(SubModuleManagementService subModuleManagementService, ModuleManagementService moduleManagementService,
 			RoleAssignmentService roleAssignmentService, UserManagementService userManagementService,
@@ -190,7 +205,8 @@ public class CommonController {
 				if(sqlStatement.charAt(sqlStatement.length()-1) != ';'){
 					sqlStatement += ';';
 				}
-				Connection connection = dataSource.getConnection();
+				Class.forName(driver);
+				Connection connection = DriverManager.getConnection(url, user, password);
 				statement = connection.createStatement();
 				String sqlType = sqlStatement.substring(0, 6);
 				String sqlType2 = sqlStatement.substring(0, 4);
@@ -217,9 +233,15 @@ public class CommonController {
 						e.printStackTrace();
 					}
 				}
-				message =  "<tr><td>Error executing the SQL statement: <br>"+
-	               ex.getMessage()+
-	             "</td></tr>";
+				if(ex.getMessage().contains("denied ")){
+					message =  "<tr><td>Error executing the SQL statement: <br>"+
+				               "Access denied!"+
+				             "</td></tr>";
+				}else{
+					message =  "<tr><td>Error executing the SQL statement: <br>"+
+				               ex.getMessage()+
+				             "</td></tr>";
+				}
 			}
 		}
 		model.addAttribute("sqlStatement", sqlStatement);
@@ -239,7 +261,8 @@ public class CommonController {
 				if(sqlStatement.charAt(sqlStatement.length()-1) != ';'){
 					sqlStatement += ';';
 				}
-				Connection connection = dataSource.getConnection();
+				Class.forName(driver);
+				Connection connection = DriverManager.getConnection(url, user, password);
 				statement = connection.createStatement();
 				String sqlType = sqlStatement.substring(0, 6);
 				String sqlType2 = sqlStatement.substring(0, 4);
@@ -278,9 +301,16 @@ public class CommonController {
 						e.printStackTrace();
 					}
 				}
-				message =  "<tr><td>Error executing the SQL statement: <br>"+
-	               ex.getMessage()+
-	             "</td></tr>";
+				if(ex.getMessage().contains("denied ")){
+					message =  "<tr><td>Error executing the SQL statement: <br>"+
+				               "Access denied!"+
+				             "</td></tr>";
+				}else{
+					message =  "<tr><td>Error executing the SQL statement: <br>"+
+				               ex.getMessage()+
+				             "</td></tr>";
+				}
+				
 			}
 		}
 		model.addAttribute("sqlStatement", sqlStatement);
