@@ -21,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.model.Expense;
 import com.JJ.model.Invoice;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
+import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 import com.JJ.validator.PaymentFormValidator;
 
 
@@ -39,6 +42,7 @@ public class PaymentManagementController {
 	private PaymentManagementService paymentManagementService;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
+	private SalaryBonusManagementService salaryBonusManagementService;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentFormValidator paymentFormValidator;
 	
@@ -46,11 +50,13 @@ public class PaymentManagementController {
 	public PaymentManagementController(PaymentManagementService paymentManagementService,
 			ExpenseManagementService expenseManagementService,
 			InvoiceManagementService invoiceManagementService,
+			SalaryBonusManagementService salaryBonusManagementService,
 			ExpenseTypeLookup expenseTypeLookup,
 			PaymentFormValidator paymentFormValidator) {
 		this.paymentManagementService = paymentManagementService;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
+		this.salaryBonusManagementService = salaryBonusManagementService;
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.paymentFormValidator = paymentFormValidator;
 	}
@@ -113,12 +119,12 @@ public class PaymentManagementController {
 				result.rejectValue("cashamount", "error.notequal.paymentform.expensetotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");
 			}
-			if(!validateInputDate(lastdate, paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.expenselastdate");
 			}
 			
-			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.expenselastdate");
 			}
@@ -196,12 +202,12 @@ public class PaymentManagementController {
 				result.rejectValue("cashamount", "error.notequal.paymentform.invoicetotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
 			}
-			if(!validateInputDate(lastdate, paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
 			
-			if(!validateInputDate(lastdate, paymentVo.getChequedateString())){
+			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
 			}
@@ -249,9 +255,9 @@ public class PaymentManagementController {
 		return false;
 	}
 	
-	private boolean validateInputDate(String lastdateString, String dateString) {
+	private boolean validateInputDate(String lastdateString, String lastdateformat, String dateString) {
 		try {
-			Date lastdate = new SimpleDateFormat("dd/MM/yyyy").parse(lastdateString);
+			Date lastdate = new SimpleDateFormat(lastdateformat).parse(lastdateString);
 			Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
 			
 			if(date.compareTo(lastdate) >= 0) {
@@ -264,5 +270,179 @@ public class PaymentManagementController {
 	}
 	
 	/* Invoice Payment End */
+	
+	/* Salary Payment Start */
+	
+	@RequestMapping(value = "/createPaySalary", method = RequestMethod.POST)
+	public String createPaySalary(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes, Model model) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}
+		
+		List<Integer> idList = new ArrayList<Integer>();
+		for(String id : ids){
+			idList.add(Integer.valueOf(id));
+		}
+		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(idList);
+		BigDecimal totalamount = BigDecimal.ZERO;
+		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MMM-yyyy"));
+			totalamount = totalamount.add(salaryBonusVo.getTakehomeamount());
+		}
+		
+		PaymentVo paymentvo = new PaymentVo();
+		model.addAttribute("paymentForm", paymentvo);
+		model.addAttribute("salaryList", salaryBonusVoList);
+		model.addAttribute("idList", idList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", salaryBonusVoList.get(salaryBonusVoList.size()-1).getDateString());
+		model.addAttribute("posturl", "/JJ/payment/createSalaryPayment");
+		return "createPaySalary";
+	}
+	
+	@RequestMapping(value = "/createSalaryPayment", method = RequestMethod.POST)
+    public String saveSalaryPayment(
+    		@RequestParam(value = "referenceIds", required=false) List<Integer> salaryIdList,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
+    		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		logger.debug("saveSalaryPayment() : " + paymentVo.toString());
+		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
+		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MMM-yyyy"));
+		}
+		if (!result.hasErrors()) {
+			boolean hasErrors = false;
+			if(!validateInputAmount(totalamount, paymentVo)){
+				hasErrors = true;
+				result.rejectValue("cashamount", "error.notequal.paymentform.salarytotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.salarytotalamount");
+			}
+			if(!validateInputDate(lastdate, "MMM-yyyy", paymentVo.getPaymentdateString())){
+				hasErrors = true;
+				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.salarylastdate");
+			}
+			
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "MMM-yyyy", paymentVo.getChequedateString())){
+				hasErrors = true;
+				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.salarylastdate");
+			}
+			
+			if(!hasErrors){
+				paymentVo.setReferenceType("salary");
+				try{ 
+					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					if(paymentVo.getPaymentmodecheque())
+						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+				}catch(Exception e) {
+					logger.info("Error parsing date string");
+				}
+				paymentManagementService.saveSalaryPayment(paymentVo, salaryIdList);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
+		        return "redirect:/salarybonus/listSalaryBonus";  
+			}
+		}
+		model.addAttribute("paymentForm", paymentVo);
+		model.addAttribute("salaryList", salaryBonusVoList);
+		model.addAttribute("idList", salaryIdList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", salaryBonusVoList.get(salaryBonusVoList.size()-1).getDateString());
+		model.addAttribute("posturl", "/JJ/payment/createSalaryPayment");
+		return "createPaySalary";
+    }  
+	
+	/* Salary Payment End */
+	
+	/* Bonus Payment Start */
+	
+	@RequestMapping(value = "/createPayBonus", method = RequestMethod.POST)
+	public String createPayBonus(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes, Model model) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}
+		
+		List<Integer> idList = new ArrayList<Integer>();
+		for(String id : ids){
+			idList.add(Integer.valueOf(id));
+		}
+		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(idList);
+		BigDecimal totalamount = BigDecimal.ZERO;
+		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
+			totalamount = totalamount.add(salaryBonusVo.getBonusamount());
+		}
+		
+		PaymentVo paymentvo = new PaymentVo();
+		model.addAttribute("paymentForm", paymentvo);
+		model.addAttribute("bonusList", salaryBonusVoList);
+		model.addAttribute("idList", idList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", salaryBonusVoList.get(salaryBonusVoList.size()-1).getDateString());
+		model.addAttribute("posturl", "/JJ/payment/createBonusPayment");
+		return "createPayBonus";
+	}
+	
+	@RequestMapping(value = "/createBonusPayment", method = RequestMethod.POST)
+    public String saveBonusPayment(
+    		@RequestParam(value = "referenceIds", required=false) List<Integer> bonusIdList,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
+    		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		logger.debug("saveBonusPayment() : " + paymentVo.toString());
+		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusIdList);
+		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
+		}
+		if (!result.hasErrors()) {
+			boolean hasErrors = false;
+			if(!validateInputAmount(totalamount, paymentVo)){
+				hasErrors = true;
+				result.rejectValue("cashamount", "error.notequal.paymentform.bonustotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.bonustotalamount");
+			}
+			if(!validateInputDate(lastdate, "yyyy", paymentVo.getPaymentdateString())){
+				hasErrors = true;
+				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.bonuslastdate");
+			}
+			
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "yyyy", paymentVo.getChequedateString())){
+				hasErrors = true;
+				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.bonuslastdate");
+			}
+			
+			if(!hasErrors){
+				paymentVo.setReferenceType("bonus");
+				try{ 
+					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					if(paymentVo.getPaymentmodecheque())
+						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+				}catch(Exception e) {
+					logger.info("Error parsing date string");
+				}
+				paymentManagementService.saveBonusPayment(paymentVo, bonusIdList);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
+		        return "redirect:/salarybonus/listSalaryBonus";  
+			}
+		}
+		model.addAttribute("paymentForm", paymentVo);
+		model.addAttribute("bonusList", salaryBonusVoList);
+		model.addAttribute("idList", bonusIdList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", salaryBonusVoList.get(salaryBonusVoList.size()-1).getDateString());
+		model.addAttribute("posturl", "/JJ/payment/createBonusPayment");
+		return "createPayBonus";
+    }  
+	
+	/* Salary Payment End */
 
 }

@@ -1,6 +1,6 @@
 <tr>
   <th></th>
-  <th>Month</th>
+  <th>Month/Year</th>
   <th>Name</th>
   <th>Type</th>
   <th>Gross Amount</th>

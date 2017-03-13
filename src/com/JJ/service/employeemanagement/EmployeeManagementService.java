@@ -37,6 +37,18 @@ public class EmployeeManagementService {
 		return voList;
 	}
 	
+	public List<EmployeeVo> getAllEmployeeVoInAscendingName() {
+		List<Employee> employeeList = getAllEmployees("name asc");
+		List<EmployeeVo> voList = new ArrayList<EmployeeVo>();
+		if(employeeList != null && employeeList.size() > 0) {
+			for(Employee employee : employeeList) {
+				EmployeeVo vo = convertEmployeeToVo(employee);
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
 	public EmployeeVo getEmployeeById(Integer id) {
 		EmployeeVo vo = new EmployeeVo();
 		Employee employee = findById(id);
@@ -100,9 +112,17 @@ public class EmployeeManagementService {
 	}
 	
 	public List<Employee> getAllEmployees() {
-		EmployeeExample employeeExample = new EmployeeExample();
-		employeeExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Employee> employeeList = employeeMapper.selectByExample(employeeExample);
+		EmployeeExample example = new EmployeeExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		List<Employee> employeeList = employeeMapper.selectByExample(example);
+		return employeeList;
+	}
+	
+	public List<Employee> getAllEmployees(String ordByClause) {
+		EmployeeExample example = new EmployeeExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		example.setOrderByClause(ordByClause);
+		List<Employee> employeeList = employeeMapper.selectByExample(example);
 		return employeeList;
 	}
 	

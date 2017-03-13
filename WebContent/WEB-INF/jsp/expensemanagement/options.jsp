@@ -9,6 +9,10 @@
 <form id="viewExpenseForm" method="post" action="<c:url value="/expense/viewExpense" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+<form id="payExpenseForm" method="post" action="<c:url value="/expense/payExpense" />">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
+
 <div class="margin">
 	<div class="btn-grp">
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/invoice/deleteExpense" />"> Delete</button>

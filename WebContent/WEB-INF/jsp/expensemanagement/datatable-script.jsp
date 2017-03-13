@@ -31,8 +31,11 @@ $(function () {
           $(row).find('button[name="viewBtn"]').prop('value', data.expenseid);
           if(data.status == "PAID"){
         	  $(row).find('div[name="statusDiv"]').css("display","none");
+        	  $(row).find('div[name="payBtnDiv"]').css("display","none");
           }else{
         	 $(row).find('div[name="statusDiv"]').css("display","");
+        	 $(row).find('div[name="payBtnDiv"]').css("display","");
+        	 $(row).find('button[name="payBtn"]').prop('value', data.expenseid);
           }
        }
     });

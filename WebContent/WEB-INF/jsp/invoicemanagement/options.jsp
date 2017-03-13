@@ -5,6 +5,9 @@
 <form id="viewInvoiceForm" method="post" action="<c:url value="/invoice/viewInvoice" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+<form id="payInvoiceForm" method="post" action="<c:url value="/invoice/payInvoice" />">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 
 <div class="margin">
 	<div class="btn-grp">

@@ -1420,6 +1420,52 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+    <definition name="createSalaryBonus" extends="main_template">
+    	<put-attribute name="title" value="Add Salary / Bonus" />
+    	<put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Add New Salary / Bonus" />
+        		<put-attribute name="heading-description" value="" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/salarybonusmanagement/createSalaryBonus.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createPaySalary" extends="main_template">  
+        <put-attribute name="title" value="Salary Payment" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Salary Payment" />
+        		<put-attribute name="heading-description" value="To pay selected salary." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/paymentmanagement/createPayment.jsp">
+        				<put-attribute name="billtable" value="/WEB-INF/jsp/salarybonusmanagement/salaryforpayment/listSalaryToPay.jsp" />
+        				<put-attribute name="paymentoption" value="/WEB-INF/jsp/salarybonusmanagement/salaryforpayment/paymentoption.jsp" />
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="createPayBonus" extends="main_template">  
+        <put-attribute name="title" value="Bonus Payment" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Bonus Payment" />
+        		<put-attribute name="heading-description" value="To pay selected bonus." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/paymentmanagement/createPayment.jsp">
+        				<put-attribute name="billtable" value="/WEB-INF/jsp/salarybonusmanagement/bonusforpayment/listBonusToPay.jsp" />
+        				<put-attribute name="paymentoption" value="/WEB-INF/jsp/salarybonusmanagement/bonusforpayment/paymentoption.jsp" />
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
   	<!-- Salary Bonus Module END -->
   	
   	<!-- Employee Module START -->
