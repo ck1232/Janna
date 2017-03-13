@@ -300,7 +300,7 @@ CREATE TABLE `employee_bonus` (
   `employeeId` int(11) NOT NULL,
   `bonusAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
   `employeeCPF` decimal(8,2) DEFAULT NULL,
-  `employerCDF` decimal(8,2) DEFAULT NULL,
+  `employerCPF` decimal(8,2) DEFAULT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'UNPAID',
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   `createdon` datetime NOT NULL,
@@ -308,7 +308,7 @@ CREATE TABLE `employee_bonus` (
   `updatedby` varchar(255) NOT NULL,
   `updatedon` datetime NOT NULL,
   PRIMARY KEY (`bonusId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,6 +317,7 @@ CREATE TABLE `employee_bonus` (
 
 LOCK TABLES `employee_bonus` WRITE;
 /*!40000 ALTER TABLE `employee_bonus` DISABLE KEYS */;
+INSERT INTO `employee_bonus` VALUES (1,'2017-03-01',1,3000.00,NULL,NULL,'PAID','N','2017-03-13 17:56:33','euphona','euphona','2017-03-13 17:56:43');
 /*!40000 ALTER TABLE `employee_bonus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,7 +335,10 @@ CREATE TABLE `employee_salary` (
   `basicSalaryAmount` decimal(8,2) NOT NULL DEFAULT '0.00',
   `overtimeAmount` decimal(8,2) DEFAULT NULL,
   `overtimeHours` decimal(6,2) DEFAULT NULL,
+  `overtimeRemark` varchar(255) DEFAULT NULL,
   `allowance` decimal(8,2) DEFAULT NULL,
+  `unpaidLeaveAmount` decimal(8,2) DEFAULT NULL,
+  `unpaidLeaveRemark` varchar(255) DEFAULT NULL,
   `employeeCPF` decimal(8,2) DEFAULT NULL,
   `employerCPF` decimal(8,2) DEFAULT NULL,
   `cdacAmount` decimal(4,2) DEFAULT NULL,
@@ -347,7 +351,7 @@ CREATE TABLE `employee_salary` (
   `updatedby` varchar(255) NOT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`salaryId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,6 +360,7 @@ CREATE TABLE `employee_salary` (
 
 LOCK TABLES `employee_salary` WRITE;
 /*!40000 ALTER TABLE `employee_salary` DISABLE KEYS */;
+INSERT INTO `employee_salary` VALUES (1,'2017-03-13',1,2500.00,NULL,NULL,'',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID','2017-03-13 13:23:49','2017-03-13 13:23:49','euphona','euphona','N'),(2,'2017-02-08',1,2500.00,NULL,NULL,'',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID','2017-03-13 15:58:37','2017-03-13 17:57:21','euphona','euphona','N');
 /*!40000 ALTER TABLE `employee_salary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -609,7 +614,7 @@ CREATE TABLE `payment_rs` (
   `createdby` varchar(255) NOT NULL,
   `updatedby` varchar(255) NOT NULL,
   PRIMARY KEY (`paymentRSId`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -618,7 +623,7 @@ CREATE TABLE `payment_rs` (
 
 LOCK TABLES `payment_rs` WRITE;
 /*!40000 ALTER TABLE `payment_rs` DISABLE KEYS */;
-INSERT INTO `payment_rs` VALUES (1,'expense',2,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(2,'expense',3,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(3,'expense',2,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(4,'expense',3,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(5,'expense',1,5,'N','2017-03-06 22:24:18','2017-03-06 22:24:18','euphona','euphona'),(6,'invoice',5354,6,'N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona'),(7,'invoice',6246,6,'N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona'),(8,'invoice',6247,6,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(9,'invoice',5354,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(10,'invoice',6246,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(11,'invoice',6247,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(12,'invoice',6248,8,'N','2017-03-07 20:51:30','2017-03-07 20:51:30','euphona','euphona'),(13,'invoice',6250,9,'N','2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona'),(14,'invoice',6249,9,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(15,'invoice',6250,10,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(16,'invoice',6249,10,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(17,'expense',5,11,'N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona'),(18,'expense',5,12,'N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona'),(19,'expense',11,13,'N','2017-03-09 22:50:00','2017-03-09 22:50:00','euphona','euphona'),(21,'expense',13,15,'N','2017-03-09 23:22:49','2017-03-09 23:22:49','euphona','euphona');
+INSERT INTO `payment_rs` VALUES (1,'expense',2,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(2,'expense',3,3,'N','2017-03-06 20:53:29','2017-03-06 20:53:29','euphona','euphona'),(3,'expense',2,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(4,'expense',3,4,'N','2017-03-06 20:53:30','2017-03-06 20:53:30','euphona','euphona'),(5,'expense',1,5,'N','2017-03-06 22:24:18','2017-03-06 22:24:18','euphona','euphona'),(6,'invoice',5354,6,'N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona'),(7,'invoice',6246,6,'N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona'),(8,'invoice',6247,6,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(9,'invoice',5354,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(10,'invoice',6246,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(11,'invoice',6247,7,'N','2017-03-07 20:41:48','2017-03-07 20:41:48','euphona','euphona'),(12,'invoice',6248,8,'N','2017-03-07 20:51:30','2017-03-07 20:51:30','euphona','euphona'),(13,'invoice',6250,9,'N','2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona'),(14,'invoice',6249,9,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(15,'invoice',6250,10,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(16,'invoice',6249,10,'N','2017-03-07 22:51:01','2017-03-07 22:51:01','euphona','euphona'),(17,'expense',5,11,'N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona'),(18,'expense',5,12,'N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona'),(19,'expense',11,13,'N','2017-03-09 22:50:00','2017-03-09 22:50:00','euphona','euphona'),(21,'expense',13,15,'N','2017-03-09 23:22:49','2017-03-09 23:22:49','euphona','euphona'),(22,'salary',1,16,'N','2017-03-13 16:45:33','2017-03-13 16:45:33','euphona','euphona'),(25,'bonus',1,19,'N','2017-03-13 17:40:47','2017-03-13 17:40:47','euphona','euphona'),(26,'bonus',1,17,'N','2017-03-13 17:56:43','2017-03-13 17:56:43','euphona','euphona'),(27,'salary',2,18,'N','2017-03-13 17:57:18','2017-03-13 17:57:18','euphona','euphona');
 /*!40000 ALTER TABLE `payment_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -642,7 +647,7 @@ CREATE TABLE `paymentdetail` (
   `updatedby` varchar(255) NOT NULL,
   `deleteInd` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`paymentDetailId`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -651,7 +656,7 @@ CREATE TABLE `paymentdetail` (
 
 LOCK TABLES `paymentdetail` WRITE;
 /*!40000 ALTER TABLE `paymentdetail` DISABLE KEYS */;
-INSERT INTO `paymentdetail` VALUES (3,'2017-03-05',1,8.00,'',NULL,'2017-03-06 20:53:10','2017-03-06 20:53:10','euphona','euphona','N'),(4,'2017-03-06',2,7.00,'2353','N','2017-03-06 20:53:27','2017-03-06 20:53:27','euphona','euphona','N'),(5,'2017-03-08',1,10.00,'',NULL,'2017-03-06 22:24:18','2017-03-06 22:24:18','euphona','euphona','N'),(6,'2017-03-07',1,956.00,'',NULL,'2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona','N'),(7,'2017-03-07',2,3310.00,'4324222','N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona','N'),(8,'2017-03-07',1,946.00,'',NULL,'2017-03-07 20:51:30','2017-03-07 20:51:30','euphona','euphona','N'),(9,'2017-03-13',1,800.00,'',NULL,'2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona','N'),(10,'2017-03-13',2,13079.00,'4324222','N','2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona','N'),(11,'2017-03-14',1,10.00,'',NULL,'2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona','N'),(12,'2017-03-14',2,10.00,'4324222','N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona','N'),(13,'2017-03-09',1,100.00,'',NULL,'2017-03-09 22:50:00','2017-03-09 22:50:00','euphona','euphona','N'),(15,'2017-03-28',1,100.00,'',NULL,'2017-03-09 23:22:49','2017-03-09 23:22:49','euphona','euphona','N');
+INSERT INTO `paymentdetail` VALUES (3,'2017-03-05',1,8.00,'',NULL,'2017-03-06 20:53:10','2017-03-06 20:53:10','euphona','euphona','N'),(4,'2017-03-06',2,7.00,'2353','N','2017-03-06 20:53:27','2017-03-06 20:53:27','euphona','euphona','N'),(5,'2017-03-08',1,10.00,'',NULL,'2017-03-06 22:24:18','2017-03-06 22:24:18','euphona','euphona','N'),(6,'2017-03-07',1,956.00,'',NULL,'2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona','N'),(7,'2017-03-07',2,3310.00,'4324222','N','2017-03-07 20:41:47','2017-03-07 20:41:47','euphona','euphona','N'),(8,'2017-03-07',1,946.00,'',NULL,'2017-03-07 20:51:30','2017-03-07 20:51:30','euphona','euphona','N'),(9,'2017-03-13',1,800.00,'',NULL,'2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona','N'),(10,'2017-03-13',2,13079.00,'4324222','N','2017-03-07 22:51:00','2017-03-07 22:51:00','euphona','euphona','N'),(11,'2017-03-14',1,10.00,'',NULL,'2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona','N'),(12,'2017-03-14',2,10.00,'4324222','N','2017-03-07 22:54:27','2017-03-07 22:54:27','euphona','euphona','N'),(13,'2017-03-09',1,100.00,'',NULL,'2017-03-09 22:50:00','2017-03-09 22:50:00','euphona','euphona','N'),(15,'2017-03-28',1,100.00,'',NULL,'2017-03-09 23:22:49','2017-03-09 23:22:49','euphona','euphona','N'),(16,'2017-03-01',2,2500.00,'2222','N','2017-03-13 16:45:33','2017-03-13 16:45:33','euphona','euphona','N'),(17,'2017-03-01',1,3000.00,'',NULL,'2017-03-13 17:56:43','2017-03-13 17:56:43','euphona','euphona','N'),(18,'2017-03-01',1,2500.00,'',NULL,'2017-03-13 17:57:18','2017-03-13 17:57:18','euphona','euphona','N');
 /*!40000 ALTER TABLE `paymentdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1898,4 +1903,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-12 23:38:08
+-- Dump completed on 2017-03-13 18:00:29
