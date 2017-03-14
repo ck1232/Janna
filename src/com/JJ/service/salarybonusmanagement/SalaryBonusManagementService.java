@@ -73,8 +73,32 @@ public class SalaryBonusManagementService {
 		return voList;
 	}
 	
+	public List<SalaryBonusVo> getAllSalaryByEmpId(Integer employeeId) {
+		List<EmployeeSalary> salaryList = getAllSalaryByEmpIdWithOrderBy(employeeId, "salaryDate desc");
+		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
+		if(salaryList != null && !salaryList.isEmpty()) {
+			for(EmployeeSalary salary : salaryList) {
+				SalaryBonusVo vo = convertSalaryToVo(salary);
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
 	public List<SalaryBonusVo> getAllBonusByIdList(List<Integer> idList) {
 		List<EmployeeBonus> bonusList = getAllBonusByIdListWithOrderBy(idList, "bonusDate desc");
+		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
+		if(bonusList != null && !bonusList.isEmpty()) {
+			for(EmployeeBonus bonus : bonusList) {
+				SalaryBonusVo vo = convertBonusToVo(bonus);
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
+	public List<SalaryBonusVo> getAllBonusByEmpId(Integer employeeId) {
+		List<EmployeeBonus> bonusList = getAllBonusByEmpIdWithOrderBy(employeeId, "bonusDate desc");
 		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
 		if(bonusList != null && !bonusList.isEmpty()) {
 			for(EmployeeBonus bonus : bonusList) {
@@ -261,6 +285,14 @@ public class SalaryBonusManagementService {
 		return salaryList;
 	}
 	
+	public List<EmployeeSalary> getAllSalaryByEmpIdWithOrderBy(Integer empId, String orderByClause) {
+		EmployeeSalaryExample example = new EmployeeSalaryExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andEmployeeidEqualTo(empId);
+		example.setOrderByClause(orderByClause);
+		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
+		return salaryList;
+	}
+	
 	public List<EmployeeBonus> getAllBonus() {
 		EmployeeBonusExample example = new EmployeeBonusExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
@@ -279,6 +311,14 @@ public class SalaryBonusManagementService {
 	public List<EmployeeBonus> getAllBonusByIdListWithOrderBy(List<Integer> idList, String orderByClause) {
 		EmployeeBonusExample example = new EmployeeBonusExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBonusidIn(idList);
+		example.setOrderByClause(orderByClause);
+		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
+		return bonusList;
+	}
+	
+	public List<EmployeeBonus> getAllBonusByEmpIdWithOrderBy(Integer empId, String orderByClause) {
+		EmployeeBonusExample example = new EmployeeBonusExample();
+		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andEmployeeidEqualTo(empId);
 		example.setOrderByClause(orderByClause);
 		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
 		return bonusList;

@@ -13,6 +13,9 @@
                     	<h3 class="box-title">Employee Information</h3>
                     </div>
                     <!--FORM-->
+                    <form id="paySalaryBonusForm" method="post" action="<c:url value="/salarybonus/paySalaryBonus" />">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					</form>
                     <form id="backToListButton" method="get" action="<c:url value="/employee/listEmployee" />"></form>
                     <form id="updateEmployeeForm" method="post" action="<c:url value="/employee/updateEmployee" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -72,16 +75,69 @@
 						<!-- /.box-body -->
 		      		</div>
 		      		<!-- /.BOX -->
-		      		
-		      		<div class="row">
-	            		<div class="form-group">
-		            		<div class="col-sm-2"></div>
-							<div class="col-sm-10">
-								<button type="submit" class="btn btn-primary" form ="updateEmployeeForm">Edit</button>
-			                  	<button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
-							</div>
-						</div>
-					</div>	
               </div>
     	</div>
+    	<div class="box">
+			<div class="box-header with-border">
+                  	<h3 class="box-title">All Salary</h3>
+                  </div>
+            	<div class="box-body">
+            		<div class="row">
+						<div class="col-sm-3">Month</div>
+						<div class="col-sm-3">Salary Amount</div>
+						<div class="col-sm-3">Status</div>
+					</div>
+					<c:forEach items="${salaryList}" var="salary">
+						<c:if test="${salaryList != null}">
+							<div class="row">
+								<div class="col-sm-3">${salary.dateString}</div>
+								<div class="col-sm-3">${salary.takehomeamount}</div>
+								<div class="col-sm-3">${salary.status}</div>
+								<div class="col-sm-3"><c:if test="${salary.status != 'PAID'}"><button type="submit" name="payBtn" value="${salary.id},${salary.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if></div>
+							</div>
+						</c:if>
+						<c:if test="${salaryList == null}">
+							<div class="row">
+								<div class="col-sm-12">No salary available</div>
+							</div>
+						</c:if>
+					</c:forEach>
+			</div>
+		</div>
+		<div class="box">
+			<div class="box-header with-border">
+                  	<h3 class="box-title">All Bonus</h3>
+                  </div>
+            	<div class="box-body">
+            		<div class="row">
+						<div class="col-sm-3">Year</div>
+						<div class="col-sm-3">Bonus Amount</div>
+						<div class="col-sm-3">Status</div>
+					</div>
+					<c:forEach items="${bonusList}" var="bonus">
+						<c:if test="${bonusList != null}">
+							<div class="row">
+								<div class="col-sm-3">${bonus.dateString}</div>
+								<div class="col-sm-3">${bonus.bonusamount}</div>
+								<div class="col-sm-3">${bonus.status}</div>
+								<div class="col-sm-3"><c:if test="${bonus.status != 'PAID'}"><button type="submit" name="payBtn" value="${bonus.id},${bonus.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if></div>
+							</div>
+						</c:if>
+						<c:if test="${bonusList == null}">
+							<div class="row">
+								<div class="col-sm-12">No bonus available</div>
+							</div>
+						</c:if>
+					</c:forEach>
+			</div>
+		</div>
+    	<div class="row">
+       		<div class="form-group">
+	        	<div class="col-sm-2"></div>
+				<div class="col-sm-10">
+					<button type="submit" class="btn btn-primary" form ="updateEmployeeForm">Edit</button>
+	                 	<button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+				</div>
+			</div>
+		</div>	
     </section>

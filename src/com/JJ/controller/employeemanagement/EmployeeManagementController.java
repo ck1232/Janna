@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
+import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 import com.JJ.validator.EmployeeFormValidator;
 
 
@@ -33,14 +35,17 @@ public class EmployeeManagementController {
 	private static final Logger logger = Logger.getLogger(EmployeeManagementController.class);
 	
 	private EmployeeManagementService employeeManagementService;
+	private SalaryBonusManagementService salaryBonusManagementService;
 	private EmployeeFormValidator employeeFormValidator;
 	
 	Map<String,String> employmentTypeList;
 	
 	@Autowired
 	public EmployeeManagementController(EmployeeManagementService employeeManagementService,
+			SalaryBonusManagementService salaryBonusManagementService,
 			EmployeeFormValidator employeeFormValidator) {
 		this.employeeManagementService = employeeManagementService;
+		this.salaryBonusManagementService = salaryBonusManagementService;
 		this.employeeFormValidator = employeeFormValidator;
 	}
 	
@@ -137,6 +142,10 @@ public class EmployeeManagementController {
 			model.addAttribute("msg", "Employee not found");
 		}else{
 			model.addAttribute("employee", employeeVo);
+			List<SalaryBonusVo> salaryList = salaryBonusManagementService.getAllSalaryByEmpId(employeeVo.getEmployeeid());
+			model.addAttribute("salaryList", salaryList);
+			List<SalaryBonusVo> bonusList = salaryBonusManagementService.getAllBonusByEmpId(employeeVo.getEmployeeid());
+			model.addAttribute("bonusList", bonusList);
 		}
 		return "viewEmployee";
 
