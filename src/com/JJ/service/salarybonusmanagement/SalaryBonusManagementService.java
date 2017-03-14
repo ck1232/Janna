@@ -254,9 +254,9 @@ public class SalaryBonusManagementService {
 	//take home amount = gross amount - employee cpf - cdac amount
 	private BigDecimal calculateTakeHomeAmount(SalaryBonusVo vo, EmployeeSalary salary) {
 		BigDecimal takehomeamount = vo.getGrossamount();
-		if(salary.getOvertimeamount() != null)
+		if(salary.getEmployeecpf() != null)
 			takehomeamount = takehomeamount.subtract(salary.getEmployeecpf());
-		if(salary.getOvertimeamount() != null)
+		if(salary.getCdacamount() != null)
 			takehomeamount = takehomeamount.subtract(salary.getCdacamount());
 		return takehomeamount;
 	}
