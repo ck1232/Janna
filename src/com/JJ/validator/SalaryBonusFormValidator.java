@@ -37,7 +37,7 @@ public class SalaryBonusFormValidator implements Validator {
 		}
 		
 		if(!salaryBonusVo.getType().isEmpty()) {
-			if(salaryBonusVo.getType().equals(TypeEnum.SALARY.toString())) {
+			if(salaryBonusVo.getType().toLowerCase().equals("salary")) {
 				if(salaryBonusVo.getBasicsalary() == null) {
 					errors.rejectValue("basicsalary", "error.notempty.salarybonusform.basicsalary");
 				}else{
@@ -46,7 +46,7 @@ public class SalaryBonusFormValidator implements Validator {
 					}
 				}
 				
-			}else if(salaryBonusVo.getType().equals(TypeEnum.BONUS.toString())){
+			}else if(salaryBonusVo.getType().toLowerCase().equals("bonus")){
 				if(salaryBonusVo.getBonusamount() == null) {
 					errors.rejectValue("bonusamount", "error.notempty.salarybonusform.bonusamount");
 				}else{

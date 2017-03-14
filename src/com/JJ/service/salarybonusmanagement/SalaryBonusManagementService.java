@@ -85,6 +85,15 @@ public class SalaryBonusManagementService {
 		return voList;
 	}
 	
+	public SalaryBonusVo getSalaryVoById(Integer id) {
+		EmployeeSalary salary = getSalaryById(id);
+		SalaryBonusVo vo = new SalaryBonusVo();
+		if(salary != null) {
+			vo = convertSalaryToVo(salary);
+		}
+		return vo;
+	}
+	
 	public List<SalaryBonusVo> getAllBonusByIdList(List<Integer> idList) {
 		List<EmployeeBonus> bonusList = getAllBonusByIdListWithOrderBy(idList, "bonusDate desc");
 		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
@@ -95,6 +104,15 @@ public class SalaryBonusManagementService {
 			}
 		}
 		return voList;
+	}
+	
+	public SalaryBonusVo getBonusVoById(Integer id) {
+		EmployeeBonus bonus = getBonusById(id);
+		SalaryBonusVo vo = new SalaryBonusVo();
+		if(bonus != null) {
+			vo = convertBonusToVo(bonus);
+		}
+		return vo;
 	}
 	
 	public List<SalaryBonusVo> getAllBonusByEmpId(Integer employeeId) {
@@ -140,7 +158,7 @@ public class SalaryBonusManagementService {
 	//delete salary and bonus from idList
 	public void deleteSalaryBonus(List<String> idList) {
 		for(String id : idList) {
-			String[] splitId = id.split(",");
+			String[] splitId = id.split("-");
 			if(splitId[0] != null && splitId[1] != null){
 				if(splitId[1].toLowerCase().equals("salary")) {
 					deleteSalary(Integer.valueOf(splitId[0]));

@@ -17,5 +17,6 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<div name="payBtnDiv"><button name="payBtn" class="btn btn-primary" type="submit" form="paySalaryBonusForm">Pay</button></div>'
+    "defaultContent": '<div name="payBtnDiv"><button name="payBtn" class="btn btn-primary" type="submit" form="paySalaryBonusForm">Pay</button>'+
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateSalaryBonusForm"><i class="fa fa-pencil"></i> Edit</button></div>'
 },
