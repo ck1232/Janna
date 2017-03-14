@@ -32,11 +32,11 @@
     </bean>  
     
     <!-- Properties files-->
-    <bean id="mailProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     	<property name="locations">
     		<list>
-    			<value>classpath:/WEB-INF/admin-dev-config.properties</value>
-    			<value>classpath:/WEB-INF/admin-prd-config.properties</value>
+    			<value>classpath:admin-dev-config.properties</value>
+    			<value>classpath:admin-prd-config.properties</value>
     		</list>
     	</property>
     	<property name="ignoreResourceNotFound">
@@ -78,7 +78,7 @@
 	</mvc:interceptors>
     <bean id="messageSource"
       class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    	<property name="basename" value="/WEB-INF/message" />
+    	<property name="basename" value="/WEB-INF/classes/message" />
 	</bean>
 	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >

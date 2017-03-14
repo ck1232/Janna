@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @ComponentScan({"com.JJ"})
 @PropertySources({
-	@PropertySource(value = "classpath:/WEB-INF/admin-dev-config.properties", ignoreResourceNotFound = false),
+	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
 	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
 })
 public class AppConfig extends WebMvcConfigurerAdapter{

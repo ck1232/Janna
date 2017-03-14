@@ -55,7 +55,7 @@ import com.JJ.service.usermanagement.UserManagementService;
 @Controller  
 @SessionAttributes
 @PropertySources({
-	@PropertySource(value = "classpath:/WEB-INF/admin-dev-config.properties", ignoreResourceNotFound = false),
+	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
 	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
 })
 @RequestMapping(value = "/")

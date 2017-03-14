@@ -26,7 +26,7 @@ import org.springframework.security.web.access.expression.WebExpressionVoter;
 @Configuration
 @EnableWebSecurity
 @PropertySources({
-	@PropertySource(value = "classpath:/WEB-INF/admin-dev-config.properties", ignoreResourceNotFound = false),
+	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
 	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
 })
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
