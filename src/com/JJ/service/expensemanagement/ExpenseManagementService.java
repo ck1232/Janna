@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.expensemanagement.ExpenseStatus;
+import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.dao.ExpenseMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
@@ -49,7 +49,7 @@ public class ExpenseManagementService {
 	}
 	
 	public void saveExpense(Expense expense) {
-		expense.setStatus(ExpenseStatus.UNPAID.toString());
+		expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
 		expense.setDeleteind(GeneralUtils.NOT_DELETED);
 		expenseMapper.insert(expense);
 	}

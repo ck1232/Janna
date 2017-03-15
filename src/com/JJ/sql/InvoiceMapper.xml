@@ -105,7 +105,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.JJ.model.Invoice">
+  <insert id="insert" parameterType="com.JJ.model.Invoice" useGeneratedKeys="true" keyProperty="invoiceid" keyColumn="invoiceId">
     insert into invoice (invoiceId, messenger, invoiceDate, 
       totalPrice, status, deleteInd, 
       createdon, createdby, updatedon, 

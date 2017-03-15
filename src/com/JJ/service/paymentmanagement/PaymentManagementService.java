@@ -7,25 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.expensemanagement.ExpenseStatus;
-import com.JJ.controller.invoicemanagement.InvoiceStatus;
+import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
+import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
 import com.JJ.controller.paymentmanagement.PaymentVo;
-import com.JJ.dao.ExpenseMapper;
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
 import com.JJ.dao.PaymentRsMapper;
 import com.JJ.dao.PaymentdetailMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
-import com.JJ.model.ExpenseExample;
 import com.JJ.model.Invoice;
 import com.JJ.model.PaymentRs;
 import com.JJ.model.PaymentRsExample;
 import com.JJ.model.Paymentdetail;
 import com.JJ.model.PaymentdetailExample;
-import com.JJ.model.Promotion;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
+import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 import com.JJ.lookup.ExpenseTypeLookup;
-import com.JJ.lookup.PaymentModeLookup;
 
 @Service
 @Transactional
@@ -34,20 +32,22 @@ public class PaymentManagementService {
 	private PaymentRsMapper paymentRsMapper;
 	private PaymentdetailMapper paymentDetailMapper;
 	private ExpenseTypeLookup expenseTypeLookup;
-	private PaymentModeLookup paymentModeLookup;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
+	private SalaryBonusManagementService salaryBonusManagementService;
 	
 	@Autowired
 	public PaymentManagementService(PaymentRsMapper paymentRsMapper, PaymentdetailMapper paymentDetailMapper,
-			ExpenseTypeLookup expenseTypeLookup, PaymentModeLookup paymentModeLookup, 
-			ExpenseManagementService expenseManagementService, InvoiceManagementService invoiceManagementService) {
+			ExpenseTypeLookup expenseTypeLookup,  
+			ExpenseManagementService expenseManagementService, 
+			InvoiceManagementService invoiceManagementService,
+			SalaryBonusManagementService salaryBonusManagementService) {
 		this.paymentRsMapper = paymentRsMapper;
 		this.paymentDetailMapper = paymentDetailMapper;
 		this.expenseTypeLookup = expenseTypeLookup;
-		this.paymentModeLookup = paymentModeLookup;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
+		this.salaryBonusManagementService = salaryBonusManagementService;
 	}
 	public void saveExpensePayment(PaymentVo paymentVo, List<Integer> expenseidList) {
 		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseidList);
@@ -62,9 +62,9 @@ public class PaymentManagementService {
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
 				paymentRsMapper.insert(paymentrs);
 				if(expense.getexpensetype().toLowerCase().contains("china"))
-					expense.setStatus(ExpenseStatus.UNPAID.toString());
+					expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
 				else
-					expense.setStatus(ExpenseStatus.PAID.toString());
+					expense.setStatus(ExpenseStatusEnum.PAID.toString());
 				expenseManagementService.updateExpense(expense);
 			}
 		}
@@ -82,11 +82,48 @@ public class PaymentManagementService {
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
 				paymentRsMapper.insert(paymentrs);
 				
-				invoice.setStatus(InvoiceStatus.PAID.toString());
+				invoice.setStatus(InvoiceStatusEnum.PAID.toString());
 				invoiceManagementService.updateInvoice(invoice);
 			}
 		}
 	}
+	
+	public void saveSalaryPayment(PaymentVo paymentVo, List<Integer> salaryidList) {
+		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryidList);
+		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
+		
+		for(Paymentdetail paymentdetail : paymentDetailList) {
+			for(SalaryBonusVo salary : salaryBonusVoList) {
+				PaymentRs paymentrs = new PaymentRs();
+				paymentrs.setReferencetype("salary");
+				paymentrs.setReferenceid(salary.getId());
+				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
+				paymentRsMapper.insert(paymentrs);
+				
+				salary.setStatus(ExpenseStatusEnum.PAID.toString());
+				salaryBonusManagementService.updateSalaryBonus(salary);
+			}
+		}
+	}
+	
+	public void saveBonusPayment(PaymentVo paymentVo, List<Integer> bonusidList) {
+		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusidList);
+		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
+		
+		for(Paymentdetail paymentdetail : paymentDetailList) {
+			for(SalaryBonusVo bonus : salaryBonusVoList) {
+				PaymentRs paymentrs = new PaymentRs();
+				paymentrs.setReferencetype("bonus");
+				paymentrs.setReferenceid(bonus.getId());
+				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
+				paymentRsMapper.insert(paymentrs);
+				
+				bonus.setStatus(ExpenseStatusEnum.PAID.toString());
+				salaryBonusManagementService.updateSalaryBonus(bonus);
+			}
+		}
+	}
+	
 	
 	private List<Paymentdetail> genPaymentDetail(PaymentVo paymentVo) {
 		List<Paymentdetail> paymentDetailList = new ArrayList<Paymentdetail>();

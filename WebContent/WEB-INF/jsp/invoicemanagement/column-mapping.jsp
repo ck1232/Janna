@@ -15,5 +15,6 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button>'
+    "defaultContent": '<div name="payBtnDiv"><button name="payBtn" class="btn btn-primary" type="submit" form="payInvoiceForm">Pay</button></div>'+
+    '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button>'
 },

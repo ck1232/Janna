@@ -3,8 +3,10 @@ package com.JJ.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Employee {
-    private Integer employeeid;
+public class Employee extends Base{
+	private static final long serialVersionUID = 1L;
+
+	private Integer employeeid;
 
     private String name;
 
@@ -16,7 +18,11 @@ public class Employee {
 
     private BigDecimal basicsalary;
 
-    private String defunctind;
+    private Date employstartdate;
+
+    private Date employenddate;
+
+    private String cdacind;
 
     public Integer getEmployeeid() {
         return employeeid;
@@ -66,11 +72,27 @@ public class Employee {
         this.basicsalary = basicsalary;
     }
 
-    public String getDefunctind() {
-        return defunctind;
+    public Date getEmploystartdate() {
+        return employstartdate;
     }
 
-    public void setDefunctind(String defunctind) {
-        this.defunctind = defunctind;
+    public void setEmploystartdate(Date employstartdate) {
+        this.employstartdate = employstartdate;
+    }
+
+    public Date getEmployenddate() {
+        return employenddate;
+    }
+
+    public void setEmployenddate(Date employenddate) {
+        this.employenddate = employenddate;
+    }
+
+    public String getCdacind() {
+        return cdacind;
+    }
+
+    public void setCdacind(String cdacind) {
+        this.cdacind = cdacind;
     }
 }

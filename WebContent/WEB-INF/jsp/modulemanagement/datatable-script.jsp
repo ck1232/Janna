@@ -60,7 +60,7 @@ $(function () {
 function format ( data ) {
     // `d` is the original data object for the row
     selectedModuleId = data.id;
-    selectedModuleName = data.name.replace(" ","");
+    selectedModuleName = data.name.replace(/[ \/&]/g,'');
     return <tiles:insertAttribute name="subdatatable" />;
 }
 

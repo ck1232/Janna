@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.EmployeeBonusMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.EmployeeBonus">
+    <id column="bonusId" jdbcType="INTEGER" property="bonusid" />
+    <result column="bonusDate" jdbcType="DATE" property="bonusdate" />
+    <result column="employeeId" jdbcType="INTEGER" property="employeeid" />
+    <result column="bonusAmount" jdbcType="DECIMAL" property="bonusamount" />
+    <result column="employeeCPF" jdbcType="DECIMAL" property="employeecpf" />
+    <result column="employerCPF" jdbcType="DECIMAL" property="employercpf" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
+    <result column="createdon" jdbcType="TIMESTAMP" property="createdon" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="updatedby" jdbcType="VARCHAR" property="updatedby" />
+    <result column="updatedon" jdbcType="TIMESTAMP" property="updatedon" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    bonusId, bonusDate, employeeId, bonusAmount, employeeCPF, employerCPF, status, deleteInd, 
+    createdon, createdby, updatedby, updatedon
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.EmployeeBonusExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from employee_bonus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from employee_bonus
+    where bonusId = #{bonusid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from employee_bonus
+    where bonusId = #{bonusid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.EmployeeBonusExample">
+    delete from employee_bonus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.EmployeeBonus" useGeneratedKeys="true" keyProperty="bonusid" keyColumn="bonusId">
+    insert into employee_bonus (bonusId, bonusDate, employeeId, 
+      bonusAmount, employeeCPF, employerCPF, 
+      status, deleteInd, createdon, 
+      createdby, updatedby, updatedon
+      )
+    values (#{bonusid,jdbcType=INTEGER}, #{bonusdate,jdbcType=DATE}, #{employeeid,jdbcType=INTEGER}, 
+      #{bonusamount,jdbcType=DECIMAL}, #{employeecpf,jdbcType=DECIMAL}, #{employercpf,jdbcType=DECIMAL}, 
+      #{status,jdbcType=VARCHAR}, #{deleteind,jdbcType=CHAR}, #{createdon,jdbcType=TIMESTAMP}, 
+      #{createdby,jdbcType=VARCHAR}, #{updatedby,jdbcType=VARCHAR}, #{updatedon,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.EmployeeBonus">
+    insert into employee_bonus
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bonusid != null">
+        bonusId,
+      </if>
+      <if test="bonusdate != null">
+        bonusDate,
+      </if>
+      <if test="employeeid != null">
+        employeeId,
+      </if>
+      <if test="bonusamount != null">
+        bonusAmount,
+      </if>
+      <if test="employeecpf != null">
+        employeeCPF,
+      </if>
+      <if test="employercpf != null">
+        employerCPF,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deleteind != null">
+        deleteInd,
+      </if>
+      <if test="createdon != null">
+        createdon,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="updatedby != null">
+        updatedby,
+      </if>
+      <if test="updatedon != null">
+        updatedon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bonusid != null">
+        #{bonusid,jdbcType=INTEGER},
+      </if>
+      <if test="bonusdate != null">
+        #{bonusdate,jdbcType=DATE},
+      </if>
+      <if test="employeeid != null">
+        #{employeeid,jdbcType=INTEGER},
+      </if>
+      <if test="bonusamount != null">
+        #{bonusamount,jdbcType=DECIMAL},
+      </if>
+      <if test="employeecpf != null">
+        #{employeecpf,jdbcType=DECIMAL},
+      </if>
+      <if test="employercpf != null">
+        #{employercpf,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteind != null">
+        #{deleteind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedby != null">
+        #{updatedby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedon != null">
+        #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.EmployeeBonusExample" resultType="java.lang.Integer">
+    select count(*) from employee_bonus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update employee_bonus
+    <set>
+      <if test="record.bonusid != null">
+        bonusId = #{record.bonusid,jdbcType=INTEGER},
+      </if>
+      <if test="record.bonusdate != null">
+        bonusDate = #{record.bonusdate,jdbcType=DATE},
+      </if>
+      <if test="record.employeeid != null">
+        employeeId = #{record.employeeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.bonusamount != null">
+        bonusAmount = #{record.bonusamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.employeecpf != null">
+        employeeCPF = #{record.employeecpf,jdbcType=DECIMAL},
+      </if>
+      <if test="record.employercpf != null">
+        employerCPF = #{record.employercpf,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleteind != null">
+        deleteInd = #{record.deleteind,jdbcType=CHAR},
+      </if>
+      <if test="record.createdon != null">
+        createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdby != null">
+        createdby = #{record.createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedby != null">
+        updatedby = #{record.updatedby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedon != null">
+        updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update employee_bonus
+    set bonusId = #{record.bonusid,jdbcType=INTEGER},
+      bonusDate = #{record.bonusdate,jdbcType=DATE},
+      employeeId = #{record.employeeid,jdbcType=INTEGER},
+      bonusAmount = #{record.bonusamount,jdbcType=DECIMAL},
+      employeeCPF = #{record.employeecpf,jdbcType=DECIMAL},
+      employerCPF = #{record.employercpf,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=VARCHAR},
+      deleteInd = #{record.deleteind,jdbcType=CHAR},
+      createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      createdby = #{record.createdby,jdbcType=VARCHAR},
+      updatedby = #{record.updatedby,jdbcType=VARCHAR},
+      updatedon = #{record.updatedon,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.EmployeeBonus">
+    update employee_bonus
+    <set>
+      <if test="bonusdate != null">
+        bonusDate = #{bonusdate,jdbcType=DATE},
+      </if>
+      <if test="employeeid != null">
+        employeeId = #{employeeid,jdbcType=INTEGER},
+      </if>
+      <if test="bonusamount != null">
+        bonusAmount = #{bonusamount,jdbcType=DECIMAL},
+      </if>
+      <if test="employeecpf != null">
+        employeeCPF = #{employeecpf,jdbcType=DECIMAL},
+      </if>
+      <if test="employercpf != null">
+        employerCPF = #{employercpf,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteind != null">
+        deleteInd = #{deleteind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        createdon = #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedby != null">
+        updatedby = #{updatedby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedon != null">
+        updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where bonusId = #{bonusid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.EmployeeBonus">
+    update employee_bonus
+    set bonusDate = #{bonusdate,jdbcType=DATE},
+      employeeId = #{employeeid,jdbcType=INTEGER},
+      bonusAmount = #{bonusamount,jdbcType=DECIMAL},
+      employeeCPF = #{employeecpf,jdbcType=DECIMAL},
+      employerCPF = #{employercpf,jdbcType=DECIMAL},
+      status = #{status,jdbcType=VARCHAR},
+      deleteInd = #{deleteind,jdbcType=CHAR},
+      createdon = #{createdon,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      updatedby = #{updatedby,jdbcType=VARCHAR},
+      updatedon = #{updatedon,jdbcType=TIMESTAMP}
+    where bonusId = #{bonusid,jdbcType=INTEGER}
+  </update>
+</mapper>

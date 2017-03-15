@@ -216,6 +216,12 @@ public class ExpenseManagementController {
 		return "redirect:listExpense";
 	}
 	
-	
+	@RequestMapping(value = "/payExpense", method = RequestMethod.POST)
+    public String payExpense(@RequestParam("payBtn") String id, Model model,
+    		final RedirectAttributes redirectAttributes) {
+		List<String> idList = new ArrayList<String>();
+		idList.add(id);
+		return paymentManagementController.createPayExpense(idList, redirectAttributes, model);
+    } 
 
 }

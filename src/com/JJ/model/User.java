@@ -3,7 +3,9 @@ package com.JJ.model;
 import java.util.Date;
 
 public class User extends Base {
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
 	public String toString() {
 		return "User [id=" + id + ", userid=" + userid + ", password=" + password + ", status=" + status + ", name="
 				+ name + ", emailaddress=" + emailaddress + ", lastlogints=" + lastlogints + ", enabled=" + enabled

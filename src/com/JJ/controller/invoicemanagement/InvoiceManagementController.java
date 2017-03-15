@@ -3,6 +3,7 @@ package com.JJ.controller.invoicemanagement;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,6 +38,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.PaymentModeLookup;
 import com.JJ.model.FileMeta;
@@ -54,6 +56,7 @@ import com.JJ.validator.InvoiceSearchValidator;
 public class InvoiceManagementController {
 	private static final Logger logger = Logger.getLogger(InvoiceManagementController.class);
 	
+	private PaymentManagementController paymentManagementController;
 	private InvoiceManagementService invoiceManagementService;
 	private PaymentManagementService paymentManagementService;
 	private InvoiceSearchValidator invoiceSearchValidator;
@@ -64,10 +67,12 @@ public class InvoiceManagementController {
 	Map<String,String> statusList;
 	
 	@Autowired
-	public InvoiceManagementController(InvoiceManagementService invoiceManagementService,
+	public InvoiceManagementController(PaymentManagementController paymentManagementController,
+			InvoiceManagementService invoiceManagementService,
 			PaymentManagementService paymentManagementService,
 			InvoiceSearchValidator invoiceSearchValidator,
 			PaymentModeLookup paymentModeLookup) {
+		this.paymentManagementController = paymentManagementController;
 		this.invoiceManagementService = invoiceManagementService;
 		this.paymentManagementService = paymentManagementService;
 		this.invoiceSearchValidator = invoiceSearchValidator;
@@ -83,8 +88,8 @@ public class InvoiceManagementController {
     	searchCriteria = new InvoiceSearchCriteria();
     	
     	statusList = new LinkedHashMap<String,String>();
-    	statusList.put(InvoiceStatus.PAID.toString(), InvoiceStatus.PAID.getStatus());
-    	statusList.put(InvoiceStatus.PENDING.toString(), InvoiceStatus.PENDING.getStatus());
+    	statusList.put(InvoiceStatusEnum.PAID.toString(), InvoiceStatusEnum.PAID.getStatus());
+    	statusList.put(InvoiceStatusEnum.PENDING.toString(), InvoiceStatusEnum.PENDING.getStatus());
     	model.addAttribute("invoiceForm", invoiceVo);
     	model.addAttribute("exportForm", searchCriteria);
     	model.addAttribute("statusList", statusList);
@@ -238,6 +243,14 @@ public class InvoiceManagementController {
 		return "redirect:listInvoice";
 	}
 	
+	@RequestMapping(value = "/payInvoice", method = RequestMethod.POST)
+    public String payInvoice(@RequestParam("payBtn") String id, Model model,
+    		final RedirectAttributes redirectAttributes) {
+		List<String> idList = new ArrayList<String>();
+		idList.add(id);
+		return paymentManagementController.createPayInvoice(idList, redirectAttributes, model);
+    } 
+	
 	@InitBinder("exportForm")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(invoiceSearchValidator);
@@ -258,8 +271,8 @@ public class InvoiceManagementController {
 				redirectAttributes.addFlashAttribute("css", "danger");
 				redirectAttributes.addFlashAttribute("msg", "No invoice result is found!");
 				statusList = new LinkedHashMap<String,String>();
-				statusList.put(InvoiceStatus.PAID.toString(), InvoiceStatus.PAID.getStatus());
-		    	statusList.put(InvoiceStatus.PENDING.toString(), InvoiceStatus.PENDING.getStatus());
+				statusList.put(InvoiceStatusEnum.PAID.toString(), InvoiceStatusEnum.PAID.getStatus());
+		    	statusList.put(InvoiceStatusEnum.PENDING.toString(), InvoiceStatusEnum.PENDING.getStatus());
 		    	
 		    	model.addAttribute("invoiceForm", invoiceVo);
 		    	model.addAttribute("exportForm", searchCriteria);
@@ -269,8 +282,8 @@ public class InvoiceManagementController {
 				
 		}
 		statusList = new LinkedHashMap<String,String>();
-		statusList.put(InvoiceStatus.PAID.toString(), InvoiceStatus.PAID.getStatus());
-    	statusList.put(InvoiceStatus.PENDING.toString(), InvoiceStatus.PENDING.getStatus());
+		statusList.put(InvoiceStatusEnum.PAID.toString(), InvoiceStatusEnum.PAID.getStatus());
+    	statusList.put(InvoiceStatusEnum.PENDING.toString(), InvoiceStatusEnum.PENDING.getStatus());
     	
     	model.addAttribute("invoiceForm", invoiceVo);
     	model.addAttribute("exportForm", searchCriteria);

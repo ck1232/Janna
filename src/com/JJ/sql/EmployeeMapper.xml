@@ -8,7 +8,14 @@
     <result column="dob" jdbcType="DATE" property="dob" />
     <result column="nationality" jdbcType="VARCHAR" property="nationality" />
     <result column="basicSalary" jdbcType="DECIMAL" property="basicsalary" />
-    <result column="defunctInd" jdbcType="CHAR" property="defunctind" />
+    <result column="employStartDate" jdbcType="DATE" property="employstartdate" />
+    <result column="employEndDate" jdbcType="DATE" property="employenddate" />
+    <result column="deleteInd" jdbcType="CHAR" property="deleteind" />
+    <result column="cdacInd" jdbcType="CHAR" property="cdacind" />
+    <result column="createdon" jdbcType="TIMESTAMP" property="createdon" />
+    <result column="createdby" jdbcType="VARCHAR" property="createdby" />
+    <result column="updatedon" jdbcType="TIMESTAMP" property="updatedon" />
+    <result column="updatedby" jdbcType="VARCHAR" property="updatedby" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    employeeId, name, employmentType, dob, nationality, basicSalary, defunctInd
+    employeeId, name, employmentType, dob, nationality, basicSalary, employStartDate, 
+    employEndDate, deleteInd, cdacInd, createdon, createdby, updatedon, updatedby
   </sql>
   <select id="selectByExample" parameterType="com.JJ.model.EmployeeExample" resultMap="BaseResultMap">
     select
@@ -104,10 +112,14 @@
   <insert id="insert" parameterType="com.JJ.model.Employee">
     insert into employee (employeeId, name, employmentType, 
       dob, nationality, basicSalary, 
-      defunctInd)
+      employStartDate, employEndDate, deleteInd, 
+      cdacInd, createdon, createdby, 
+      updatedon, updatedby)
     values (#{employeeid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{employmenttype,jdbcType=VARCHAR}, 
       #{dob,jdbcType=DATE}, #{nationality,jdbcType=VARCHAR}, #{basicsalary,jdbcType=DECIMAL}, 
-      #{defunctind,jdbcType=CHAR})
+      #{employstartdate,jdbcType=DATE}, #{employenddate,jdbcType=DATE}, #{deleteind,jdbcType=CHAR}, 
+      #{cdacind,jdbcType=CHAR}, #{createdon,jdbcType=TIMESTAMP}, #{createdby,jdbcType=VARCHAR}, 
+      #{updatedon,jdbcType=TIMESTAMP}, #{updatedby,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.JJ.model.Employee">
     insert into employee
@@ -130,8 +142,29 @@
       <if test="basicsalary != null">
         basicSalary,
       </if>
-      <if test="defunctind != null">
-        defunctInd,
+      <if test="employstartdate != null">
+        employStartDate,
+      </if>
+      <if test="employenddate != null">
+        employEndDate,
+      </if>
+      <if test="deleteind != null">
+        deleteInd,
+      </if>
+      <if test="cdacind != null">
+        cdacInd,
+      </if>
+      <if test="createdon != null">
+        createdon,
+      </if>
+      <if test="createdby != null">
+        createdby,
+      </if>
+      <if test="updatedon != null">
+        updatedon,
+      </if>
+      <if test="updatedby != null">
+        updatedby,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -153,8 +186,29 @@
       <if test="basicsalary != null">
         #{basicsalary,jdbcType=DECIMAL},
       </if>
-      <if test="defunctind != null">
-        #{defunctind,jdbcType=CHAR},
+      <if test="employstartdate != null">
+        #{employstartdate,jdbcType=DATE},
+      </if>
+      <if test="employenddate != null">
+        #{employenddate,jdbcType=DATE},
+      </if>
+      <if test="deleteind != null">
+        #{deleteind,jdbcType=CHAR},
+      </if>
+      <if test="cdacind != null">
+        #{cdacind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedon != null">
+        #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedby != null">
+        #{updatedby,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -185,8 +239,29 @@
       <if test="record.basicsalary != null">
         basicSalary = #{record.basicsalary,jdbcType=DECIMAL},
       </if>
-      <if test="record.defunctind != null">
-        defunctInd = #{record.defunctind,jdbcType=CHAR},
+      <if test="record.employstartdate != null">
+        employStartDate = #{record.employstartdate,jdbcType=DATE},
+      </if>
+      <if test="record.employenddate != null">
+        employEndDate = #{record.employenddate,jdbcType=DATE},
+      </if>
+      <if test="record.deleteind != null">
+        deleteInd = #{record.deleteind,jdbcType=CHAR},
+      </if>
+      <if test="record.cdacind != null">
+        cdacInd = #{record.cdacind,jdbcType=CHAR},
+      </if>
+      <if test="record.createdon != null">
+        createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdby != null">
+        createdby = #{record.createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedon != null">
+        updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedby != null">
+        updatedby = #{record.updatedby,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -201,7 +276,14 @@
       dob = #{record.dob,jdbcType=DATE},
       nationality = #{record.nationality,jdbcType=VARCHAR},
       basicSalary = #{record.basicsalary,jdbcType=DECIMAL},
-      defunctInd = #{record.defunctind,jdbcType=CHAR}
+      employStartDate = #{record.employstartdate,jdbcType=DATE},
+      employEndDate = #{record.employenddate,jdbcType=DATE},
+      deleteInd = #{record.deleteind,jdbcType=CHAR},
+      cdacInd = #{record.cdacind,jdbcType=CHAR},
+      createdon = #{record.createdon,jdbcType=TIMESTAMP},
+      createdby = #{record.createdby,jdbcType=VARCHAR},
+      updatedon = #{record.updatedon,jdbcType=TIMESTAMP},
+      updatedby = #{record.updatedby,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,8 +306,29 @@
       <if test="basicsalary != null">
         basicSalary = #{basicsalary,jdbcType=DECIMAL},
       </if>
-      <if test="defunctind != null">
-        defunctInd = #{defunctind,jdbcType=CHAR},
+      <if test="employstartdate != null">
+        employStartDate = #{employstartdate,jdbcType=DATE},
+      </if>
+      <if test="employenddate != null">
+        employEndDate = #{employenddate,jdbcType=DATE},
+      </if>
+      <if test="deleteind != null">
+        deleteInd = #{deleteind,jdbcType=CHAR},
+      </if>
+      <if test="cdacind != null">
+        cdacInd = #{cdacind,jdbcType=CHAR},
+      </if>
+      <if test="createdon != null">
+        createdon = #{createdon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdby != null">
+        createdby = #{createdby,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedon != null">
+        updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedby != null">
+        updatedby = #{updatedby,jdbcType=VARCHAR},
       </if>
     </set>
     where employeeId = #{employeeid,jdbcType=INTEGER}
@@ -237,7 +340,14 @@
       dob = #{dob,jdbcType=DATE},
       nationality = #{nationality,jdbcType=VARCHAR},
       basicSalary = #{basicsalary,jdbcType=DECIMAL},
-      defunctInd = #{defunctind,jdbcType=CHAR}
+      employStartDate = #{employstartdate,jdbcType=DATE},
+      employEndDate = #{employenddate,jdbcType=DATE},
+      deleteInd = #{deleteind,jdbcType=CHAR},
+      cdacInd = #{cdacind,jdbcType=CHAR},
+      createdon = #{createdon,jdbcType=TIMESTAMP},
+      createdby = #{createdby,jdbcType=VARCHAR},
+      updatedon = #{updatedon,jdbcType=TIMESTAMP},
+      updatedby = #{updatedby,jdbcType=VARCHAR}
     where employeeId = #{employeeid,jdbcType=INTEGER}
   </update>
 </mapper>
