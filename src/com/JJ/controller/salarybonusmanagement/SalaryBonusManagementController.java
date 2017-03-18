@@ -157,6 +157,47 @@ public class SalaryBonusManagementController {
 		return "redirect:listSalaryBonus";
     }  
 	
+	@RequestMapping(value = "/updateSalaryBonus", method = RequestMethod.POST)
+	public String getSalaryBonusToUpdate(@RequestParam("editBtn") String id, Model model) {
+		SalaryBonusVo salaryBonusVo = null;
+		String[] splitId = id.split("-");
+		if(splitId[0] != null && splitId[1] != null){
+			if(splitId[1].toLowerCase().equals("salary")) {
+				salaryBonusVo = salaryBonusManagementService.getSalaryVoById(Integer.valueOf(splitId[0]));
+			}else if(splitId[1].toLowerCase().equals("bonus")) {
+				salaryBonusVo = salaryBonusManagementService.getBonusVoById(Integer.valueOf(splitId[0]));
+			}
+		}
+		salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "dd/MM/yyyy"));
+
+		logger.debug("Loading update salary bonus page for " + salaryBonusVo.toString());
+		initData();
+		model.addAttribute("salaryBonusForm", salaryBonusVo);
+    	model.addAttribute("employeeList", employeeList);
+    	model.addAttribute("typeList", typeList);
+		return "updateSalaryBonus";
+	}
+	
+	@RequestMapping(value = "/updateSalaryBonusToDb", method = RequestMethod.POST)
+	public String updateSalaryBonus(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVo salaryBonusVo,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		logger.debug("updateSalaryBonus() : " + salaryBonusVo.toString());
+		
+		if (result.hasErrors()) {
+			initData();
+	    	model.addAttribute("employeeList", employeeList);
+	    	model.addAttribute("typeList", typeList);
+			return "updateSalaryBonus";
+		} else {
+			salaryBonusManagementService.updateSalaryBonus(salaryBonusVo);
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Salary/Bonus updated successfully!");
+		}
+		
+		return "redirect:listSalaryBonus";
+	}
+	
 	@RequestMapping(value = "/paySalaryBonus", method = RequestMethod.POST)
     public String paySalaryBonus(@RequestParam("payBtn") String id, Model model,
     		final RedirectAttributes redirectAttributes) {
