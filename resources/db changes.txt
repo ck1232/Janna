@@ -21,7 +21,6 @@ Salary table
 - CDAC amount
 - SDL amount
 - FW Levy
-- PaymentId
 - createdby
 - createdon
 - updateby

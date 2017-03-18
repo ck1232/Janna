@@ -1,25 +1,42 @@
 package com.JJ.controller.inventorymanagement;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
+import com.JJ.controller.batchintakemanagement.BatchProductVo;
 import com.JJ.controller.productmanagement.vo.ProductVo;
+import com.JJ.controller.productmanagement.vo.SubOptionVo;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.JsonResponse;
+import com.JJ.model.Product;
+import com.JJ.model.Storagelocation;
 import com.JJ.model.ViewProductInventory;
 import com.JJ.model.ViewProductInventoryLocation;
 import com.JJ.model.ViewProductSuboptionInventory;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
+import com.mysql.jdbc.StringUtils;
 
 
 @Controller  
@@ -30,7 +47,11 @@ public class InventoryManagementController {
 	
 	private InventoryProductManagementService inventoryProductManagementService;
 	private ProductService productService;
+
+	private InventoryVO inventoryVO;
+	private ProductVo productVo;
 	
+	private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	@Autowired
 	public InventoryManagementController(InventoryProductManagementService inventoryProductManagementService,
 			ProductService productService) {
@@ -85,6 +106,176 @@ public class InventoryManagementController {
 		return GeneralUtils.convertListToJSONString(productQuantityList);
 	}
 	
+	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.GET)
+	public String createInventoryProduct(Model model) {
+		logger.debug("loading createInventoryProduct");
+    	inventoryVO = new InventoryVO();
+    	inventoryVO.setDate(new Date());
+    	model.addAttribute("inventoryProductForm", inventoryVO);
+        return "createInventoryProduct"; 
+	}
 	
+	@RequestMapping(value = "/getAddInventoryProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String getBatchProductList() {
+		if(inventoryVO.getProductItems() != null){
+			for(BatchIntakeProduct batchIntakeProduct : inventoryVO.getProductItems() ){
+				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
+			}
+			return GeneralUtils.convertListToJSONString(inventoryVO.getProductItems());
+		}
+		return GeneralUtils.convertListToJSONString(new ArrayList<BatchProductVo>());
+	}
+	
+	@RequestMapping(value = "/getBatchProductVo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ProductVo getBatchProductVo(@RequestBody Product product) {
+		logger.debug(product.getProductid());
+		
+		List<ProductVo> productVoList = productService.getAllProductVo(product.getProductid());
+		if(productVoList != null && productVoList.size() > 0){
+			productVo = productVoList.get(0);
+			if(productVo != null){
+				return productVo;
+			}
+		}
+		return new ProductVo();
+	}
+	
+	@RequestMapping(value = "/saveAddProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse saveAddProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("save add product");
+		boolean pass = true;
+		if(StringUtils.isNullOrEmpty(product.getProduct().getProductname()) ||
+				product.getSubOptionList() == null ||
+				product.getSubOptionList().size() == 0 ||
+				product.getUnitcost() == null ||
+				product.getQty() == null){
+			pass = false;
+		}else if(product.getSubOptionList().size() > 0){
+			for(SubOptionVo vo : product.getSubOptionList()){
+				if(vo.getSubOptionId() == null){
+					pass = false;
+					break;
+				}
+			}
+		}
+		if(!pass){
+			return new JsonResponse("error", "Please fill in all the details!");
+		}
+		
+		if(inventoryVO.getProductItems() == null) { 
+			inventoryVO.setProductItems(new ArrayList<BatchIntakeProduct>());
+		}
+		/*
+		BigDecimal totalcostNum = product.getBatchtotalcost();
+		if(totalcostNum != null){
+			if(batchIntakeProductList.size() > 0) { 
+				for(BatchIntakeProduct p: batchIntakeProductList) {
+					BigDecimal d = p.getUnitcost().multiply(BigDecimal.valueOf((double)p.getQty()));
+					totalcostNum = totalcostNum.subtract(d);
+				}
+			}
+			BigDecimal d = product.getUnitcost().multiply(BigDecimal.valueOf((double)product.getQty()));
+				totalcostNum = totalcostNum.subtract(d);
+				if(totalcostNum.signum() == -1) {
+					return new JsonResponse("error", "Please either lower the price of products or add the total cost!");
+				
+			}
+		}
+		*/
+		//for generating suboption
+		Iterator<SubOptionVo> i = product.getSubOptionList().iterator();
+		while(i.hasNext()){
+			SubOptionVo subOptionVo = i.next();
+			SubOptionVo generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
+			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
+			subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
+		}
+		for(BatchIntakeProduct p : inventoryVO.getProductItems()){
+			if(p.hashCode() == product.hashCode()) {
+				return new JsonResponse("error", "Product already exists!");
+			}
+		}
+		inventoryVO.getProductItems().add(product);
+		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value = "/deleteInventoryProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse deleteBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("delete inventory product");
+		if(inventoryVO.getProductItems() != null) {
+			Iterator<BatchIntakeProduct> iterator = inventoryVO.getProductItems().iterator();
+			while(iterator.hasNext()){
+				BatchIntakeProduct inventoryProduct = iterator.next();
+				if(inventoryProduct.hashCode() == product.getHashCode()){
+					iterator.remove();
+					break;
+				}
+			}
+		}
+		return new JsonResponse("success");
+	}
+	
+	@RequestMapping(value="/editBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody BatchIntakeProduct editBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+		if(inventoryVO.getProductItems() != null && inventoryVO.getProductItems().size() > 0){
+			for(BatchIntakeProduct batchIntakeProduct : inventoryVO.getProductItems()){
+				if(batchIntakeProduct.getHashCode() == product.getHashCode()){
+					return batchIntakeProduct;
+				}
+			}
+		}
+		return new BatchIntakeProduct();
+	}
+	
+	@RequestMapping(value = "/saveEditProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponse saveEditProduct(@RequestBody BatchIntakeProduct product) {
+		logger.debug("save edit product");
+		if(inventoryVO.getProductItems() != null) {
+			for(BatchIntakeProduct batchproduct: inventoryVO.getProductItems()){
+				if((batchproduct.getHashCode()) == product.getHashCode()) {
+					batchproduct.setUnitcost(product.getUnitcost());
+					batchproduct.setQty(product.getQty());
+					break;
+				}
+			}
+		}
+		return new JsonResponse("success");
+	}
+	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
+	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") InventoryVO inventoryVO, 
+			final RedirectAttributes redirectAttributes) {
+		inventoryVO.setProductItems(this.inventoryVO.getProductItems());
+		try{
+			List<Storagelocation> locationList = inventoryProductManagementService.getAllStorageLocation();
+			Map<String, Storagelocation> locationMap = new HashMap<String, Storagelocation>();
+			if(locationList != null && locationList.size() > 0){
+				for(Storagelocation location:locationList){
+					locationMap.put(location.getLocationname(), location);
+				}
+			}
+			Date date = df.parse(inventoryVO.getDateString());
+			inventoryVO.setDate(date);
+			Storagelocation locationTo = locationMap.get(inventoryVO.getLocationFrom());
+			Storagelocation locationFrom = locationMap.get(inventoryVO.getLocationTo());
+			if(locationTo != null){
+				inventoryVO.setLocationToId(locationTo.getLocationid());
+			}
+			
+			if(locationFrom != null){
+				inventoryVO.setLocationFromId(locationFrom.getLocationid());
+			}
+			
+			
+			inventoryProductManagementService.saveInventoryRecord(inventoryVO);
+			
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");
+		}catch(Exception ex){
+			ex.printStackTrace();
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Invalid date input.");
+		}
+		return "redirect:listInventoryProduct";
+	}
 	
 }

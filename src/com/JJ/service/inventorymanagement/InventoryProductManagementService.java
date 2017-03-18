@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
 import com.JJ.controller.inventorymanagement.InventoryHistorySearchCriteria;
+import com.JJ.controller.inventorymanagement.InventoryVO;
 import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
 import com.JJ.controller.productmanagement.vo.ProductVo;
+import com.JJ.controller.productmanagement.vo.SubOptionVo;
 import com.JJ.dao.ProductinventoryMapper;
 import com.JJ.dao.ViewProductInventoryLocationMapper;
 import com.JJ.dao.ViewProductInventoryMapper;
@@ -23,6 +26,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Product;
 import com.JJ.model.Productinventory;
 import com.JJ.model.ProductinventoryExample;
+import com.JJ.model.ProductsuboptionRs;
 import com.JJ.model.Storagelocation;
 import com.JJ.model.ViewItemCode;
 import com.JJ.model.ViewProductInventory;
@@ -32,7 +36,6 @@ import com.JJ.model.ViewProductInventoryLocationExample;
 import com.JJ.model.ViewProductSuboptionInventory;
 import com.JJ.model.ViewProductSuboptionInventoryExample;
 import com.JJ.service.productmanagement.ProductService;
-import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
 
 @Service
@@ -44,7 +47,6 @@ public class InventoryProductManagementService {
 	private ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper;
 	private ProductinventoryMapper inventoryMapper;
 	private ProductService productService;
-	private ProductSubOptionManagementService productSubOptionManagementService;
 	private StorageLocationManagementService storageLocationManagementService;
 	
 	@Autowired
@@ -53,15 +55,13 @@ public class InventoryProductManagementService {
 			ViewProductSuboptionInventoryMapper productSuboptionInventoryMapper,
 			ProductinventoryMapper inventoryMapper,
 			ProductService productService,
-			StorageLocationManagementService storageLocationManagementService,
-			ProductSubOptionManagementService productSubOptionManagementService) {
+			StorageLocationManagementService storageLocationManagementService) {
 		this.productInventoryMapper = productInventoryMapper;
 		this.productInventoryLocationMapper = productInventoryLocationMapper;
 		this.productSuboptionInventoryMapper = productSuboptionInventoryMapper;
 		this.inventoryMapper = inventoryMapper;
 		this.productService = productService;
 		this.storageLocationManagementService = storageLocationManagementService;
-		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
 	/* Inventory Products START */
@@ -125,6 +125,10 @@ public class InventoryProductManagementService {
 		return productInventoryList;
 	}
 	
+	public List<Storagelocation> getAllStorageLocation(){
+		return storageLocationManagementService.getAllStoragelocations();
+	}
+	
 	private List<Productinventory> combineProductInventoryInfo(List<Productinventory> productInventoryList, 
 			List<Product> productList,
 			List<ViewItemCode> itemCodeList,
@@ -138,6 +142,9 @@ public class InventoryProductManagementService {
 		for(Productinventory productInventory : productInventoryList) {
 			productInventory.setProductSuboption(productSuboptionHash.get(productInventory.getProductsuboptionid()));
 			Product product = productHash.get(productInventory.getProductSuboption().getProductid());
+			if(product == null){
+				continue;
+			}
 			ProductVo productvo = new ProductVo();
 			if(product == null){
 				continue;
@@ -237,5 +244,78 @@ public class InventoryProductManagementService {
 	}
 	/* Product inventory table END */
 	
+	
+	public void saveInventoryRecord(InventoryVO inventoryVo){
+		List<Productinventory> productInventoryList = convertToProductInventoryList(inventoryVo);
+		if(productInventoryList != null && productInventoryList.size() > 0){
+			for(Productinventory inventory : productInventoryList){
+				inventoryMapper.insertSelective(inventory);
+			}
+		}
+	}
+
+	private List<Productinventory> convertToProductInventoryList(InventoryVO inventoryVo) {
+		List<Productinventory> productInventoryList = new ArrayList<Productinventory>();
+		if(inventoryVo.getProductItems() != null && inventoryVo.getProductItems().size() > 0){
+			for(BatchIntakeProduct batchProduct:inventoryVo.getProductItems()){
+				List<Integer> suboptionIdList = new ArrayList<Integer>();
+				for(SubOptionVo suboption: batchProduct.getSubOptionList()) {
+					suboptionIdList.add(suboption.getSubOptionId());
+				}
+				ProductsuboptionRs rs = productService.findProductSubOptionRs(batchProduct.getProduct().getProductid(), suboptionIdList);
+				if(rs == null || rs.getProductsuboptionid() == null){
+					continue;
+				}
+				if(inventoryVo.getLocationFromId() != null && inventoryVo.getLocationToId() != null){
+					//if both location exists, mean is transfer, create two inventory record
+					Productinventory addInventory = new Productinventory();
+					addInventory.setDate(inventoryVo.getDate());
+					addInventory.setTransferfrom(inventoryVo.getLocationFromId());
+					addInventory.setPlusorminus(true);
+					addInventory.setRemarks(inventoryVo.getRemarks());
+					addInventory.setProductsuboptionid(rs.getProductsuboptionid());
+					addInventory.setUnitcost(batchProduct.getUnitcost());
+					addInventory.setQty(batchProduct.getQty());
+					productInventoryList.add(addInventory);
+					
+					Productinventory deleteInventory = new Productinventory();
+					deleteInventory.setDate(inventoryVo.getDate());
+					deleteInventory.setDeleteremarks(inventoryVo.getRemarks());
+					deleteInventory.setTransferto(inventoryVo.getLocationToId());
+					deleteInventory.setPlusorminus(false);
+					deleteInventory.setUnitcost(batchProduct.getUnitcost());
+					deleteInventory.setRemarks(inventoryVo.getRemarks());
+					deleteInventory.setProductsuboptionid(rs.getProductsuboptionid());
+					deleteInventory.setQty(batchProduct.getQty());
+					productInventoryList.add(deleteInventory);
+				}else if (inventoryVo.getLocationFromId() != null){
+					//if locationTo is empty, means is add
+					Productinventory addInventory = new Productinventory();
+					addInventory.setDate(inventoryVo.getDate());
+					addInventory.setTransferfrom(inventoryVo.getLocationFromId());
+					addInventory.setPlusorminus(true);
+					addInventory.setUnitcost(batchProduct.getUnitcost());
+					addInventory.setRemarks(inventoryVo.getRemarks());
+					addInventory.setProductsuboptionid(rs.getProductsuboptionid());
+					addInventory.setQty(batchProduct.getQty());
+					productInventoryList.add(addInventory);
+				}else if (inventoryVo.getLocationToId() != null){
+					//if locationFrom is empty, mean is delete
+					Productinventory deleteInventory = new Productinventory();
+					deleteInventory.setDate(inventoryVo.getDate());
+					deleteInventory.setDeleteremarks(inventoryVo.getRemarks());
+					deleteInventory.setTransferto(inventoryVo.getLocationToId());
+					deleteInventory.setUnitcost(batchProduct.getUnitcost());
+					deleteInventory.setPlusorminus(false);
+					deleteInventory.setRemarks(inventoryVo.getRemarks());
+					deleteInventory.setProductsuboptionid(rs.getProductsuboptionid());
+					deleteInventory.setQty(batchProduct.getQty());
+					productInventoryList.add(deleteInventory);
+				}
+			}
+		}
+		
+		return productInventoryList;
+	}
 	
 }

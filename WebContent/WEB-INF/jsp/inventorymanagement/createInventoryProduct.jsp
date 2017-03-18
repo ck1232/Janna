@@ -2,6 +2,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
 
@@ -12,18 +13,19 @@
     	}); 
 
      var locationList = new Bloodhound({
-   	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationname'),
-   	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-   	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
-   	}); 
+      	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationname'),
+      	  queryTokenizer: Bloodhound.tokenizers.whitespace,
+      	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
+      	}); 
  	
     $( function() {
-    	$('#date').datepicker(
-    	{
-    		format: 'dd/MM/yyyy',
-	      	autoclose: true
-	    });
 
+    	$('#date').datepicker(
+ 	    	{
+ 	    		format: 'dd/mm/yyyy',
+ 		      	autoclose: true,
+ 		    });
+    	        
     	$('#addProductNameDiv .typeahead').keyup(function(){
    			$("#productId").val("");
    	    	$("#quantity").val("");
@@ -44,22 +46,44 @@
     		getList(item);
     	});
 
-    	$('#addLocationNameDiv .typeahead').keyup(function(){
-    		$("#storagelocation").val("");
+
+    	
+
+    	$('#addLocationFromDiv .typeahead').keyup(function(){
+    		$("#locationFromId").val("");
 		});
 
-    	$('#addLocationNameDiv .typeahead').typeahead(null, {
+    	$('#addLocationFromDiv .typeahead').typeahead(null, {
    		 name: 'locationList',
-   		  display: 'locationname',
+   		 display: 'locationname',
    		source: locationList
 		});
 
-    	$('#addLocationNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
-        	$("#storagelocation").val(item.locationid);
+    	$('#addLocationFromDiv .typeahead').on('typeahead:selected', function(evt, item) {
+        	$("#locationFromHidden").val(item.locationid);
     	});
+
+
+    	
+
+    	$('#addLocationToDiv .typeahead').keyup(function(){
+    		$("#locationToId").val("");
+		});
+
+    	$('#addLocationToDiv .typeahead').typeahead(null, {
+   		 name: 'locationList',
+   		 display: 'locationname',
+   		source: locationList
+		});
+
+    	$('#addLocationToDiv .typeahead').on('typeahead:selected', function(evt, item) {
+        	$("#locationToHidden").val(item.locationid);
+    	});
+
+    	
 	 } );
 
-	function getList(item) {
+    function getList(item) {
 		var id = item.productid;
 		var data = {
 	  	        "productid" : id
@@ -94,6 +118,8 @@
   	  		$('#unitcostDiv').css("display", "");
 			});
 	}
+
+	
     
     function addProduct(){
     	$("#name").val("");
@@ -111,7 +137,7 @@
 		$("#productModal").hide();
 	}
 
-    function saveAddIntakeProduct(){
+    function saveAddInventoryProduct(){
     	var productName = $("#name").val();
     	var productId = $("#productId").val();
     	var productData = {
@@ -167,11 +193,12 @@
 		    }
   		}); 
     }
+
     /* ------------------------ edit -------------------------------*/
     function closeEditProduct(){
 		$("#editModal").hide();
 	}
-    function saveEditIntakeProduct(){
+    function saveEditInventoryProduct(){
         var hashCode = $('#hashCodeId').val();
     	var productName = $("#editName").val();
     	var productId = $("#editProductId").val();
@@ -223,83 +250,93 @@
 			intakeTable.ajax.reload();
 		}); 
     }
+
+
 </script>
+
+
 <!-- Content Wrapper. Contains page content -->
     <section class="content">
     	<div class="row">
     		<div class="col-md-12">
-    			<c:url var="post_url" value="/batchintake/createBatchIntake" />
-    			<form id="backToListButton" method="get" action="<c:url value="/batchintake/listBatchIntake" />"></form>
-    			<form:form id="createBatchIntakeForm" method="post" modelAttribute="batchIntakeForm" action="${post_url}">
     			<!--BOX-->
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
-                    	<h3 class="box-title">Batch Information</h3>
+                    	<h3 class="box-title">Add Inventory Product</h3>
                     </div>
+                    <!--FORM-->
+                    <form id="backToListButton" method="get" action="<c:url value="/inventory/listInventoryProduct" />"></form>
+                    <c:url var="post_url" value="/inventory/createInventoryProduct" />
+                    <form:form id="createInventoryProductForm" method="post" modelAttribute="inventoryProductForm" action="${post_url }">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <form:input path="batchid" type="hidden" class="form-control" id="batchid" />
-			              <div class="box-body">
-				              	<div class="row">
-								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Remarks</label>
-										<div class="col-sm-10">
-											<form:input path="remarks" type="text" class="form-control"
-						                                id="remarks" placeholder="Enter batch remarks" />
+		             	<div class="box-body">
+		              		<div class="row">
+							  	<div class="form-group ${status.error ? 'has-error' : ''}">
+									<label class="col-sm-2 control-label">Remarks</label>
+									<div class="col-sm-10">
+										<form:input path="remarks" type="text" class="form-control"
+						                                id="remarks" placeholder="Enter remarks for adding" />
 											<form:errors path="remarks" class="text-danger" />
-										</div>
-								  	</div>
-								</div>
-								<div class="row">
-								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Purchase Date</label>
-										<div class="col-sm-10">
-											<form:input path="date" type="text" class="form-control"
-						                                id="date" placeholder="Press to select date" />
-											<form:errors path="date" class="text-danger" />
-										</div>
-								  	</div>
-								</div>
-					            <div class="row">
+									</div>
+							  	</div>
+							</div>
+							<div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Initial Location</label>
-											<div class="col-sm-10" id="addLocationNameDiv">
+										<label class="col-sm-2 control-label">Location From</label>
+											<div class="col-sm-10" id="addLocationFromDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
-						                  			  path="storagelocationname" id="storagelocationname" />
-						                  		<form:input path="storagelocation" id="storagelocation" type="hidden"/>
-						                  		<form:errors path="storagelocation" class="text-danger" />
+						                  			  path="locationFrom" id="locationFrom" />
+						                  		<form:input path="locationFromId" id="locationFromHidden" type="hidden"/>
+						                  		<form:errors path="locationFrom" class="text-danger" />
 						                	</div>
-						              </div>
-					            </div>
-					            <div class="row">
+						           </div>
+					       </div>
+					       
+					       <div class="row">
+						            <div class="form-group ${status.error ? 'has-error' : ''}">
+										<label class="col-sm-2 control-label">Location To</label>
+											<div class="col-sm-10" id="addLocationToDiv">
+						                  		<form:input type="text" class="form-control typeahead" 
+						                  			  path="locationTo" id="locationTo" />
+						                  		<form:input path="locationToId" id="locationToHidden" type="hidden"/>
+						                  		<form:errors path="locationTo" class="text-danger" />
+						                	</div>
+						           </div>
+					       </div>
+					       
+					       <div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Total Cost</label>
+										<label class="col-sm-2 control-label">Date</label>
 										<div class="col-sm-10">
-											<form:input path="totalcost" type="number" class="form-control"
-						                                id="totalcost" placeholder="Enter total cost" />
-											<form:errors path="totalcost" class="text-danger" />
+										<fmt:formatDate var="fmtDate" value="${inventoryProductForm.date}" pattern="dd/MM/yyyy"/>
+											<form:input path="dateString" type="text" class="form-control"
+						                                id="date" placeholder="Press to select date" value="${fmtDate}"/>
+						                                
+											<form:errors path="dateString" class="text-danger" />
 										</div>
 								  	</div>
-								</div>		
-			              </div>
-			              <!-- /.box-body -->
-		            
-                </div>
-                <tiles:insertAttribute name = "productList" />
-                <div class="row">
-					<div class="form-group">
-						<label class="col-sm-2 control-label"></label>
-						<div class="col-sm-10">
-							<button id="addBatchIntakeBtn" type="submit" class="btn btn-primary" form ="createBatchIntakeForm" formaction="../<tiles:getAsString name="action" />">Save</button>
-		                  <button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+								</div>
+					            <br/><br/>
+		            	</div>
+		            	<tiles:insertAttribute name = "productList" />
+	            		<div class="row">
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-primary" form ="createInventoryProductForm">Add</button>
+			                  			<button type="submit" class="btn btn-default" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
+									</div>
+							</div>
 						</div>
-					</div>
-				</div>
-				</form:form>
-		        <!--/.FORM-->
+		        	</form:form>
+		            <!--/.FORM-->
+                </div>
+                <!-- /.box-body -->
     		</div>
     	</div>
     </section>
+    
     
     
     <div id="productModal" class="modal">
@@ -339,18 +376,16 @@
 				
 			</div>
 			<div class="modal-footer">
-				<button id="saveProductBtn" class="btn btn-primary" type="button" onclick="saveAddIntakeProduct();">Add</button>
+				<button id="saveProductBtn" class="btn btn-primary" type="button" onclick="saveAddInventoryProduct();">Add</button>
 				<button type="button" onclick="closeProduct();" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
 	</div>
 	<!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-
-
-<div id="editModal" class="modal">
+	</div>
+	
+	<div id="editModal" class="modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -389,7 +424,7 @@
 				
 			</div>
 			<div class="modal-footer">
-				<button id="editSaveProductBtn" class="btn btn-primary" type="button" onclick="saveEditIntakeProduct();">Save</button>
+				<button id="editSaveProductBtn" class="btn btn-primary" type="button" onclick="saveEditInventoryProduct();">Save</button>
 				<button type="button" onclick="closeEditProduct();" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -397,4 +432,3 @@
 	</div>
 	<!-- /.modal-dialog -->
 </div>
-    
