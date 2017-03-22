@@ -118,7 +118,7 @@ public class UserManagementController {
 	
 	@RequestMapping(value = "/updateUserById/{userid}", method = RequestMethod.GET)
 	public String getUserToUpdateByUserId(@PathVariable String userid, Model model) {
-		User user = userManagementService.findByUserId(userid);
+		User user = userManagementService.findByUserName(userid);
 		logger.debug("Loading update user page for " + user.toString());
 		model.addAttribute("userForm", user);
 		return "updateUser";

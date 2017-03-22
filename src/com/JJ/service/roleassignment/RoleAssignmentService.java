@@ -6,61 +6,66 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.common.vo.UserRoleVO;
+import com.JJ.dao.UserRoleDbObjectMapper;
 import com.JJ.dao.UserRoleMapper;
 import com.JJ.model.RolesToAssign;
+import com.JJ.model.UserDbObjectExample;
 import com.JJ.model.UserRole;
+import com.JJ.model.UserRoleDbObject;
+import com.JJ.model.UserRoleDbObjectExample;
 import com.JJ.model.UserRoleExample;
 
 @Service
 @Transactional
 public class RoleAssignmentService {
 	
-	private UserRoleMapper userRoleMapper;
+	private UserRoleDbObjectMapper userRoleDbObjectMapper;
 	
 	@Autowired
-	public RoleAssignmentService(UserRoleMapper userRoleMapper) {
-		this.userRoleMapper = userRoleMapper;
+	public RoleAssignmentService(UserRoleDbObjectMapper userRoleDbObjectMapper) {
+		this.userRoleDbObjectMapper = userRoleDbObjectMapper;
 	}
 	
-	public UserRole findById(UserRole key) {
-		return userRoleMapper.selectByPrimaryKey(key);
+	public UserRoleVO findById(UserRoleVO key) {
+		return userRoleDbObjectMapper.selectByPrimaryKey(key);
 	}
 
-	public List<UserRole> getAllRoles() {
-		UserRoleExample userRoleExample = new UserRoleExample();
+	public List<UserRoleVO> getAllRoles() {
+		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
 		userRoleExample.createCriteria();
-		List<UserRole> userRoleList = userRoleMapper.selectByExample(userRoleExample);
+		List<UserRoleDbObject> userRoleList = userRoleDbObjectMapper.selectByExample(userRoleExample);
 		return userRoleList;
 	}
 	
-	public List<UserRole> getRoleListByUserId(Integer userId){
-		UserRoleExample userRoleExample = new UserRoleExample();
-		userRoleExample.createCriteria().andUseridEqualTo(userId);
-		return userRoleMapper.selectByExample(userRoleExample);
+	public List<UserRoleVO> getRoleListByUserId(Integer userId){
+		UserDbObjectExample userRoleExample = new UserDbObjectExample();
+		userRoleExample.createCriteria().andUserIdEqualTo(userId);
+		return userRoleDbObjectMapper.selectByExample(userRoleExample);
 	}
 	
 	public List<RolesToAssign> getRolesToAssign(String userid) {
-		return userRoleMapper.getRolesToAssign(userid);
+		return userRoleDbObjectMapper.getRolesToAssign(userid);
 	}
 	
 	
-	public void saveUserRole(UserRole userRole) {
-		userRoleMapper.insert(userRole);
+	public void saveUserRole(UserRoleVO userRole) {
+		userRoleDbObjectMapper.insert(userRole);
 	}
 	
 	
-	public void deleteUserRole(UserRole key) {
-		userRoleMapper.deleteByPrimaryKey(key);
+	public void deleteUserRole(UserRoleVO key) {
+		userRoleDbObjectMapper.deleteByPrimaryKey(key);
 	}
 	
 	public void deleteRoleListByUserId(Integer userId){
-		UserRoleExample userRoleExample = new UserRoleExample();
-		userRoleExample.createCriteria().andUseridEqualTo(userId);
-		userRoleMapper.deleteByExample(userRoleExample);
+		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
+		userRoleExample.createCriteria().andUserIdEqualTo(userId);
+		userRoleDbObjectMapper.deleteByExample(userRoleExample);
 	}
 	
 	public void updateRole(UserRole role) {
-		userRoleMapper.updateByPrimaryKeySelective(role);
+		userRoleDbObjectMapper.updateByPrimaryKeySelective(role);
 	}
 	 
 	

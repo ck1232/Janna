@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.EmployeeBonusDbObjectMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.EmployeeBonusDbObject">
+    <id column="bonus_id" jdbcType="INTEGER" property="bonusId" />
+    <result column="bonus_date" jdbcType="DATE" property="bonusDate" />
+    <result column="employee_id" jdbcType="INTEGER" property="employeeId" />
+    <result column="bonus_amt" jdbcType="DECIMAL" property="bonusAmt" />
+    <result column="employee_cpf" jdbcType="DECIMAL" property="employeeCpf" />
+    <result column="employer_cpf" jdbcType="DECIMAL" property="employerCpf" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_on" jdbcType="TIMESTAMP" property="createdOn" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_on" jdbcType="TIMESTAMP" property="updatedOn" />
+    <result column="delete_ind" jdbcType="CHAR" property="deleteInd" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    bonus_id, bonus_date, employee_id, bonus_amt, employee_cpf, employer_cpf, status, 
+    version, created_by, created_on, updated_by, updated_on, delete_ind
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.EmployeeBonusDbObjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from employee_bonus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from employee_bonus
+    where bonus_id = #{bonusId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from employee_bonus
+    where bonus_id = #{bonusId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.EmployeeBonusDbObjectExample">
+    delete from employee_bonus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.EmployeeBonusDbObject">
+    <selectKey keyProperty="bonusId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into employee_bonus (bonus_date, employee_id, bonus_amt, 
+      employee_cpf, employer_cpf, status, 
+      version, created_by, created_on, 
+      updated_by, updated_on, delete_ind
+      )
+    values (#{bonusDate,jdbcType=DATE}, #{employeeId,jdbcType=INTEGER}, #{bonusAmt,jdbcType=DECIMAL}, 
+      #{employeeCpf,jdbcType=DECIMAL}, #{employerCpf,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.EmployeeBonusDbObject">
+    <selectKey keyProperty="bonusId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into employee_bonus
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bonusDate != null">
+        bonus_date,
+      </if>
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="bonusAmt != null">
+        bonus_amt,
+      </if>
+      <if test="employeeCpf != null">
+        employee_cpf,
+      </if>
+      <if test="employerCpf != null">
+        employer_cpf,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdOn != null">
+        created_on,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="updatedOn != null">
+        updated_on,
+      </if>
+      <if test="deleteInd != null">
+        delete_ind,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bonusDate != null">
+        #{bonusDate,jdbcType=DATE},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="bonusAmt != null">
+        #{bonusAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="employeeCpf != null">
+        #{employeeCpf,jdbcType=DECIMAL},
+      </if>
+      <if test="employerCpf != null">
+        #{employerCpf,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        #{deleteInd,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.EmployeeBonusDbObjectExample" resultType="java.lang.Integer">
+    select count(*) from employee_bonus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update employee_bonus
+    <set>
+      <if test="record.bonusId != null">
+        bonus_id = #{record.bonusId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bonusDate != null">
+        bonus_date = #{record.bonusDate,jdbcType=DATE},
+      </if>
+      <if test="record.employeeId != null">
+        employee_id = #{record.employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bonusAmt != null">
+        bonus_amt = #{record.bonusAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.employeeCpf != null">
+        employee_cpf = #{record.employeeCpf,jdbcType=DECIMAL},
+      </if>
+      <if test="record.employerCpf != null">
+        employer_cpf = #{record.employerCpf,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdOn != null">
+        created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null">
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedOn != null">
+        updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteInd != null">
+        delete_ind = #{record.deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update employee_bonus
+    set bonus_id = #{record.bonusId,jdbcType=INTEGER},
+      bonus_date = #{record.bonusDate,jdbcType=DATE},
+      employee_id = #{record.employeeId,jdbcType=INTEGER},
+      bonus_amt = #{record.bonusAmt,jdbcType=DECIMAL},
+      employee_cpf = #{record.employeeCpf,jdbcType=DECIMAL},
+      employer_cpf = #{record.employerCpf,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=VARCHAR},
+      version = #{record.version,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{record.deleteInd,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.EmployeeBonusDbObject">
+    update employee_bonus
+    <set>
+      <if test="bonusDate != null">
+        bonus_date = #{bonusDate,jdbcType=DATE},
+      </if>
+      <if test="employeeId != null">
+        employee_id = #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="bonusAmt != null">
+        bonus_amt = #{bonusAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="employeeCpf != null">
+        employee_cpf = #{employeeCpf,jdbcType=DECIMAL},
+      </if>
+      <if test="employerCpf != null">
+        employer_cpf = #{employerCpf,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        created_on = #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        delete_ind = #{deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    where bonus_id = #{bonusId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.EmployeeBonusDbObject">
+    update employee_bonus
+    set bonus_date = #{bonusDate,jdbcType=DATE},
+      employee_id = #{employeeId,jdbcType=INTEGER},
+      bonus_amt = #{bonusAmt,jdbcType=DECIMAL},
+      employee_cpf = #{employeeCpf,jdbcType=DECIMAL},
+      employer_cpf = #{employerCpf,jdbcType=DECIMAL},
+      status = #{status,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{deleteInd,jdbcType=CHAR}
+    where bonus_id = #{bonusId,jdbcType=INTEGER}
+  </update>
+</mapper>

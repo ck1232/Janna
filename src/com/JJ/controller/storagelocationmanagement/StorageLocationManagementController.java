@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,13 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Storagelocation;
-import com.JJ.model.User;
 import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
-import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.StorageLocationFormValidator;
-import com.JJ.validator.UserFormValidator;
 
 
 @Controller  
@@ -55,14 +51,14 @@ public class StorageLocationManagementController {
 	@RequestMapping(value = "/getStorageLocationList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getStorageLocationList() {
 		logger.debug("getting storage location list");
-		List<Storagelocation> locationList = storageLocationManagementService.getAllStoragelocations();
+		List<StorageLocationVO> locationList = storageLocationManagementService.getAllStorageLocations();
 		return GeneralUtils.convertListToJSONString(locationList);
 	}
 	
 	@RequestMapping(value = "/createStorageLocation", method = RequestMethod.GET)
     public String showAddStorageLocationForm(Model model) {  
     	logger.debug("loading showAddStorageLocationForm");
-    	Storagelocation location = new Storagelocation();
+    	StorageLocationVO location = new StorageLocationVO();
     	model.addAttribute("storageLocationForm", location);
         return "createStorageLocation";  
     }  
@@ -73,7 +69,7 @@ public class StorageLocationManagementController {
 	}
 	
 	@RequestMapping(value = "/createStorageLocation", method = RequestMethod.POST)
-    public String saveStorageLocation(@ModelAttribute("storageLocationForm") @Validated Storagelocation location, 
+    public String saveStorageLocation(@ModelAttribute("storageLocationForm") @Validated StorageLocationVO location, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveStorageLocation() : " + location.toString());
@@ -110,7 +106,7 @@ public class StorageLocationManagementController {
 	@RequestMapping(value = "/updateStorageLocation", method = RequestMethod.POST)
 	public String getStorageLocationToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Storagelocation location = storageLocationManagementService.findById(new Integer(id));
+		StorageLocationVO location = storageLocationManagementService.findById(new Integer(id));
 		logger.debug("Loading update storage location page for " + location.toString());
 		
 		model.addAttribute("storageLocationForm", location);
@@ -118,7 +114,7 @@ public class StorageLocationManagementController {
 	}
 	
 	@RequestMapping(value = "/updateStorageLocationToDb", method = RequestMethod.POST)
-	public String updateStorageLocation(@ModelAttribute("storageLocationForm") @Validated Storagelocation location,
+	public String updateStorageLocation(@ModelAttribute("storageLocationForm") @Validated StorageLocationVO location,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("updateStorageLocation() : " + location.toString());
@@ -137,7 +133,7 @@ public class StorageLocationManagementController {
 	@RequestMapping(value = "/viewStorageLocation", method = RequestMethod.POST)
 	public String viewStorageLocation(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Storagelocation location = storageLocationManagementService.findById(new Integer(id));
+		StorageLocationVO location = storageLocationManagementService.findById(new Integer(id));
 		if (location == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Storage location not found");

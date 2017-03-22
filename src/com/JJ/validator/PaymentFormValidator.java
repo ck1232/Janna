@@ -2,24 +2,25 @@ package com.JJ.validator;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.controller.paymentmanagement.PaymentVo;
+import com.JJ.controller.paymentmanagement.vo.PaymentVO;
 
 @Component
 public class PaymentFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return PaymentVo.class.equals(clazz);
+		return PaymentVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		PaymentVo paymentVo = (PaymentVo) target;
+		PaymentVO paymentVo = (PaymentVO) target;
 		
 		if(paymentVo.getPaymentdateString() == null || paymentVo.getPaymentdateString().trim().isEmpty()){
 			errors.rejectValue("paymentdateString", "error.notempty.paymentform.paymentdate");

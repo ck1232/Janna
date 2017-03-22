@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.invoicemanagement.InvoiceSearchCriteria;
-import com.JJ.controller.invoicemanagement.InvoiceVo;
+import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.dao.InvoiceMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Expense;
 import com.JJ.model.ExpenseExample;
-import com.JJ.model.FileMeta;
 import com.JJ.model.Invoice;
 import com.JJ.model.InvoiceExample;
 
@@ -120,11 +120,11 @@ public class InvoiceManagementService {
 			deleteInvoice(invoiceid);
 	}
 	
-	public int saveInvoiceFromUploadFile(InvoiceVo invoice) {
+	public int saveInvoiceFromUploadFile(InvoiceVO invoice) {
 		excelFileHelper = new ExcelFileHelper();
 		Invoice invoicedata;
 		int fileUploadCount = 0;
-		for(FileMeta file : invoice.getInvoiceList()) {
+		for(FileMetaVO file : invoice.getInvoiceList()) {
 			invoicedata = excelFileHelper.readFromFile(file.getBytes());
 			if(invoicedata != null){
 				invoicedata.setStatus(GeneralUtils.STATUS_PENDING);

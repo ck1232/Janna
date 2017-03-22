@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.RolesToPermissionCustomDbObjectMapper">
+	<resultMap id="rolesToPermissionResultMap" type="com.JJ.model.RolesToPermissionCustomDbObject">
+    <id column="roleid" jdbcType="INTEGER" property="roleid" />
+    <result column="rolename" jdbcType="VARCHAR" property="rolename" />
+    <result column="permissionid" jdbcType="VARCHAR" property="permissionId" />
+    <result column="permission" jdbcType="VARCHAR" property="permission" />
+  </resultMap>
+  <select id="getRolesToPermission" parameterType="String" resultMap="rolesToPermissionResultMap">  
+	(select rolePermission.id as "roleId", rolePermission.name as "rolename", smptype.id as permissionid, smptype.permissiontype as permission from (
+	select id, name, roleId, submoduleId, permission from jj.role r  
+	left join jj.submodulepermission smp on r.id = smp.roleId  
+	where smp.submoduleid = #{submoduleid} 
+	and r.deleteInd = 'N' 
+	and smp.deleteInd = 'N') as rolePermission
+	left join jj.submodulepermissiontype smptype on rolePermission.permission = smptype.id)
+	UNION
+	(SELECT r.id as "roleId", r.name as "rolename", null as permissionid, "none" as permission from jj.role r
+	left join jj.submodulepermission smp on r.id = smp.roleId where r.id not in (
+	select distinct(roleId) from jj.submodulepermission where submoduleId = #{submoduleid}))
+	</select>
+	
+	<resultMap id="submodulePermissionResultMap" type="com.JJ.model.SubModulePermissionDbObject">
+	    <id column="submoduleId" jdbcType="INTEGER" property="submoduleid" />
+	    <id column="submodulename" jdbcType="VARCHAR" property="submodulename" />
+	    <id column="permission" jdbcType="VARCHAR" property="permission" />
+	    <id column="permissiontype" jdbcType="VARCHAR" property="permissiontype" />
+	</resultMap>
+	<select id="getSubmodulePermissionByRoleIdList" parameterType="map" resultMap="submodulePermissionResultMap">  
+	SELECT distinct(a.submoduleId) as "submoduleId", b.name as "submodulename", a.permission as "permission", c.permissiontype as "permissiontype"
+	FROM jj.submodulepermission a left join submodule b on a.submoduleId = b.id 
+	left join submodulepermissiontype c on a.permission = c.id 
+	where a.roleId in 
+	 <foreach item="item" index="index" collection="list"
+             open="(" separator="," close=")">
+        #{item}
+    </foreach> and a.deleteInd = 'N'
+	</select>
+</mapper>

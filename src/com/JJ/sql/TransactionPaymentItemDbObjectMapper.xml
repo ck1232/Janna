@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.TransactionPaymentItemDbObjectMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.TransactionPaymentItemDbObject">
+    <id column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="ebay_item_txn_id" jdbcType="VARCHAR" property="ebayItemTxnId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="quantity" jdbcType="VARCHAR" property="quantity" />
+    <result column="shipping_amt" jdbcType="DECIMAL" property="shippingAmt" />
+    <result column="handling_amt" jdbcType="DECIMAL" property="handlingAmt" />
+    <result column="coupon_id" jdbcType="VARCHAR" property="couponId" />
+    <result column="coupon_amt" jdbcType="DECIMAL" property="couponAmt" />
+    <result column="coupon_amt_currency" jdbcType="VARCHAR" property="couponAmtCurrency" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_on" jdbcType="TIMESTAMP" property="createdOn" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_on" jdbcType="TIMESTAMP" property="updatedOn" />
+    <result column="delete_ind" jdbcType="CHAR" property="deleteInd" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    transaction_id, ebay_item_txn_id, name, number, quantity, shipping_amt, handling_amt, 
+    coupon_id, coupon_amt, coupon_amt_currency, amt, version, created_by, created_on, 
+    updated_by, updated_on, delete_ind
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.TransactionPaymentItemDbObjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from transaction_payment_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from transaction_payment_item
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from transaction_payment_item
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.TransactionPaymentItemDbObjectExample">
+    delete from transaction_payment_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.TransactionPaymentItemDbObject">
+    insert into transaction_payment_item (transaction_id, ebay_item_txn_id, name, 
+      number, quantity, shipping_amt, 
+      handling_amt, coupon_id, coupon_amt, 
+      coupon_amt_currency, amt, version, 
+      created_by, created_on, updated_by, 
+      updated_on, delete_ind)
+    values (#{transactionId,jdbcType=VARCHAR}, #{ebayItemTxnId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{quantity,jdbcType=VARCHAR}, #{shippingAmt,jdbcType=DECIMAL}, 
+      #{handlingAmt,jdbcType=DECIMAL}, #{couponId,jdbcType=VARCHAR}, #{couponAmt,jdbcType=DECIMAL}, 
+      #{couponAmtCurrency,jdbcType=VARCHAR}, #{amt,jdbcType=DECIMAL}, #{version,jdbcType=INTEGER}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.TransactionPaymentItemDbObject">
+    insert into transaction_payment_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="ebayItemTxnId != null">
+        ebay_item_txn_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="shippingAmt != null">
+        shipping_amt,
+      </if>
+      <if test="handlingAmt != null">
+        handling_amt,
+      </if>
+      <if test="couponId != null">
+        coupon_id,
+      </if>
+      <if test="couponAmt != null">
+        coupon_amt,
+      </if>
+      <if test="couponAmtCurrency != null">
+        coupon_amt_currency,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdOn != null">
+        created_on,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="updatedOn != null">
+        updated_on,
+      </if>
+      <if test="deleteInd != null">
+        delete_ind,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="ebayItemTxnId != null">
+        #{ebayItemTxnId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingAmt != null">
+        #{shippingAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="handlingAmt != null">
+        #{handlingAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="couponId != null">
+        #{couponId,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmt != null">
+        #{couponAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="couponAmtCurrency != null">
+        #{couponAmtCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        #{deleteInd,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.TransactionPaymentItemDbObjectExample" resultType="java.lang.Integer">
+    select count(*) from transaction_payment_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update transaction_payment_item
+    <set>
+      <if test="record.transactionId != null">
+        transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ebayItemTxnId != null">
+        ebay_item_txn_id = #{record.ebayItemTxnId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingAmt != null">
+        shipping_amt = #{record.shippingAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.handlingAmt != null">
+        handling_amt = #{record.handlingAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponId != null">
+        coupon_id = #{record.couponId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponAmt != null">
+        coupon_amt = #{record.couponAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponAmtCurrency != null">
+        coupon_amt_currency = #{record.couponAmtCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amt != null">
+        amt = #{record.amt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdOn != null">
+        created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null">
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedOn != null">
+        updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteInd != null">
+        delete_ind = #{record.deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update transaction_payment_item
+    set transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+      ebay_item_txn_id = #{record.ebayItemTxnId,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=VARCHAR},
+      shipping_amt = #{record.shippingAmt,jdbcType=DECIMAL},
+      handling_amt = #{record.handlingAmt,jdbcType=DECIMAL},
+      coupon_id = #{record.couponId,jdbcType=VARCHAR},
+      coupon_amt = #{record.couponAmt,jdbcType=DECIMAL},
+      coupon_amt_currency = #{record.couponAmtCurrency,jdbcType=VARCHAR},
+      amt = #{record.amt,jdbcType=DECIMAL},
+      version = #{record.version,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{record.deleteInd,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.TransactionPaymentItemDbObject">
+    update transaction_payment_item
+    <set>
+      <if test="ebayItemTxnId != null">
+        ebay_item_txn_id = #{ebayItemTxnId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingAmt != null">
+        shipping_amt = #{shippingAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="handlingAmt != null">
+        handling_amt = #{handlingAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="couponId != null">
+        coupon_id = #{couponId,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmt != null">
+        coupon_amt = #{couponAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="couponAmtCurrency != null">
+        coupon_amt_currency = #{couponAmtCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        created_on = #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        delete_ind = #{deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.TransactionPaymentItemDbObject">
+    update transaction_payment_item
+    set ebay_item_txn_id = #{ebayItemTxnId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=VARCHAR},
+      shipping_amt = #{shippingAmt,jdbcType=DECIMAL},
+      handling_amt = #{handlingAmt,jdbcType=DECIMAL},
+      coupon_id = #{couponId,jdbcType=VARCHAR},
+      coupon_amt = #{couponAmt,jdbcType=DECIMAL},
+      coupon_amt_currency = #{couponAmtCurrency,jdbcType=VARCHAR},
+      amt = #{amt,jdbcType=DECIMAL},
+      version = #{version,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{deleteInd,jdbcType=CHAR}
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

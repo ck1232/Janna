@@ -1,5 +1,7 @@
 package com.JJ.service.usermanagement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,34 +9,58 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.UserMapper;
-import com.JJ.model.User;
-import com.JJ.model.UserExample;
+import com.JJ.controller.common.vo.UserVO;
+import com.JJ.dao.UserDbObjectMapper;
+import com.JJ.model.UserDbObject;
+import com.JJ.model.UserDbObjectExample;
 
 @Service
 @Transactional
 public class UserManagementService {
 	
-	private UserMapper userMapper;
+	private UserDbObjectMapper userMapper;
 	
 	@Autowired
-	public UserManagementService(UserMapper userMapper) {
+	public UserManagementService(UserDbObjectMapper userMapper) {
 		this.userMapper = userMapper;
 	}
 	
-	public User findById(Integer id) {
-		User user = userMapper.selectByPrimaryKey(id);
-		user.setPassword(null);
-		return user;
+	public UserVO findById(Integer id) {
+		UserDbObject user = userMapper.selectByPrimaryKey(id);
+		List<UserVO> userVOList = convertToUserVOList(Arrays.asList(user));
+		if(userVOList != null && userVOList.size() > 0){
+			return userVOList.get(0);
+		}
+		return new UserVO();
 	}
 	
-	public User findByUserId(String userid) {
-		UserExample example = new UserExample();
-		example.createCriteria().andUseridEqualTo(userid);
-		List<User> users = userMapper.selectByExample(example);
-		if(users != null && users.size() > 0){
-			User user = users.get(0);
-			user.setPassword(null);
+	private List<UserVO> convertToUserVOList(List<UserDbObject> dbObjList) {
+		List<UserVO> list = new ArrayList<UserVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(UserDbObject dbObj : dbObjList){
+				UserVO vo = new UserVO();
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setEmailAddress(dbObj.getEmailAddress());
+				vo.setEnabled(dbObj.getEnabled());
+				vo.setLastLogin(dbObj.getLastLogin());
+				vo.setName(dbObj.getName());
+				vo.setPassword(dbObj.getPassword());
+				vo.setStatus(dbObj.getStatus());
+				vo.setUserId(dbObj.getUserId());
+				vo.setUserName(dbObj.getUserName());
+				list.add(vo);
+			}
+		}
+		return list;
+	}
+
+	public UserVO findByUserName(String userName) {
+		UserDbObjectExample example = new UserDbObjectExample();
+		example.createCriteria().andUserNameEqualTo(userName);
+		List<UserDbObject> dbObjList = userMapper.selectByExample(example);
+		List<UserVO> voList = convertToUserVOList(dbObjList);
+		if(voList != null && voList.size() > 0){
+			UserVO user = voList.get(0);
 			return user;
 		}else{
 			return null;
@@ -42,27 +68,51 @@ public class UserManagementService {
 	}
 	
 
-	public List<User> getAllUsers() {
-		UserExample userExample = new UserExample();
+	public List<UserVO> getAllUsers() {
+		UserDbObjectExample userExample = new UserDbObjectExample();
 		userExample.createCriteria();
-		List<User> userList = userMapper.selectByExample(userExample);
-		return userList;
+		List<UserDbObject> userList = userMapper.selectByExample(userExample);
+		return convertToUserVOList(userList);
 	}
 	
-	public void saveUser(User user) {
+	public void saveUser(UserVO user) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(hashedPassword);
-		userMapper.insert(user);
+		List<UserDbObject> dbObjList = convertToUserDbObjectList(Arrays.asList(user));
+		if(dbObjList != null && dbObjList.size() > 0){
+			userMapper.insert(dbObjList.get(0));
+		}
+		
 	}
 	
-	public void resetPassword(String userid, String password){
+	private List<UserDbObject> convertToUserDbObjectList(List<UserVO> voList) {
+		List<UserDbObject> list = new ArrayList<UserDbObject>();
+		if(voList != null && voList.size() > 0){
+			for(UserVO obj : voList){
+				UserDbObject dbObj = new UserDbObject();
+				dbObj.setDeleteInd(obj.getDeleteInd());
+				dbObj.setEmailAddress(obj.getEmailAddress());
+				dbObj.setEnabled(obj.getEnabled());
+				dbObj.setLastLogin(obj.getLastLogin());
+				dbObj.setName(obj.getName());
+				dbObj.setPassword(obj.getPassword());
+				dbObj.setStatus(obj.getStatus());
+				dbObj.setUserId(obj.getUserId());
+				dbObj.setUserName(obj.getUserName());
+				list.add(dbObj);
+			}
+		}
+		return list;
+	}
+
+	public void resetPassword(String userName, String password){
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
-		UserExample example = new UserExample();
-		User user = new User();
+		UserDbObjectExample example = new UserDbObjectExample();
+		UserDbObject user = new UserDbObject();
 		user.setPassword(hashedPassword);
-		example.createCriteria().andUseridEqualTo(userid);
+		example.createCriteria().andUserNameEqualTo(userName);
 		userMapper.updateByExampleSelective(user, example);
 	}
 	
@@ -70,9 +120,13 @@ public class UserManagementService {
 		userMapper.deleteByPrimaryKey(id);
 	}
 	
-	public void updateUser(User user) {
+	public void updateUser(UserVO user) {
 		user.setPassword(null);
-		userMapper.updateByPrimaryKeySelective(user);
+		List<UserDbObject> dbObjList = convertToUserDbObjectList(Arrays.asList(user));
+		if(dbObjList != null && dbObjList.size() > 0){
+			userMapper.updateByPrimaryKeySelective(dbObjList.get(0));
+		}
+		
 	}
 	
 	/*public List<User> getAllUsersById(List<Integer> idList) {

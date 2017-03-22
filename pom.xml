@@ -237,4 +237,7 @@
   		</dependency>
   	</dependencies>
   </dependencyManagement>
+  <properties>
+  	<mybatis.generator.overwrite>true</mybatis.generator.overwrite>
+  </properties>
 </project>

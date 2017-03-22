@@ -38,12 +38,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.common.vo.JsonResponseVO;
+import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.PaymentModeLookup;
-import com.JJ.model.FileMeta;
 import com.JJ.model.Invoice;
-import com.JJ.model.JsonResponse;
 import com.JJ.model.Paymentdetail;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
@@ -62,7 +63,7 @@ public class InvoiceManagementController {
 	private InvoiceSearchValidator invoiceSearchValidator;
 	private PaymentModeLookup paymentModeLookup;
 	List<Invoice> invoiceList;
-	InvoiceVo invoiceVo;
+	InvoiceVO invoiceVo;
 	InvoiceSearchCriteria searchCriteria;
 	Map<String,String> statusList;
 	
@@ -84,7 +85,7 @@ public class InvoiceManagementController {
     public String listInvoice(Model model) {  
     	logger.debug("loading listInvoice");
     	
-    	invoiceVo = new InvoiceVo();
+    	invoiceVo = new InvoiceVO();
     	searchCriteria = new InvoiceSearchCriteria();
     	
     	statusList = new LinkedHashMap<String,String>();
@@ -137,7 +138,7 @@ public class InvoiceManagementController {
 	}
 	
 	@RequestMapping(value = "/uploadFile",method = RequestMethod.POST)
-	public @ResponseBody LinkedList<FileMeta> upload(MultipartHttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody LinkedList<FileMetaVO> upload(MultipartHttpServletRequest request, HttpServletResponse response) {
         Iterator<String> itr =  request.getFileNames();
         MultipartFile mpf = null;
         while(itr.hasNext()){
@@ -146,7 +147,7 @@ public class InvoiceManagementController {
             	return null;
             }
             
-            FileMeta fileMeta = new FileMeta();
+            FileMetaVO fileMeta = new FileMetaVO();
             fileMeta.setFileName(mpf.getOriginalFilename());
             fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
             fileMeta.setFileType(mpf.getContentType());
@@ -158,7 +159,7 @@ public class InvoiceManagementController {
            }
             if(invoiceVo != null){
             	if(invoiceVo.getInvoiceList() == null){
-            		invoiceVo.setInvoiceList(new LinkedList<FileMeta>());
+            		invoiceVo.setInvoiceList(new LinkedList<FileMetaVO>());
             	}
             	fileMeta.setSequence(invoiceVo.getInvoiceList().size() + 1);
             	invoiceVo.getInvoiceList().add(fileMeta);
@@ -170,11 +171,11 @@ public class InvoiceManagementController {
 	}
 	
 	@RequestMapping(value = "/removeUploadFile",method = RequestMethod.POST)
-	public @ResponseBody JsonResponse removeUploadFile(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
+	public @ResponseBody JsonResponseVO removeUploadFile(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
 		if(invoiceVo != null && invoiceVo.getInvoiceList() != null && invoiceVo.getInvoiceList().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
-			Iterator<FileMeta> iterator = invoiceVo.getInvoiceList().iterator();
+			Iterator<FileMetaVO> iterator = invoiceVo.getInvoiceList().iterator();
 			while(iterator.hasNext()){
-				FileMeta file = iterator.next();
+				FileMetaVO file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
 					iterator.remove();
 					break;
@@ -182,13 +183,13 @@ public class InvoiceManagementController {
 			}
 			reshuffleFiles(invoiceVo.getInvoiceList());
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/sortFile", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse sortFile(@RequestBody List<String> orderList) {
+	public @ResponseBody JsonResponseVO sortFile(@RequestBody List<String> orderList) {
 		if(invoiceVo.getInvoiceList() != null && invoiceVo.getInvoiceList().size() > 0){
-			for(FileMeta file : invoiceVo.getInvoiceList()){
+			for(FileMetaVO file : invoiceVo.getInvoiceList()){
 				int index = orderList.indexOf(file.getFileName());
 				if(index < 0){
 					file.setSequence(0);
@@ -199,10 +200,10 @@ public class InvoiceManagementController {
 			}
 			reshuffleFiles(invoiceVo.getInvoiceList());
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 
-	private void reshuffleFiles(LinkedList<FileMeta> files) {
+	private void reshuffleFiles(LinkedList<FileMetaVO> files) {
 		if(files != null && files.size() > 0){
 			Collections.sort(files,new FileCompare());
 			for(int i=0;i<files.size(); i++){
@@ -344,10 +345,10 @@ public class InvoiceManagementController {
 	
 	
 	
-	class FileCompare implements Comparator<FileMeta>{
+	class FileCompare implements Comparator<FileMetaVO>{
 
 		@Override
-		public int compare(FileMeta o1, FileMeta o2) {
+		public int compare(FileMetaVO o1, FileMetaVO o2) {
 			if(o1.getSequence() != null && o2.getSequence() != null){
 				return o1.getSequence().compareTo(o2.getSequence());
 			}else if(o1.getSequence() != null){

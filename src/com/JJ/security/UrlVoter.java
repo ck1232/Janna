@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +23,17 @@ public class UrlVoter implements AccessDecisionVoter<FilterInvocation>{
 	
 	@Autowired
 	private PermissionManagementService permissionManagementService;
-	
+	private static final Logger logger = Logger.getLogger(UrlVoter.class);
     @Override
     public int vote(Authentication authentication, FilterInvocation fi, Collection<ConfigAttribute> collection) {
     	String url = fi.getRequestUrl();
+    	String method = fi.getHttpRequest().getMethod();
+    	String username = "GUEST";
+    	Object userObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(userObj instanceof UserDetails){
+			UserDetails user = (UserDetails)userObj ;
+			username = user.getUsername();
+		}
     	HttpSession session = fi.getRequest().getSession();
     	@SuppressWarnings("unchecked")
 		List<String> allowedUrlList = (List<String>) session.getAttribute("allowedUrl");
@@ -32,22 +42,24 @@ public class UrlVoter implements AccessDecisionVoter<FilterInvocation>{
     	if(index >= 0){
     		url = url.substring(0,index);
     	}
-    	System.out.println("voter:"+url);
     	
     	if(authentication == null ){
+    		logger.info("user:"+username + ", url:"+ url +" ~"+ method +", permission:DENIED");
     		return ACCESS_DENIED;
     	}
     	if(url.equalsIgnoreCase("/") || url.equalsIgnoreCase("/dashboard")){
+    		logger.info("user:"+username + ", url:"+ url +" ~"+ method +", permission:GRANTED");
     		return ACCESS_GRANTED;
     	}
     	if(allowedUrlList != null && allowedUrlList.size() > 0){
     		for(String allowedUrl : allowedUrlList){
         		if(allowedUrl.contains(url) || url.contains(allowedUrl)){
-        			System.out.println("allowed url:"+allowedUrl);
+        			logger.info("user:"+username + ", url:"+ url +" ~"+ method +", permission:GRANTED");
         			return ACCESS_GRANTED;
         		}
         	}
     	}
+    	logger.info("user:"+username + ", url:"+ url +" ~"+ method +", permission:ABSTAIN");
     	return ACCESS_ABSTAIN;
         
 //            return ACCESS_DENIED; // Abstain Based on your requirement

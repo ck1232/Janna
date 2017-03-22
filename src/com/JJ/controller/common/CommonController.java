@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.common.vo.MenuVO;
+import com.JJ.controller.common.vo.ModuleVO;
+import com.JJ.controller.common.vo.SubModulePermissionVO;
+import com.JJ.controller.common.vo.SubModuleVO;
+import com.JJ.controller.common.vo.UserRoleVO;
+import com.JJ.controller.common.vo.UserVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Menu;
-import com.JJ.model.Module;
-import com.JJ.model.Submodule;
-import com.JJ.model.Submodulepermission;
-import com.JJ.model.User;
-import com.JJ.model.UserRole;
 import com.JJ.service.common.CommonService;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
@@ -67,7 +66,6 @@ public class CommonController {
 	private UserManagementService userManagementService;
 	private PermissionManagementService permissionManagementService;
 	private CommonService commonService;
-	private BasicDataSource dataSource;
 	
 	@Value("${jdbc.driver}")
 	private String driver;
@@ -84,14 +82,13 @@ public class CommonController {
 	@Autowired
 	public CommonController(SubModuleManagementService subModuleManagementService, ModuleManagementService moduleManagementService,
 			RoleAssignmentService roleAssignmentService, UserManagementService userManagementService,
-			PermissionManagementService permissionManagementService, CommonService commonService, BasicDataSource dataSource){
+			PermissionManagementService permissionManagementService, CommonService commonService){
 		this.subModuleManagementService = subModuleManagementService;
 		this.moduleManagementService = moduleManagementService;
 		this.roleAssignmentService = roleAssignmentService;
 		this.userManagementService = userManagementService;
 		this.permissionManagementService = permissionManagementService;
 		this.commonService = commonService;
-		this.dataSource = dataSource;
 	}
 	
 	@RequestMapping(value={"/","/dashboard"})  
@@ -114,46 +111,46 @@ public class CommonController {
         return "dashboard";  
     }
 	
-	private List<Submodule> getAllSubModuleByUserId(String userId){
+	private List<SubModuleVO> getAllSubModuleByUserId(String userId){
 		List<Integer> roleIdList = new ArrayList<Integer>();
 		List<Integer> subModuleIdList = new ArrayList<Integer>();
-		User dbUser = userManagementService.findByUserId(userId);
+		UserVO dbUser = userManagementService.findByUserName(userId);
 		if(dbUser == null){
 			return null;
 		}
-		List<UserRole> roleList = roleAssignmentService.getRoleListByUserId(dbUser.getId());
-		for(UserRole userRole: roleList){
-			roleIdList.add(userRole.getRoleid());
+		List<UserRoleVO> roleList = roleAssignmentService.getRoleListByUserId(dbUser.getUserId());
+		for(UserRoleVO userRole: roleList){
+			roleIdList.add(userRole.getRoleId());
 		}
 		if(roleIdList.size() == 0){
 			return null;
 		}
-		List<Submodulepermission> submodulepermissionList = permissionManagementService.getSubmoduleByRole(roleIdList);
-		for(Submodulepermission obj : submodulepermissionList){
-			subModuleIdList.add(obj.getSubmoduleid());
+		List<SubModulePermissionVO> submodulepermissionList = permissionManagementService.getSubmoduleByRole(roleIdList);
+		for(SubModulePermissionVO obj : submodulepermissionList){
+			subModuleIdList.add(obj.getSubmoduleId());
 		}
 		if(subModuleIdList.size() == 0){
 			return null;
 		}
 		return subModuleManagementService.getSubmodulesById(subModuleIdList);
 	}
-	public Menu populateMenu(UserDetails user){
-		Menu menu = new Menu();
+	public MenuVO populateMenu(UserDetails user){
+		MenuVO menu = new MenuVO();
 		
-		List<Submodule> subModuleList = getAllSubModuleByUserId(user.getUsername());
-		List<Module> moduleList = moduleManagementService.getAllModules();
+		List<SubModuleVO> subModuleList = getAllSubModuleByUserId(user.getUsername());
+		List<ModuleVO> moduleList = moduleManagementService.getAllModules();
 //		List<Submodule> submoduleList = subModuleManagementService.getAllSubmodules();
 		
 		if(subModuleList != null && subModuleList.size() > 0){
-			Map<Integer, List<Submodule>> subModuleMap = new HashMap<Integer, List<Submodule>>();
-			for(Submodule subModule : subModuleList){
-				if(subModuleMap.get(subModule.getParentid()) == null){
-					subModuleMap.put(subModule.getParentid(), new ArrayList<Submodule>());
+			Map<Integer, List<SubModuleVO>> subModuleMap = new HashMap<Integer, List<SubModuleVO>>();
+			for(SubModuleVO subModule : subModuleList){
+				if(subModuleMap.get(subModule.getParentId()) == null){
+					subModuleMap.put(subModule.getParentId(), new ArrayList<SubModuleVO>());
 				}
-				subModuleMap.get(subModule.getParentid()).add(subModule);
+				subModuleMap.get(subModule.getParentId()).add(subModule);
 			}
-			for(Module module : moduleList){
-				module.setSubModuleList(subModuleMap.get(module.getId()));
+			for(ModuleVO module : moduleList){
+				module.setSubModuleList(subModuleMap.get(module.getModuleId()));
 			}
 			
 		}

@@ -95,7 +95,7 @@ public class ProductSubCategoryManagementController {
 			return "redirect:listSubCategory/"+id;
     	}
     	Productsubcategory productsubcategory = new Productsubcategory();
-    	productsubcategory.setDeleteind(GeneralUtils.NOT_DELETED);
+    	productsubcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
     	productsubcategory.setProductcategoryid(new Integer(id));
     	productsubcategory.setDisplayind(true);
     	model.addAttribute("subcategoryForm", productsubcategory);

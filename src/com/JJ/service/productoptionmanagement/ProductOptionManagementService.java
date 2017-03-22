@@ -46,21 +46,21 @@ public class ProductOptionManagementService {
 	
 	public void deleteProductoption(Integer id) {
 		Productoption productoption = findById(id);
-		if(productoption.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			productoption.setDeleteind(GeneralUtils.DELETED);
+		if(productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			productoption.setDeleteInd(GeneralUtils.DELETED);
 			productoptionMapper.updateByPrimaryKey(productoption);
 		}
 	}
 	
 	public void deleteProductoption(Productoption productoption) {
-		if(productoption.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			productoption.setDeleteind(GeneralUtils.DELETED);
+		if(productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			productoption.setDeleteInd(GeneralUtils.DELETED);
 			productoptionMapper.updateByPrimaryKey(productoption);
 		}
 	}
 	
 	public void updateProductoption(Productoption productoption) {
-		if(productoption.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			productoptionMapper.updateByPrimaryKeySelective(productoption);
 	}
 	 

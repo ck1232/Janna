@@ -1,5 +1,7 @@
 package com.JJ.service.batchintakemanagement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.BatchstockintakeMapper;
+import com.JJ.controller.batchintakemanagement.vo.BatchProductRsVO;
+import com.JJ.controller.batchintakemanagement.vo.BatchStockIntakeVO;
+import com.JJ.controller.batchintakemanagement.vo.ProductInventoryVO;
+import com.JJ.dao.BatchStockIntakeDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.BatchproductRs;
-import com.JJ.model.Batchstockintake;
-import com.JJ.model.BatchstockintakeExample;
-import com.JJ.model.Productinventory;
+import com.JJ.model.BatchStockIntakeDbObject;
+import com.JJ.model.BatchStockIntakeDbObjectExample;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 
@@ -20,86 +23,136 @@ import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class BatchIntakeManagementService {
 	
-	private BatchstockintakeMapper batchStockIntakeMapper;
+	private BatchStockIntakeDbObjectMapper batchStockIntakeDbObjectMapper;
 	private BatchProductRSManagementService batchProductRSManagementService;
 	private InventoryProductManagementService inventoryService;
 	
 	@Autowired
-	public BatchIntakeManagementService(BatchstockintakeMapper batchStockIntakeMapper, 
+	public BatchIntakeManagementService(BatchStockIntakeDbObjectMapper batchStockIntakeDbObjectMapper, 
 			BatchProductRSManagementService batchProductRSManagementService,
 			InventoryProductManagementService inventoryService) {
-		this.batchStockIntakeMapper = batchStockIntakeMapper;
+		this.batchStockIntakeDbObjectMapper = batchStockIntakeDbObjectMapper;
 		this.batchProductRSManagementService = batchProductRSManagementService;
 		this.inventoryService = inventoryService;
 	}
 	
-	public Batchstockintake findById(Integer id) {
-		return batchStockIntakeMapper.selectByPrimaryKey(id);
+	public BatchStockIntakeVO findById(Integer id) {
+		BatchStockIntakeDbObject batchStockIntakeDbObject = batchStockIntakeDbObjectMapper.selectByPrimaryKey(id);
+		if(batchStockIntakeDbObject != null && batchStockIntakeDbObject.getBatchId() != null){
+			return convertToBatchStockIntakeVOList(Arrays.asList(batchStockIntakeDbObject)).get(0);
+		}else{
+			return new BatchStockIntakeVO();
+		}
 	}
 	
-	public List<Batchstockintake> findByIdList(List<Integer> idList) {
-		BatchstockintakeExample batchStockIntakeExample = new BatchstockintakeExample();
-		batchStockIntakeExample.createCriteria().andBatchidIn(idList).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		return batchStockIntakeMapper.selectByExample(batchStockIntakeExample);
+	public List<BatchStockIntakeVO> findByIdList(List<Integer> idList) {
+		BatchStockIntakeDbObjectExample batchStockIntakeExample = new BatchStockIntakeDbObjectExample();
+		batchStockIntakeExample.createCriteria().andBatchIdIn(idList).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToBatchStockIntakeVOList(batchStockIntakeDbObjectMapper.selectByExample(batchStockIntakeExample));
 	}
 
-	public List<Batchstockintake> getAllBatchstockintakes() {
-		BatchstockintakeExample batchStockIntakeExample = new BatchstockintakeExample();
-		batchStockIntakeExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		return batchStockIntakeMapper.selectByExample(batchStockIntakeExample);
+	public List<BatchStockIntakeVO> getAllBatchStockIntakes() {
+		BatchStockIntakeDbObjectExample batchStockIntakeExample = new BatchStockIntakeDbObjectExample();
+		batchStockIntakeExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToBatchStockIntakeVOList(batchStockIntakeDbObjectMapper.selectByExample(batchStockIntakeExample));
 	}
-	public void createBatchstockintake(Batchstockintake batchStockIntake, List<Productinventory> inventoryList,
-			List<BatchproductRs> batchProductList){
+	public void createBatchstockintake(BatchStockIntakeVO batchStockIntake, List<ProductInventoryVO> inventoryList,
+			List<BatchProductRsVO> batchProductList){
 		saveBatchstockintake(batchStockIntake);
 		inventoryService.saveInventoryList(inventoryList);
 		if(batchProductList != null && batchProductList.size() > 0){
-			for(BatchproductRs batchProduct : batchProductList){
-				batchProduct.setBatchid(batchStockIntake.getBatchid());
+			for(BatchProductRsVO batchProduct : batchProductList){
+				batchProduct.setBatchId(batchStockIntake.getBatchId());
 				batchProductRSManagementService.saveBatchproduct(batchProduct);
 			}
 		}
 	}
-	public void saveBatchstockintake(Batchstockintake batchStockIntake) {
-		batchStockIntakeMapper.insert(batchStockIntake);
+	public void saveBatchstockintake(BatchStockIntakeVO batchStockIntake) {
+		if(batchStockIntake != null){
+			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntake)).get(0);
+			batchStockIntakeDbObjectMapper.insert(dbObj);
+		}
 	}
 	
-	public void deleteBatchstockintake(Integer id) {
-		Batchstockintake batchStockIntake = findById(id);
-		if(batchStockIntake.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			batchStockIntake.setDeleteind(GeneralUtils.DELETED);
-			batchStockIntakeMapper.updateByPrimaryKey(batchStockIntake);
+	public void deleteBatchStockIntake(Integer id) {
+		BatchStockIntakeVO batchStockIntake = findById(id);
+		if(batchStockIntake != null && batchStockIntake.getDeleteInd() != null &&
+				batchStockIntake.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			BatchStockIntakeDbObject dbObj = new BatchStockIntakeDbObject();
+			dbObj.setBatchId(id);
+			dbObj.setDeleteInd(GeneralUtils.DELETED);
+			batchStockIntakeDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
 	}
 	
 	public void deleteBatchstockintake(List<Integer> idList) {
-		BatchstockintakeExample batchStockIntakeExample = new BatchstockintakeExample();
-		batchStockIntakeExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidIn(idList);
-		Batchstockintake batchStockIntake = new Batchstockintake();
-		batchStockIntake.setDeleteind(GeneralUtils.DELETED);
-		batchStockIntakeMapper.updateByExampleSelective(batchStockIntake, batchStockIntakeExample);
+		BatchStockIntakeDbObjectExample batchStockIntakeExample = new BatchStockIntakeDbObjectExample();
+		batchStockIntakeExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBatchIdIn(idList);
+		BatchStockIntakeDbObject batchStockIntake = new BatchStockIntakeDbObject();
+		batchStockIntake.setDeleteInd(GeneralUtils.DELETED);
+		batchStockIntakeDbObjectMapper.updateByExampleSelective(batchStockIntake, batchStockIntakeExample);
 	}
 	
-	public void updateBatchstockintake(Batchstockintake batchStockIntake) {
-		if(batchStockIntake.getDeleteind().equals(GeneralUtils.NOT_DELETED))
-			batchStockIntakeMapper.updateByPrimaryKeySelective(batchStockIntake);
+	public void updateBatchStockIntake(BatchStockIntakeVO batchStockIntake) {
+		if(batchStockIntake != null && batchStockIntake.getDeleteInd() != null &&
+				batchStockIntake.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntake)).get(0);
+			batchStockIntakeDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
+			
 	}
 	
-	public void editBatchstockintake(Batchstockintake batchStockIntake, List<Integer> idList , List<BatchproductRs> batchProductList, List<Productinventory> productInventoryList){
-		updateBatchstockintake(batchStockIntake);
-		batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchStockIntake.getBatchid(), idList);
+	public void editBatchstockintake(BatchStockIntakeVO batchStockIntake, List<Integer> idList , List<BatchProductRsVO> batchProductList, List<ProductInventoryVO> productInventoryList){
+		updateBatchStockIntake(batchStockIntake);
+		batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchStockIntake.getBatchId(), idList);
 		if(batchProductList != null && batchProductList.size() > 0){
-			for(BatchproductRs batchProduct : batchProductList){
-				batchProduct.setBatchid(batchStockIntake.getBatchid());
+			for(BatchProductRsVO batchProduct : batchProductList){
+				batchProduct.setBatchId(batchStockIntake.getBatchId());
 				batchProductRSManagementService.saveBatchproduct(batchProduct);
 			}
 		}
 		inventoryService.saveInventoryList(productInventoryList);
 	}
 
-	public void deleteBatch(List<Integer> ids, List<Productinventory> productInventoryList) {
+	public void deleteBatch(List<Integer> ids, List<ProductInventoryVO> productInventoryList) {
 		deleteBatchstockintake(ids);
 		batchProductRSManagementService.deleteBatchproduct(ids);
 		inventoryService.saveInventoryList(productInventoryList);
 	}
 	
+	private List<BatchStockIntakeVO> convertToBatchStockIntakeVOList(List<BatchStockIntakeDbObject> batchStockIntakeDbObjectList){
+		List<BatchStockIntakeVO> batchStockIntakeVOList = new ArrayList<BatchStockIntakeVO>();
+		if(batchStockIntakeDbObjectList != null && batchStockIntakeDbObjectList.size() > 0){
+			for(BatchStockIntakeDbObject dbObj : batchStockIntakeDbObjectList){
+				BatchStockIntakeVO batchStockIntakeVO = new BatchStockIntakeVO();
+				batchStockIntakeVO.setAdditionalCost(dbObj.getAdditionalCost());
+				batchStockIntakeVO.setBatchId(dbObj.getBatchId());
+				batchStockIntakeVO.setDeleteInd(dbObj.getDeleteInd());
+				batchStockIntakeVO.setDate(dbObj.getDate());
+				batchStockIntakeVO.setRemarks(dbObj.getRemarks());
+				batchStockIntakeVO.setStorageLocation(dbObj.getStorageLocation());
+				batchStockIntakeVO.setTotalCost(dbObj.getTotalCost());
+				batchStockIntakeVOList.add(batchStockIntakeVO);
+			}
+		}
+		return batchStockIntakeVOList;
+	}
+	
+	private List<BatchStockIntakeDbObject> convertToBatchStockIntakeDbObjectList(List<BatchStockIntakeVO> batchStockIntakeVOList){
+		List<BatchStockIntakeDbObject> batchStockIntakeDbObjectList = new ArrayList<BatchStockIntakeDbObject>();
+		if(batchStockIntakeVOList != null && batchStockIntakeVOList.size() > 0){
+			for(BatchStockIntakeVO vo : batchStockIntakeVOList){
+				BatchStockIntakeVO batchStockIntakeVO = new BatchStockIntakeVO();
+				batchStockIntakeVO.setAdditionalCost(vo.getAdditionalCost());
+				batchStockIntakeVO.setBatchId(vo.getBatchId());
+				batchStockIntakeVO.setDeleteInd(vo.getDeleteInd());
+				batchStockIntakeVO.setDate(vo.getDate());
+				batchStockIntakeVO.setRemarks(vo.getRemarks());
+				batchStockIntakeVO.setStorageLocation(vo.getStorageLocation());
+				batchStockIntakeVO.setTotalCost(vo.getTotalCost());
+				batchStockIntakeVOList.add(batchStockIntakeVO);
+			}
+		}
+		return batchStockIntakeDbObjectList;
+	}
 }

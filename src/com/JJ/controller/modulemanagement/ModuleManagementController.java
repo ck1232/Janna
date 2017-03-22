@@ -59,7 +59,7 @@ public class ModuleManagementController {
     public String showAddModuleForm(Model model) {  
     	logger.debug("loading showAddModuleForm");
     	Module module = new Module();
-    	module.setDeleteind(GeneralUtils.NOT_DELETED);
+    	module.setDeleteInd(GeneralUtils.NOT_DELETED);
     	
     	model.addAttribute("moduleForm", module);
         return "createModule";  

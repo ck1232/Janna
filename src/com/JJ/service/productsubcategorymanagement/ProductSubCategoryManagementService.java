@@ -46,8 +46,8 @@ public class ProductSubCategoryManagementService {
 	
 	public void deleteProductSubCategory(Integer id) {
 		Productsubcategory productsubcategory = findById(id);
-		if(productsubcategory.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			productsubcategory.setDeleteind(GeneralUtils.DELETED);
+		if(productsubcategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			productsubcategory.setDeleteInd(GeneralUtils.DELETED);
 			productSubCategoryMapper.updateByPrimaryKey(productsubcategory);
 		}
 	}
@@ -55,8 +55,8 @@ public class ProductSubCategoryManagementService {
 	public void deleteProductSubCategoryByCategory(Integer id) {
 		List<Productsubcategory> subcategoryList = getAllProductSubCategoryByCategory(id);
 		for(Productsubcategory psc: subcategoryList){
-			if(psc.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-				psc.setDeleteind(GeneralUtils.DELETED);
+			if(psc.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+				psc.setDeleteInd(GeneralUtils.DELETED);
 				productSubCategoryMapper.updateByPrimaryKey(psc);
 			}
 		}
@@ -65,7 +65,7 @@ public class ProductSubCategoryManagementService {
 	
 	
 	public void updateProductsubcategory(Productsubcategory productSubCategory) {
-		if(productSubCategory.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(productSubCategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			productSubCategoryMapper.updateByPrimaryKeySelective(productSubCategory);
 	}
 

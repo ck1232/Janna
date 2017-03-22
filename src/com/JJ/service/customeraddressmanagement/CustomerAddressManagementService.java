@@ -44,14 +44,14 @@ public class CustomerAddressManagementService {
 	
 	public void deleteCustomerAddress(Integer id) {
 		Customeraddress customerAddress = findById(id);
-		if(customerAddress.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			customerAddress.setDeleteind(GeneralUtils.DELETED);
+		if(customerAddress.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			customerAddress.setDeleteInd(GeneralUtils.DELETED);
 			customerAddressMapper.updateByPrimaryKey(customerAddress);
 		}
 	}
 	
 	public void updateCustomerAddress(Customeraddress customerAddress) {
-		if(customerAddress.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(customerAddress.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			customerAddressMapper.updateByPrimaryKeySelective(customerAddress);
 	}
 	

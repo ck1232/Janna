@@ -84,7 +84,7 @@ public class ProductOptionManagementController {
 					return "createProductOption";
 				}
 			}
-			productoption.setDeleteind(GeneralUtils.NOT_DELETED);
+			productoption.setDeleteInd(GeneralUtils.NOT_DELETED);
 			productOptionManagementService.saveProductoption(productoption);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product option added successfully!");

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.productmanagement.vo.SubOptionVo;
+import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.dao.ProductMapper;
 import com.JJ.dao.ProductsuboptionMapper;
 import com.JJ.helper.GeneralUtils;
@@ -66,26 +66,26 @@ public class ProductSubOptionManagementService {
 	
 	public void deleteProductsuboption(Integer id) {
 		Productsuboption productsuboption = findById(id);
-		if(productsuboption.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			productsuboption.setDeleteind(GeneralUtils.DELETED);
+		if(productsuboption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			productsuboption.setDeleteInd(GeneralUtils.DELETED);
 			productsuboptionMapper.updateByPrimaryKey(productsuboption);
 		}
 	}
 	
 	public void deleteProductsuboption(Productsuboption productsuboption) {
-		if(productsuboption.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			productsuboption.setDeleteind(GeneralUtils.DELETED);
+		if(productsuboption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			productsuboption.setDeleteInd(GeneralUtils.DELETED);
 			productsuboptionMapper.updateByPrimaryKey(productsuboption);
 		}
 	}
 	
 	public void updateProductoption(Productsuboption productsuboption) {
-		if(productsuboption.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(productsuboption.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			productsuboptionMapper.updateByPrimaryKeySelective(productsuboption);
 	}
 	
-	public SubOptionVo convertSubOptionToVo(Productsuboption suboption){
-		SubOptionVo vo = new SubOptionVo();
+	public SubOptionVO convertSubOptionToVo(Productsuboption suboption){
+		SubOptionVO vo = new SubOptionVO();
 		vo.setSubOptionId(suboption.getProductsuboptionid());
 		vo.setSubOptionName(suboption.getName());
 		return vo;

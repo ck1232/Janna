@@ -39,14 +39,14 @@ public class PromotionManagementService {
 	
 	public void deletePromotion(Integer id) {
 		Promotion promotion = findById(id);
-		if(promotion.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			promotion.setDeleteind(GeneralUtils.DELETED);
+		if(promotion.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			promotion.setDeleteInd(GeneralUtils.DELETED);
 			promotionMapper.updateByPrimaryKey(promotion);
 		}
 	}
 	
 	public void updatePromotion(Promotion promotion) {
-		if(promotion.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(promotion.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			promotionMapper.updateByPrimaryKeySelective(promotion);
 	}
 	 

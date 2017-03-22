@@ -39,14 +39,14 @@ public class ProductCategoryManagementService {
 	
 	public void deleteProductCategory(Integer id) {
 		Productcategory productcategory = findById(id);
-		if(productcategory.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			productcategory.setDeleteind(GeneralUtils.DELETED);
+		if(productcategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			productcategory.setDeleteInd(GeneralUtils.DELETED);
 			productCategoryMapper.updateByPrimaryKey(productcategory);
 		}
 	}
 	
 	public void updateProductcategory(Productcategory productCategory) {
-		if(productCategory.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(productCategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			productCategoryMapper.updateByPrimaryKeySelective(productCategory);
 	}
 }

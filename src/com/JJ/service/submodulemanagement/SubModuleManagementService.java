@@ -1,81 +1,133 @@
 package com.JJ.service.submodulemanagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.SubmoduleMapper;
+import com.JJ.controller.common.vo.SubModuleVO;
+import com.JJ.dao.SubModuleDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Submodule;
-import com.JJ.model.SubmoduleExample;
+import com.JJ.model.SubModuleDbObject;
+import com.JJ.model.SubModuleDbObjectExample;
 
 @Service
 @Transactional
 public class SubModuleManagementService {
 	
-	private SubmoduleMapper submoduleMapper;
+	private SubModuleDbObjectMapper subModuleDbObjectMapper;
 	
 	@Autowired
-	public SubModuleManagementService(SubmoduleMapper roleMapper) {
-		this.submoduleMapper = roleMapper;
+	public SubModuleManagementService(SubModuleDbObjectMapper subModuleDbObjectMapper) {
+		this.subModuleDbObjectMapper = subModuleDbObjectMapper;
 	}
 	
-	public Submodule findById(Integer id) {
-		return submoduleMapper.selectByPrimaryKey(id);
+	public SubModuleVO findById(Integer id) {
+		SubModuleDbObject dbObj = subModuleDbObjectMapper.selectByPrimaryKey(id);
+		List<SubModuleVO> voList = convertToSubModuleVOList(Arrays.asList(dbObj));
+		if(voList != null && voList.size() > 0){
+			return voList.get(0);
+		}
+		return new SubModuleVO();
 	}
 
-	public List<Submodule> getAllSubmodules() {
-		SubmoduleExample submoduleExample = new SubmoduleExample();
-		submoduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
-		return submoduleList;
-	}
-	public List<Submodule> getSubmodulesById(List<Integer> subModuleList) {
-		if(subModuleList == null || subModuleList.size() == 0){
-			return new ArrayList<Submodule>();
+	private List<SubModuleVO> convertToSubModuleVOList(
+			List<SubModuleDbObject> dbObjList) {
+		List<SubModuleVO> voList = new ArrayList<SubModuleVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(SubModuleDbObject dbObj : dbObjList){
+				SubModuleVO vo = new SubModuleVO();
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setIcon(dbObj.getIcon());
+				vo.setName(dbObj.getName());
+				vo.setParentId(dbObj.getParentId());
+				vo.setSubmoduleId(dbObj.getSubmoduleId());
+				vo.setUrl(dbObj.getUrl());
+				voList.add(vo);
+			}
 		}
-		SubmoduleExample submoduleExample = new SubmoduleExample();
-		submoduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andIdIn(subModuleList);
-		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
-		return submoduleList;
+		return voList;
+	}
+
+	public List<SubModuleVO> getAllSubmodules() {
+		SubModuleDbObjectExample submoduleExample = new SubModuleDbObjectExample();
+		submoduleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<SubModuleDbObject> submoduleList = subModuleDbObjectMapper.selectByExample(submoduleExample);
+		return convertToSubModuleVOList(submoduleList);
+	}
+	public List<SubModuleVO> getSubmodulesById(List<Integer> subModuleList) {
+		if(subModuleList != null && subModuleList.size() == 0){
+			SubModuleDbObjectExample submoduleExample = new SubModuleDbObjectExample();
+			submoduleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSubmoduleIdIn(subModuleList);
+			List<SubModuleDbObject> submoduleList = subModuleDbObjectMapper.selectByExample(submoduleExample);
+			return convertToSubModuleVOList(submoduleList);
+		}
+		return new ArrayList<SubModuleVO>();
 	}
 	
-	public List<Submodule> getAllSubmodulesByModule(Integer moduleid) {
-		SubmoduleExample submoduleExample = new SubmoduleExample();
-		submoduleExample.createCriteria().andParentidEqualTo(moduleid)
-										.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
-		return submoduleList;
+	public List<SubModuleVO> getAllSubmodulesByModule(Integer moduleid) {
+		SubModuleDbObjectExample submoduleExample = new SubModuleDbObjectExample();
+		submoduleExample.createCriteria().andParentIdEqualTo(moduleid).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<SubModuleDbObject> submoduleList = subModuleDbObjectMapper.selectByExample(submoduleExample);
+		return convertToSubModuleVOList(submoduleList);
 	}
 	
-	public List<Submodule> getAllSubmodulesOrderByClause(String orderByClause) {
-		SubmoduleExample submoduleExample = new SubmoduleExample();
-		submoduleExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+	public List<SubModuleVO> getAllSubmodulesOrderByClause(String orderByClause) {
+		SubModuleDbObjectExample submoduleExample = new SubModuleDbObjectExample();
+		submoduleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		submoduleExample.setOrderByClause(orderByClause);
-		List<Submodule> submoduleList = submoduleMapper.selectByExample(submoduleExample);
-		return submoduleList;
+		List<SubModuleDbObject> submoduleList = subModuleDbObjectMapper.selectByExample(submoduleExample);
+		return convertToSubModuleVOList(submoduleList);
 	}
 	
-	public void saveSubmodule(Submodule submodule) {
-		submoduleMapper.insert(submodule);
+	public void saveSubmodule(SubModuleVO submodule) {
+		List<SubModuleDbObject> dbObjList = convertToSubModuleDbObjectList(Arrays.asList(submodule));
+		if(dbObjList != null && dbObjList.size() > 0){
+			subModuleDbObjectMapper.insert(dbObjList.get(0));
+		}
+		
 	}
 	
 	public void deleteSubmodule(Integer id) {
-		Submodule submodule = findById(id);
-		if(submodule.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			submodule.setDeleteind(GeneralUtils.DELETED);
-			submoduleMapper.updateByPrimaryKey(submodule);
+		SubModuleVO submodule = findById(id);
+		if(submodule != null && submodule.getDeleteInd() != null){
+			if(submodule.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+				SubModuleDbObject dbObj = new SubModuleDbObject();
+				dbObj.setSubmoduleId(id);
+				dbObj.setDeleteInd(GeneralUtils.DELETED);
+				subModuleDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+			}
+		}
+		
+	}
+	
+	public void updateSubmodule(SubModuleVO submodule) {
+		if(submodule != null && submodule.getDeleteInd() != null){
+			if(submodule.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+				List<SubModuleDbObject> dbObjList = convertToSubModuleDbObjectList(Arrays.asList(submodule));
+				subModuleDbObjectMapper.updateByPrimaryKeySelective(dbObjList.get(0));
+			}
 		}
 	}
-	
-	public void updateSubmodule(Submodule submodule) {
-		if(submodule.getDeleteind().equals(GeneralUtils.NOT_DELETED))
-			submoduleMapper.updateByPrimaryKeySelective(submodule);
-	}
 	 
-	
+	private List<SubModuleDbObject> convertToSubModuleDbObjectList(List<SubModuleVO> voList) {
+		List<SubModuleDbObject> dbObjList = new ArrayList<SubModuleDbObject>();
+		if(voList != null && voList.size() > 0){
+			for(SubModuleVO obj : voList){
+				SubModuleDbObject dbObj = new SubModuleDbObject();
+				dbObj.setDeleteInd(obj.getDeleteInd());
+				dbObj.setIcon(obj.getIcon());
+				dbObj.setName(obj.getName());
+				dbObj.setParentId(obj.getParentId());
+				dbObj.setSubmoduleId(obj.getSubmoduleId());
+				dbObj.setUrl(obj.getUrl());
+				dbObjList.add(dbObj);
+			}
+		}
+		return dbObjList;
+	}
 	
 }

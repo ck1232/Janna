@@ -26,37 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.productmanagement.vo.OptionVo;
-import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
-import com.JJ.controller.productmanagement.vo.ProductVo;
-import com.JJ.controller.productmanagement.vo.SubOptionVo;
-import com.JJ.dao.ProductMapper;
-import com.JJ.dao.ProductimageMapper;
-import com.JJ.dao.ProductoptionMapper;
-import com.JJ.dao.ProductspecificationMapper;
-import com.JJ.dao.ProductsuboptionMapper;
-import com.JJ.dao.ProductsuboptionRsMapper;
-import com.JJ.dao.ProducttagsMapper;
-import com.JJ.dao.ViewItemCodeMapper;
+import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
+import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.inventorymanagement.vo.ViewItemCodeVO;
+import com.JJ.controller.productmanagement.vo.OptionVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
+import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.FileMeta;
-import com.JJ.model.Product;
-import com.JJ.model.ProductExample;
-import com.JJ.model.ProductimageExample;
-import com.JJ.model.ProductimageWithBLOBs;
-import com.JJ.model.Productoption;
-import com.JJ.model.ProductoptionExample;
-import com.JJ.model.Productspecification;
-import com.JJ.model.ProductspecificationExample;
-import com.JJ.model.Productsubcategory;
-import com.JJ.model.Productsuboption;
-import com.JJ.model.ProductsuboptionExample;
-import com.JJ.model.ProductsuboptionRs;
-import com.JJ.model.ProductsuboptionRsExample;
-import com.JJ.model.Producttags;
-import com.JJ.model.ProducttagsExample;
-import com.JJ.model.ViewItemCode;
-import com.JJ.model.ViewItemCodeExample;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
@@ -99,7 +75,7 @@ public class ProductService {
 		this.viewItemCodeMapper = viewItemCodeMapper;
 	}
 	
-	public List<Product> getAllProducts() {
+	public List<ProductVO> getAllProducts() {
 		ProductExample productExample = new ProductExample();
 		productExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Product> productList = productMapper.selectByExample(productExample);
@@ -128,7 +104,7 @@ public class ProductService {
 		return new ArrayList<Product>();
 	}
 	
-	public Product getProductsById(Integer productId) {
+	public ProductVO getProductsById(Integer productId) {
 		ProductExample productExample = new ProductExample();
 		ProductExample.Criteria criteria = productExample.createCriteria();
 		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
@@ -142,15 +118,15 @@ public class ProductService {
 		return new Product();
 	}
 	//-------------- START
-	public List<ProductVo> getAllProductsByName(String name) {
-		List<ProductVo> productVoList = new ArrayList<ProductVo>();
+	public List<ProductVO> getAllProductsByName(String name) {
+		List<ProductVO> productVoList = new ArrayList<ProductVO>();
 		ProductExample productExample = new ProductExample();
 		productExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductnameEqualTo(name);
 		List<Product> productList = productMapper.selectByExample(productExample);
 		//get suboptions
 		if(productList.size() > 0) {
 			for(Product product: productList) {
-				ProductVo vo = new ProductVo();
+				ProductVO vo = new ProductVO();
 				List<Productsuboption> suboptionList = productSubOptionManagementService.getAllProductsuboptionsByProductId(product.getProductid());
 				if(suboptionList.size() > 0){
 					Map<Integer, List<Productsuboption>> suboptionMap = new HashMap<Integer, List<Productsuboption>>();
@@ -165,14 +141,14 @@ public class ProductService {
 						}
 					}
 					
-					List<OptionVo> optionvoList = new ArrayList<OptionVo>();
+					List<OptionVO> optionvoList = new ArrayList<OptionVO>();
 					for(Integer optionid: suboptionMap.keySet()){
-						OptionVo option = new OptionVo();
+						OptionVO option = new OptionVO();
 						Productoption po = productOptionManagementService.findById(optionid);
 						option.setOptionId(optionid);
 						option.setOptionName(po.getName());
 						//option.setSequence(po.getSequence());
-						List<SubOptionVo> suboptionvoList = new ArrayList<SubOptionVo>();
+						List<SubOptionVO> suboptionvoList = new ArrayList<SubOptionVO>();
 						for(Productsuboption suboption: suboptionMap.get(optionid)){
 							suboptionvoList.add(productSubOptionManagementService.convertSubOptionToVo(suboption));
 						}
@@ -215,18 +191,18 @@ public class ProductService {
 	
 	
 	
-	public ProductVo getProductVoById(Integer id) {
-		ProductVo product = new ProductVo();
-		List<ProductVo> productList = getAllProductVo(id);
+	public ProductVO getProductVoById(Integer id) {
+		ProductVO product = new ProductVO();
+		List<ProductVO> productList = getAllProductVo(id);
 		if(productList != null && productList.size() > 0){
 			product = productList.get(0);  
 		}
 		return product;
 	}
 		
-	public List<ProductVo> getAllProductVo(Integer id) {
+	public List<ProductVO> getAllProductVo(Integer id) {
 		List<Product> productList = getAllProduct(id);
-		List<ProductVo> productVoList = new ArrayList<ProductVo>();
+		List<ProductVO> productVoList = new ArrayList<ProductVO>();
 		
 		Map<Integer, Productsubcategory> subcategoryMap =  getProductsubcategoryMap();
 		if(productList != null && productList.size() > 0){
@@ -242,7 +218,7 @@ public class ProductService {
 				Productspecification productInfo =  getProductSpecification(product.getProductid());
 				
 				//get Product Option
-				List<OptionVo> optionVoList = getOptionVoList(product.getProductid());
+				List<OptionVO> optionVoList = getOptionVoList(product.getProductid());
 				Collections.sort(optionVoList,new OptionVoCompare());
 				//get ProductTags
 				List<String> tagsList = getProductTags(product.getProductid());
@@ -266,21 +242,21 @@ public class ProductService {
 		return tagsList;
 	}
 
-	public SubOptionVo getSubOptionVo(Integer suboptionId){
+	public SubOptionVO getSubOptionVo(Integer suboptionId){
 		ProductsuboptionExample example = new ProductsuboptionExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductsuboptionidEqualTo(suboptionId);
 		List<Productsuboption> productSubOptionList = productSubOptionMapper.selectByExample(example);
 		if(productSubOptionList != null && productSubOptionList.size() > 0){
 			return convertToSubOptionVo(productSubOptionList.get(0));
 		}
-		return new SubOptionVo();
+		return new SubOptionVO();
 	}
-	private List<OptionVo> getOptionVoList(Integer productId){
+	private List<OptionVO> getOptionVoList(Integer productId){
 		if(productId != null){
-			List<OptionVo> optionVoList = new ArrayList<OptionVo>();
+			List<OptionVO> optionVoList = new ArrayList<OptionVO>();
 			List<Productoption> productOption = productOptionManagementService.getAllProductoptions();
 			Map<Integer , Productoption> optionMap = new HashMap<Integer, Productoption>();
-			Map<Integer, List<SubOptionVo>> suboptionMap = new HashMap<Integer, List<SubOptionVo>>();
+			Map<Integer, List<SubOptionVO>> suboptionMap = new HashMap<Integer, List<SubOptionVO>>();
 			if(productOption != null && productOption.size() > 0){
 				for(Productoption option : productOption){
 					optionMap.put(option.getProductoptionid(), option);
@@ -292,7 +268,7 @@ public class ProductService {
 			if(productSubOptionList != null && productSubOptionList.size() > 0){
 				for(Productsuboption suboption : productSubOptionList){
 					if(!suboptionMap.containsKey(suboption.getProductoptionid())){
-						suboptionMap.put(suboption.getProductoptionid(), new ArrayList<SubOptionVo>());
+						suboptionMap.put(suboption.getProductoptionid(), new ArrayList<SubOptionVO>());
 					}
 					suboptionMap.get(suboption.getProductoptionid()).add(convertToSubOptionVo(suboption));
 				}
@@ -301,7 +277,7 @@ public class ProductService {
 					for(Integer key : suboptionMap.keySet()){
 						Productoption option = optionMap.get(key);
 						if(option != null){
-							OptionVo optionVo = convertToOptionVo(option);
+							OptionVO optionVo = convertToOptionVo(option);
 							optionVo.setSubOptionList(suboptionMap.get(key));
 							optionVoList.add(optionVo);
 						}
@@ -311,11 +287,11 @@ public class ProductService {
 			}
 			
 		}
-		return new ArrayList<OptionVo>();
+		return new ArrayList<OptionVO>();
 	}
 	
-	private OptionVo convertToOptionVo(Productoption option){
-		OptionVo optionVo = new OptionVo();
+	private OptionVO convertToOptionVo(Productoption option){
+		OptionVO optionVo = new OptionVO();
 		if(option != null){
 			optionVo.setOptionId(option.getProductoptionid());
 			optionVo.setOptionName(option.getName());
@@ -323,8 +299,8 @@ public class ProductService {
 		}
 		return optionVo;
 	}
-	private SubOptionVo convertToSubOptionVo(Productsuboption suboption){
-		SubOptionVo subOptionVo = new SubOptionVo();
+	private SubOptionVO convertToSubOptionVo(Productsuboption suboption){
+		SubOptionVO subOptionVo = new SubOptionVO();
 		if(suboption != null){
 			subOptionVo.setDisplay(suboption.getDisplayind()== null ? false: suboption.getDisplayind().booleanValue());
 			subOptionVo.setSubOptionId(suboption.getProductsuboptionid());
@@ -352,8 +328,8 @@ public class ProductService {
 		}
 		return productImageList;
 	}
-	private ProductVo convertToProductVo(Product product, List<ProductimageWithBLOBs> productImageList, Productspecification productInfo, List<OptionVo> optionVoList, List<String> productTagsList){
-		ProductVo productVo = new ProductVo();
+	private ProductVO convertToProductVo(Product product, List<ProductimageWithBLOBs> productImageList, Productspecification productInfo, List<OptionVO> optionVoList, List<String> productTagsList){
+		ProductVO productVo = new ProductVO();
 		if(product != null){
 			productVo.setId(product.getProductid());
 			productVo.setProductName(product.getProductname());
@@ -369,11 +345,11 @@ public class ProductService {
 		return productVo;
 	}
 	
-	private LinkedList<FileMeta> convertToFileMetaList(List<ProductimageWithBLOBs> productImageList){
-		LinkedList<FileMeta> fileMetaList = new LinkedList<FileMeta>();
+	private LinkedList<FileMetaVO> convertToFileMetaList(List<ProductimageWithBLOBs> productImageList){
+		LinkedList<FileMetaVO> fileMetaList = new LinkedList<FileMetaVO>();
 		if(productImageList != null && productImageList.size() > 0){
 			for(ProductimageWithBLOBs image : productImageList){
-				FileMeta fileMeta = new FileMeta();
+				FileMetaVO fileMeta = new FileMetaVO();
 				fileMeta.setBytes(image.getImage());
 				fileMeta.setFileSize(image.getImage().length+"");
 				fileMeta.setFileName(image.getImagename());
@@ -415,7 +391,7 @@ public class ProductService {
 //		imageStagingService.deleteImageStaging(stagingId);
 	}
 	
-	public void saveProduct(ProductVo productVo){
+	public void saveProduct(ProductVO productVo){
 		Product product = convertToProduct(productVo);
 		//insert into product table
 		if(product.getProductid() != null){
@@ -433,7 +409,7 @@ public class ProductService {
 		saveProductTags(productVo, product.getProductid());
 	}
 	
-	private void saveProductTags(ProductVo productVo, Integer productid) {
+	private void saveProductTags(ProductVO productVo, Integer productid) {
 		//delete all tags not in tags list
 		ProducttagsExample deleteExample = new ProducttagsExample();
 		ProducttagsExample.Criteria criteria = deleteExample.createCriteria();
@@ -442,7 +418,7 @@ public class ProductService {
 			criteria.andNameNotIn(productVo.getTags());
 		}
 		Producttags tags = new Producttags();
-		tags.setDeleteind(GeneralUtils.DELETED);
+		tags.setDeleteInd(GeneralUtils.DELETED);
 		productTagsMapper.updateByExampleSelective(tags, deleteExample);
 		if(productVo.getTags() != null && !productVo.getTags().isEmpty()){
 			//get all active tags
@@ -471,25 +447,25 @@ public class ProductService {
 				Producttags dbTag = new Producttags();
 				dbTag.setName(tag);
 				dbTag.setProductid(productId);
-				dbTag.setDeleteind(GeneralUtils.NOT_DELETED);
+				dbTag.setDeleteInd(GeneralUtils.NOT_DELETED);
 				dbList.add(dbTag);
 			}
 		}
 		return dbList;
 	}
 
-	private void saveProductImage(ProductVo productVo, Integer productId){
+	private void saveProductImage(ProductVO productVo, Integer productId){
 		//delete all images
 		ProductimageExample deleteExample = new ProductimageExample();
 		deleteExample.createCriteria().andProductidEqualTo(productId);
 		ProductimageWithBLOBs obj = new ProductimageWithBLOBs();
-		obj.setDeleteind(GeneralUtils.DELETED);
+		obj.setDeleteInd(GeneralUtils.DELETED);
 		productImageMapper.updateByExampleSelective(obj, deleteExample);
 		//table image
-		LinkedList<FileMeta> images = productVo.getImages();
+		LinkedList<FileMetaVO> images = productVo.getImages();
 		List<ProductimageWithBLOBs> productImages = convertToProductImage(productId,images);
 		for(ProductimageWithBLOBs productImage : productImages){
-			productImage.setDeleteind(GeneralUtils.NOT_DELETED);
+			productImage.setDeleteInd(GeneralUtils.NOT_DELETED);
 			if(productImage.getImageid() != null){
 				productImageMapper.updateByPrimaryKeySelective(productImage);
 			}else{
@@ -498,7 +474,7 @@ public class ProductService {
 		}
 	}
 	
-	private void saveProductInfo(ProductVo productVo, Integer productId){
+	private void saveProductInfo(ProductVO productVo, Integer productId){
 		ProductspecificationExample selectSpecExample = new ProductspecificationExample();
 		selectSpecExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductidEqualTo(productId);
 		List<Productspecification> specList = productSpecificationMapper.selectByExample(selectSpecExample);
@@ -510,18 +486,18 @@ public class ProductService {
 		}else{
 			//insert
 			spec.setProductid(productId);
-			spec.setDeleteind(GeneralUtils.NOT_DELETED);
+			spec.setDeleteInd(GeneralUtils.NOT_DELETED);
 			productSpecificationMapper.insertSelective(spec);
 		}
 	}
-	private void saveOption(ProductVo productVo, Integer productId){
+	private void saveOption(ProductVO productVo, Integer productId){
 		
 		//find product option
 		if(productVo.getOptionList() != null && productVo.getOptionList().size() > 0){
 			//get all name
 			List<String> optionNameList = new ArrayList<String>();
-			Map<String, OptionVo> optionMap = new HashMap<String, OptionVo>();
-			for(OptionVo optionVo : productVo.getOptionList()){
+			Map<String, OptionVO> optionMap = new HashMap<String, OptionVO>();
+			for(OptionVO optionVo : productVo.getOptionList()){
 				optionVo.setOptionId(null);
 				optionMap.put(optionVo.getOptionName(), optionVo);
 			}
@@ -534,7 +510,7 @@ public class ProductService {
 			//set id for existing optionVo
 			if(productOptionList != null && productOptionList.size() > 0){
 				for(Productoption productOption : productOptionList){
-					OptionVo optionVo = optionMap.get(productOption.getName());
+					OptionVO optionVo = optionMap.get(productOption.getName());
 					//reset all optionId
 //					optionVo.setOptionId(null);
 					if(optionVo != null){
@@ -543,8 +519,8 @@ public class ProductService {
 				}
 			}
 			//find non exist productoption
-			List<OptionVo> newOptionVo = new ArrayList<OptionVo>();
-			for(OptionVo optionVo : productVo.getOptionList()){
+			List<OptionVO> newOptionVo = new ArrayList<OptionVO>();
+			for(OptionVO optionVo : productVo.getOptionList()){
 				if(optionVo.getOptionId() == null){
 					newOptionVo.add(optionVo);
 				}
@@ -554,7 +530,7 @@ public class ProductService {
 			List<Productoption> newProductOptionList = convertToProductOption(newOptionVo);
 			for(Productoption productOption : newProductOptionList){
 				productOptionMapper.insert(productOption);
-				OptionVo optionVo = optionMap.get(productOption.getName());
+				OptionVO optionVo = optionMap.get(productOption.getName());
 				//set id for newly created optionVo
 				if(optionVo != null){
 					optionVo.setOptionId(productOption.getProductoptionid());
@@ -566,14 +542,14 @@ public class ProductService {
 		ProductsuboptionExample example = new ProductsuboptionExample();
 		example.createCriteria().andProductidEqualTo(productId);
 		Productsuboption subOption = new Productsuboption();
-		subOption.setDeleteind(GeneralUtils.DELETED);
+		subOption.setDeleteInd(GeneralUtils.DELETED);
 		productSubOptionMapper.updateByExampleSelective(subOption, example);
 		
 		
 		//get all subOption
 		if(productVo.getOptionList() != null && productVo.getOptionList().size() > 0){
 			List<Productsuboption> productSubOptionList = new ArrayList<Productsuboption>();
-			for(OptionVo optionVo : productVo.getOptionList()){
+			for(OptionVO optionVo : productVo.getOptionList()){
 				if(optionVo.getSubOptionList() != null && optionVo.getSubOptionList().size() > 0){
 					productSubOptionList.addAll(convertToProductsuboption(productId, optionVo.getOptionId(), optionVo.getSubOptionList()));
 				}
@@ -582,7 +558,7 @@ public class ProductService {
 			ProductsuboptionExample deleteExample = new ProductsuboptionExample();
 			deleteExample.createCriteria().andProductidEqualTo(productId).andProductoptionidEqualTo(0).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 			Productsuboption updateProductSubOption = new Productsuboption();
-			updateProductSubOption.setDeleteind(GeneralUtils.DELETED);
+			updateProductSubOption.setDeleteInd(GeneralUtils.DELETED);
 			productSubOptionMapper.updateByExample(updateProductSubOption, deleteExample);
 			
 			//insert into productsuboption
@@ -596,10 +572,10 @@ public class ProductService {
 					productSubOptionMapper.insert(productSubOption);
 					//set id back to suboptionVo
 					A:
-					for(OptionVo optionVo : productVo.getOptionList()){
+					for(OptionVO optionVo : productVo.getOptionList()){
 						if(optionVo.getOptionId() != null && productSubOption.getProductoptionid() != null &&
 								optionVo.getOptionId().compareTo(productSubOption.getProductoptionid()) == 0){
-							for(SubOptionVo suboptionVO : optionVo.getSubOptionList()){
+							for(SubOptionVO suboptionVO : optionVo.getSubOptionList()){
 								if(suboptionVO.getSubOptionId() == null 
 										&& suboptionVO.getSubOptionName().equals(productSubOption.getName())){
 									suboptionVO.setSubOptionId(productSubOption.getProductsuboptionid());
@@ -619,7 +595,7 @@ public class ProductService {
 			//insert empty suboption if dont exists
 			if(productSubOptionList == null || productSubOptionList.size() == 0){
 				Productsuboption productSubOption = new Productsuboption();
-				productSubOption.setDeleteind(GeneralUtils.NOT_DELETED);
+				productSubOption.setDeleteInd(GeneralUtils.NOT_DELETED);
 				productSubOption.setCode(" ");
 				productSubOption.setProductid(productId);
 				productSubOption.setProductoptionid(0);
@@ -632,14 +608,14 @@ public class ProductService {
 		saveProductSubOptionRs(productVo);
 	}
 	
-	private void saveProductSubOptionRs(ProductVo productVo) {
+	private void saveProductSubOptionRs(ProductVO productVo) {
 		
 		//find if product suboption rs exists
 		//set delete ind to true for all suboption
 		ProductsuboptionRsExample deleteExample = new ProductsuboptionRsExample();
 		deleteExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductidEqualTo(productVo.getId());
 		ProductsuboptionRs obj = new ProductsuboptionRs();
-		obj.setDeleteind(GeneralUtils.DELETED);
+		obj.setDeleteInd(GeneralUtils.DELETED);
 		productSuboptionRsMapper.updateByExampleSelective(obj, deleteExample);
 		
 		//if suboption exists
@@ -674,10 +650,10 @@ public class ProductService {
 		productSuboptionRsMapper.deleteByExample(deleteRsExample);
 	}
 	
-	private List<ProductsuboptionRs> generateLevelOne(OptionVo option){
+	private List<ProductsuboptionRs> generateLevelOne(OptionVO option){
 		List<ProductsuboptionRs> list = new ArrayList<ProductsuboptionRs>();
 		if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-			for(SubOptionVo suboptionVo : option.getSubOptionList()){
+			for(SubOptionVO suboptionVo : option.getSubOptionList()){
 				ProductsuboptionRs suboption = new ProductsuboptionRs();
 				suboption.setSuboption1id(suboptionVo.getSubOptionId());
 				list.add(suboption);
@@ -686,11 +662,11 @@ public class ProductService {
 		return list;
 	}
 	
-	private List<ProductsuboptionRs> generateLevelTwo(OptionVo option, List<ProductsuboptionRs> list){
+	private List<ProductsuboptionRs> generateLevelTwo(OptionVO option, List<ProductsuboptionRs> list){
 		List<ProductsuboptionRs> list2 = new ArrayList<ProductsuboptionRs>();
 		
 		if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-			for(SubOptionVo suboptionVo : option.getSubOptionList()){
+			for(SubOptionVO suboptionVo : option.getSubOptionList()){
 				if(list != null && list.size() > 0){
 					for(ProductsuboptionRs suboption1 : list){
 						ProductsuboptionRs suboption = new ProductsuboptionRs();
@@ -703,11 +679,11 @@ public class ProductService {
 		}
 		return list2;
 	}
-	private List<ProductsuboptionRs> generateLevelThree(OptionVo option, List<ProductsuboptionRs> list){
+	private List<ProductsuboptionRs> generateLevelThree(OptionVO option, List<ProductsuboptionRs> list){
 		List<ProductsuboptionRs> list2 = new ArrayList<ProductsuboptionRs>();
 		
 		if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-			for(SubOptionVo suboptionVo : option.getSubOptionList()){
+			for(SubOptionVO suboptionVo : option.getSubOptionList()){
 				if(list != null && list.size() > 0){
 					for(ProductsuboptionRs suboption1 : list){
 						ProductsuboptionRs suboption = new ProductsuboptionRs();
@@ -736,7 +712,7 @@ public class ProductService {
 			criteria.andSuboption3idEqualTo(suboption3);
 		}
 		ProductsuboptionRs deleteObj = new ProductsuboptionRs();
-		deleteObj.setDeleteind(GeneralUtils.NOT_DELETED);
+		deleteObj.setDeleteInd(GeneralUtils.NOT_DELETED);
 		int rowsUpdated = productSuboptionRsMapper.updateByExampleSelective(deleteObj, updateExample);
 		
 		//record dont exist, insert record
@@ -746,12 +722,12 @@ public class ProductService {
 			obj.setSuboption1id(suboption1);
 			obj.setSuboption2id(suboption2);
 			obj.setSuboption3id(suboption3);
-			obj.setDeleteind(GeneralUtils.NOT_DELETED);
+			obj.setDeleteInd(GeneralUtils.NOT_DELETED);
 			productSuboptionRsMapper.insertSelective(obj);
 		}
 	}
 
-	private Product convertToProduct(ProductVo productVo){
+	private Product convertToProduct(ProductVO productVo){
 		Product product = new Product();
 		product.setProductid(productVo.getId());
 		product.setProductcode(productVo.getProductCode());
@@ -760,19 +736,19 @@ public class ProductService {
 		product.setProductname(productVo.getProductName());
 		product.setUnitprice(productVo.getUnitPrice());
 		product.setSubcategoryid(productVo.getSubcategoryId());
-		product.setDeleteind(GeneralUtils.NOT_DELETED);
+		product.setDeleteInd(GeneralUtils.NOT_DELETED);
 		return product;
 	}
 	
-	private List<Productoption> convertToProductOption(List<OptionVo> optionList){
+	private List<Productoption> convertToProductOption(List<OptionVO> optionList){
 		List<Productoption> productOptionList = new ArrayList<Productoption>();
 		if(optionList != null  && optionList.size() > 0){
-			for(OptionVo optionVo : optionList){
+			for(OptionVO optionVo : optionList){
 				Productoption productOption = new Productoption();
 				productOption.setProductoptionid(optionVo.getOptionId());
 //				productOption.setSequence(optionVo.getSequence());
 				productOption.setName(optionVo.getOptionName());
-				productOption.setDeleteind(GeneralUtils.NOT_DELETED);
+				productOption.setDeleteInd(GeneralUtils.NOT_DELETED);
 				productOption.setDisplayind(true);
 				productOptionList.add(productOption);
 			}
@@ -780,17 +756,17 @@ public class ProductService {
 		return productOptionList;
 	}
 	
-	private List<Productsuboption> convertToProductsuboption(Integer productId, Integer optionId, List<SubOptionVo> subOptionList){
+	private List<Productsuboption> convertToProductsuboption(Integer productId, Integer optionId, List<SubOptionVO> subOptionList){
 		List<Productsuboption> productOptionList = new ArrayList<Productsuboption>();
 		if(subOptionList != null && subOptionList.size() > 0){
-			for(SubOptionVo subOption : subOptionList){
+			for(SubOptionVO subOption : subOptionList){
 				Productsuboption productSubOption = new Productsuboption();
 				productSubOption.setProductsuboptionid(subOption.getSubOptionId());
 				productSubOption.setProductid(productId);
 				productSubOption.setCode(subOption.getCode());
 				productSubOption.setProductoptionid(optionId);
 				productSubOption.setName(subOption.getSubOptionName());
-				productSubOption.setDeleteind(GeneralUtils.NOT_DELETED);
+				productSubOption.setDeleteInd(GeneralUtils.NOT_DELETED);
 				productSubOption.setDisplayind(subOption.isDisplay());
 				productOptionList.add(productSubOption);
 			}
@@ -798,10 +774,10 @@ public class ProductService {
 		return productOptionList;
 	}
 	
-	private List<ProductimageWithBLOBs> convertToProductImage(Integer productId,List<FileMeta> images){
+	private List<ProductimageWithBLOBs> convertToProductImage(Integer productId,List<FileMetaVO> images){
 		List<ProductimageWithBLOBs> productImages = new ArrayList<ProductimageWithBLOBs>();
 		if(images != null && images.size() > 0 && productId != null){
-			for(FileMeta image : images){
+			for(FileMetaVO image : images){
 				ProductimageWithBLOBs productImage = new ProductimageWithBLOBs();
 				productImage.setImageid(image.getImageId());
 				productImage.setProductid(productId);
@@ -824,7 +800,7 @@ public class ProductService {
 		ProductExample example = new ProductExample();
 		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andProductidIn(idList);
 		Product product = new Product();
-		product.setDeleteind(GeneralUtils.DELETED);
+		product.setDeleteInd(GeneralUtils.DELETED);
 		productMapper.updateByExampleSelective(product, example);
 	}
 	
@@ -840,9 +816,9 @@ public class ProductService {
 		}
 	}
 	
-	public class OptionVoCompare implements Comparator<OptionVo>{
+	public class OptionVoCompare implements Comparator<OptionVO>{
 		@Override
-		public int compare(OptionVo o1, OptionVo o2) {
+		public int compare(OptionVO o1, OptionVO o2) {
 			if(o1.getSequence() != null && o2.getSequence() != null){
 				return o1.getSequence().compareTo(o2.getSequence());
 			}else if(o1.getSequence() != null){
@@ -882,11 +858,11 @@ public class ProductService {
 		}
 	}
 	
-	public ProductsuboptionRs findProductSubOptionRs(Integer productId, List<Integer> suboptionIdList){
+	public ProductSubOptionRsVO findProductSubOptionRs(Integer productId, List<Integer> suboptionIdList){
 		//check suboption belong to product, reorder by option
 		List<Integer> list = checkValidProductSubOption(productId, suboptionIdList);
 		if(list == null){
-			return new ProductsuboptionRs();
+			return new ProductSubOptionRsVO();
 		}
 		
 		//check against productSuboption
@@ -904,7 +880,7 @@ public class ProductService {
 		//if not exist, add and return
 		if(result == null || result.size() == 0){
 			ProductsuboptionRs rs = new ProductsuboptionRs();
-			rs.setDeleteind(GeneralUtils.NOT_DELETED);
+			rs.setDeleteInd(GeneralUtils.NOT_DELETED);
 			rs.setVersion(1);
 			rs.setProductid(productId);
 			switch(size){
@@ -955,26 +931,26 @@ public class ProductService {
 		return null;
 	}
 	
-	public ProductSubOptionRsVo getProductSubOptionVo(Integer productSubOptionId){
+	public ProductSubOptionRsVO getProductSubOptionVo(Integer productSubOptionId){
 		ProductsuboptionRsExample selectExample = new ProductsuboptionRsExample();
 		selectExample.createCriteria().andProductidEqualTo(productSubOptionId).andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<ProductsuboptionRs> result = productSuboptionRsMapper.selectByExample(selectExample);
 		
 		if(result != null && result.size() > 0){
 			ProductsuboptionRs obj = result.get(0);
-			ProductSubOptionRsVo vo = new ProductSubOptionRsVo();
+			ProductSubOptionRsVO vo = new ProductSubOptionRsVO();
 			vo.setProductsuboptionid(obj.getProductsuboptionid());
 			vo.setProductid(obj.getProductid());
 			vo.setSuboption1id(obj.getSuboption1id());
 			vo.setSuboption2id(obj.getSuboption2id());
 			vo.setSuboption3id(obj.getSuboption3id());
-			List<OptionVo> allOptionVo = getOptionVoList(obj.getProductid());
+			List<OptionVO> allOptionVo = getOptionVoList(obj.getProductid());
 			if(vo.getSuboption1id() != null && allOptionVo != null && allOptionVo.size() > 0){
-				for(OptionVo option: allOptionVo){
+				for(OptionVO option: allOptionVo){
 					if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-						for(SubOptionVo suboptionVo :option.getSubOptionList()){
+						for(SubOptionVO suboptionVo :option.getSubOptionList()){
 							if(suboptionVo.getSubOptionId().equals(vo.getSuboption1id())){
-								OptionVo option1 = new OptionVo();
+								OptionVO option1 = new OptionVO();
 								option1.setOptionId(option.getOptionId());
 								option1.setOptionName(option.getOptionName());
 								option1.setSubOptionList(Arrays.asList(suboptionVo));
@@ -987,11 +963,11 @@ public class ProductService {
 			}
 			
 			if(vo.getSuboption2id() != null && allOptionVo != null && allOptionVo.size() > 0){
-				for(OptionVo option: allOptionVo){
+				for(OptionVO option: allOptionVo){
 					if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-						for(SubOptionVo suboptionVo :option.getSubOptionList()){
+						for(SubOptionVO suboptionVo :option.getSubOptionList()){
 							if(suboptionVo.getSubOptionId().equals(vo.getSuboption2id())){
-								OptionVo option2 = new OptionVo();
+								OptionVO option2 = new OptionVO();
 								option2.setOptionId(option.getOptionId());
 								option2.setOptionName(option.getOptionName());
 								option2.setSubOptionList(Arrays.asList(suboptionVo));
@@ -1004,11 +980,11 @@ public class ProductService {
 			}
 			
 			if(vo.getSuboption3id() != null && allOptionVo != null && allOptionVo.size() > 0){
-				for(OptionVo option: allOptionVo){
+				for(OptionVO option: allOptionVo){
 					if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-						for(SubOptionVo suboptionVo :option.getSubOptionList()){
+						for(SubOptionVO suboptionVo :option.getSubOptionList()){
 							if(suboptionVo.getSubOptionId().equals(vo.getSuboption3id())){
-								OptionVo option3 = new OptionVo();
+								OptionVO option3 = new OptionVO();
 								option3.setOptionId(option.getOptionId());
 								option3.setOptionName(option.getOptionName());
 								option3.setSubOptionList(Arrays.asList(suboptionVo));
@@ -1021,33 +997,33 @@ public class ProductService {
 			}
 			return vo;
 		}
-		return new ProductSubOptionRsVo();
+		return new ProductSubOptionRsVO();
 	}
 	
-	public List<ProductSubOptionRsVo> getAllProductSubOptionVo(){
+	public List<ProductSubOptionRsVO> getAllProductSubOptionVo(){
 		ProductsuboptionRsExample selectExample = new ProductsuboptionRsExample();
 		selectExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<ProductsuboptionRs> result = productSuboptionRsMapper.selectByExample(selectExample);
 		
-		List<ProductSubOptionRsVo> voList = new ArrayList<ProductSubOptionRsVo>();
+		List<ProductSubOptionRsVO> voList = new ArrayList<ProductSubOptionRsVO>();
 		
 		
 		if(result != null && result.size() > 0){
 			for(ProductsuboptionRs obj : result) {
-				ProductSubOptionRsVo vo = new ProductSubOptionRsVo();
+				ProductSubOptionRsVO vo = new ProductSubOptionRsVO();
 				
 				vo.setProductsuboptionid(obj.getProductsuboptionid());
 				vo.setProductid(obj.getProductid());
 				vo.setSuboption1id(obj.getSuboption1id());
 				vo.setSuboption2id(obj.getSuboption2id());
 				vo.setSuboption3id(obj.getSuboption3id());
-				List<OptionVo> allOptionVo = getOptionVoList(obj.getProductid());
+				List<OptionVO> allOptionVo = getOptionVoList(obj.getProductid());
 				if(vo.getSuboption1id() != null && allOptionVo != null && allOptionVo.size() > 0){
-					for(OptionVo option: allOptionVo){
+					for(OptionVO option: allOptionVo){
 						if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-							for(SubOptionVo suboptionVo :option.getSubOptionList()){
+							for(SubOptionVO suboptionVo :option.getSubOptionList()){
 								if(suboptionVo.getSubOptionId().equals(vo.getSuboption1id())){
-									OptionVo option1 = new OptionVo();
+									OptionVO option1 = new OptionVO();
 									option1.setOptionId(option.getOptionId());
 									option1.setOptionName(option.getOptionName());
 									option1.setSubOptionList(Arrays.asList(suboptionVo));
@@ -1060,11 +1036,11 @@ public class ProductService {
 				}
 				
 				if(vo.getSuboption2id() != null && allOptionVo != null && allOptionVo.size() > 0){
-					for(OptionVo option: allOptionVo){
+					for(OptionVO option: allOptionVo){
 						if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-							for(SubOptionVo suboptionVo :option.getSubOptionList()){
+							for(SubOptionVO suboptionVo :option.getSubOptionList()){
 								if(suboptionVo.getSubOptionId().equals(vo.getSuboption2id())){
-									OptionVo option2 = new OptionVo();
+									OptionVO option2 = new OptionVO();
 									option2.setOptionId(option.getOptionId());
 									option2.setOptionName(option.getOptionName());
 									option2.setSubOptionList(Arrays.asList(suboptionVo));
@@ -1077,11 +1053,11 @@ public class ProductService {
 				}
 				
 				if(vo.getSuboption3id() != null && allOptionVo != null && allOptionVo.size() > 0){
-					for(OptionVo option: allOptionVo){
+					for(OptionVO option: allOptionVo){
 						if(option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-							for(SubOptionVo suboptionVo :option.getSubOptionList()){
+							for(SubOptionVO suboptionVo :option.getSubOptionList()){
 								if(suboptionVo.getSubOptionId().equals(vo.getSuboption3id())){
-									OptionVo option3 = new OptionVo();
+									OptionVO option3 = new OptionVO();
 									option3.setOptionId(option.getOptionId());
 									option3.setOptionName(option.getOptionName());
 									option3.setSubOptionList(Arrays.asList(suboptionVo));
@@ -1098,7 +1074,7 @@ public class ProductService {
 		return voList;
 	}
 	
-	public ProductsuboptionRs getProductsuboptionRsById(Integer productsuboptionid) {
+	public ProductSubOptionRsVO getProductsuboptionRsById(Integer productsuboptionid) {
 		return productSuboptionRsMapper.selectByPrimaryKey(productsuboptionid);
 	}
 	
@@ -1119,7 +1095,7 @@ public class ProductService {
 		return productCodeList;
 	}
 	
-	public List<ViewItemCode> getAllItemCode() {
+	public List<ViewItemCodeVO> getAllItemCode() {
 		ViewItemCodeExample viewItemCodeExample = new ViewItemCodeExample();
 		List<ViewItemCode> itemCodeList = viewItemCodeMapper.selectByExample(viewItemCodeExample);
 		return itemCodeList;

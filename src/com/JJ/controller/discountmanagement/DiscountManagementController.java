@@ -66,7 +66,7 @@ public class DiscountManagementController {
     public String showAddDiscountForm(Model model) {  
     	logger.debug("loading showAddDiscountForm");
     	Discount discount = new Discount();
-    	discount.setDeleteind(GeneralUtils.NOT_DELETED);
+    	discount.setDeleteInd(GeneralUtils.NOT_DELETED);
     	
     	List<String> discTypeList = new ArrayList<String>();
     	discTypeList.add("Percentage %");

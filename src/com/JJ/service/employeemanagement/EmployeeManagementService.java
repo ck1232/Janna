@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.employeemanagement.EmployeeVo;
 import com.JJ.controller.employeemanagement.EmploymentTypeEnum;
+import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.dao.EmployeeMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Employee;
@@ -25,32 +25,32 @@ public class EmployeeManagementService {
 		this.employeeMapper = employeeMapper;
 	}
 	
-	public List<EmployeeVo> getAllEmployeeVo() {
+	public List<EmployeeVO> getAllEmployeeVo() {
 		List<Employee> employeeList = getAllEmployees();
-		List<EmployeeVo> voList = new ArrayList<EmployeeVo>();
+		List<EmployeeVO> voList = new ArrayList<EmployeeVO>();
 		if(employeeList != null && employeeList.size() > 0) {
 			for(Employee employee : employeeList) {
-				EmployeeVo vo = convertEmployeeToVo(employee);
+				EmployeeVO vo = convertEmployeeToVo(employee);
 				voList.add(vo);
 			}
 		}
 		return voList;
 	}
 	
-	public List<EmployeeVo> getAllEmployeeVoInAscendingName() {
+	public List<EmployeeVO> getAllEmployeeVoInAscendingName() {
 		List<Employee> employeeList = getAllEmployees("name asc");
-		List<EmployeeVo> voList = new ArrayList<EmployeeVo>();
+		List<EmployeeVO> voList = new ArrayList<EmployeeVO>();
 		if(employeeList != null && employeeList.size() > 0) {
 			for(Employee employee : employeeList) {
-				EmployeeVo vo = convertEmployeeToVo(employee);
+				EmployeeVO vo = convertEmployeeToVo(employee);
 				voList.add(vo);
 			}
 		}
 		return voList;
 	}
 	
-	public EmployeeVo getEmployeeById(Integer id) {
-		EmployeeVo vo = new EmployeeVo();
+	public EmployeeVO getEmployeeById(Integer id) {
+		EmployeeVO vo = new EmployeeVO();
 		Employee employee = findById(id);
 		if(employee != null) {
 			vo = convertEmployeeToVo(employee);
@@ -58,12 +58,12 @@ public class EmployeeManagementService {
 		return vo;
 	}
 	
-	public void saveEmployee(EmployeeVo vo) {
+	public void saveEmployee(EmployeeVO vo) {
 		Employee employee = convertVoToEmployee(vo, new Employee());
 		saveEmployee(employee);
 	}
 	
-	public void updateEmployee(EmployeeVo vo) {
+	public void updateEmployee(EmployeeVO vo) {
 		Employee employee = findById(vo.getEmployeeid());
 		if(employee!=null){
 			employee = convertVoToEmployee(vo, employee);
@@ -72,7 +72,7 @@ public class EmployeeManagementService {
 	}
 	
 	//convert employeeVo to employee
-	public Employee convertVoToEmployee(EmployeeVo vo, Employee employee) {
+	public Employee convertVoToEmployee(EmployeeVO vo, Employee employee) {
 		if(employee == null) {
 			employee = new Employee();
 		}
@@ -88,8 +88,8 @@ public class EmployeeManagementService {
 	}
 	
 	//convert employeeVo to employee
-	public EmployeeVo convertEmployeeToVo(Employee employee) {
-		EmployeeVo vo = new EmployeeVo();
+	public EmployeeVO convertEmployeeToVo(Employee employee) {
+		EmployeeVO vo = new EmployeeVO();
 		vo.setEmployeeid(employee.getEmployeeid());
 		vo.setName(employee.getName());
 		vo.setEmploymenttype(employee.getEmploymenttype());
@@ -132,14 +132,14 @@ public class EmployeeManagementService {
 	
 	public void deleteEmployee(Integer id) {
 		Employee employee = findById(id);
-		if(employee.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			employee.setDeleteind(GeneralUtils.DELETED);
+		if(employee.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			employee.setDeleteInd(GeneralUtils.DELETED);
 			employeeMapper.updateByPrimaryKey(employee);
 		}
 	}
 	
 	public void updateEmployee(Employee employee) {
-		if(employee.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(employee.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			employeeMapper.updateByPrimaryKeySelective(employee);
 	}
 	 

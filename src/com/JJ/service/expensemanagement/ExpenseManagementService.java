@@ -50,7 +50,7 @@ public class ExpenseManagementService {
 	
 	public void saveExpense(Expense expense) {
 		expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
-		expense.setDeleteind(GeneralUtils.NOT_DELETED);
+		expense.setDeleteInd(GeneralUtils.NOT_DELETED);
 		expenseMapper.insert(expense);
 	}
 	
@@ -69,7 +69,7 @@ public class ExpenseManagementService {
 	}
 	
 	public void updateExpense(Expense expense) {
-		if(expense.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(expense.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			expenseMapper.updateByPrimaryKeySelective(expense);
 	}
 	/* Expense END */

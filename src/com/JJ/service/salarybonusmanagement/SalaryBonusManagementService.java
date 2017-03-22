@@ -380,12 +380,12 @@ public class SalaryBonusManagementService {
 	}
 	
 	public void updateSalary(EmployeeSalary salary) {
-		if(salary.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(salary.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			employeeSalaryMapper.updateByPrimaryKeySelective(salary);
 	}
 	
 	public void updateBonus(EmployeeBonus bonus) {
-		if(bonus.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(bonus.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			employeeBonusMapper.updateByPrimaryKeySelective(bonus);
 	}
 }

@@ -38,14 +38,14 @@ public class SQLInterceptor implements Interceptor {
 			if(mappedStatement.getSqlCommandType().equals(SqlCommandType.UPDATE)){
 				if(queryArgs[PARAMETER_INDEX] instanceof Base){
 					Base base = (Base)queryArgs[PARAMETER_INDEX];
-					if(base.getDeleteind() == null){
-						base.setDeleteind(GeneralUtils.NOT_DELETED);
+					if(base.getDeleteInd() == null){
+						base.setDeleteInd(GeneralUtils.NOT_DELETED);
 					}
 					Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 					if(principal instanceof UserDetails){
 						UserDetails user = (UserDetails)principal;
-						base.setUpdatedon(new Date());
-						base.setUpdatedby(user.getUsername());
+						base.setUpdatedOn(new Date());
+						base.setUpdatedBy(user.getUsername());
 						if(base.getVersion() == null){
 							base.setVersion(1);
 						}else{
@@ -56,16 +56,16 @@ public class SQLInterceptor implements Interceptor {
 			}else if(mappedStatement.getSqlCommandType().equals(SqlCommandType.INSERT)){
 				if(queryArgs[PARAMETER_INDEX] instanceof Base){
 					Base base = (Base)queryArgs[PARAMETER_INDEX];
-					if(base.getDeleteind() == null){
-						base.setDeleteind(GeneralUtils.NOT_DELETED);
+					if(base.getDeleteInd() == null){
+						base.setDeleteInd(GeneralUtils.NOT_DELETED);
 					}
 					Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 					if(principal instanceof UserDetails){
 						UserDetails user = (UserDetails)principal;
-						base.setUpdatedon(new Date());
-						base.setUpdatedby(user.getUsername());
-						base.setCreatedby(user.getUsername());
-						base.setCreatedon(new Date());
+						base.setUpdatedOn(new Date());
+						base.setUpdatedBy(user.getUsername());
+						base.setCreatedBy(user.getUsername());
+						base.setCreatedOn(new Date());
 						base.setVersion(1);
 					}
 				}

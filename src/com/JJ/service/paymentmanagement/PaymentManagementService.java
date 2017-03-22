@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
-import com.JJ.controller.paymentmanagement.PaymentVo;
+import com.JJ.controller.paymentmanagement.vo.PaymentVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
 import com.JJ.dao.PaymentRsMapper;
 import com.JJ.dao.PaymentdetailMapper;
@@ -49,7 +49,7 @@ public class PaymentManagementService {
 		this.invoiceManagementService = invoiceManagementService;
 		this.salaryBonusManagementService = salaryBonusManagementService;
 	}
-	public void saveExpensePayment(PaymentVo paymentVo, List<Integer> expenseidList) {
+	public void saveExpensePayment(PaymentVO paymentVo, List<Integer> expenseidList) {
 		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
@@ -70,7 +70,7 @@ public class PaymentManagementService {
 		}
 	}
 	
-	public void saveInvoicePayment(PaymentVo paymentVo, List<Integer> invoiceidList) {
+	public void saveInvoicePayment(PaymentVO paymentVo, List<Integer> invoiceidList) {
 		List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
@@ -88,7 +88,7 @@ public class PaymentManagementService {
 		}
 	}
 	
-	public void saveSalaryPayment(PaymentVo paymentVo, List<Integer> salaryidList) {
+	public void saveSalaryPayment(PaymentVO paymentVo, List<Integer> salaryidList) {
 		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
@@ -106,7 +106,7 @@ public class PaymentManagementService {
 		}
 	}
 	
-	public void saveBonusPayment(PaymentVo paymentVo, List<Integer> bonusidList) {
+	public void saveBonusPayment(PaymentVO paymentVo, List<Integer> bonusidList) {
 		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
@@ -125,7 +125,7 @@ public class PaymentManagementService {
 	}
 	
 	
-	private List<Paymentdetail> genPaymentDetail(PaymentVo paymentVo) {
+	private List<Paymentdetail> genPaymentDetail(PaymentVO paymentVo) {
 		List<Paymentdetail> paymentDetailList = new ArrayList<Paymentdetail>();
 		if(paymentVo.getPaymentmodecash()){
 			Paymentdetail paymentdetail = new Paymentdetail(

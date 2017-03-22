@@ -57,14 +57,14 @@ public class DiscountManagementService {
 	
 	public void deleteDiscount(Integer id) {
 		Discount discount = findById(id);
-		if(discount.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			discount.setDeleteind(GeneralUtils.DELETED);
+		if(discount.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			discount.setDeleteInd(GeneralUtils.DELETED);
 			discountMapper.updateByPrimaryKey(discount);
 		}
 	}
 	
 	public void updateDiscount(Discount discount) {
-		if(discount.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(discount.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			discountMapper.updateByPrimaryKeySelective(discount);
 	}
 	 

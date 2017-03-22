@@ -95,7 +95,7 @@ public class PromotionManagementController {
     public String savePromotion(@ModelAttribute("promotionForm") @Validated Promotion promotion, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		promotion.setDeleteind(GeneralUtils.NOT_DELETED);
+		promotion.setDeleteInd(GeneralUtils.NOT_DELETED);
 		logger.debug("savePromotion() : " + promotion.toString());
 		if (result.hasErrors()) {
 			return "createPromotion";

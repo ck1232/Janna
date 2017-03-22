@@ -13,24 +13,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.JJ.model.Menu;
-import com.JJ.model.Submodulepermissiontype;
+import com.JJ.controller.common.vo.MenuVO;
+import com.JJ.controller.common.vo.SubModulePermissionTypeVO;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
 @Component
 public class MenuInterceptor extends HandlerInterceptorAdapter {
-	@Autowired
 	private CommonController commonController;
-	@Autowired
 	private PermissionManagementService permissionManagementService;
+	@Autowired
+	public MenuInterceptor(CommonController commonController,
+			PermissionManagementService permissionManagementService) {
+		super();
+		this.commonController = commonController;
+		this.permissionManagementService = permissionManagementService;
+	}
+	
 	@Override
     public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
-		Menu menu  = (Menu) request.getSession().getAttribute("menu");
+		
+		MenuVO menu  = (MenuVO) request.getSession().getAttribute("menu");
 		UserDetails user = null;
 		Object userObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(userObj instanceof UserDetails){
 			user = (UserDetails)userObj ;
 		}else{
 			return super.preHandle(request, response, handler);
+			
 		}
 		
 		if(user != null){
@@ -42,7 +50,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 			else{
 				menu = commonController.populateMenu(user);
 				request.getSession().setAttribute("menu", menu);
-				List<Submodulepermissiontype> urlList = permissionManagementService.getSubmodulepermissiontypeByUrl();
+				List<SubModulePermissionTypeVO> urlList = permissionManagementService.getSubmodulepermissiontypeByUrl();
 				request.getSession().setAttribute("urlList", urlList);
 			}
 
@@ -50,13 +58,13 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 			String mappedUrl = request.getRequestURI().toString().replace(urlPrefix, "").replace(request.getContextPath(), "");
 			if(!mappedUrl.contains("development")){
 				@SuppressWarnings("unchecked")
-				List<Submodulepermissiontype> urlList = (List<Submodulepermissiontype>) request.getSession().getAttribute("urlList");
+				List<SubModulePermissionTypeVO> urlList = (List<SubModulePermissionTypeVO>) request.getSession().getAttribute("urlList");
 				if(urlList == null){
 					urlList = permissionManagementService.getSubmodulepermissiontypeByUrl();
 					request.getSession().setAttribute("urlList", urlList);
 				}
 				if(urlList != null && urlList.size() > 0){
-					for(Submodulepermissiontype obj : urlList){
+					for(SubModulePermissionTypeVO obj : urlList){
 						if(obj != null && (obj.getUrl().contains(mappedUrl) || mappedUrl.contains(obj.getUrl()))){
 							request.getSession().setAttribute("menuSubmodule", obj);
 						}
@@ -69,4 +77,5 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 		}
 		return super.preHandle(request, response, handler);
 	}
+	
 }

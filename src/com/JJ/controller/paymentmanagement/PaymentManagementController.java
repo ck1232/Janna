@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.paymentmanagement.vo.PaymentVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
@@ -84,7 +86,7 @@ public class PaymentManagementController {
 			totalamount = totalamount.add(expense.getTotalamount());
 		}
 		
-		PaymentVo paymentvo = new PaymentVo();
+		PaymentVO paymentvo = new PaymentVO();
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("expenseList", expenseList);
 		model.addAttribute("idList", idList);
@@ -104,7 +106,7 @@ public class PaymentManagementController {
     		@RequestParam(value = "referenceIds", required=false) List<Integer> expenseIdList,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
-    		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveExpensePayment() : " + paymentVo.toString());
 		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
@@ -177,7 +179,7 @@ public class PaymentManagementController {
 			totalamount = totalamount.add(invoice.getTotalprice());
 		}
 		
-		PaymentVo paymentvo = new PaymentVo();
+		PaymentVO paymentvo = new PaymentVO();
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("invoiceList", invoiceList);
 		model.addAttribute("totalamount", totalamount);
@@ -192,7 +194,7 @@ public class PaymentManagementController {
     		@RequestParam(value = "referenceIds", required=false) List<Integer> invoiceIdList,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
-    		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveInvoicePayment() : " + paymentVo.toString());
 		if (!result.hasErrors()) {
@@ -241,7 +243,7 @@ public class PaymentManagementController {
 		
     }  
 	
-	private boolean validateInputAmount(BigDecimal totalamount, PaymentVo paymentVo) {
+	private boolean validateInputAmount(BigDecimal totalamount, PaymentVO paymentVo) {
 		BigDecimal inputAmount = BigDecimal.ZERO;
 		if(paymentVo.getPaymentmodecash()) {
 			inputAmount = inputAmount.add(paymentVo.getCashamount());
@@ -293,7 +295,7 @@ public class PaymentManagementController {
 			totalamount = totalamount.add(salaryBonusVo.getTakehomeamount());
 		}
 		
-		PaymentVo paymentvo = new PaymentVo();
+		PaymentVO paymentvo = new PaymentVO();
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("salaryList", salaryBonusVoList);
 		model.addAttribute("idList", idList);
@@ -308,7 +310,7 @@ public class PaymentManagementController {
     		@RequestParam(value = "referenceIds", required=false) List<Integer> salaryIdList,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
-    		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveSalaryPayment() : " + paymentVo.toString());
 		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
@@ -380,7 +382,7 @@ public class PaymentManagementController {
 			totalamount = totalamount.add(salaryBonusVo.getBonusamount());
 		}
 		
-		PaymentVo paymentvo = new PaymentVo();
+		PaymentVO paymentvo = new PaymentVO();
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("bonusList", salaryBonusVoList);
 		model.addAttribute("idList", idList);
@@ -395,7 +397,7 @@ public class PaymentManagementController {
     		@RequestParam(value = "referenceIds", required=false) List<Integer> bonusIdList,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
-    		@ModelAttribute("paymentForm") @Validated PaymentVo paymentVo, 
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveBonusPayment() : " + paymentVo.toString());
 		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusIdList);

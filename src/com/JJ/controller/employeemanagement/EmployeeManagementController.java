@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
@@ -60,7 +61,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/getEmployeeList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getEmployeeList() {
 		logger.debug("getting employee list");
-		List<EmployeeVo> employeeList = employeeManagementService.getAllEmployeeVo();
+		List<EmployeeVO> employeeList = employeeManagementService.getAllEmployeeVo();
 		return GeneralUtils.convertListToJSONString(employeeList);
 	}
 	
@@ -86,7 +87,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/createEmployee", method = RequestMethod.GET)
     public String showAddEmployeeForm(Model model) {  
     	logger.debug("loading showAddEmployeeForm");
-    	EmployeeVo employeeVo = new EmployeeVo();
+    	EmployeeVO employeeVo = new EmployeeVO();
     	initData();
     	model.addAttribute("employeeForm", employeeVo);
     	model.addAttribute("employmentTypeList", employmentTypeList);
@@ -108,7 +109,7 @@ public class EmployeeManagementController {
 	}
 	
 	@RequestMapping(value = "/createEmployee", method = RequestMethod.POST)
-    public String saveEmployee(@ModelAttribute("employeeForm") @Validated EmployeeVo employeeVo, 
+    public String saveEmployee(@ModelAttribute("employeeForm") @Validated EmployeeVO employeeVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("saveEmployee() : " + employeeVo.toString());
@@ -136,7 +137,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/viewEmployee", method = RequestMethod.POST)
 	public String viewEmployee(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		EmployeeVo employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
+		EmployeeVO employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
 		if (employeeVo == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Employee not found");
@@ -154,7 +155,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/updateEmployee", method = RequestMethod.POST)
 	public String getEmployeeToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		EmployeeVo employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
+		EmployeeVO employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
 		logger.debug("Loading update employee page for " + employeeVo.toString());
 		initData();
 		model.addAttribute("employmentTypeList", employmentTypeList);
@@ -163,7 +164,7 @@ public class EmployeeManagementController {
 	}
 	
 	@RequestMapping(value = "/updateEmployeeToDb", method = RequestMethod.POST)
-	public String updateEmployee(@ModelAttribute("employeeForm") @Validated EmployeeVo employeeVo,
+	public String updateEmployee(@ModelAttribute("employeeForm") @Validated EmployeeVO employeeVo,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("updateEmployee() : " + employeeVo.toString());

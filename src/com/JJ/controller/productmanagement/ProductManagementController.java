@@ -35,12 +35,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.productmanagement.vo.OptionVo;
-import com.JJ.controller.productmanagement.vo.ProductVo;
-import com.JJ.controller.productmanagement.vo.SubOptionVo;
+import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.common.vo.JsonResponseVO;
+import com.JJ.controller.productmanagement.vo.OptionVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
+import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.FileMeta;
-import com.JJ.model.JsonResponse;
 import com.JJ.model.Product;
 import com.JJ.model.Productcategory;
 import com.JJ.model.ProductimageWithBLOBs;
@@ -61,8 +61,8 @@ public class ProductManagementController {
 	private ProductCategoryManagementService productCategoryManagementService;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
     private ProductOptionManagementService productOptionManagementService;
-    private ProductVo newProduct;
-    private OptionVo selectedOption;
+    private ProductVO newProduct;
+    private OptionVO selectedOption;
     private static final int code_limit = 6;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
@@ -113,7 +113,7 @@ public class ProductManagementController {
 	@RequestMapping("/createProduct")
 	public String createProduct(Model model){
 		logger.debug("loading create product");
-		newProduct = new ProductVo();
+		newProduct = new ProductVO();
 		model.addAttribute("productForm", newProduct);
 		model.addAttribute("categoryList", getProductCategoryList());
 		return "createProduct";
@@ -123,7 +123,7 @@ public class ProductManagementController {
 	public String editProduct(Model model, @RequestParam("editBtn") Integer id){
 		logger.debug("loading edit product");
 		if(id != null){
-			List<ProductVo> productList = productService.getAllProductVo(id);
+			List<ProductVO> productList = productService.getAllProductVo(id);
 			if(productList != null && productList.size() > 0){
 				newProduct = productList.get(0);
 				model.addAttribute("productForm", newProduct);
@@ -141,12 +141,12 @@ public class ProductManagementController {
 		if(newProduct != null && newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
 			return GeneralUtils.convertListToJSONString(newProduct.getOptionList());
 		}else{
-			return GeneralUtils.convertListToJSONString(new ArrayList<OptionVo>());
+			return GeneralUtils.convertListToJSONString(new ArrayList<OptionVO>());
 		}
 	}
 	
 	@RequestMapping(value = "/uploadImage",method = RequestMethod.POST)
-	public @ResponseBody LinkedList<FileMeta> upload(MultipartHttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody LinkedList<FileMetaVO> upload(MultipartHttpServletRequest request, HttpServletResponse response) {
 		//1. build an iterator
         Iterator<String> itr =  request.getFileNames();
         MultipartFile mpf = null;
@@ -162,7 +162,7 @@ public class ProductManagementController {
             	newProduct.getImages().pop();
 
             //2.3 create new fileMeta
-            FileMeta fileMeta = new FileMeta();
+            FileMetaVO fileMeta = new FileMetaVO();
             fileMeta.setFileName(mpf.getOriginalFilename());
             fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
             fileMeta.setFileType(mpf.getContentType());
@@ -176,7 +176,7 @@ public class ProductManagementController {
             //2.4 add to files
             if(newProduct != null){
             	if(newProduct.getImages() == null){
-            		newProduct.setImages(new LinkedList<FileMeta>());
+            		newProduct.setImages(new LinkedList<FileMetaVO>());
             	}
             	fileMeta.setSequence(newProduct.getImages().size() + 1);
             	newProduct.getImages().add(fileMeta);
@@ -190,11 +190,11 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping(value = "/removeUploadImage",method = RequestMethod.POST)
-	public @ResponseBody JsonResponse removeUploadImage(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
+	public @ResponseBody JsonResponseVO removeUploadImage(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
 		if(newProduct != null && newProduct.getImages() != null && newProduct.getImages().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
-			Iterator<FileMeta> iterator = newProduct.getImages().iterator();
+			Iterator<FileMetaVO> iterator = newProduct.getImages().iterator();
 			while(iterator.hasNext()){
-				FileMeta file = iterator.next();
+				FileMetaVO file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
 					iterator.remove();
 					break;
@@ -202,22 +202,22 @@ public class ProductManagementController {
 			}
 			reshuffleImage(newProduct.getImages());
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/getPreUploadImage", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<FileMeta> getPreUploadImage() {
+	public @ResponseBody List<FileMetaVO> getPreUploadImage() {
 		if(newProduct == null || newProduct.getImages() == null ){
-			return new ArrayList<FileMeta>();
+			return new ArrayList<FileMetaVO>();
 		}else{
 			return newProduct.getImages();
 		}
 	}
 	
 	@RequestMapping(value = "/sortImage", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveOption(@RequestBody List<String> orderList) {
+	public @ResponseBody JsonResponseVO saveOption(@RequestBody List<String> orderList) {
 		if(newProduct.getImages() != null && newProduct.getImages().size() > 0){
-			for(FileMeta image : newProduct.getImages()){
+			for(FileMetaVO image : newProduct.getImages()){
 				int index = orderList.indexOf(image.getFileName());
 				if(index < 0){
 					image.setSequence(0);
@@ -228,7 +228,7 @@ public class ProductManagementController {
 			}
 			reshuffleImage(newProduct.getImages());
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/getProductOptionName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -285,9 +285,9 @@ public class ProductManagementController {
 		}
 		return code;
 	}
-	private OptionVo generateSubOptionCode(OptionVo option){
+	private OptionVO generateSubOptionCode(OptionVO option){
 		if(option != null && option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-			for(SubOptionVo subOption : option.getSubOptionList()){
+			for(SubOptionVO subOption : option.getSubOptionList()){
 				String name = subOption.getSubOptionName();
 				subOption.setCode(generateCode(name));
 			}
@@ -295,7 +295,7 @@ public class ProductManagementController {
 		return option;
 	}
 	
-	private ProductVo generateProductCode(ProductVo product){
+	private ProductVO generateProductCode(ProductVO product){
 		if(product.getProductCode() == null || product.getProductCode().trim().isEmpty()){
 			product.setProductCode(generateCode(product.getProductName()));
 		}else{
@@ -317,7 +317,7 @@ public class ProductManagementController {
 		product.setProductCode(productCode);
 		//generate suboption code
 		if(product.getOptionList() != null && product.getOptionList().size() > 0){
-			for(OptionVo option : product.getOptionList()){
+			for(OptionVO option : product.getOptionList()){
 				option = generateSubOptionCode(option);
 			}
 		}
@@ -326,27 +326,27 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping(value = "/saveAddOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveAddOption(@RequestBody OptionVo option) {
+	public @ResponseBody JsonResponseVO saveAddOption(@RequestBody OptionVO option) {
 		if(newProduct != null){
 			if(newProduct.getOptionList() == null){
-				newProduct.setOptionList(new ArrayList<OptionVo>());
+				newProduct.setOptionList(new ArrayList<OptionVO>());
 			}
-			for(OptionVo optionVo : newProduct.getOptionList()){
+			for(OptionVO optionVo : newProduct.getOptionList()){
 				if(optionVo.getOptionName().equalsIgnoreCase(option.getOptionName())){
-					return new JsonResponse("fail", "Option Name already exists.");
+					return new JsonResponseVO("fail", "Option Name already exists.");
 				}
 			}
 			newProduct.getOptionList().add(option);
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/saveEditOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveEditOption(@RequestBody OptionVo option) {
+	public @ResponseBody JsonResponseVO saveEditOption(@RequestBody OptionVO option) {
 		if(newProduct != null && newProduct.getOptionList() != null){
-			for(OptionVo optionVo : newProduct.getOptionList()){
+			for(OptionVO optionVo : newProduct.getOptionList()){
 				if(optionVo.getOptionName().equalsIgnoreCase(option.getOptionName()) && optionVo.getOptionId() != option.getOptionId()){
-					return new JsonResponse("fail", "Option Name already exists.");
+					return new JsonResponseVO("fail", "Option Name already exists.");
 				}
 			}
 		}
@@ -357,38 +357,38 @@ public class ProductManagementController {
 			selectedOption.setSubOptionList(option.getSubOptionList());
 			selectedOption = null;
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	//current not in use
 	@RequestMapping(value = "/sortOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse sortOption(@RequestBody List<OptionVo> optionList) {
+	public @ResponseBody JsonResponseVO sortOption(@RequestBody List<OptionVO> optionList) {
 		logger.debug(optionList);
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/editOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody OptionVo sortOption(@RequestBody OptionVo optionName) {
+	public @ResponseBody OptionVO sortOption(@RequestBody OptionVO optionName) {
 		logger.debug(optionName.getOptionName());
 
 		if(newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
-			for(OptionVo option: newProduct.getOptionList()){
+			for(OptionVO option: newProduct.getOptionList()){
 				if(option.getOptionName() != null && option.getOptionName().compareToIgnoreCase(optionName.getOptionName()) == 0){
 					selectedOption = option;
 					return option;
 				}
 			}
 		}
-		return new OptionVo();
+		return new OptionVO();
 	}
 	
 	@RequestMapping(value = "/deleteOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse deleteOption(@RequestBody List<String> selectedOptions) {
+	public @ResponseBody JsonResponseVO deleteOption(@RequestBody List<String> selectedOptions) {
 		if(selectedOptions != null && selectedOptions.size() > 0 && newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
 			for(String option : selectedOptions){
-				Iterator<OptionVo> i = newProduct.getOptionList().iterator();
+				Iterator<OptionVO> i = newProduct.getOptionList().iterator();
 				while(i.hasNext()){
-					OptionVo optionVo = i.next();
+					OptionVO optionVo = i.next();
 					if(optionVo.getOptionName() != null && optionVo.getOptionName().compareToIgnoreCase(option) == 0){
 						i.remove();
 						break;
@@ -397,11 +397,11 @@ public class ProductManagementController {
 			}
 		}
 		
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/saveProduct", method = RequestMethod.POST)
-	public String saveProduct(@ModelAttribute("productForm") ProductVo product, final RedirectAttributes redirectAttributes) {
+	public String saveProduct(@ModelAttribute("productForm") ProductVO product, final RedirectAttributes redirectAttributes) {
 		
 		product.setOptionList(newProduct.getOptionList());
 		product = generateProductCode(product);
@@ -426,7 +426,7 @@ public class ProductManagementController {
 		return "redirect:listProduct";
 	}
 
-	private void reshuffleImage(LinkedList<FileMeta> images) {
+	private void reshuffleImage(LinkedList<FileMetaVO> images) {
 		if(images != null && images.size() > 0){
 			Collections.sort(images,new ImageCompare());
 			for(int i=0;i<images.size(); i++){
@@ -452,7 +452,7 @@ public class ProductManagementController {
 	@RequestMapping(value="/getImage/{imageId}", method = RequestMethod.GET)
 	public void getImage(@PathVariable Integer imageId, HttpServletRequest request, HttpServletResponse response){
 		if(this.newProduct != null && this.newProduct.getImages() != null && this.newProduct.getImages().size() > 0){
-			for(FileMeta image : newProduct.getImages()){
+			for(FileMetaVO image : newProduct.getImages()){
 				if(image.getImageId() == imageId){
 					  response.setContentType(image.getFileType());
 					  try {
@@ -509,10 +509,10 @@ public class ProductManagementController {
 		}
 	}	
 	
-	class ImageCompare implements Comparator<FileMeta>{
+	class ImageCompare implements Comparator<FileMetaVO>{
 
 		@Override
-		public int compare(FileMeta o1, FileMeta o2) {
+		public int compare(FileMetaVO o1, FileMetaVO o2) {
 			if(o1.getSequence() != null && o2.getSequence() != null){
 				return o1.getSequence().compareTo(o2.getSequence());
 			}else if(o1.getSequence() != null){

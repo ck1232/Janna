@@ -93,7 +93,7 @@ public class ProductCategoryManagementController {
 	@RequestMapping(value = "/createProductCategory", method = RequestMethod.POST)
     public String saveProductCategory(@ModelAttribute("categoryForm") @Validated Productcategory productcategory, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
-		productcategory.setDeleteind(GeneralUtils.NOT_DELETED);
+		productcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
 		logger.debug("saveProductcategory() : " + productcategory.toString());
 		if (result.hasErrors()) {
 			return "createProductCategory";
@@ -102,7 +102,7 @@ public class ProductCategoryManagementController {
 			if(!productcategory.getIsparent()) {
 				Productsubcategory productsubcategory = new Productsubcategory();
 				productsubcategory.setName(productcategory.getName());
-		    	productsubcategory.setDeleteind(GeneralUtils.NOT_DELETED);
+		    	productsubcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
 		    	productsubcategory.setProductcategoryid(new Integer(productcategory.getId()));
 		    	productsubcategory.setDisplayind(productcategory.getDisplayind());
 				productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
@@ -186,7 +186,7 @@ public class ProductCategoryManagementController {
 			if(!productcategory.getIsparent()) {
 				Productsubcategory productsubcategory = new Productsubcategory();
 				productsubcategory.setName(productcategory.getName());
-		    	productsubcategory.setDeleteind(GeneralUtils.NOT_DELETED);
+		    	productsubcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
 		    	productsubcategory.setProductcategoryid(new Integer(productcategory.getId()));
 		    	productsubcategory.setDisplayind(productcategory.getDisplayind());
 				productSubCategoryManagementService.saveProductSubCategory(productsubcategory);

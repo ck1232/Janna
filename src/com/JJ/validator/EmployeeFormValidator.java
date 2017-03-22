@@ -9,19 +9,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.controller.employeemanagement.EmployeeVo;
+import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 
 @Component
 public class EmployeeFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return EmployeeVo.class.equals(clazz);
+		return EmployeeVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		EmployeeVo employeeVo = (EmployeeVo) target;
+		EmployeeVO employeeVo = (EmployeeVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.employeeform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employmenttype", "error.notempty.employeeform.employmenttype");

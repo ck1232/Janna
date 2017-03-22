@@ -27,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Module;
-import com.JJ.model.RolesToPermission;
+import com.JJ.model.RolesToPermissionCustomDbObject;
 import com.JJ.model.Submodule;
 import com.JJ.model.Submodulepermission;
 import com.JJ.model.Submodulepermissiontype;
@@ -82,12 +82,12 @@ public class PermissionManagementController {
 	@RequestMapping(value = "/getRoleToPermission", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getRoleListToPermission(@RequestParam("editBtn") String submoduleid) {
 		logger.debug("getting role list");
-		List<RolesToPermission> rolesToPermissionList = permissionManagementService.getRolesToPermission(submoduleid);
+		List<RolesToPermissionCustomDbObject> rolesToPermissionList = permissionManagementService.getRolesToPermission(submoduleid);
 
-		List<RolesToPermission> permissionList = new ArrayList<RolesToPermission>();
-		Map<String, RolesToPermission> permissionMap = new HashMap<String, RolesToPermission>();
-		for(RolesToPermission obj : rolesToPermissionList){
-			RolesToPermission roleToPermission = permissionMap.get(obj.getRoleid());
+		List<RolesToPermissionCustomDbObject> permissionList = new ArrayList<RolesToPermissionCustomDbObject>();
+		Map<String, RolesToPermissionCustomDbObject> permissionMap = new HashMap<String, RolesToPermissionCustomDbObject>();
+		for(RolesToPermissionCustomDbObject obj : rolesToPermissionList){
+			RolesToPermissionCustomDbObject roleToPermission = permissionMap.get(obj.getRoleid());
 			if(roleToPermission == null){
 				permissionMap.put(obj.getRoleid(), obj);
 			}else{
@@ -95,7 +95,7 @@ public class PermissionManagementController {
 				roleToPermission.setPermissionId(roleToPermission.getPermissionId()+","+obj.getPermissionId());
 			}
 		}
-		for(RolesToPermission obj : permissionMap.values()){
+		for(RolesToPermissionCustomDbObject obj : permissionMap.values()){
 			permissionList.add(obj);
 		}
 		

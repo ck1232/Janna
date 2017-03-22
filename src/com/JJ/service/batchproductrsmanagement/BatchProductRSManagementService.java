@@ -1,57 +1,79 @@
 package com.JJ.service.batchproductrsmanagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
-import com.JJ.controller.productmanagement.vo.SubOptionVo;
-import com.JJ.dao.BatchproductRsMapper;
+import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
+import com.JJ.controller.batchintakemanagement.vo.BatchProductRsVO;
+import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
+import com.JJ.controller.productmanagement.vo.SubOptionVO;
+import com.JJ.dao.BatchProductRsDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.BatchproductRs;
-import com.JJ.model.BatchproductRsExample;
-import com.JJ.model.Product;
-import com.JJ.model.ProductsuboptionRs;
+import com.JJ.model.BatchProductRsDbObject;
+import com.JJ.model.BatchProductRsDbObjectExample;
 import com.JJ.service.productmanagement.ProductService;
-import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
-import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
 @Transactional(rollbackFor=Exception.class)
 public class BatchProductRSManagementService {
 	
-	private BatchproductRsMapper batchproductRsMapper;
+	private BatchProductRsDbObjectMapper batchProductRsDbObjectMapper;
 	private ProductService productService;
-	private ProductOptionManagementService productOptionManagementService;
-	private ProductSubOptionManagementService productSubOptionManagementService;
 	
 	@Autowired
-	public BatchProductRSManagementService(BatchproductRsMapper batchproductRsMapper, ProductService productService,
-			ProductOptionManagementService productOptionManagementService,
-			ProductSubOptionManagementService productSubOptionManagementService) {
-		this.batchproductRsMapper = batchproductRsMapper;
+	public BatchProductRSManagementService(BatchProductRsDbObjectMapper batchProductRsDbObjectMapper,
+			ProductService productService) {
+		this.batchProductRsDbObjectMapper = batchProductRsDbObjectMapper;
 		this.productService = productService;
-		this.productOptionManagementService = productOptionManagementService;
-		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
-	public BatchproductRs findById(Integer id) {
-		return batchproductRsMapper.selectByPrimaryKey(id);
+	public BatchProductRsVO findById(Integer id) {
+		if(id != null){
+			BatchProductRsDbObject dbObj = batchProductRsDbObjectMapper.selectByPrimaryKey(id);
+			return convertToBatchProductRsVOList(Arrays.asList(dbObj)).get(0);
+		}
+		return new BatchProductRsVO();
 	}
 
-	public List<BatchproductRs> getAllBatchproduct() {
-		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
-		batchproductRsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		return batchproductRsMapper.selectByExample(batchproductRsExample);
+	private List<BatchProductRsVO> convertToBatchProductRsVOList(
+			List<BatchProductRsDbObject> dbObjList) {
+		List<BatchProductRsVO> list = new ArrayList<BatchProductRsVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(BatchProductRsDbObject dbObj : dbObjList){
+				BatchProductRsVO vo = new BatchProductRsVO();
+				vo.setBatchId(dbObj.getBatchId());
+				vo.setBatchProductRsId(dbObj.getBatchProductRsId());
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setProductSubOptionId(dbObj.getProductSubOptionId());
+				vo.setQty(dbObj.getQty());
+				vo.setUnitCost(dbObj.getUnitCost());
+				list.add(vo);
+			}
+		}
+		return list;
+	}
+
+	public List<BatchProductRsVO> getAllBatchproduct() {
+		BatchProductRsDbObjectExample batchproductRsExample = new BatchProductRsDbObjectExample();
+		batchproductRsExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<BatchProductRsDbObject> list = batchProductRsDbObjectMapper.selectByExample(batchproductRsExample);
+		return convertToBatchProductRsVOList(list);
 	}
 	
-	public List<BatchproductRs> getBatchproductByBatchId(Integer batchid) {
-		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
-		batchproductRsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidEqualTo(batchid);
-		return batchproductRsMapper.selectByExample(batchproductRsExample);
+	public List<BatchProductRsVO> getBatchproductByBatchId(Integer batchId) {
+		if(batchId != null){
+			BatchProductRsDbObjectExample batchproductRsExample = new BatchProductRsDbObjectExample();
+			batchproductRsExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBatchIdEqualTo(batchId);
+			List<BatchProductRsDbObject> list = batchProductRsDbObjectMapper.selectByExample(batchproductRsExample);
+			return convertToBatchProductRsVOList(list);
+		}
+		return new ArrayList<BatchProductRsVO>();
 	}
 	
 	/*public BatchproductRs findByProductNameAndSubOption(Integer batchid, BatchIntakeProduct product) {
@@ -81,71 +103,102 @@ public class BatchProductRSManagementService {
 		return rsList.get(0);
 	}*/
 	
-	public int saveBatchproduct(BatchproductRs batchproductRs) {
-		return batchproductRsMapper.insertSelective(batchproductRs);
+	public int saveBatchproduct(BatchProductRsVO batchproductRs) {
+		List<BatchProductRsDbObject> dbObjList = convertToBatchProductRsDbObjectList(Arrays.asList(batchproductRs));
+		if(dbObjList != null && dbObjList.size() > 0){
+			return batchProductRsDbObjectMapper.insertSelective(dbObjList.get(0));
+		}
+		return 0;
 	}
 	
-	public void deleteBatchproduct(Integer id) {
-		BatchproductRs batchproductRs = findById(id);
-		if(batchproductRs.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			batchproductRs.setDeleteind(GeneralUtils.DELETED);
-			batchproductRsMapper.updateByPrimaryKey(batchproductRs);
+	private List<BatchProductRsDbObject> convertToBatchProductRsDbObjectList(
+			List<BatchProductRsVO> voList) {
+		List<BatchProductRsDbObject> list = new ArrayList<BatchProductRsDbObject>();
+		if(voList != null && voList.size() > 0){
+			for(BatchProductRsVO vo : voList){
+				BatchProductRsDbObject dbObj = new BatchProductRsDbObject();
+				dbObj.setBatchId(vo.getBatchId());
+				dbObj.setBatchProductRsId(vo.getBatchProductRsId());
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setProductSubOptionId(vo.getProductSubOptionId());
+				dbObj.setQty(vo.getQty());
+				dbObj.setUnitCost(vo.getUnitCost());
+				list.add(dbObj);
+			}
 		}
+		return list;
+	}
+
+	public void deleteBatchproduct(Integer id) {
+		BatchProductRsVO batchProductRs = findById(id);
+		if(batchProductRs != null && batchProductRs.getDeleteInd() != null){
+			if(batchProductRs.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+				BatchProductRsDbObject dbObj = new BatchProductRsDbObject();
+				dbObj.setBatchId(id);
+				dbObj.setDeleteInd(GeneralUtils.DELETED);
+				batchProductRsDbObjectMapper.updateByPrimaryKey(dbObj);
+			}
+		}
+		
 	}
 	
 	public void deleteBatchproduct(List<Integer> batchidList) {
-		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
-		batchproductRsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidIn(batchidList);
-		BatchproductRs batchproductRs = new BatchproductRs();
-		batchproductRs.setDeleteind(GeneralUtils.DELETED);
-		batchproductRsMapper.updateByExampleSelective(batchproductRs, batchproductRsExample);
+		BatchProductRsDbObjectExample batchproductRsExample = new BatchProductRsDbObjectExample();
+		batchproductRsExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBatchIdIn(batchidList);
+		BatchProductRsDbObject dbObj = new BatchProductRsDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		batchProductRsDbObjectMapper.updateByExampleSelective(dbObj, batchproductRsExample);
 	}
 	
 	public void deleteBatchproductNotInBatchProductidList(Integer batchid, List<Integer> idList) {
-		BatchproductRsExample batchproductRsExample = new BatchproductRsExample();
-		BatchproductRsExample.Criteria criteria = batchproductRsExample.createCriteria();
-		criteria.andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBatchidEqualTo(batchid);
+		BatchProductRsDbObjectExample batchproductRsExample = new BatchProductRsDbObjectExample();
+		BatchProductRsDbObjectExample.Criteria criteria = batchproductRsExample.createCriteria();
+		criteria.andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBatchIdEqualTo(batchid);
 		
 		if(idList != null && idList.size() > 0){
-			criteria.andBatchproductidNotIn(idList);
+			criteria.andBatchProductRsIdNotIn(idList);
 		}
-		BatchproductRs batchproductRs = new BatchproductRs();
-		batchproductRs.setDeleteind(GeneralUtils.DELETED);
-		batchproductRsMapper.updateByExampleSelective(batchproductRs, batchproductRsExample);
+		BatchProductRsDbObject batchproductRs = new BatchProductRsDbObject();
+		batchproductRs.setDeleteInd(GeneralUtils.DELETED);
+		batchProductRsDbObjectMapper.updateByExampleSelective(batchproductRs, batchproductRsExample);
 	}
 	
-	public void updateBatchproductRS(BatchproductRs batchproductRs) {
-		if(batchproductRs.getDeleteind().equals(GeneralUtils.NOT_DELETED))
-			batchproductRsMapper.updateByPrimaryKeySelective(batchproductRs);
+	public void updateBatchproductRS(BatchProductRsVO batchproductRs) {
+		if(batchproductRs.getDeleteInd() != null && 
+				batchproductRs.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			List<BatchProductRsDbObject> list = convertToBatchProductRsDbObjectList(Arrays.asList(batchproductRs));
+			batchProductRsDbObjectMapper.updateByPrimaryKeySelective(list.get(0));
+		}
+			
 	}
 	
-	public List<BatchIntakeProduct> getAllBatchProductVoByBatchId(Integer batchId) {
-		List<BatchproductRs> rsList = getBatchproductByBatchId(batchId);
-		List<BatchIntakeProduct> productVoList = new ArrayList<BatchIntakeProduct>();
+	public List<BatchIntakeProductVO> getAllBatchProductVoByBatchId(Integer batchId) {
+		List<BatchProductRsVO> rsList = getBatchproductByBatchId(batchId);
+		List<BatchIntakeProductVO> productVoList = new ArrayList<BatchIntakeProductVO>();
 		if(rsList.size() != 0){
-			for(BatchproductRs rs: rsList){
-				BatchIntakeProduct batchProduct = new BatchIntakeProduct();
-				ProductsuboptionRs productoptionrs = productService.getProductsuboptionRsById(rs.getProductsuboptionid());
-				Product product = productService.getProductsById(productoptionrs.getProductid());
+			for(BatchProductRsVO rs: rsList){
+				BatchIntakeProductVO batchProduct = new BatchIntakeProductVO();
+				ProductSubOptionRsVO productoptionrs = productService.getProductsuboptionRsById(rs.getProductSubOptionId());
+				ProductVO product = productService.getProductsById(productoptionrs.getProductId());
 				batchProduct.setProduct(product);
 				batchProduct.setQty(rs.getQty());
-				batchProduct.setUnitcost(rs.getUnitcost());
-				batchProduct.setBatchProductId(rs.getBatchproductid());
-				batchProduct.setSubOptionList(new ArrayList<SubOptionVo>());
-				if(productoptionrs.getSuboption1id() != null && productoptionrs.getSuboption1id() > 0){
-					SubOptionVo subOption1 = productService.getSubOptionVo(productoptionrs.getSuboption1id());
+				batchProduct.setUnitcost(rs.getUnitCost());
+				batchProduct.setBatchProductId(rs.getBatchProductRsId());
+				batchProduct.setSubOptionList(new ArrayList<SubOptionVO>());
+				if(productoptionrs.getSuboption1Id() != null && productoptionrs.getSuboption1Id() > 0){
+					SubOptionVO subOption1 = productService.getSubOptionVo(productoptionrs.getSuboption1Id());
 					if(subOption1 != null){
 						batchProduct.getSubOptionList().add(subOption1);
 					}
 				}
-				if(productoptionrs.getSuboption2id() != null && productoptionrs.getSuboption2id() > 0){
-					SubOptionVo subOption2 = productService.getSubOptionVo(productoptionrs.getSuboption2id());
+				if(productoptionrs.getSuboption2Id() != null && productoptionrs.getSuboption2Id() > 0){
+					SubOptionVO subOption2 = productService.getSubOptionVo(productoptionrs.getSuboption2Id());
 					if(subOption2 != null){
 						batchProduct.getSubOptionList().add(subOption2);
 					}
 				}
-				if(productoptionrs.getSuboption3id() != null && productoptionrs.getSuboption3id() > 0){
-					SubOptionVo subOption3 = productService.getSubOptionVo(productoptionrs.getSuboption3id());
+				if(productoptionrs.getSuboption3Id() != null && productoptionrs.getSuboption3Id() > 0){
+					SubOptionVO subOption3 = productService.getSubOptionVo(productoptionrs.getSuboption3Id());
 					if(subOption3 != null){
 						batchProduct.getSubOptionList().add(subOption3);
 					}

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.TransactionShippingOptionDbObjectMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.TransactionShippingOptionDbObject">
+    <id column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="shipping_calculation_mode" jdbcType="VARCHAR" property="shippingCalculationMode" />
+    <result column="insurance_option_selected" jdbcType="VARCHAR" property="insuranceOptionSelected" />
+    <result column="shipping_option_is_default" jdbcType="VARCHAR" property="shippingOptionIsDefault" />
+    <result column="shipping_option_amt" jdbcType="DECIMAL" property="shippingOptionAmt" />
+    <result column="shipping_option_name" jdbcType="VARCHAR" property="shippingOptionName" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_on" jdbcType="TIMESTAMP" property="createdOn" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_on" jdbcType="TIMESTAMP" property="updatedOn" />
+    <result column="delete_ind" jdbcType="CHAR" property="deleteInd" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    transaction_id, shipping_calculation_mode, insurance_option_selected, shipping_option_is_default, 
+    shipping_option_amt, shipping_option_name, version, created_by, created_on, updated_by, 
+    updated_on, delete_ind
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.TransactionShippingOptionDbObjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from transaction_shipping_option
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from transaction_shipping_option
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from transaction_shipping_option
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.TransactionShippingOptionDbObjectExample">
+    delete from transaction_shipping_option
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.TransactionShippingOptionDbObject">
+    insert into transaction_shipping_option (transaction_id, shipping_calculation_mode, 
+      insurance_option_selected, shipping_option_is_default, 
+      shipping_option_amt, shipping_option_name, 
+      version, created_by, created_on, 
+      updated_by, updated_on, delete_ind
+      )
+    values (#{transactionId,jdbcType=VARCHAR}, #{shippingCalculationMode,jdbcType=VARCHAR}, 
+      #{insuranceOptionSelected,jdbcType=VARCHAR}, #{shippingOptionIsDefault,jdbcType=VARCHAR}, 
+      #{shippingOptionAmt,jdbcType=DECIMAL}, #{shippingOptionName,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.TransactionShippingOptionDbObject">
+    insert into transaction_shipping_option
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="shippingCalculationMode != null">
+        shipping_calculation_mode,
+      </if>
+      <if test="insuranceOptionSelected != null">
+        insurance_option_selected,
+      </if>
+      <if test="shippingOptionIsDefault != null">
+        shipping_option_is_default,
+      </if>
+      <if test="shippingOptionAmt != null">
+        shipping_option_amt,
+      </if>
+      <if test="shippingOptionName != null">
+        shipping_option_name,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdOn != null">
+        created_on,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="updatedOn != null">
+        updated_on,
+      </if>
+      <if test="deleteInd != null">
+        delete_ind,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingCalculationMode != null">
+        #{shippingCalculationMode,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceOptionSelected != null">
+        #{insuranceOptionSelected,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingOptionIsDefault != null">
+        #{shippingOptionIsDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingOptionAmt != null">
+        #{shippingOptionAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingOptionName != null">
+        #{shippingOptionName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        #{deleteInd,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.TransactionShippingOptionDbObjectExample" resultType="java.lang.Integer">
+    select count(*) from transaction_shipping_option
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update transaction_shipping_option
+    <set>
+      <if test="record.transactionId != null">
+        transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingCalculationMode != null">
+        shipping_calculation_mode = #{record.shippingCalculationMode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insuranceOptionSelected != null">
+        insurance_option_selected = #{record.insuranceOptionSelected,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingOptionIsDefault != null">
+        shipping_option_is_default = #{record.shippingOptionIsDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingOptionAmt != null">
+        shipping_option_amt = #{record.shippingOptionAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingOptionName != null">
+        shipping_option_name = #{record.shippingOptionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdOn != null">
+        created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null">
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedOn != null">
+        updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteInd != null">
+        delete_ind = #{record.deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update transaction_shipping_option
+    set transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+      shipping_calculation_mode = #{record.shippingCalculationMode,jdbcType=VARCHAR},
+      insurance_option_selected = #{record.insuranceOptionSelected,jdbcType=VARCHAR},
+      shipping_option_is_default = #{record.shippingOptionIsDefault,jdbcType=VARCHAR},
+      shipping_option_amt = #{record.shippingOptionAmt,jdbcType=DECIMAL},
+      shipping_option_name = #{record.shippingOptionName,jdbcType=VARCHAR},
+      version = #{record.version,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{record.deleteInd,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.TransactionShippingOptionDbObject">
+    update transaction_shipping_option
+    <set>
+      <if test="shippingCalculationMode != null">
+        shipping_calculation_mode = #{shippingCalculationMode,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceOptionSelected != null">
+        insurance_option_selected = #{insuranceOptionSelected,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingOptionIsDefault != null">
+        shipping_option_is_default = #{shippingOptionIsDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingOptionAmt != null">
+        shipping_option_amt = #{shippingOptionAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingOptionName != null">
+        shipping_option_name = #{shippingOptionName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        created_on = #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        delete_ind = #{deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.TransactionShippingOptionDbObject">
+    update transaction_shipping_option
+    set shipping_calculation_mode = #{shippingCalculationMode,jdbcType=VARCHAR},
+      insurance_option_selected = #{insuranceOptionSelected,jdbcType=VARCHAR},
+      shipping_option_is_default = #{shippingOptionIsDefault,jdbcType=VARCHAR},
+      shipping_option_amt = #{shippingOptionAmt,jdbcType=DECIMAL},
+      shipping_option_name = #{shippingOptionName,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{deleteInd,jdbcType=CHAR}
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

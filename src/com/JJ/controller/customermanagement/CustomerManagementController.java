@@ -114,7 +114,7 @@ public class CustomerManagementController {
 //		if (result.hasErrors()) {
 //			return "createCustomer";
 //		} else {
-			customer.setDeleteind(GeneralUtils.NOT_DELETED);
+			customer.setDeleteInd(GeneralUtils.NOT_DELETED);
 			customerManagementService.saveCustomer(customer);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Customer added successfully!");

@@ -6,16 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.CustomerMapper;
+import com.JJ.dao.CustomerDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Customer;
-import com.JJ.model.CustomerExample;
+import com.JJ.model.CustomerDbObject;;
 
 @Service
 @Transactional
 public class CustomerManagementService {
 	
-	private CustomerMapper customerMapper;
+	private CustomerDbObject customerMapper;
 	
 	@Autowired
 	public CustomerManagementService(CustomerMapper customerMapper) {
@@ -44,8 +43,8 @@ public class CustomerManagementService {
 	
 	public void deleteCustomer(Integer id) {
 		Customer customer = findById(id);
-		if(customer.getDeleteind().equals(GeneralUtils.NOT_DELETED)){
-			customer.setDeleteind(GeneralUtils.DELETED);
+		if(customer.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			customer.setDeleteInd(GeneralUtils.DELETED);
 			customerMapper.updateByPrimaryKey(customer);
 		}
 	}
@@ -53,13 +52,13 @@ public class CustomerManagementService {
 	public void deleteCustomer(List<Integer> customerIdList) {
 		List<Customer> customerList = getAllCustomers(customerIdList);
 		for(Customer customer: customerList){
-			customer.setDeleteind(GeneralUtils.DELETED);
+			customer.setDeleteInd(GeneralUtils.DELETED);
 			customerMapper.updateByPrimaryKey(customer);
 		}
 	}
 	
 	public void updateCustomer(Customer customer) {
-		if(customer.getDeleteind().equals(GeneralUtils.NOT_DELETED))
+		if(customer.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
 			customerMapper.updateByPrimaryKeySelective(customer);
 	}
 	 

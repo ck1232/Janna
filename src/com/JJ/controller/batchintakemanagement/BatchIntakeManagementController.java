@@ -28,16 +28,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.productmanagement.vo.ProductVo;
-import com.JJ.controller.productmanagement.vo.SubOptionVo;
+import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
+import com.JJ.controller.batchintakemanagement.vo.BatchProductRsVO;
+import com.JJ.controller.batchintakemanagement.vo.BatchStockIntakeVO;
+import com.JJ.controller.batchintakemanagement.vo.ProductInventoryVO;
+import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
+import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
+import com.JJ.controller.common.vo.JsonResponseVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
+import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.BatchproductRs;
-import com.JJ.model.Batchstockintake;
-import com.JJ.model.JsonResponse;
-import com.JJ.model.Product;
-import com.JJ.model.Productinventory;
-import com.JJ.model.ProductsuboptionRs;
-import com.JJ.model.Storagelocation;
 import com.JJ.service.batchintakemanagement.BatchIntakeManagementService;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
 import com.JJ.service.productmanagement.ProductService;
@@ -58,9 +58,8 @@ public class BatchIntakeManagementController {
 	private StorageLocationManagementService storageLocationManagementService;
 	private BatchIntakeFormValidator batchIntakeFormValidator;
 	
-	private List<BatchProductVo> productList;
-	private ProductVo productVo;
-	private List<BatchIntakeProduct> batchIntakeProductList; 
+	private ProductVO productVo;
+	private List<BatchIntakeProductVO> batchIntakeProductList; 
 	
 	@Autowired
 	public BatchIntakeManagementController(BatchIntakeManagementService batchIntakeManagementService,
@@ -85,10 +84,12 @@ public class BatchIntakeManagementController {
 	@RequestMapping(value = "/getBatchIntakeList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getBatchIntakeList() {
 		logger.debug("getting batch intake list");
-		List<Batchstockintake> batchIntakeList = batchIntakeManagementService.getAllBatchstockintakes();
-		for(Batchstockintake batch: batchIntakeList) {
-			Storagelocation loc = storageLocationManagementService.findById(batch.getStoragelocation());
-			batch.setStoragelocationname(loc.getLocationname());
+		List<BatchStockIntakeVO> batchIntakeList = batchIntakeManagementService.getAllBatchStockIntakes();
+		for(BatchStockIntakeVO batch: batchIntakeList) {
+			StorageLocationVO loc = storageLocationManagementService.findById(batch.getStorageLocation());
+			if(loc != null){
+				batch.setStorageLocationName(loc.getName());
+			}
 		}
 		return GeneralUtils.convertListToJSONString(batchIntakeList);
 	}
@@ -96,9 +97,9 @@ public class BatchIntakeManagementController {
 	@RequestMapping(value = "/createBatchIntake", method = RequestMethod.GET)
     public String showAddBatchIntakeForm(Model model) {  
     	logger.debug("loading showAddBatchIntakeForm");
-    	Batchstockintake batchIntake = new Batchstockintake();
+    	BatchStockIntakeVO batchIntake = new BatchStockIntakeVO();
     	batchIntake.setDate(new Date());
-    	batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
+    	batchIntakeProductList = new ArrayList<BatchIntakeProductVO>();
     	model.addAttribute("batchIntakeForm", batchIntake);
         return "createBatchIntake";  
     }
@@ -111,7 +112,7 @@ public class BatchIntakeManagementController {
 	}
 	
 	@RequestMapping(value = "/createBatchIntake", method = RequestMethod.POST)
-    public String saveBatchIntake(@ModelAttribute("batchIntakeForm") @Validated Batchstockintake batchIntake, 
+    public String saveBatchIntake(@ModelAttribute("batchIntakeForm") @Validated BatchStockIntakeVO batchIntake, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveBatchIntake() : " + batchIntake.toString());
@@ -120,40 +121,40 @@ public class BatchIntakeManagementController {
 		} else {
 			BigDecimal totalProductCost = BigDecimal.ZERO;
 			if(batchIntakeProductList != null) {
-				for(BatchIntakeProduct product: batchIntakeProductList){
+				for(BatchIntakeProductVO product: batchIntakeProductList){
 					BigDecimal i = product.getUnitcost().multiply(BigDecimal.valueOf(product.getQty()));
 					totalProductCost = totalProductCost.add(i);
 				}
 			}
-			BigDecimal addcost = batchIntake.getTotalcost().subtract(totalProductCost);
+			BigDecimal addcost = batchIntake.getTotalCost().subtract(totalProductCost);
 			if(addcost.signum() == -1) {
 				result.rejectValue("totalcost", "error.lessthan.batchintakeform.totalcost");
 				return "createBatchIntake";
 			}
-			batchIntake.setAdditionalcost(addcost);
-			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
-			List<BatchproductRs> batchProductList = new ArrayList<BatchproductRs>();
-			List<Productinventory> inventoryList = new ArrayList<Productinventory>();
+			batchIntake.setAdditionalCost(addcost);
+			batchIntake.setDeleteInd(GeneralUtils.NOT_DELETED);
+			List<BatchProductRsVO> batchProductList = new ArrayList<BatchProductRsVO>();
+			List<ProductInventoryVO> inventoryList = new ArrayList<ProductInventoryVO>();
 			if(batchIntakeProductList != null) {
-				for(BatchIntakeProduct product: batchIntakeProductList){
+				for(BatchIntakeProductVO product: batchIntakeProductList){
 					//find if exist in db
 					List<Integer> suboptionIdList = new ArrayList<Integer>();
-					for(SubOptionVo suboption: product.getSubOptionList()) {
+					for(SubOptionVO suboption: product.getSubOptionList()) {
 						suboptionIdList.add(suboption.getSubOptionId());
 					}
-					ProductsuboptionRs rs = productService.findProductSubOptionRs(product.getProduct().getProductid(), suboptionIdList);
+					ProductSubOptionRsVO rs = productService.findProductSubOptionRs(product.getProduct().getProductId(), suboptionIdList);
 					//if exist, get id
-					if(rs.getProductid() != null) {
-						BatchproductRs batchProductRs = new BatchproductRs();
-						batchProductRs.setBatchid(batchIntake.getBatchid());
-						batchProductRs.setProductsuboptionid(rs.getProductsuboptionid());
-						batchProductRs.setUnitcost(product.getUnitcost());
+					if(rs.getProductId() != null) {
+						BatchProductRsVO batchProductRs = new BatchProductRsVO();
+						batchProductRs.setBatchId(batchIntake.getBatchId());
+						batchProductRs.setProductSubOptionId(rs.getProductSuboptionRsId());
+						batchProductRs.setUnitCost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
-						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);
+						batchProductRs.setDeleteInd(GeneralUtils.NOT_DELETED);
 						batchProductList.add(batchProductRs);
 						
-						Productinventory inventory = new Productinventory(rs.getProductsuboptionid(), null, 
-								batchIntake.getStoragelocation(), true,
+						ProductInventoryVO inventory = new ProductInventoryVO(rs.getProductSuboptionRsId(), null, 
+								batchIntake.getStorageLocation(), true,
 								product.getQty(), null);
 						inventoryList.add(inventory);
 					//else invalid
@@ -165,7 +166,7 @@ public class BatchIntakeManagementController {
 				}
 			}
 			batchIntakeManagementService.createBatchstockintake(batchIntake, inventoryList, batchProductList);
-			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
+			batchIntakeProductList = new ArrayList<BatchIntakeProductVO>();
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");
 		}
@@ -182,11 +183,11 @@ public class BatchIntakeManagementController {
 			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
 			return "redirect:listBatchIntake";
 		}
-		List<Productinventory> inventoryList = new ArrayList<Productinventory>();
-		List<Batchstockintake> batchList = batchIntakeManagementService.findByIdList(ids);
-		for(Batchstockintake batch : batchList) {
-			List<BatchproductRs> originalList = batchProductRSManagementService.getBatchproductByBatchId(batch.getBatchid());
-			inventoryList.addAll(this.compareBatchProductsQtyDifference(batch, originalList, new ArrayList<BatchproductRs>()));
+		List<ProductInventoryVO> inventoryList = new ArrayList<ProductInventoryVO>();
+		List<BatchStockIntakeVO> batchList = batchIntakeManagementService.findByIdList(ids);
+		for(BatchStockIntakeVO batch : batchList) {
+			List<BatchProductRsVO> originalList = batchProductRSManagementService.getBatchproductByBatchId(batch.getBatchId());
+			inventoryList.addAll(this.compareBatchProductsQtyDifference(batch, originalList, new ArrayList<BatchProductRsVO>()));
 		}
 		
 		batchIntakeManagementService.deleteBatch(ids, inventoryList);
@@ -199,40 +200,40 @@ public class BatchIntakeManagementController {
 	@RequestMapping(value = "/getBatchProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getBatchProductList() {
 		if(batchIntakeProductList != null){
-			for(BatchIntakeProduct batchIntakeProduct : batchIntakeProductList){
+			for(BatchIntakeProductVO batchIntakeProduct : batchIntakeProductList){
 				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
 			}
 			return GeneralUtils.convertListToJSONString(batchIntakeProductList);
 		}
-		return GeneralUtils.convertListToJSONString(new ArrayList<BatchIntakeProduct>());
+		return GeneralUtils.convertListToJSONString(new ArrayList<BatchIntakeProductVO>());
 	}
 	
 	@RequestMapping(value = "/getLocationList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Storagelocation> getLocationNameList() {
+	public @ResponseBody List<StorageLocationVO> getLocationNameList() {
 		logger.debug("getting product list");
-		List<Storagelocation> locationList = storageLocationManagementService.getAllStoragelocations();	
+		List<StorageLocationVO> locationList = storageLocationManagementService.getAllStorageLocations();	
 		return locationList;
 	}
 	
 	@RequestMapping(value = "/getProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Product> getProductNameList() {
+	public @ResponseBody List<ProductVO> getProductNameList() {
 		logger.debug("getting product list");
-		List<Product> productList = productService.getAllProducts();		
+		List<ProductVO> productList = productService.getAllProducts();		
 		return productList;
 	}
 	
 	@RequestMapping(value = "/getBatchProductVo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ProductVo getBatchProductVo(@RequestBody Product product) {
-		logger.debug(product.getProductid());
+	public @ResponseBody ProductVO getBatchProductVo(@RequestBody ProductVO product) {
+		logger.debug(product.getProductId());
 		
-		List<ProductVo> productVoList = productService.getAllProductVo(product.getProductid());
+		List<ProductVO> productVoList = productService.getAllProductVo(product.getProductId());
 		if(productVoList != null && productVoList.size() > 0){
 			productVo = productVoList.get(0);
 			if(productVo != null){
 				return productVo;
 			}
 		}
-		return new ProductVo();
+		return new ProductVO();
 	}
 	/*
 	@RequestMapping(value = "/calculateAdditionalCost", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -253,17 +254,17 @@ public class BatchIntakeManagementController {
 	*/
 	
 	@RequestMapping(value = "/saveAddProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveAddProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody JsonResponseVO saveAddProduct(@RequestBody BatchIntakeProductVO product) {
 		logger.debug("save add product");
 		boolean pass = true;
-		if(StringUtils.isNullOrEmpty(product.getProduct().getProductname()) ||
+		if(StringUtils.isNullOrEmpty(product.getProduct().getProductName()) ||
 				product.getSubOptionList() == null ||
 				product.getSubOptionList().size() == 0 ||
 				product.getUnitcost() == null ||
 				product.getQty() == null){
 			pass = false;
 		}else if(product.getSubOptionList().size() > 0){
-			for(SubOptionVo vo : product.getSubOptionList()){
+			for(SubOptionVO vo : product.getSubOptionList()){
 				if(vo.getSubOptionId() == null){
 					pass = false;
 					break;
@@ -271,11 +272,11 @@ public class BatchIntakeManagementController {
 			}
 		}
 		if(!pass){
-			return new JsonResponse("error", "Please fill in all the details!");
+			return new JsonResponseVO("error", "Please fill in all the details!");
 		}
 		
 		if(batchIntakeProductList == null) { 
-			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
+			batchIntakeProductList = new ArrayList<BatchIntakeProductVO>();
 		}
 		/*
 		BigDecimal totalcostNum = product.getBatchtotalcost();
@@ -295,39 +296,39 @@ public class BatchIntakeManagementController {
 		}
 		*/
 		//for generating suboption
-		Iterator<SubOptionVo> i = product.getSubOptionList().iterator();
+		Iterator<SubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
-			SubOptionVo subOptionVo = i.next();
-			SubOptionVo generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
+			SubOptionVO subOptionVo = i.next();
+			SubOptionVO generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 			subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
 		}
-		for(BatchIntakeProduct p : batchIntakeProductList){
+		for(BatchIntakeProductVO p : batchIntakeProductList){
 			if(p.hashCode() == product.hashCode()) {
-				return new JsonResponse("error", "Product already exists!");
+				return new JsonResponseVO("error", "Product already exists!");
 			}
 		}
 		batchIntakeProductList.add(product);
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value="/editBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody BatchIntakeProduct editBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody BatchIntakeProductVO editBatchIntakeProduct(@RequestBody BatchIntakeProductVO product) {
 		if(batchIntakeProductList != null && batchIntakeProductList.size() > 0){
-			for(BatchIntakeProduct batchIntakeProduct : batchIntakeProductList){
+			for(BatchIntakeProductVO batchIntakeProduct : batchIntakeProductList){
 				if(batchIntakeProduct.getHashCode() == product.getHashCode()){
 					return batchIntakeProduct;
 				}
 			}
 		}
-		return new BatchIntakeProduct();
+		return new BatchIntakeProductVO();
 	}
 	
 	@RequestMapping(value = "/saveEditProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveEditProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody JsonResponseVO saveEditProduct(@RequestBody BatchIntakeProductVO product) {
 		logger.debug("save edit product");
 		if(batchIntakeProductList != null) {
-			for(BatchIntakeProduct batchproduct: batchIntakeProductList){
+			for(BatchIntakeProductVO batchproduct: batchIntakeProductList){
 				if((batchproduct.getHashCode()) == product.getHashCode()) {
 					batchproduct.setUnitcost(product.getUnitcost());
 					batchproduct.setQty(product.getQty());
@@ -335,15 +336,15 @@ public class BatchIntakeManagementController {
 				}
 			}
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/deleteBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse deleteBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody JsonResponseVO deleteBatchIntakeProduct(@RequestBody BatchIntakeProductVO product) {
 		logger.debug("delete product");
 		int index = -1;
 		if(batchIntakeProductList != null) {
-			for(BatchIntakeProduct batchproduct: batchIntakeProductList){
+			for(BatchIntakeProductVO batchproduct: batchIntakeProductList){
 				if((batchproduct.getHashCode()) == product.getHashCode()) {
 					index = batchIntakeProductList.indexOf(batchproduct);
 					break;
@@ -353,66 +354,69 @@ public class BatchIntakeManagementController {
 		if(index > -1){
 			batchIntakeProductList.remove(index);
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	/*----------------------Update batch intake ------------------------------*/
 	
 	@RequestMapping(value = "/updateBatchIntake", method = RequestMethod.POST)
 	public String getBatchIntakeToUpdate(@RequestParam("editBtn") String id, Model model) {
-		Batchstockintake batchIntake = batchIntakeManagementService.findById(Integer.parseInt(id));
-		Storagelocation loc = storageLocationManagementService.findById(batchIntake.getStoragelocation());
-		batchIntake.setStoragelocationname(loc.getLocationname());
-		batchIntakeProductList = batchProductRSManagementService.getAllBatchProductVoByBatchId(batchIntake.getBatchid());
-		logger.debug("Loading update Batch Intake page for " + batchIntake.toString());
-		model.addAttribute("batchIntakeForm", batchIntake);
+		BatchStockIntakeVO batchIntake = batchIntakeManagementService.findById(Integer.parseInt(id));
+		if(batchIntake != null){
+			StorageLocationVO loc = storageLocationManagementService.findById(batchIntake.getStorageLocation());
+			batchIntake.setStorageLocationName(loc.getName());
+			batchIntakeProductList = batchProductRSManagementService.getAllBatchProductVoByBatchId(batchIntake.getBatchId());
+			logger.debug("Loading update Batch Intake page for " + batchIntake.toString());
+			model.addAttribute("batchIntakeForm", batchIntake);
+		}
+		
         return "updateBatchIntake";  
 	}
 	
 	
-	private List<Productinventory> compareBatchProductsQtyDifference(Batchstockintake batch, List<BatchproductRs> originalList, List<BatchproductRs> newList){
-		List<Productinventory> productInventoryList = new ArrayList<Productinventory>();
+	private List<ProductInventoryVO> compareBatchProductsQtyDifference(BatchStockIntakeVO batch, List<BatchProductRsVO> originalList, List<BatchProductRsVO> newList){
+		List<ProductInventoryVO> productInventoryList = new ArrayList<ProductInventoryVO>();
 		if(newList != null && originalList != null) {
-			Map<Integer, BatchproductRs> newProductRsMap = new HashMap<Integer, BatchproductRs>();
-			Map<Integer, BatchproductRs> oldProductRsMap = new HashMap<Integer, BatchproductRs>();
-			for(BatchproductRs rs : newList){
-				newProductRsMap.put(rs.getProductsuboptionid(), rs);
+			Map<Integer, BatchProductRsVO> newProductRsMap = new HashMap<Integer, BatchProductRsVO>();
+			Map<Integer, BatchProductRsVO> oldProductRsMap = new HashMap<Integer, BatchProductRsVO>();
+			for(BatchProductRsVO rs : newList){
+				newProductRsMap.put(rs.getProductSubOptionId(), rs);
 			}
-			for(BatchproductRs rs : originalList){
-				oldProductRsMap.put(rs.getProductsuboptionid(), rs);
+			for(BatchProductRsVO rs : originalList){
+				oldProductRsMap.put(rs.getProductSubOptionId(), rs);
 			}
-			for(BatchproductRs originalProduct : originalList){
-				BatchproductRs newProductRs = newProductRsMap.get(originalProduct.getProductsuboptionid());
+			for(BatchProductRsVO originalProduct : originalList){
+				BatchProductRsVO newProductRs = newProductRsMap.get(originalProduct.getProductSubOptionId());
 				if(newProductRs == null){
 					//old product kena deleted
-					Productinventory inventory = new Productinventory(originalProduct.getProductsuboptionid(), batch.getStoragelocation(), 
+					ProductInventoryVO inventory = new ProductInventoryVO(originalProduct.getProductSubOptionId(), batch.getStorageLocation(), 
 							null, false,
-							originalProduct.getQty(), null, GeneralUtils.MODE_BATCH, batch.getBatchid());
+							originalProduct.getQty(), null, GeneralUtils.MODE_BATCH, batch.getBatchId());
 					productInventoryList.add(inventory);
 				}else{
 					//check qty difference
 					String remark = "old: " + originalProduct.getQty() + ", new: " + newProductRs.getQty();
 					if(originalProduct.getQty().compareTo(newProductRs.getQty()) > 0) {
-						Productinventory inventory = new Productinventory(newProductRs.getProductsuboptionid(), null, 
-								batch.getStoragelocation(), false,
-								originalProduct.getQty() - newProductRs.getQty(), remark, GeneralUtils.MODE_BATCH, batch.getBatchid());
+						ProductInventoryVO inventory = new ProductInventoryVO(newProductRs.getProductSubOptionId(), null, 
+								batch.getStorageLocation(), false,
+								originalProduct.getQty() - newProductRs.getQty(), remark, GeneralUtils.MODE_BATCH, batch.getBatchId());
 						productInventoryList.add(inventory);
 					}else if(originalProduct.getQty().compareTo(newProductRs.getQty()) < 0){
-						Productinventory inventory = new Productinventory(newProductRs.getProductsuboptionid(), null, 
-								batch.getStoragelocation(), true,
-								newProductRs.getQty() - originalProduct.getQty(), remark, GeneralUtils.MODE_BATCH, batch.getBatchid());
+						ProductInventoryVO inventory = new ProductInventoryVO(newProductRs.getProductSubOptionId(), null, 
+								batch.getStorageLocation(), true,
+								newProductRs.getQty() - originalProduct.getQty(), remark, GeneralUtils.MODE_BATCH, batch.getBatchId());
 						productInventoryList.add(inventory);
 					}
 				}
 			}
 			
 			for(Integer prdSuboptionId : newProductRsMap.keySet()){
-				BatchproductRs oldProductRs = oldProductRsMap.get(prdSuboptionId);
+				BatchProductRsVO oldProductRs = oldProductRsMap.get(prdSuboptionId);
 				if(oldProductRs == null){
 					//new product added
-					Productinventory inventory = new Productinventory(prdSuboptionId, null, 
-							batch.getStoragelocation(), true,
-							newProductRsMap.get(prdSuboptionId).getQty(), null, GeneralUtils.MODE_BATCH, batch.getBatchid());
+					ProductInventoryVO inventory = new ProductInventoryVO(prdSuboptionId, null, 
+							batch.getStorageLocation(), true,
+							newProductRsMap.get(prdSuboptionId).getQty(), null, GeneralUtils.MODE_BATCH, batch.getBatchId());
 					productInventoryList.add(inventory);
 				}
 			}
@@ -421,7 +425,7 @@ public class BatchIntakeManagementController {
 	}
 	
 	@RequestMapping(value = "/editBatchIntake", method = RequestMethod.POST)
-    public String saveEditBatchIntake(@ModelAttribute("batchIntakeForm") @Validated Batchstockintake batchIntake, 
+    public String saveEditBatchIntake(@ModelAttribute("batchIntakeForm") @Validated BatchStockIntakeVO batchIntake, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveEditBatchIntake() : " + batchIntake.toString());
@@ -430,69 +434,68 @@ public class BatchIntakeManagementController {
 		} else {
 			BigDecimal totalProductCost = BigDecimal.ZERO;
 			if(batchIntakeProductList != null) {
-				for(BatchIntakeProduct product: batchIntakeProductList){
+				for(BatchIntakeProductVO product: batchIntakeProductList){
 					BigDecimal i = product.getUnitcost().multiply(BigDecimal.valueOf(product.getQty()));
 					totalProductCost = totalProductCost.add(i);
 				}
 			}
 			
-			BigDecimal addcost = batchIntake.getTotalcost().subtract(totalProductCost);
+			BigDecimal addcost = batchIntake.getTotalCost().subtract(totalProductCost);
 			if(addcost.signum() == -1) {
 				result.rejectValue("totalcost", "error.lessthan.batchintakeform.totalcost");
 				return "updateBatchIntake";
 			}
-			batchIntake.setAdditionalcost(addcost);
-			batchIntake.setDeleteind(GeneralUtils.NOT_DELETED);
+			batchIntake.setAdditionalCost(addcost);
+			batchIntake.setDeleteInd(GeneralUtils.NOT_DELETED);
 //			batchIntakeManagementService.updateBatchstockintake(batchIntake);
 			List<Integer> idList = new ArrayList<Integer>();
 			if(batchIntakeProductList != null) {
-				for(BatchIntakeProduct product: batchIntakeProductList) {
+				for(BatchIntakeProductVO product: batchIntakeProductList) {
 					if(product.getBatchProductId() != null) {
 						idList.add(product.getBatchProductId());
 					}
 				}
 			}
-			List<BatchproductRs> originalList = batchProductRSManagementService.getBatchproductByBatchId(batchIntake.getBatchid());
+			List<BatchProductRsVO> originalList = batchProductRSManagementService.getBatchproductByBatchId(batchIntake.getBatchId());
 //			batchProductRSManagementService.deleteBatchproductNotInBatchProductidList(batchIntake.getBatchid(), idList);
-			List<BatchproductRs> batchProductList = new ArrayList<BatchproductRs>();
-			List<BatchproductRs> batchProductRsList = new ArrayList<BatchproductRs>();
-			List<Productinventory> inventoryList = new ArrayList<Productinventory>();
+			List<BatchProductRsVO> batchProductList = new ArrayList<BatchProductRsVO>();
+			List<BatchProductRsVO> batchProductRsList = new ArrayList<BatchProductRsVO>();
 			if(batchIntakeProductList != null) {
-				for(BatchIntakeProduct product: batchIntakeProductList){
-					BatchproductRs batchProductRs = batchProductRSManagementService.findById(product.getBatchProductId());
+				for(BatchIntakeProductVO product: batchIntakeProductList){
+					BatchProductRsVO batchProductRs = batchProductRSManagementService.findById(product.getBatchProductId());
 					if(batchProductRs == null){
 						List<Integer> suboptionIdList = new ArrayList<Integer>();
-						for(SubOptionVo suboption: product.getSubOptionList()) {
+						for(SubOptionVO suboption: product.getSubOptionList()) {
 							suboptionIdList.add(suboption.getSubOptionId());
 						}
-						ProductsuboptionRs rs = productService.findProductSubOptionRs(product.getProduct().getProductid(), suboptionIdList);
-						if(rs.getProductsuboptionid() == null){
+						ProductSubOptionRsVO rs = productService.findProductSubOptionRs(product.getProduct().getProductId(), suboptionIdList);
+						if(rs.getProductSuboptionRsId() == null){
 							redirectAttributes.addFlashAttribute("css", "danger");
 							redirectAttributes.addFlashAttribute("msg", "Invalid Product(s)!");
 							return "redirect:updateBatchIntake";
 						}
-						batchProductRs = new BatchproductRs();
-						batchProductRs.setBatchid(batchIntake.getBatchid());
-						batchProductRs.setProductsuboptionid(rs.getProductsuboptionid());
-						batchProductRs.setUnitcost(product.getUnitcost());
+						batchProductRs = new BatchProductRsVO();
+						batchProductRs.setBatchId(batchIntake.getBatchId());
+						batchProductRs.setProductSubOptionId(rs.getProductSuboptionRsId());
+						batchProductRs.setUnitCost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
-						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);
+						batchProductRs.setDeleteInd(GeneralUtils.NOT_DELETED);
 						batchProductList.add(batchProductRs);
 						batchProductRsList.add(batchProductRs);
 //						batchProductRSManagementService.saveBatchproduct(batchProductRs);
 					}else{
-						batchProductRs.setUnitcost(product.getUnitcost());
+						batchProductRs.setUnitCost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
-						batchProductRs.setDeleteind(GeneralUtils.NOT_DELETED);
+						batchProductRs.setDeleteInd(GeneralUtils.NOT_DELETED);
 						batchProductRSManagementService.updateBatchproductRS(batchProductRs);
 						batchProductRsList.add(batchProductRs);
 					}
 				}
 			}
 			
-			List<Productinventory> productInventoryList = compareBatchProductsQtyDifference(batchIntake, originalList, batchProductRsList);
+			List<ProductInventoryVO> productInventoryList = compareBatchProductsQtyDifference(batchIntake, originalList, batchProductRsList);
 			batchIntakeManagementService.editBatchstockintake(batchIntake, idList, batchProductList, productInventoryList);
-			batchIntakeProductList = new ArrayList<BatchIntakeProduct>();
+			batchIntakeProductList = new ArrayList<BatchIntakeProductVO>();
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Batch intake updated successfully!");
 		}

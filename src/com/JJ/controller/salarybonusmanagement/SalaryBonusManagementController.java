@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.employeemanagement.EmployeeVo;
+import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
 import com.JJ.helper.GeneralUtils;
@@ -97,9 +97,9 @@ public class SalaryBonusManagementController {
 	//initialise for employment type dropdown
 	private void initData(){
 		employeeList = new LinkedHashMap<Integer,String>();
-		List<EmployeeVo> voList = employeeManagementService.getAllEmployeeVoInAscendingName();
+		List<EmployeeVO> voList = employeeManagementService.getAllEmployeeVoInAscendingName();
 		if(voList != null && voList.size() > 0){
-			for(EmployeeVo vo : voList) {
+			for(EmployeeVO vo : voList) {
 				employeeList.put(vo.getEmployeeid(), vo.getName());
 			}
 		}

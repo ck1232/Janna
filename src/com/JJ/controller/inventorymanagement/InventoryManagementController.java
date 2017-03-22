@@ -23,17 +23,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.batchintakemanagement.BatchIntakeProduct;
-import com.JJ.controller.batchintakemanagement.BatchProductVo;
-import com.JJ.controller.productmanagement.vo.ProductVo;
-import com.JJ.controller.productmanagement.vo.SubOptionVo;
+import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
+import com.JJ.controller.batchintakemanagement.vo.BatchProductVO;
+import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
+import com.JJ.controller.common.vo.JsonResponseVO;
+import com.JJ.controller.inventorymanagement.vo.InventoryVO;
+import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryLocationVO;
+import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryVO;
+import com.JJ.controller.inventorymanagement.vo.ViewProductSubOptionInventoryVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
+import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.JsonResponse;
-import com.JJ.model.Product;
-import com.JJ.model.Storagelocation;
-import com.JJ.model.ViewProductInventory;
-import com.JJ.model.ViewProductInventoryLocation;
-import com.JJ.model.ViewProductSuboptionInventory;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.mysql.jdbc.StringUtils;
@@ -49,7 +49,7 @@ public class InventoryManagementController {
 	private ProductService productService;
 
 	private InventoryVO inventoryVO;
-	private ProductVo productVo;
+	private ProductVO productVo;
 	
 	private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	@Autowired
@@ -69,14 +69,14 @@ public class InventoryManagementController {
 	@RequestMapping(value = "/getInventoryProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getInventoryProductList() {
 		logger.debug("getting inventory product list");
-		List<ViewProductInventory> productList = inventoryProductManagementService.getAllInventoryProducts();
+		List<ViewProductInventoryVO> productList = inventoryProductManagementService.getAllInventoryProducts();
 		return GeneralUtils.convertListToJSONString(productList);
 	}
 	
 	@RequestMapping(value = "/viewInventoryProduct", method = RequestMethod.POST)
 	public String viewInventoryProduct(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		ProductVo product = productService.getProductVoById(Integer.parseInt(id));
+		ProductVO product = productService.getProductVoById(Integer.parseInt(id));
 		if (product == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Inventory Product not found");
@@ -94,7 +94,7 @@ public class InventoryManagementController {
 		int suboption1Id  = Integer.parseInt(suboptionIds[0]);
 		int suboption2Id  = Integer.parseInt(suboptionIds[1]);
 		int suboption3Id  = Integer.parseInt(suboptionIds[2]);
-		List<ViewProductInventoryLocation> productLocationList = inventoryProductManagementService.getAllInventoryProductLocations(suboption1Id, suboption2Id,suboption3Id);
+		List<ViewProductInventoryLocationVO> productLocationList = inventoryProductManagementService.getAllInventoryProductLocations(suboption1Id, suboption2Id,suboption3Id);
 		return GeneralUtils.convertListToJSONString(productLocationList);
 	}
 	
@@ -102,7 +102,7 @@ public class InventoryManagementController {
 	@RequestMapping(value = "/getInventoryProductQuantityList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getInventoryProductQuantityList(@RequestParam("productid") String id) {
 		logger.debug("getting inventory product quantity list");
-		List<ViewProductSuboptionInventory> productQuantityList = inventoryProductManagementService.getInventoryProductAllQuantity(Integer.parseInt(id));
+		List<ViewProductSubOptionInventoryVO> productQuantityList = inventoryProductManagementService.getInventoryProductAllQuantity(Integer.parseInt(id));
 		return GeneralUtils.convertListToJSONString(productQuantityList);
 	}
 	
@@ -118,40 +118,40 @@ public class InventoryManagementController {
 	@RequestMapping(value = "/getAddInventoryProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getBatchProductList() {
 		if(inventoryVO.getProductItems() != null){
-			for(BatchIntakeProduct batchIntakeProduct : inventoryVO.getProductItems() ){
+			for(BatchIntakeProductVO batchIntakeProduct : inventoryVO.getProductItems() ){
 				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
 			}
 			return GeneralUtils.convertListToJSONString(inventoryVO.getProductItems());
 		}
-		return GeneralUtils.convertListToJSONString(new ArrayList<BatchProductVo>());
+		return GeneralUtils.convertListToJSONString(new ArrayList<BatchProductVO>());
 	}
 	
 	@RequestMapping(value = "/getBatchProductVo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ProductVo getBatchProductVo(@RequestBody Product product) {
-		logger.debug(product.getProductid());
+	public @ResponseBody ProductVO getBatchProductVo(@RequestBody ProductVO product) {
+		logger.debug(product.getProductId());
 		
-		List<ProductVo> productVoList = productService.getAllProductVo(product.getProductid());
+		List<ProductVO> productVoList = productService.getAllProductVo(product.getProductId());
 		if(productVoList != null && productVoList.size() > 0){
 			productVo = productVoList.get(0);
 			if(productVo != null){
 				return productVo;
 			}
 		}
-		return new ProductVo();
+		return new ProductVO();
 	}
 	
 	@RequestMapping(value = "/saveAddProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveAddProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody JsonResponseVO saveAddProduct(@RequestBody BatchIntakeProductVO product) {
 		logger.debug("save add product");
 		boolean pass = true;
-		if(StringUtils.isNullOrEmpty(product.getProduct().getProductname()) ||
+		if(StringUtils.isNullOrEmpty(product.getProduct().getProductName()) ||
 				product.getSubOptionList() == null ||
 				product.getSubOptionList().size() == 0 ||
 				product.getUnitcost() == null ||
 				product.getQty() == null){
 			pass = false;
 		}else if(product.getSubOptionList().size() > 0){
-			for(SubOptionVo vo : product.getSubOptionList()){
+			for(SubOptionVO vo : product.getSubOptionList()){
 				if(vo.getSubOptionId() == null){
 					pass = false;
 					break;
@@ -159,11 +159,11 @@ public class InventoryManagementController {
 			}
 		}
 		if(!pass){
-			return new JsonResponse("error", "Please fill in all the details!");
+			return new JsonResponseVO("error", "Please fill in all the details!");
 		}
 		
 		if(inventoryVO.getProductItems() == null) { 
-			inventoryVO.setProductItems(new ArrayList<BatchIntakeProduct>());
+			inventoryVO.setProductItems(new ArrayList<BatchIntakeProductVO>());
 		}
 		/*
 		BigDecimal totalcostNum = product.getBatchtotalcost();
@@ -183,55 +183,55 @@ public class InventoryManagementController {
 		}
 		*/
 		//for generating suboption
-		Iterator<SubOptionVo> i = product.getSubOptionList().iterator();
+		Iterator<SubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
-			SubOptionVo subOptionVo = i.next();
-			SubOptionVo generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
+			SubOptionVO subOptionVo = i.next();
+			SubOptionVO generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 			subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
 		}
-		for(BatchIntakeProduct p : inventoryVO.getProductItems()){
+		for(BatchIntakeProductVO p : inventoryVO.getProductItems()){
 			if(p.hashCode() == product.hashCode()) {
-				return new JsonResponse("error", "Product already exists!");
+				return new JsonResponseVO("error", "Product already exists!");
 			}
 		}
 		inventoryVO.getProductItems().add(product);
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/deleteInventoryProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse deleteBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody JsonResponseVO deleteBatchIntakeProduct(@RequestBody BatchIntakeProductVO product) {
 		logger.debug("delete inventory product");
 		if(inventoryVO.getProductItems() != null) {
-			Iterator<BatchIntakeProduct> iterator = inventoryVO.getProductItems().iterator();
+			Iterator<BatchIntakeProductVO> iterator = inventoryVO.getProductItems().iterator();
 			while(iterator.hasNext()){
-				BatchIntakeProduct inventoryProduct = iterator.next();
+				BatchIntakeProductVO inventoryProduct = iterator.next();
 				if(inventoryProduct.hashCode() == product.getHashCode()){
 					iterator.remove();
 					break;
 				}
 			}
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value="/editBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody BatchIntakeProduct editBatchIntakeProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody BatchIntakeProductVO editBatchIntakeProduct(@RequestBody BatchIntakeProductVO product) {
 		if(inventoryVO.getProductItems() != null && inventoryVO.getProductItems().size() > 0){
-			for(BatchIntakeProduct batchIntakeProduct : inventoryVO.getProductItems()){
+			for(BatchIntakeProductVO batchIntakeProduct : inventoryVO.getProductItems()){
 				if(batchIntakeProduct.getHashCode() == product.getHashCode()){
 					return batchIntakeProduct;
 				}
 			}
 		}
-		return new BatchIntakeProduct();
+		return new BatchIntakeProductVO();
 	}
 	
 	@RequestMapping(value = "/saveEditProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponse saveEditProduct(@RequestBody BatchIntakeProduct product) {
+	public @ResponseBody JsonResponseVO saveEditProduct(@RequestBody BatchIntakeProductVO product) {
 		logger.debug("save edit product");
 		if(inventoryVO.getProductItems() != null) {
-			for(BatchIntakeProduct batchproduct: inventoryVO.getProductItems()){
+			for(BatchIntakeProductVO batchproduct: inventoryVO.getProductItems()){
 				if((batchproduct.getHashCode()) == product.getHashCode()) {
 					batchproduct.setUnitcost(product.getUnitcost());
 					batchproduct.setQty(product.getQty());
@@ -239,30 +239,30 @@ public class InventoryManagementController {
 				}
 			}
 		}
-		return new JsonResponse("success");
+		return new JsonResponseVO("success");
 	}
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
 	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") InventoryVO inventoryVO, 
 			final RedirectAttributes redirectAttributes) {
 		inventoryVO.setProductItems(this.inventoryVO.getProductItems());
 		try{
-			List<Storagelocation> locationList = inventoryProductManagementService.getAllStorageLocation();
-			Map<String, Storagelocation> locationMap = new HashMap<String, Storagelocation>();
+			List<StorageLocationVO> locationList = inventoryProductManagementService.getAllStorageLocation();
+			Map<String, StorageLocationVO> locationMap = new HashMap<String, StorageLocationVO>();
 			if(locationList != null && locationList.size() > 0){
-				for(Storagelocation location:locationList){
-					locationMap.put(location.getLocationname(), location);
+				for(StorageLocationVO location:locationList){
+					locationMap.put(location.getName(), location);
 				}
 			}
 			Date date = df.parse(inventoryVO.getDateString());
 			inventoryVO.setDate(date);
-			Storagelocation locationTo = locationMap.get(inventoryVO.getLocationFrom());
-			Storagelocation locationFrom = locationMap.get(inventoryVO.getLocationTo());
+			StorageLocationVO locationTo = locationMap.get(inventoryVO.getLocationFrom());
+			StorageLocationVO locationFrom = locationMap.get(inventoryVO.getLocationTo());
 			if(locationTo != null){
-				inventoryVO.setLocationToId(locationTo.getLocationid());
+				inventoryVO.setLocationToId(locationTo.getLocationId());
 			}
 			
 			if(locationFrom != null){
-				inventoryVO.setLocationFromId(locationFrom.getLocationid());
+				inventoryVO.setLocationFromId(locationFrom.getLocationId());
 			}
 			
 			

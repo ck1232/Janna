@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVo;
-import com.JJ.controller.productmanagement.vo.ProductVo;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Product;
 import com.JJ.model.Productinventory;
@@ -86,7 +86,7 @@ public class InventoryHistoryManagementController {
     	modeList.put("ADHOC", "Adhoc Creation");
     	
     	locationList = new LinkedHashMap<String,String>();
-    	List<Storagelocation> storageLocationList = storageLocationManagementService.getAllStoragelocations();
+    	List<Storagelocation> storageLocationList = storageLocationManagementService.getAllStorageLocations();
     	for(Storagelocation storageLocation : storageLocationList) {
     		locationList.put(String.valueOf(storageLocation.getLocationid()), storageLocation.getLocationname());
     	}
