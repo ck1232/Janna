@@ -1,14 +1,22 @@
-package com.JJ.model;
+package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProductTagsDbObject extends Base implements Serializable {
-    private Integer tagsId;
+import com.JJ.model.Base;
+
+public class ProductSubOptionVO extends Base implements Serializable {
+    private Integer productSuboptionId;
+
+    private Integer productId;
+
+    private Integer productOptionId;
 
     private String name;
 
-    private String productId;
+    private String displayInd;
+
+    private String code;
 
     private Integer version;
 
@@ -21,15 +29,35 @@ public class ProductTagsDbObject extends Base implements Serializable {
     private Date updatedOn;
 
     private String deleteInd;
+    
+    private String optionName;
+    
+    private int seq;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getTagsId() {
-        return tagsId;
+    public Integer getProductSuboptionId() {
+        return productSuboptionId;
     }
 
-    public void setTagsId(Integer tagsId) {
-        this.tagsId = tagsId;
+    public void setProductSuboptionId(Integer productSuboptionId) {
+        this.productSuboptionId = productSuboptionId;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public Integer getProductOptionId() {
+        return productOptionId;
+    }
+
+    public void setProductOptionId(Integer productOptionId) {
+        this.productOptionId = productOptionId;
     }
 
     public String getName() {
@@ -40,12 +68,20 @@ public class ProductTagsDbObject extends Base implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getProductId() {
-        return productId;
+    public String getDisplayInd() {
+        return displayInd;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+    public void setDisplayInd(String displayInd) {
+        this.displayInd = displayInd == null ? null : displayInd.trim();
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
     }
 
     public Integer getVersion() {
@@ -96,15 +132,34 @@ public class ProductTagsDbObject extends Base implements Serializable {
         this.deleteInd = deleteInd == null ? null : deleteInd.trim();
     }
 
+    public String getOptionName() {
+		return optionName;
+	}
+
+	public int getSeq() {
+		return seq;
+	}
+
+	public void setOptionName(String optionName) {
+		this.optionName = optionName;
+	}
+
+	public void setSeq(int seq) {
+		this.seq = seq;
+	}
+	
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", tagsId=").append(tagsId);
-        sb.append(", name=").append(name);
+        sb.append(", productSuboptionId=").append(productSuboptionId);
         sb.append(", productId=").append(productId);
+        sb.append(", productOptionId=").append(productOptionId);
+        sb.append(", name=").append(name);
+        sb.append(", displayInd=").append(displayInd);
+        sb.append(", code=").append(code);
         sb.append(", version=").append(version);
         sb.append(", createdBy=").append(createdBy);
         sb.append(", createdOn=").append(createdOn);

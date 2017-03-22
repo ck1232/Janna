@@ -1,20 +1,18 @@
-package com.JJ.model;
+package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProductSubOptionDbObject extends Base implements Serializable {
-    private Integer productSuboptionId;
+import com.JJ.model.Base;
 
-    private Integer productId;
-
-    private Integer productOptionId;
+public class ProductSubCategoryVO extends Base implements Serializable {
+    private Integer subCategoryId;
 
     private String name;
 
-    private String displayInd;
+    private Integer categoryId;
 
-    private String code;
+    private String displayInd;
 
     private Integer version;
 
@@ -27,31 +25,15 @@ public class ProductSubOptionDbObject extends Base implements Serializable {
     private Date updatedOn;
 
     private String deleteInd;
-    
+
     private static final long serialVersionUID = 1L;
 
-    public Integer getProductSuboptionId() {
-        return productSuboptionId;
+    public Integer getSubCategoryId() {
+        return subCategoryId;
     }
 
-    public void setProductSuboptionId(Integer productSuboptionId) {
-        this.productSuboptionId = productSuboptionId;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
-
-    public Integer getProductOptionId() {
-        return productOptionId;
-    }
-
-    public void setProductOptionId(Integer productOptionId) {
-        this.productOptionId = productOptionId;
+    public void setSubCategoryId(Integer subCategoryId) {
+        this.subCategoryId = subCategoryId;
     }
 
     public String getName() {
@@ -62,20 +44,20 @@ public class ProductSubOptionDbObject extends Base implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public String getDisplayInd() {
         return displayInd;
     }
 
     public void setDisplayInd(String displayInd) {
         this.displayInd = displayInd == null ? null : displayInd.trim();
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
     }
 
     public Integer getVersion() {
@@ -126,18 +108,16 @@ public class ProductSubOptionDbObject extends Base implements Serializable {
         this.deleteInd = deleteInd == null ? null : deleteInd.trim();
     }
 
-	@Override
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", productSuboptionId=").append(productSuboptionId);
-        sb.append(", productId=").append(productId);
-        sb.append(", productOptionId=").append(productOptionId);
+        sb.append(", subCategoryId=").append(subCategoryId);
         sb.append(", name=").append(name);
+        sb.append(", categoryId=").append(categoryId);
         sb.append(", displayInd=").append(displayInd);
-        sb.append(", code=").append(code);
         sb.append(", version=").append(version);
         sb.append(", createdBy=").append(createdBy);
         sb.append(", createdOn=").append(createdOn);

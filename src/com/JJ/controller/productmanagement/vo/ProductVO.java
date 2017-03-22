@@ -38,11 +38,15 @@ public class ProductVO extends Base implements Serializable {
 
     private String deleteInd;
 
-    private List<OptionVO> optionList;
+    private List<ProductOptionVO> optionList;
     
     private LinkedList<FileMetaVO> images;
     
     private List<String> tags;
+    
+    private ProductSubCategoryVO subCategory;
+    
+    private String productInfo;
     
     private static final long serialVersionUID = 1L;
 
@@ -158,11 +162,11 @@ public class ProductVO extends Base implements Serializable {
         this.deleteInd = deleteInd == null ? null : deleteInd.trim();
     }
 
-    public List<OptionVO> getOptionList() {
+    public List<ProductOptionVO> getOptionList() {
 		return optionList;
 	}
 
-	public void setOptionList(List<OptionVO> optionList) {
+	public void setOptionList(List<ProductOptionVO> optionList) {
 		this.optionList = optionList;
 	}
 
@@ -180,6 +184,22 @@ public class ProductVO extends Base implements Serializable {
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public ProductSubCategoryVO getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(ProductSubCategoryVO subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	public String getProductInfo() {
+		return productInfo;
+	}
+
+	public void setProductInfo(String productInfo) {
+		this.productInfo = productInfo;
 	}
 
 	@Override

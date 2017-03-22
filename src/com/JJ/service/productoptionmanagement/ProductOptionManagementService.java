@@ -6,62 +6,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.ProductoptionMapper;
+import com.JJ.controller.productmanagement.vo.ProductOptionVO;
+import com.JJ.dao.ProductOptionDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Productoption;
-import com.JJ.model.ProductoptionExample;
+import com.JJ.model.ProductOptionDbObject;
+import com.JJ.model.ProductOptionDbObjectExample;
 
 @Service
 @Transactional
 public class ProductOptionManagementService {
 	
-	private ProductoptionMapper productoptionMapper;
+	private ProductOptionDbObjectMapper productOptionDbObjectMapper;
 	
 	@Autowired
-	public ProductOptionManagementService(ProductoptionMapper productoptionMapper) {
-		this.productoptionMapper = productoptionMapper;
+	public ProductOptionManagementService(ProductOptionDbObjectMapper productOptionDbObjectMapper) {
+		this.productOptionDbObjectMapper = productOptionDbObjectMapper;
 	}
 	
-	public Productoption findById(Integer id) {
-		return productoptionMapper.selectByPrimaryKey(id);
+	public ProductOptionVO findById(Integer id) {
+		return productOptionDbObjectMapper.selectByPrimaryKey(id);
 	}
 
-	public List<Productoption> getAllProductoptions() {
-		ProductoptionExample productoptionExample = new ProductoptionExample();
-		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
+	public List<ProductOptionVO> getAllProductoptions() {
+		ProductOptionDbObjectExample productoptionExample = new ProductOptionDbObjectExample();
+		productoptionExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<ProductOptionDbObject> productoptionList = productOptionDbObjectMapper.selectByExample(productoptionExample);
 		return productoptionList;
 	}
 
-	public List<Productoption> getAllProductoptionsByName(String name) {
-		ProductoptionExample productoptionExample = new ProductoptionExample();
-		productoptionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andNameEqualTo(name);
-		List<Productoption> productoptionList = productoptionMapper.selectByExample(productoptionExample);
+	public List<ProductOptionVO> getAllProductoptionsByName(String name) {
+		ProductOptionDbObjectExample productoptionExample = new ProductOptionDbObjectExample();
+		productoptionExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andNameEqualTo(name);
+		List<ProductOptionDbObject> productoptionList = productOptionDbObjectMapper.selectByExample(productoptionExample);
 		return productoptionList;
 	}
 	
-	public void saveProductoption(Productoption productoption) {
-		productoptionMapper.insert(productoption);
+	public void saveProductoption(ProductOptionVO productoption) {
+		productOptionDbObjectMapper.insert(productoption);
 	}
 	
 	public void deleteProductoption(Integer id) {
-		Productoption productoption = findById(id);
+		ProductOptionVO productoption = findById(id);
 		if(productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
 			productoption.setDeleteInd(GeneralUtils.DELETED);
-			productoptionMapper.updateByPrimaryKey(productoption);
+			productOptionDbObjectMapper.updateByPrimaryKey(productoption);
 		}
 	}
 	
-	public void deleteProductoption(Productoption productoption) {
+	public void deleteProductoption(ProductOptionVO productoption) {
 		if(productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
 			productoption.setDeleteInd(GeneralUtils.DELETED);
-			productoptionMapper.updateByPrimaryKey(productoption);
+			productOptionDbObjectMapper.updateByPrimaryKey(productoption);
 		}
 	}
 	
-	public void updateProductoption(Productoption productoption) {
+	public void updateProductoption(ProductOptionVO productoption) {
 		if(productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			productoptionMapper.updateByPrimaryKeySelective(productoption);
+			productOptionDbObjectMapper.updateByPrimaryKeySelective(productoption);
 	}
 	 
 	

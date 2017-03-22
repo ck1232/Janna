@@ -1,20 +1,17 @@
-package com.JJ.model;
+package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class ProductSubOptionDbObject extends Base implements Serializable {
-    private Integer productSuboptionId;
+import com.JJ.model.Base;
 
-    private Integer productId;
-
+public class ProductOptionVO extends Base implements Serializable {
     private Integer productOptionId;
 
     private String name;
 
     private String displayInd;
-
-    private String code;
 
     private Integer version;
 
@@ -28,23 +25,11 @@ public class ProductSubOptionDbObject extends Base implements Serializable {
 
     private String deleteInd;
     
+    private List<ProductSubOptionVO> subOptionList;
+    
+	private Integer sequence;
+
     private static final long serialVersionUID = 1L;
-
-    public Integer getProductSuboptionId() {
-        return productSuboptionId;
-    }
-
-    public void setProductSuboptionId(Integer productSuboptionId) {
-        this.productSuboptionId = productSuboptionId;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
 
     public Integer getProductOptionId() {
         return productOptionId;
@@ -68,14 +53,6 @@ public class ProductSubOptionDbObject extends Base implements Serializable {
 
     public void setDisplayInd(String displayInd) {
         this.displayInd = displayInd == null ? null : displayInd.trim();
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
     }
 
     public Integer getVersion() {
@@ -125,19 +102,42 @@ public class ProductSubOptionDbObject extends Base implements Serializable {
     public void setDeleteInd(String deleteInd) {
         this.deleteInd = deleteInd == null ? null : deleteInd.trim();
     }
+    
+    public List<ProductSubOptionVO> getSubOptionList() {
+		return subOptionList;
+	}
+	public void setSubOptionList(List<ProductSubOptionVO> subOptionList) {
+		this.subOptionList = subOptionList;
+	}
+	public Integer getSequence() {
+		return sequence;
+	}
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
+	public String getSubOptionListComma() {
+		String subOptionListComma = "";
+		if(subOptionList != null && subOptionList.size() > 0){
+			for(ProductSubOptionVO vo: subOptionList){
+				subOptionListComma += vo.getName() + ", ";
+			}
+		}
+		if(subOptionListComma.length() > 2){
+			return subOptionListComma.substring(0, subOptionListComma.length()-2);
+		}else{
+			return subOptionListComma;
+		}
+	}
 
-	@Override
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", productSuboptionId=").append(productSuboptionId);
-        sb.append(", productId=").append(productId);
         sb.append(", productOptionId=").append(productOptionId);
         sb.append(", name=").append(name);
         sb.append(", displayInd=").append(displayInd);
-        sb.append(", code=").append(code);
         sb.append(", version=").append(version);
         sb.append(", createdBy=").append(createdBy);
         sb.append(", createdOn=").append(createdOn);
