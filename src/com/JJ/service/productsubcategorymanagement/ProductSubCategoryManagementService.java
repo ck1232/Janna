@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.dao.ProductsubcategoryMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Productsubcategory;
@@ -25,7 +26,7 @@ public class ProductSubCategoryManagementService {
 		return productSubCategoryMapper.selectByPrimaryKey(id);
 	}
 	
-	public List<Productsubcategory> getAllSubCategories() {
+	public List<ProductSubCategoryVO> getAllSubCategories() {
 		ProductsubcategoryExample subcategoryExample = new ProductsubcategoryExample();
 		subcategoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
 		List<Productsubcategory> subcategoryList = productSubCategoryMapper.selectByExample(subcategoryExample);
