@@ -1,4 +1,4 @@
-package com.JJ.controller.CustomerAddressManagementController.VO;
+package com.JJ.controller.customeraddressmanagement.VO;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +19,8 @@ public class CustomerAddressVO extends Base implements Serializable {
     private Integer postalCode;
 
     private String country;
+    
+    private String defaultInd;
 
     private Integer version;
 
@@ -89,6 +91,14 @@ public class CustomerAddressVO extends Base implements Serializable {
     public void setCountry(String country) {
         this.country = country == null ? null : country.trim();
     }
+    
+    public String getDefaultInd() {
+        return defaultInd;
+    }
+
+    public void setDefaultInd(String defaultInd) {
+        this.defaultInd = defaultInd == null ? null : defaultInd.trim();
+    }
 
     public Integer getVersion() {
         return version;
@@ -151,6 +161,7 @@ public class CustomerAddressVO extends Base implements Serializable {
         sb.append(", contactNumber=").append(contactNumber);
         sb.append(", postalCode=").append(postalCode);
         sb.append(", country=").append(country);
+        sb.append(", defaultInd=").append(defaultInd);
         sb.append(", version=").append(version);
         sb.append(", createdBy=").append(createdBy);
         sb.append(", createdOn=").append(createdOn);

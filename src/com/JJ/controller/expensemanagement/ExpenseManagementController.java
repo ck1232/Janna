@@ -21,12 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.lookup.PaymentModeLookup;
-import com.JJ.model.Expense;
-import com.JJ.model.Paymentdetail;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.validator.ExpenseFormValidator;
@@ -70,13 +69,8 @@ public class ExpenseManagementController {
 	@RequestMapping(value = "/getExpenseList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getExpenseList() {
 		logger.debug("getting expense list");
-		List<Expense> expenseList = expenseManagementService.getAllExpense();
-		if(expenseList != null && expenseList.size() > 0) {
-			for(Expense expense : expenseList) {
-				expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
-			}
-		}
-		return GeneralUtils.convertListToJSONString(expenseList);
+		List<ExpenseVO> expenseVoList = expenseManagementService.getAllExpense();
+		return GeneralUtils.convertListToJSONString(expenseVoList);
 	}
 	
 	
@@ -100,9 +94,9 @@ public class ExpenseManagementController {
 	@RequestMapping(value = "/createExpense", method = RequestMethod.GET)
     public String showAddExpenseForm(Model model) {  
     	logger.debug("loading showAddExpenseForm");
-    	Expense expense = new Expense();
+    	ExpenseVO expenseVO = new ExpenseVO();
     	Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
-    	model.addAttribute("expenseForm", expense);
+    	model.addAttribute("expenseForm", expenseVO);
     	model.addAttribute("expenseTypeList", expenseTypeList);
         return "createExpense";  
     }  
@@ -113,21 +107,21 @@ public class ExpenseManagementController {
 	}
 	
 	@RequestMapping(value = "/createExpense", method = RequestMethod.POST)
-    public String saveExpense(@ModelAttribute("expenseForm") @Validated Expense expense, 
+    public String saveExpense(@ModelAttribute("expenseForm") @Validated ExpenseVO expenseVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("saveExpense() : " + expense.toString());
+		logger.debug("saveExpense() : " + expenseVO.toString());
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
 	    	model.addAttribute("expenseTypeList", expenseTypeList);
 			return "createExpense";
 		} else {
 			try{
-				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
+				expenseVO.setExpenseDate(new SimpleDateFormat("dd/MM/yyyy").parse(expenseVO.getExpensedateString()));
 			}catch(Exception e) {
 				logger.info("Error parsing expense date string");
 			}
-			expenseManagementService.saveExpense(expense);
+			expenseManagementService.saveExpense(expenseVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Expense added successfully!");
 		}
@@ -135,22 +129,22 @@ public class ExpenseManagementController {
     }  
 	
 	@RequestMapping(value = "/createExpenseAndPay", method = RequestMethod.POST)
-    public String saveExpenseAndPay(@ModelAttribute("expenseForm") @Validated Expense expense, 
+    public String saveExpenseAndPay(@ModelAttribute("expenseForm") @Validated ExpenseVO expenseVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		List<String> idList = new ArrayList<String>();
-		logger.debug("saveExpense() : " + expense.toString());
+		logger.debug("saveExpense() : " + expenseVO.toString());
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
 	    	model.addAttribute("expenseTypeList", expenseTypeList);
 			return "createExpense";
 		} else {
 			try{
-				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
+				expenseVO.setExpenseDate(new SimpleDateFormat("dd/MM/yyyy").parse(expenseVO.getExpensedateString()));
 			}catch(Exception e) {
 				logger.info("Error parsing expense date string");
 			}
-			expenseManagementService.saveExpense(expense);			
-			idList.add(expense.getExpenseid().toString());
+			expenseManagementService.saveExpense(expenseVO);			
+			idList.add(expenseVO.getExpenseId().toString());
 		}
 		return paymentManagementController.createPayExpense(idList, redirectAttributes, model);
     }  
@@ -158,15 +152,13 @@ public class ExpenseManagementController {
 	@RequestMapping(value = "/viewExpense", method = RequestMethod.POST)
 	public String viewExpense(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Expense expense = expenseManagementService.findById(new Integer(id));
-		if (expense == null) {
+		ExpenseVO expenseVO = expenseManagementService.findById(new Integer(id));
+		if (expenseVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Expense not found");
 		}else{
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-			model.addAttribute("expense", expense);
-			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expense.getExpenseid());
+			model.addAttribute("expense", expenseVO);
+			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expenseVO.getExpenseId());
 			if(paymentList != null && paymentList.size() > 0){
 				for(Paymentdetail payment : paymentList) {
 					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
@@ -182,33 +174,28 @@ public class ExpenseManagementController {
 	@RequestMapping(value = "/updateExpense", method = RequestMethod.POST)
 	public String getExpenseToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Expense expense = expenseManagementService.findById(new Integer(id));
-		logger.debug("Loading update expense page for " + expense.toString());
-		expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
+		ExpenseVO expenseVO = expenseManagementService.findById(new Integer(id));
+		logger.debug("Loading update expense page for " + expenseVO.toString());
 		
 		Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
     	model.addAttribute("expenseTypeList", expenseTypeList);
-		model.addAttribute("expenseForm", expense);
+		model.addAttribute("expenseForm", expenseVO);
 		return "updateExpense";
 	}
 	
 	@RequestMapping(value = "/updateExpenseToDb", method = RequestMethod.POST)
-	public String updateExpense(@ModelAttribute("expenseForm") @Validated Expense expense,
+	public String updateExpense(@ModelAttribute("expenseForm") @Validated ExpenseVO expenseVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateExpense() : " + expense.toString());
+		logger.debug("updateExpense() : " + expenseVO.toString());
 		
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
 	    	model.addAttribute("expenseTypeList", expenseTypeList);
 			return "updateExpense";
 		} else {
-			try{
-				expense.setExpensedate(new SimpleDateFormat("dd/MM/yyyy").parse(expense.getExpensedateString()));
-			}catch(Exception e) {
-				logger.info("Error parsing expense date string");
-			}
-			expenseManagementService.updateExpense(expense);
+			expenseVO.setExpenseDate(GeneralUtils.convertStringToDate(expenseVO.getExpensedateString(), "dd/MM/yyyy"));
+			expenseManagementService.updateExpense(expenseVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Expense updated successfully!");
 		}

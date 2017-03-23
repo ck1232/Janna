@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.CustomerAddressManagementController.VO.CustomerAddressVO;
-import com.JJ.controller.customermanagement.VO.CustomerVO;
+import com.JJ.controller.customeraddressmanagement.VO.CustomerAddressVO;
 import com.JJ.dao.CustomerAddressDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.CustomerAddressDbObject;
 import com.JJ.model.CustomerAddressDbObjectExample;
-import com.JJ.model.CustomerDbObject;
-import com.JJ.model.CustomerDbObjectExample;
 
 @Service
 @Transactional
@@ -80,7 +77,7 @@ public class CustomerAddressManagementService {
 		CustomerAddressDbObjectExample customerAddressDbObjectExample = new CustomerAddressDbObjectExample();
 		customerAddressDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andCustomerIdEqualTo(customerid).andDefaultIndEqualTo("Y");
 		CustomerAddressDbObject dbObj = new CustomerAddressDbObject();
-		dbObj.setDefaultind("N");
+		dbObj.setDefaultInd("N");
 		customerAddressDbObjectMapper.updateByExampleSelective(dbObj, customerAddressDbObjectExample);
 	}
 	 

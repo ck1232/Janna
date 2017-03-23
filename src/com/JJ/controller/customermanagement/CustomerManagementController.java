@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.CustomerAddressManagementController.VO.CustomerAddressVO;
+import com.JJ.controller.customeraddressmanagement.VO.CustomerAddressVO;
 import com.JJ.controller.customermanagement.VO.CustomerVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.customeraddressmanagement.CustomerAddressManagementService;
@@ -66,7 +66,7 @@ public class CustomerManagementController {
 		List<CustomerAddressVO> customerAddressVOList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(id));
 		model.addAttribute("customer", customerVO);
 		for(CustomerAddressVO vo: customerAddressVOList) {
-			if(vo.getDefaultind().equals("Y")) {
+			if(vo.getDeleteInd().equals("Y")) {
 				model.addAttribute("contactNo", vo.getContactNumber());
 				break;
 			}
@@ -87,7 +87,7 @@ public class CustomerManagementController {
 		List<CustomerAddressVO> customerAddressVOList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(id));
 		model.addAttribute("customer", customerVO);
 		for(CustomerAddressVO vo: customerAddressVOList) {
-			if(vo.getDefaultind().equals("Y")) {
+			if(vo.getDeleteInd().equals("Y")) {
 				model.addAttribute("contactNo", vo.getContactNumber());
 				break;
 			}
@@ -161,20 +161,20 @@ public class CustomerManagementController {
 			@RequestParam(value="contactnumber", required=false) String contactnumber,
 			@RequestParam(value="country", required=false) String country,
 			RedirectAttributes redirectAttributes) {  
-		CustomerAddressVO customerAddress = new CustomerAddressVO();
-		customerAddress.setCustomerId(Integer.parseInt(customerid));
-		customerAddress.setRecipientName(recipientname);
-		customerAddress.setAddress(address);
-		customerAddress.setContactNumber(Long.parseLong(contactnumber));
-		customerAddress.setPostalCode(Integer.parseInt(postalcode));
-		customerAddress.setCountry(country);
+		CustomerAddressVO customerAddressVO = new CustomerAddressVO();
+		customerAddressVO.setCustomerId(Integer.parseInt(customerid));
+		customerAddressVO.setRecipientName(recipientname);
+		customerAddressVO.setAddress(address);
+		customerAddressVO.setContactNumber(Long.parseLong(contactnumber));
+		customerAddressVO.setPostalCode(Integer.parseInt(postalcode));
+		customerAddressVO.setCountry(country);
 		List<CustomerAddressVO> addressList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(customerid));
 		if(addressList.size() == 0){
-			customerAddress.setDefaultInd("Y");
+			customerAddressVO.setDefaultInd("Y");
 		}else{
-			customerAddress.setDefaultind("N");
+			customerAddressVO.setDefaultInd("N");
 		}
-		customerAddressManagementService.saveCustomerAddress(customerAddress);
+		customerAddressManagementService.saveCustomerAddress(customerAddressVO);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Address added successfully!");
 
@@ -203,7 +203,7 @@ public class CustomerManagementController {
 	public String getAddressToUpdate(@RequestParam("setDefaultBtn") String id, Model model) {
 		CustomerAddressVO customerAddress = customerAddressManagementService.findById(Integer.parseInt(id));
 		customerAddressManagementService.updateCustomerAddressToUndefault(customerAddress.getCustomerId());
-		customerAddress.setDefaultind("Y");
+		customerAddress.setDefaultInd("Y");
 		customerAddressManagementService.updateCustomerAddress(customerAddress);
 		return "redirect:viewCustomer/"+customerAddress.getCustomerId();
 	}
