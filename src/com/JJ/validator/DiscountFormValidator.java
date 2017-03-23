@@ -5,30 +5,30 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Discount;
+import com.JJ.controller.discountmanagement.vo.DiscountVO;
 
 @Component
 public class DiscountFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Discount.class.equals(clazz);
+		return DiscountVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Discount discount = (Discount) target;
+		DiscountVO discount = (DiscountVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "discountname", "error.notempty.discountform.discountname");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "discountvalue", "error.notempty.discountform.discountvalue");
 		
 		if(!errors.hasErrors()) {
-			Float value = discount.getDiscountvalue().floatValue();
-			if("Percentage %".equals(discount.getDiscounttype())) {
+			Float value = discount.getDiscountValue().floatValue();
+			if("Percentage %".equals(discount.getDiscountType())) {
 				if(value < 0 || value > 100) {
 					errors.rejectValue("discountvalue", "error.percent.discountform.discountvalue");
 				}
-			}else if("Value $".equals(discount.getDiscounttype())) {
+			}else if("Value $".equals(discount.getDiscountType())) {
 				if(value < 0) {
 					errors.rejectValue("discountvalue", "error.negative.discountform.discountvalue");
 				}

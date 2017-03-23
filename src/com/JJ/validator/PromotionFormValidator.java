@@ -8,30 +8,30 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Promotion;
+import com.JJ.controller.promotionmanagement.vo.PromotionVO;
 
 @Component
 public class PromotionFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Promotion.class.equals(clazz);
+		return PromotionVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Promotion promotion = (Promotion) target;
+		PromotionVO promotion = (PromotionVO) target;
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "promotionname", "error.notempty.promotionform.promotionname");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "promotionmessage", "error.notempty.promotionform.promotionmessage");
 
 		boolean validDate = true;
 		
-		if(promotion.getPromotionstartdate()==null){
+		if(promotion.getPromotionStartDate()==null){
 			errors.rejectValue("promotionstartdate", "error.notempty.promotionform.promotionstartdate");
 			validDate = false;
 		}
 		
-		if(promotion.getPromotionenddate()==null){
+		if(promotion.getPromotionEndDate()==null){
 			errors.rejectValue("promotionenddate", "error.notempty.promotionform.promotionenddate");
 			validDate = false;
 		}
@@ -39,14 +39,14 @@ public class PromotionFormValidator implements Validator {
 		
 		if(!errors.hasErrors()){
 			try{
-				Assert.isInstanceOf(Date.class, promotion.getPromotionstartdate());
+				Assert.isInstanceOf(Date.class, promotion.getPromotionStartDate());
 			}catch(Exception e){
 				errors.rejectValue("promotionstartdate", "error.notvalid.promotionform.promotionstartdate");
 				validDate = false;
 			}
 			
 			try{
-				Assert.isInstanceOf(Date.class, promotion.getPromotionenddate());
+				Assert.isInstanceOf(Date.class, promotion.getPromotionEndDate());
 			}catch(Exception e){
 				errors.rejectValue("promotionenddate", "error.notvalid.promotionform.promotionenddate");
 				validDate = false;
@@ -55,7 +55,7 @@ public class PromotionFormValidator implements Validator {
 
 		
 		if(validDate){
-			if(promotion.getPromotionstartdate().compareTo(promotion.getPromotionenddate()) > 0){
+			if(promotion.getPromotionStartDate().compareTo(promotion.getPromotionEndDate()) > 0){
 				errors.rejectValue("promotionstartdate", "error.promotionform.promotionstartdate.later.than.enddate");
 				errors.rejectValue("promotionenddate", "error.promotionform.promotionenddate.earlier.than.startdate");
 			}

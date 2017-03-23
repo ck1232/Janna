@@ -10,7 +10,6 @@ import org.springframework.validation.Validator;
 
 import com.JJ.controller.inventorymanagement.InventoryHistorySearchCriteria;
 import com.JJ.controller.invoicemanagement.InvoiceSearchCriteria;
-import com.JJ.model.Promotion;
 
 @Component
 public class InvoiceSearchValidator implements Validator {

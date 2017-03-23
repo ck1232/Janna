@@ -8,16 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.salarybonusmanagement.TypeEnum;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
+import com.JJ.dao.EmployeeBonusDbObjectMapper;
 import com.JJ.dao.EmployeeBonusMapper;
+import com.JJ.dao.EmployeeSalaryDbObjectMapper;
 import com.JJ.dao.EmployeeSalaryMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Employee;
 import com.JJ.model.EmployeeBonus;
+import com.JJ.model.EmployeeBonusDbObjectExample;
 import com.JJ.model.EmployeeBonusExample;
 import com.JJ.model.EmployeeSalary;
+import com.JJ.model.EmployeeSalaryDbObjectExample;
 import com.JJ.model.EmployeeSalaryExample;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
 
@@ -26,13 +31,13 @@ import com.JJ.service.employeemanagement.EmployeeManagementService;
 public class SalaryBonusManagementService {
 	
 	private EmployeeManagementService employeeManagementService;
-	private EmployeeSalaryMapper employeeSalaryMapper;
-	private EmployeeBonusMapper employeeBonusMapper;
+	private EmployeeSalaryDbObjectMapper employeeSalaryMapper;
+	private EmployeeBonusDbObjectMapper employeeBonusMapper;
 	
 	@Autowired
 	public SalaryBonusManagementService(EmployeeManagementService employeeManagementService,
-			EmployeeSalaryMapper employeeSalaryMapper,
-			EmployeeBonusMapper employeeBonusMapper) {
+			EmployeeSalaryDbObjectMapper employeeSalaryMapper,
+			EmployeeBonusDbObjectMapper employeeBonusMapper) {
 		this.employeeManagementService = employeeManagementService;
 		this.employeeSalaryMapper = employeeSalaryMapper;
 		this.employeeBonusMapper = employeeBonusMapper;
@@ -184,7 +189,7 @@ public class SalaryBonusManagementService {
 		vo.setId(salary.getSalaryid());
 		vo.setDate(salary.getSalarydate());
 		vo.setDateString(GeneralUtils.convertDateToString(salary.getSalarydate(), "MMM-yyyy"));
-		Employee employee = employeeManagementService.findById(salary.getEmployeeid());
+		EmployeeVO employee = employeeManagementService.findById(salary.getEmployeeid());
 		vo.setEmployeeid(employee.getEmployeeid());
 		vo.setName(employee.getName());
 		vo.setEmploymenttype(employee.getEmploymenttype());
@@ -227,7 +232,7 @@ public class SalaryBonusManagementService {
 		vo.setId(bonus.getBonusid());
 		vo.setDate(bonus.getBonusdate());
 		vo.setDateString(GeneralUtils.convertDateToString(bonus.getBonusdate(), "yyyy"));
-		Employee employee = employeeManagementService.findById(bonus.getEmployeeid());
+		EmployeeVO employee = employeeManagementService.findById(bonus.getEmployeeid());
 		vo.setEmployeeid(employee.getEmployeeid());
 		vo.setName(employee.getName());
 		vo.setEmploymenttype(employee.getEmploymenttype());
@@ -343,8 +348,8 @@ public class SalaryBonusManagementService {
 	}
 	
 	public EmployeeSalary getSalaryById(Integer id) {
-		EmployeeSalaryExample example = new EmployeeSalaryExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andSalaryidEqualTo(id);
+		EmployeeSalaryDbObjectExample example = new EmployeeSalaryDbObjectExample();
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdEqualTo(id);
 		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
 		if(salaryList != null && !salaryList.isEmpty()) {
 			return salaryList.get(0);
@@ -353,8 +358,8 @@ public class SalaryBonusManagementService {
 	}
 	
 	public EmployeeBonus getBonusById(Integer id) {
-		EmployeeBonusExample example = new EmployeeBonusExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBonusidEqualTo(id);
+		EmployeeBonusDbObjectExample example = new EmployeeBonusDbObjectExample();
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdEqualTo(id);
 		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
 		if(bonusList != null && !bonusList.isEmpty()) {
 			return bonusList.get(0);

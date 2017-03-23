@@ -7,19 +7,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Expense;
+import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 
 @Component
 public class ExpenseFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Expense.class.equals(clazz);
+		return ExpenseVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Expense expense = (Expense) target;
+		ExpenseVO expense = (ExpenseVO) target;
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expensetypeid", "error.notempty.expenseform.expensetype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "supplier", "error.notempty.expenseform.supplier");
 		
@@ -33,9 +33,9 @@ public class ExpenseFormValidator implements Validator {
 			}
 		}
 		
-		if(expense.getTotalamount()==null){
+		if(expense.getTotalAmt()==null){
 			errors.rejectValue("totalamount", "error.notempty.expenseform.totalamount");
-		}else if(expense.getTotalamount().compareTo(BigDecimal.ZERO) <= 0){
+		}else if(expense.getTotalAmt().compareTo(BigDecimal.ZERO) <= 0){
 			errors.rejectValue("totalamount", "error.notvalid.expenseform.totalamount");
 		}		
 	}
