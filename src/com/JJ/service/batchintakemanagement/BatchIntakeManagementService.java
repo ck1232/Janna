@@ -67,9 +67,9 @@ public class BatchIntakeManagementService {
 			}
 		}
 	}
-	public void saveBatchstockintake(BatchStockIntakeVO batchStockIntake) {
-		if(batchStockIntake != null){
-			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntake)).get(0);
+	public void saveBatchstockintake(BatchStockIntakeVO batchStockIntakeVO) {
+		if(batchStockIntakeVO != null){
+			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntakeVO)).get(0);
 			batchStockIntakeDbObjectMapper.insert(dbObj);
 		}
 	}
@@ -93,10 +93,10 @@ public class BatchIntakeManagementService {
 		batchStockIntakeDbObjectMapper.updateByExampleSelective(batchStockIntake, batchStockIntakeExample);
 	}
 	
-	public void updateBatchStockIntake(BatchStockIntakeVO batchStockIntake) {
-		if(batchStockIntake != null && batchStockIntake.getDeleteInd() != null &&
-				batchStockIntake.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntake)).get(0);
+	public void updateBatchStockIntake(BatchStockIntakeVO batchStockIntakeVO) {
+		if(batchStockIntakeVO != null && batchStockIntakeVO.getDeleteInd() != null &&
+				batchStockIntakeVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntakeVO)).get(0);
 			batchStockIntakeDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
 			
@@ -142,15 +142,15 @@ public class BatchIntakeManagementService {
 		List<BatchStockIntakeDbObject> batchStockIntakeDbObjectList = new ArrayList<BatchStockIntakeDbObject>();
 		if(batchStockIntakeVOList != null && batchStockIntakeVOList.size() > 0){
 			for(BatchStockIntakeVO vo : batchStockIntakeVOList){
-				BatchStockIntakeVO batchStockIntakeVO = new BatchStockIntakeVO();
-				batchStockIntakeVO.setAdditionalCost(vo.getAdditionalCost());
-				batchStockIntakeVO.setBatchId(vo.getBatchId());
-				batchStockIntakeVO.setDeleteInd(vo.getDeleteInd());
-				batchStockIntakeVO.setDate(vo.getDate());
-				batchStockIntakeVO.setRemarks(vo.getRemarks());
-				batchStockIntakeVO.setStorageLocation(vo.getStorageLocation());
-				batchStockIntakeVO.setTotalCost(vo.getTotalCost());
-				batchStockIntakeVOList.add(batchStockIntakeVO);
+				BatchStockIntakeDbObject dbObj = new BatchStockIntakeDbObject();
+				dbObj.setAdditionalCost(vo.getAdditionalCost());
+				dbObj.setBatchId(vo.getBatchId());
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setDate(vo.getDate());
+				dbObj.setRemarks(vo.getRemarks());
+				dbObj.setStorageLocation(vo.getStorageLocation());
+				dbObj.setTotalCost(vo.getTotalCost());
+				batchStockIntakeDbObjectList.add(dbObj);
 			}
 		}
 		return batchStockIntakeDbObjectList;
