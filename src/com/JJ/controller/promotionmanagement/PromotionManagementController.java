@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.promotionmanagement.vo.PromotionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Promotion;
 import com.JJ.service.promotionmanagement.PromotionManagementService;
 import com.JJ.validator.PromotionFormValidator;
 
@@ -55,7 +55,7 @@ public class PromotionManagementController {
 	@RequestMapping(value = "/getPromotionList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getPromotionList() {
 		logger.debug("getting promotion list");
-		List<Promotion> promotionList = promotionManagementService.getAllPromotions();
+		List<PromotionVO> promotionList = promotionManagementService.getAllPromotions();
 		return GeneralUtils.convertListToJSONString(promotionList);
 	}
 	
@@ -63,23 +63,23 @@ public class PromotionManagementController {
 	@RequestMapping(value = "/createPromotion", method = RequestMethod.GET)
     public String showAddPromotionForm(Model model) {  
     	logger.debug("loading showAddPromotionForm");
-    	Promotion promotion = new Promotion();
-    	promotion.setIsactive(true);
+    	PromotionVO promotionVo = new PromotionVO();
+    	promotionVo.setIsActive("1");
     	DateFormat df = new SimpleDateFormat("dd-MM-YYYY K:mm a");
     	Date now = new Date();
     	Date startDate = new Date(now.getYear(), now.getMonth(), now.getDate());
     	Date endDate = new Date(now.getYear(), now.getMonth(), now.getDate(),23,59,59);
-    	if(promotion.getPromotionstartdate() == null){
-    		promotion.setPromotionstartdate(startDate);
+    	if(promotionVo.getPromotionStartDate() == null){
+    		promotionVo.setPromotionStartDate(startDate);
     	}
-    	if(promotion.getPromotionenddate() == null){
-    		promotion.setPromotionenddate(endDate);
+    	if(promotionVo.getPromotionEndDate() == null){
+    		promotionVo.setPromotionEndDate(endDate);
     	}
-    	String startDateString = df.format(promotion.getPromotionstartdate());
-    	String endDateString = df.format(promotion.getPromotionenddate());
-    	promotion.setPromotionperiod(startDateString + " - " + endDateString);
+    	String startDateString = df.format(promotionVo.getPromotionStartDate());
+    	String endDateString = df.format(promotionVo.getPromotionEndDate());
+    	promotionVo.setPromotionperiod(startDateString + " - " + endDateString);
     	
-    	model.addAttribute("promotionForm", promotion);
+    	model.addAttribute("promotionForm", promotionVo);
         return "createPromotion";  
     }  
     
@@ -92,15 +92,15 @@ public class PromotionManagementController {
 	}
 	
 	@RequestMapping(value = "/createPromotion", method = RequestMethod.POST)
-    public String savePromotion(@ModelAttribute("promotionForm") @Validated Promotion promotion, 
+    public String savePromotion(@ModelAttribute("promotionForm") @Validated PromotionVO promotionVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		promotion.setDeleteInd(GeneralUtils.NOT_DELETED);
-		logger.debug("savePromotion() : " + promotion.toString());
+		promotionVo.setDeleteInd(GeneralUtils.NOT_DELETED);
+		logger.debug("savePromotion() : " + promotionVo.toString());
 		if (result.hasErrors()) {
 			return "createPromotion";
 		} else {
-			promotionManagementService.savePromotion(promotion);
+			promotionManagementService.savePromotion(promotionVo);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Promotion added successfully!");
 		}
@@ -129,27 +129,27 @@ public class PromotionManagementController {
 	@RequestMapping(value = "/updatePromotion", method = RequestMethod.POST)
 	public String getPromotionToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Promotion promotion = promotionManagementService.findById(new Integer(id));
-		logger.debug("Loading update promotion page for " + promotion.toString());
+		PromotionVO promotionVO = promotionManagementService.findById(new Integer(id));
+		logger.debug("Loading update promotion page for " + promotionVO.toString());
 		DateFormat df = new SimpleDateFormat("dd-MM-YYYY K:mm a");
-		String startDateString = df.format(promotion.getPromotionstartdate());
-    	String endDateString = df.format(promotion.getPromotionenddate());
-    	promotion.setPromotionperiod(startDateString + " - " + endDateString);
+		String startDateString = df.format(promotionVO.getPromotionStartDate());
+    	String endDateString = df.format(promotionVO.getPromotionEndDate());
+    	promotionVO.setPromotionperiod(startDateString + " - " + endDateString);
     	
-		model.addAttribute("promotionForm", promotion);
+		model.addAttribute("promotionForm", promotionVO);
 		return "updatePromotion";
 	}
 	
 	@RequestMapping(value = "/updatePromotionToDb", method = RequestMethod.POST)
-	public String updatePromotion(@ModelAttribute("promotionForm") @Validated Promotion promotion,
+	public String updatePromotion(@ModelAttribute("promotionForm") @Validated PromotionVO promotionVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updatePromotion() : " + promotion.toString());
+		logger.debug("updatePromotion() : " + promotionVO.toString());
 		
 		if (result.hasErrors()) {
 			return "updatePromotion";
 		} else {
-			promotionManagementService.updatePromotion(promotion);
+			promotionManagementService.updatePromotion(promotionVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Promotion updated successfully!");
 		}
@@ -161,12 +161,12 @@ public class PromotionManagementController {
 	@RequestMapping(value = "/viewPromotion", method = RequestMethod.POST)
 	public String viewPromotion(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Promotion promotion = promotionManagementService.findById(new Integer(id));
-		if (promotion == null) {
+		PromotionVO promotionVO = promotionManagementService.findById(new Integer(id));
+		if (promotionVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Promotion not found");
 		}
-		model.addAttribute("promotion", promotion);
+		model.addAttribute("promotion", promotionVO);
 
 		return "viewPromotion";
 

@@ -112,10 +112,10 @@ public class BatchIntakeManagementController {
 	}
 	
 	@RequestMapping(value = "/createBatchIntake", method = RequestMethod.POST)
-    public String saveBatchIntake(@ModelAttribute("batchIntakeForm") @Validated BatchStockIntakeVO batchIntake, 
+    public String saveBatchIntake(@ModelAttribute("batchIntakeForm") @Validated BatchStockIntakeVO batchIntakeVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveBatchIntake() : " + batchIntake.toString());
+		logger.debug("saveBatchIntake() : " + batchIntakeVO.toString());
 		if (result.hasErrors()) {
 			return "createBatchIntake";
 		} else {
@@ -126,13 +126,13 @@ public class BatchIntakeManagementController {
 					totalProductCost = totalProductCost.add(i);
 				}
 			}
-			BigDecimal addcost = batchIntake.getTotalCost().subtract(totalProductCost);
+			BigDecimal addcost = batchIntakeVO.getTotalCost().subtract(totalProductCost);
 			if(addcost.signum() == -1) {
 				result.rejectValue("totalcost", "error.lessthan.batchintakeform.totalcost");
 				return "createBatchIntake";
 			}
-			batchIntake.setAdditionalCost(addcost);
-			batchIntake.setDeleteInd(GeneralUtils.NOT_DELETED);
+			batchIntakeVO.setAdditionalCost(addcost);
+			batchIntakeVO.setDeleteInd(GeneralUtils.NOT_DELETED);
 			List<BatchProductRsVO> batchProductList = new ArrayList<BatchProductRsVO>();
 			List<ProductInventoryVO> inventoryList = new ArrayList<ProductInventoryVO>();
 			if(batchIntakeProductList != null) {
@@ -146,7 +146,7 @@ public class BatchIntakeManagementController {
 					//if exist, get id
 					if(rs.getProductId() != null) {
 						BatchProductRsVO batchProductRs = new BatchProductRsVO();
-						batchProductRs.setBatchId(batchIntake.getBatchId());
+						batchProductRs.setBatchId(batchIntakeVO.getBatchId());
 						batchProductRs.setProductSubOptionId(rs.getProductSuboptionRsId());
 						batchProductRs.setUnitCost(product.getUnitcost());
 						batchProductRs.setQty(product.getQty());
@@ -154,7 +154,7 @@ public class BatchIntakeManagementController {
 						batchProductList.add(batchProductRs);
 						
 						ProductInventoryVO inventory = new ProductInventoryVO(rs.getProductSuboptionRsId(), null, 
-								batchIntake.getStorageLocation(), true,
+								batchIntakeVO.getStorageLocation(), true,
 								product.getQty(), null);
 						inventoryList.add(inventory);
 					//else invalid
@@ -165,7 +165,7 @@ public class BatchIntakeManagementController {
 					}
 				}
 			}
-			batchIntakeManagementService.createBatchstockintake(batchIntake, inventoryList, batchProductList);
+			batchIntakeManagementService.createBatchstockintake(batchIntakeVO, inventoryList, batchProductList);
 			batchIntakeProductList = new ArrayList<BatchIntakeProductVO>();
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");

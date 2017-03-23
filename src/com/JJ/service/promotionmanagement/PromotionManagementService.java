@@ -1,55 +1,111 @@
 package com.JJ.service.promotionmanagement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.PromotionMapper;
+import com.JJ.controller.discountmanagement.vo.DiscountVO;
+import com.JJ.controller.promotionmanagement.vo.PromotionVO;
+import com.JJ.dao.PromotionDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Promotion;
-import com.JJ.model.PromotionExample;
+import com.JJ.model.DiscountDbObject;
+import com.JJ.model.DiscountDbObjectExample;
+import com.JJ.model.PromotionDbObject;
+import com.JJ.model.PromotionDbObjectExample;
 
 @Service
 @Transactional
 public class PromotionManagementService {
 	
-	private PromotionMapper promotionMapper;
+	private PromotionDbObjectMapper promotionDbObjectMapper;
 	
 	@Autowired
-	public PromotionManagementService(PromotionMapper promotionMapper) {
-		this.promotionMapper = promotionMapper;
+	public PromotionManagementService(PromotionDbObjectMapper promotionDbObjectMapper) {
+		this.promotionDbObjectMapper = promotionDbObjectMapper;
 	}
 	
-	public Promotion findById(Integer id) {
-		return promotionMapper.selectByPrimaryKey(id);
+	public PromotionVO findById(Integer id) {
+		PromotionDbObject promotionDbObject = promotionDbObjectMapper.selectByPrimaryKey(id);
+		if(promotionDbObject != null && promotionDbObject.getPromotionId() != null){
+			return convertToPromotionVOList(Arrays.asList(promotionDbObject)).get(0);
+		}else{
+			return new PromotionVO();
+		}
 	}
 
-	public List<Promotion> getAllPromotions() {
-		PromotionExample promotionExample = new PromotionExample();
-		promotionExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Promotion> promotionList = promotionMapper.selectByExample(promotionExample);
-		return promotionList;
+	public List<PromotionVO> getAllPromotions() {
+		PromotionDbObjectExample promotionDbObjectExample = new PromotionDbObjectExample();
+		promotionDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToPromotionVOList(promotionDbObjectMapper.selectByExample(promotionDbObjectExample));
 	}
 	
-	public void savePromotion(Promotion promotion) {
-		promotionMapper.insert(promotion);
-	}
-	
-	public void deletePromotion(Integer id) {
-		Promotion promotion = findById(id);
-		if(promotion.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-			promotion.setDeleteInd(GeneralUtils.DELETED);
-			promotionMapper.updateByPrimaryKey(promotion);
+	public void savePromotion(PromotionVO promotionVo) {
+		if(promotionVo != null) {
+			PromotionDbObject dbObj = convertToPromotionDbObjectList(Arrays.asList(promotionVo)).get(0);
+			promotionDbObjectMapper.insert(dbObj);
 		}
 	}
 	
-	public void updatePromotion(Promotion promotion) {
-		if(promotion.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			promotionMapper.updateByPrimaryKeySelective(promotion);
+	public void deletePromotion(Integer id) {
+		deletePromotion(Arrays.asList(id));
+	}
+	
+	public void deletePromotion(List<Integer> idList) {
+		PromotionDbObjectExample promotionDbObjectExample = new PromotionDbObjectExample();
+		promotionDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andPromotionIdIn(idList);
+		PromotionDbObject dbObj = new PromotionDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		promotionDbObjectMapper.updateByExampleSelective(dbObj, promotionDbObjectExample);
+	}
+	
+	public void updatePromotion(PromotionVO promotionVo) {
+		if(promotionVo != null && promotionVo.getDeleteInd() != null &&
+				promotionVo.getDeleteInd().equals(GeneralUtils.NOT_DELETED)) {
+			PromotionDbObject dbObj = convertToPromotionDbObjectList(Arrays.asList(promotionVo)).get(0);
+			promotionDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
 	}
 	 
+	private List<PromotionVO> convertToPromotionVOList(List<PromotionDbObject> promotionDbObjectList) {
+		List<PromotionVO> promotionVOList = new ArrayList<PromotionVO>();
+		if(promotionDbObjectList != null && promotionDbObjectList.size() > 0) {
+			for(PromotionDbObject dbObj : promotionDbObjectList) {
+				PromotionVO promotionVo = new PromotionVO();
+				promotionVo.setDeleteInd(dbObj.getDeleteInd());
+				promotionVo.setIsActive(dbObj.getIsActive());
+				promotionVo.setPromotionEndDate(dbObj.getPromotionEndDate());
+				promotionVo.setPromotionId(dbObj.getPromotionId());
+				promotionVo.setPromotionMessage(dbObj.getPromotionMessage());
+				promotionVo.setPromotionName(dbObj.getPromotionName());
+				promotionVo.setPromotionStartDate(dbObj.getPromotionStartDate());
+				promotionVo.setVersion(dbObj.getVersion());
+				promotionVOList.add(promotionVo);
+			}
+		}
+		return promotionVOList;
+	}
 	
+	private List<PromotionDbObject> convertToPromotionDbObjectList(List<PromotionVO> promotionVOList) {
+		List<PromotionDbObject> promotionDbObjectList = new ArrayList<PromotionDbObject>();
+		if(promotionVOList != null && promotionVOList.size() > 0){
+			for(PromotionVO vo : promotionVOList){
+				PromotionDbObject dbObj = new PromotionDbObject();
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setIsActive(vo.getIsActive());
+				dbObj.setPromotionEndDate(vo.getPromotionEndDate());
+				dbObj.setPromotionId(vo.getPromotionId());
+				dbObj.setPromotionMessage(vo.getPromotionMessage());
+				dbObj.setPromotionName(vo.getPromotionName());
+				dbObj.setPromotionStartDate(vo.getPromotionStartDate());
+				dbObj.setVersion(vo.getVersion());
+				promotionDbObjectList.add(dbObj);
+			}
+		}
+		return promotionDbObjectList;
+	}
 	
 }
