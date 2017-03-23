@@ -167,6 +167,7 @@ CREATE TABLE `customer_address` (
   `contact_number` bigint(10) DEFAULT NULL,
   `postal_code` int(8) DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
+  `default_ind` char(1) NOT NULL DEFAULT 'N',
   `version` int(5) NOT NULL DEFAULT '1',
   `created_by` varchar(255) NOT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -183,7 +184,7 @@ CREATE TABLE `customer_address` (
 
 LOCK TABLES `customer_address` WRITE;
 /*!40000 ALTER TABLE `customer_address` DISABLE KEYS */;
-INSERT INTO `customer_address` VALUES (1,1,'CK111','Blk 252 #02-390 Pending Road Singapore 670252',93273252,670255,'Singapore',1,'Janice','2016-11-09 19:29:00','Janice','2016-11-09 19:29:00','Y');
+INSERT INTO `customer_address` VALUES (1,1,'CK111','Blk 252 #02-390 Pending Road Singapore 670252',93273252,670255,'Singapore','N',1,'Janice','2016-11-09 19:29:00','Janice','2016-11-09 19:29:00','Y');
 /*!40000 ALTER TABLE `customer_address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -987,7 +988,7 @@ DROP TABLE IF EXISTS `product_tags`;
 CREATE TABLE `product_tags` (
   `tags_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `product_id` varchar(45) NOT NULL,
+  `product_id` int(11) NOT NULL,
   `version` int(5) NOT NULL DEFAULT '1',
   `created_by` varchar(255) NOT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1004,7 +1005,7 @@ CREATE TABLE `product_tags` (
 
 LOCK TABLES `product_tags` WRITE;
 /*!40000 ALTER TABLE `product_tags` DISABLE KEYS */;
-INSERT INTO `product_tags` VALUES (1,'23','30',1,'ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25','N'),(2,'fsd','30',1,'ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33','Y'),(3,'testing','30',1,'ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33','N'),(4,'iphone','24',1,'ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01','N'),(5,'apple','24',1,'ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01','N'),(6,'12','25',1,'ck1232','2017-02-28 22:29:59','ck1232','2017-02-28 22:29:59','N');
+INSERT INTO `product_tags` VALUES (1,'23',30,1,'ck1232','2016-12-05 12:49:25','ck1232','2016-12-05 12:49:25','N'),(2,'fsd',30,1,'ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33','Y'),(3,'testing',30,1,'ck1232','2016-12-05 13:06:33','ck1232','2016-12-05 13:06:33','N'),(4,'iphone',24,1,'ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01','N'),(5,'apple',24,1,'ck1232','2016-12-26 17:17:01','ck1232','2016-12-26 17:17:01','N'),(6,'12',25,1,'ck1232','2017-02-28 22:29:59','ck1232','2017-02-28 22:29:59','N');
 /*!40000 ALTER TABLE `product_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1914,4 +1915,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-22 20:57:48
+-- Dump completed on 2017-03-23 22:17:06
