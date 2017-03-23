@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.CustomerAddressManagementController.VO.CustomerAddressVO;
+import com.JJ.controller.customermanagement.VO.CustomerVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Customer;
-import com.JJ.model.Customeraddress;
 import com.JJ.service.customeraddressmanagement.CustomerAddressManagementService;
 import com.JJ.service.customermanagement.CustomerManagementService;
 
@@ -50,78 +50,78 @@ public class CustomerManagementController {
 	@RequestMapping(value = "/getCustomerList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getCustomerList() {
 		logger.debug("getting customer list");
-		List<Customer> customerList = customerManagementService.getAllCustomers();
+		List<CustomerVO> customerList = customerManagementService.getAllCustomers();
 		return GeneralUtils.convertListToJSONString(customerList);
 	}
 	
 	@RequestMapping(value = "/viewCustomer", method = RequestMethod.POST)
 	public String viewCustomer(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Customer customer = customerManagementService.findById(new Integer(id));
-		if (customer == null) {
+		CustomerVO customerVO = customerManagementService.findById(new Integer(id));
+		if (customerVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Customer not found");
 			return "listCustomer";
 		}
-		List<Customeraddress> addressList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(id));
-		model.addAttribute("customer", customer);
-		for(Customeraddress address: addressList) {
-			if(address.getDefaultind().equals("Y")) {
-				model.addAttribute("contactNo", address.getContactnumber());
+		List<CustomerAddressVO> customerAddressVOList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(id));
+		model.addAttribute("customer", customerVO);
+		for(CustomerAddressVO vo: customerAddressVOList) {
+			if(vo.getDefaultind().equals("Y")) {
+				model.addAttribute("contactNo", vo.getContactNumber());
 				break;
 			}
 		}
-		model.addAttribute("addressList", addressList);
+		model.addAttribute("addressList", customerAddressVOList);
 		return "viewCustomer";
 	}
 	
 	@RequestMapping(value = "/viewCustomer/{id}", method = RequestMethod.GET)
 	public String viewCustomerForRedirect(@PathVariable String id, Model model) {
 		logger.debug("id = " + id);
-		Customer customer = customerManagementService.findById(new Integer(id));
-		if (customer == null) {
+		CustomerVO customerVO = customerManagementService.findById(new Integer(id));
+		if (customerVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Customer not found");
 			return "listCustomer";
 		}
-		List<Customeraddress> addressList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(id));
-		model.addAttribute("customer", customer);
-		for(Customeraddress address: addressList) {
-			if(address.getDefaultind().equals("Y")) {
-				model.addAttribute("contactNo", address.getContactnumber());
+		List<CustomerAddressVO> customerAddressVOList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(id));
+		model.addAttribute("customer", customerVO);
+		for(CustomerAddressVO vo: customerAddressVOList) {
+			if(vo.getDefaultind().equals("Y")) {
+				model.addAttribute("contactNo", vo.getContactNumber());
 				break;
 			}
 		}
-		model.addAttribute("addressList", addressList);
+		model.addAttribute("addressList", customerAddressVOList);
 		return "viewCustomer";
 	}
 	
 	@RequestMapping(value = "/createCustomer", method = RequestMethod.GET)
     public String showAddCustomerForm(Model model) {  
     	logger.debug("loading showAddCustomerForm");
-    	Customer customer = new Customer();
-    	customer.setIsactive(true);
-    	customer.setGender("M");
-    	model.addAttribute("customerForm", customer);
+    	CustomerVO customerVO = new CustomerVO();
+    	customerVO.setIsActive("1");
+    	customerVO.setGender("M");
+    	model.addAttribute("customerForm", customerVO);
         return "createCustomer";  
     }  
 	
 	@RequestMapping(value = "/createCustomer", method = RequestMethod.POST)
-    public String saveCustomer(@ModelAttribute("customerForm") /*@Validated*/ Customer customer, 
+    public String saveCustomer(@ModelAttribute("customerForm") /*@Validated*/ CustomerVO customerVO, 
     		/*BindingResult result,*/ Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveCustomer() : " + customer.toString());
+		logger.debug("saveCustomer() : " + customerVO.toString());
 //		if (result.hasErrors()) {
 //			return "createCustomer";
 //		} else {
-			customer.setDeleteInd(GeneralUtils.NOT_DELETED);
-			customerManagementService.saveCustomer(customer);
+			customerVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+			customerManagementService.saveCustomer(customerVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Customer added successfully!");
 //		}
 		
 		
-        return "redirect:viewCustomer/" + customer.getCustomerid();  
+        return "redirect:viewCustomer/" + customerVO.getCustomerId();  
     }  
 	
 	@RequestMapping(value = "/deleteCustomer", method = RequestMethod.POST)
@@ -149,8 +149,8 @@ public class CustomerManagementController {
 		customerAddressManagementService.deleteCustomerAddress(Integer.valueOf(id));
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Address deleted successfully!");
-		Customeraddress address = customerAddressManagementService.findById(Integer.parseInt(id));
-		return "redirect:viewCustomer/"+address.getCustomerid();
+		CustomerAddressVO customerAddressVO = customerAddressManagementService.findById(Integer.parseInt(id));
+		return "redirect:viewCustomer/"+customerAddressVO.getCustomerId();
 	}
 	
 	@RequestMapping(value = "/createCustomerAddress", method = RequestMethod.POST)
@@ -161,16 +161,16 @@ public class CustomerManagementController {
 			@RequestParam(value="contactnumber", required=false) String contactnumber,
 			@RequestParam(value="country", required=false) String country,
 			RedirectAttributes redirectAttributes) {  
-		Customeraddress customerAddress = new Customeraddress();
-		customerAddress.setCustomerid(Integer.parseInt(customerid));
-		customerAddress.setRecipientname(recipientname);
+		CustomerAddressVO customerAddress = new CustomerAddressVO();
+		customerAddress.setCustomerId(Integer.parseInt(customerid));
+		customerAddress.setRecipientName(recipientname);
 		customerAddress.setAddress(address);
-		customerAddress.setContactnumber(Long.parseLong(contactnumber));
-		customerAddress.setPostalcode(Integer.parseInt(postalcode));
+		customerAddress.setContactNumber(Long.parseLong(contactnumber));
+		customerAddress.setPostalCode(Integer.parseInt(postalcode));
 		customerAddress.setCountry(country);
-		List<Customeraddress> addressList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(customerid));
+		List<CustomerAddressVO> addressList = customerAddressManagementService.getAllCustomerAddressByCustomerId(Integer.parseInt(customerid));
 		if(addressList.size() == 0){
-			customerAddress.setDefaultind("Y");
+			customerAddress.setDefaultInd("Y");
 		}else{
 			customerAddress.setDefaultind("N");
 		}
@@ -188,46 +188,46 @@ public class CustomerManagementController {
 			@RequestParam(value="postalcode", required=false) String postalcode,
 			@RequestParam(value="contactnumber", required=false) String contactnumber,
 			RedirectAttributes redirectAttributes) {
-		Customeraddress addressToSave = customerAddressManagementService.findById(Integer.parseInt(addressid));
-		addressToSave.setRecipientname(recipientname);
+		CustomerAddressVO addressToSave = customerAddressManagementService.findById(Integer.parseInt(addressid));
+		addressToSave.setRecipientName(recipientname);
 		addressToSave.setAddress(address);
-		addressToSave.setPostalcode(Integer.parseInt(postalcode));
-		addressToSave.setContactnumber(Long.parseLong(contactnumber));
+		addressToSave.setPostalCode(Integer.parseInt(postalcode));
+		addressToSave.setContactNumber(Long.parseLong(contactnumber));
 		customerAddressManagementService.updateCustomerAddress(addressToSave);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Address updated successfully!");
-		return "redirect:viewCustomer/"+addressToSave.getCustomerid();
+		return "redirect:viewCustomer/"+addressToSave.getCustomerId();
 	}
 	
 	@RequestMapping(value = "/setAddressDefault", method = RequestMethod.POST)
 	public String getAddressToUpdate(@RequestParam("setDefaultBtn") String id, Model model) {
-		Customeraddress customerAddress = customerAddressManagementService.findById(Integer.parseInt(id));
-		customerAddressManagementService.updateCustomerAddressToUndefault(customerAddress.getCustomerid());
+		CustomerAddressVO customerAddress = customerAddressManagementService.findById(Integer.parseInt(id));
+		customerAddressManagementService.updateCustomerAddressToUndefault(customerAddress.getCustomerId());
 		customerAddress.setDefaultind("Y");
 		customerAddressManagementService.updateCustomerAddress(customerAddress);
-		return "redirect:viewCustomer/"+customerAddress.getCustomerid();
+		return "redirect:viewCustomer/"+customerAddress.getCustomerId();
 	}
 	
 	@RequestMapping(value = "/activateOrDeactivateCustomer", method = RequestMethod.POST)
 	public String activateOrDeactivateCustomer(@RequestParam("customerId") String id, Model model, 
 			RedirectAttributes redirectAttributes) {
-		Customer customer = customerManagementService.findById(Integer.parseInt(id));
-		if(customer.getIsactive()){
-			customer.setIsactive(false);
+		CustomerVO customerVO = customerManagementService.findById(Integer.parseInt(id));
+		if(customerVO.getIsActive().equals("1")){
+			customerVO.setIsActive("0");
 			redirectAttributes.addFlashAttribute("msg", "Customer deactivated successfully!");
-		}else if(!customer.getIsactive()){
-			customer.setIsactive(true);
+		}else if(!customerVO.getIsActive().equals("1")){
+			customerVO.setIsActive("0");
 			redirectAttributes.addFlashAttribute("msg", "Customer activated successfully!");
 		}
-		customerManagementService.updateCustomer(customer);
+		customerManagementService.updateCustomer(customerVO);
 		redirectAttributes.addFlashAttribute("css", "success");
-		return "redirect:viewCustomer/"+customer.getCustomerid();
+		return "redirect:viewCustomer/"+customerVO.getCustomerId();
 	}
 	
 	@RequestMapping(value = "/updateCustomer", method = RequestMethod.POST)
 	public String getCustomerToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Customer customer = customerManagementService.findById(new Integer(id));
+		CustomerVO customer = customerManagementService.findById(new Integer(id));
 		logger.debug("Loading update customer page for " + customer.toString());
 		
 		model.addAttribute("customerForm", customer);
@@ -235,25 +235,25 @@ public class CustomerManagementController {
 	}
 	
 	@RequestMapping(value = "/updateCustomerToDb", method = RequestMethod.POST)
-	public String updateUser(@ModelAttribute("customerForm") Customer customer,
+	public String updateUser(@ModelAttribute("customerForm") CustomerVO customerVO,
 			/*BindingResult result, */Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateUser() : " + customer.toString());
+		logger.debug("updateUser() : " + customerVO.toString());
 		
 		/*if (result.hasErrors()) {
 			return "updateUser";
 		} else {*/
-			Customer toSaveCustomer = customerManagementService.findById(customer.getCustomerid());
-			toSaveCustomer.setName(customer.getName());
-			toSaveCustomer.setDob(customer.getDob());
-			toSaveCustomer.setEmailaddress(customer.getEmailaddress());
-			toSaveCustomer.setIsactive(customer.getIsactive());
+			CustomerVO toSaveCustomer = customerManagementService.findById(customerVO.getCustomerId());
+			toSaveCustomer.setName(customerVO.getName());
+			toSaveCustomer.setDob(customerVO.getDob());
+			toSaveCustomer.setEmailAddress(customerVO.getEmailAddress());
+			toSaveCustomer.setIsActive(customerVO.getIsActive());
 			customerManagementService.updateCustomer(toSaveCustomer);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Customer updated successfully!");
 //		}
 		
-		return "redirect:viewCustomer/" + customer.getCustomerid();
+		return "redirect:viewCustomer/" + customerVO.getCustomerId();
 	}
 	
 }
