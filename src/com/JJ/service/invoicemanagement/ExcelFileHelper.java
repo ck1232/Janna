@@ -18,15 +18,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import com.JJ.model.Invoice;
+import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 
 public class ExcelFileHelper {
 	private static final Logger logger = Logger.getLogger(ExcelFileHelper.class);
 	
 	public ExcelFileHelper() {}
 	
-	public Invoice readFromFile(byte[] file) {
-		Invoice invoice = new Invoice();
+	public InvoiceVO readFromFile(byte[] file) {
+		InvoiceVO invoice = new InvoiceVO();
 		InputStream is = null;
 		
 		try {
@@ -56,7 +56,7 @@ public class ExcelFileHelper {
             logger.info("index: " + i);
             if(i < cellvalue.length()) {
             	logger.info(cellvalue.substring(i, cellvalue.length()));
-            	invoice.setInvoiceid(Integer.valueOf(cellvalue.substring(i, cellvalue.length())));
+            	invoice.setInvoiceId(Integer.valueOf(cellvalue.substring(i, cellvalue.length())));
             }
             
             /* Getting Invoice Date */
@@ -65,14 +65,14 @@ public class ExcelFileHelper {
             try{
             	Date celldatevalue = invoiceDate.getDateCellValue();
             	logger.info(celldatevalue);
-                invoice.setInvoicedate(celldatevalue);
+                invoice.setInvoiceDate(celldatevalue);
             }catch(Exception e) {
             	logger.info("Error getting date");
 //            	e.printStackTrace();
             	try{
 	            	cellvalue = invoiceDate.getRichStringCellValue().getString();
 	            	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
-	            	invoice.setInvoicedate(formatter.parse(cellvalue));
+	            	invoice.setInvoiceDate(formatter.parse(cellvalue));
             	}catch(Exception ex){
             		logger.info("Error getting date again");
             	}
@@ -86,7 +86,7 @@ public class ExcelFileHelper {
             
             logger.info(messengerIndex[0]+ ", " +  messengerIndex[1] + ", " + messengerContent);
             logger.info(cellnumvalue);
-            invoice.setTotalprice(BigDecimal.valueOf(cellnumvalue));
+            invoice.setTotalAmt(BigDecimal.valueOf(cellnumvalue));
             return invoice;
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,7 +149,7 @@ public class ExcelFileHelper {
         return cell[1];
 	}
 	
-	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList, String statementPeriod){
+	public HSSFWorkbook writeToFile(File inputfile, List<InvoiceVO> invoiceList, String statementPeriod){
 		try {
 			FileInputStream file = new FileInputStream(inputfile);
 			HSSFWorkbook workbook = new HSSFWorkbook(file);
@@ -178,12 +178,12 @@ public class ExcelFileHelper {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM");
             int row = dateHeaderIndex[0] + 1;
             Double totalAmount = 0.0;
-            for(Invoice invoice : invoiceList) {
+            for(InvoiceVO invoice : invoiceList) {
             	cell = sheet.getRow(row).getCell(dateHeaderIndex[1]);
-            	cell.setCellValue(formatter.format(invoice.getInvoicedate()));
+            	cell.setCellValue(formatter.format(invoice.getInvoiceDate()));
             	
             	cell = sheet.getRow(row).getCell(invoiceNoHeaderIndex[1]);
-            	cell.setCellValue(invoice.getInvoiceid());
+            	cell.setCellValue(invoice.getInvoiceId());
             	
             	cell = sheet.getRow(row).getCell(statusHeaderIndex[1]);
             	cell.setCellValue(invoice.getStatus());
@@ -194,9 +194,9 @@ public class ExcelFileHelper {
             	}*/
             	
             	cell = sheet.getRow(row).getCell(amountHeaderIndex[1]);
-            	cell.setCellValue(invoice.getTotalprice().doubleValue());
+            	cell.setCellValue(invoice.getTotalAmt().doubleValue());
             	
-            	totalAmount += invoice.getTotalprice().doubleValue();
+            	totalAmount += invoice.getTotalAmt().doubleValue();
             	row++;
             }
             

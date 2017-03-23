@@ -40,12 +40,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.common.vo.JsonResponseVO;
+import com.JJ.controller.invoicemanagement.vo.InvoiceUploadVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.PaymentModeLookup;
-import com.JJ.model.Invoice;
-import com.JJ.model.Paymentdetail;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.validator.InvoiceSearchValidator;
@@ -62,8 +61,8 @@ public class InvoiceManagementController {
 	private PaymentManagementService paymentManagementService;
 	private InvoiceSearchValidator invoiceSearchValidator;
 	private PaymentModeLookup paymentModeLookup;
-	List<Invoice> invoiceList;
-	InvoiceVO invoiceVo;
+	List<InvoiceVO> invoiceList;
+	InvoiceUploadVO invoiceUploadVo;
 	InvoiceSearchCriteria searchCriteria;
 	Map<String,String> statusList;
 	
@@ -85,13 +84,13 @@ public class InvoiceManagementController {
     public String listInvoice(Model model) {  
     	logger.debug("loading listInvoice");
     	
-    	invoiceVo = new InvoiceVO();
+    	invoiceUploadVo = new InvoiceUploadVO();
     	searchCriteria = new InvoiceSearchCriteria();
     	
     	statusList = new LinkedHashMap<String,String>();
     	statusList.put(InvoiceStatusEnum.PAID.toString(), InvoiceStatusEnum.PAID.getStatus());
     	statusList.put(InvoiceStatusEnum.PENDING.toString(), InvoiceStatusEnum.PENDING.getStatus());
-    	model.addAttribute("invoiceForm", invoiceVo);
+    	model.addAttribute("invoiceForm", invoiceUploadVo);
     	model.addAttribute("exportForm", searchCriteria);
     	model.addAttribute("statusList", statusList);
         return "listInvoice";  
@@ -108,14 +107,13 @@ public class InvoiceManagementController {
 	@RequestMapping(value = "/viewInvoice", method = RequestMethod.POST)
 	public String viewInvoice(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Invoice invoice = invoiceManagementService.getInvoiceById(new Integer(id));
-		if (invoice == null) {
+		InvoiceVO invoiceVO = invoiceManagementService.getInvoiceById(new Integer(id));
+		if (invoiceVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Invoice not found");
 		}else{
-			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
-			model.addAttribute("invoice", invoice);
-			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("invoice", invoice.getInvoiceid());
+			model.addAttribute("invoice", invoiceVO);
+			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("invoice", invoiceVO.getInvoiceid());
 			if(paymentList != null && paymentList.size() > 0){
 				for(Paymentdetail payment : paymentList) {
 					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
@@ -157,23 +155,23 @@ public class InvoiceManagementController {
            } catch (IOException e) {
                e.printStackTrace();
            }
-            if(invoiceVo != null){
-            	if(invoiceVo.getInvoiceList() == null){
-            		invoiceVo.setInvoiceList(new LinkedList<FileMetaVO>());
+            if(invoiceUploadVo != null){
+            	if(invoiceUploadVo.getInvoiceList() == null){
+            		invoiceUploadVo.setInvoiceList(new LinkedList<FileMetaVO>());
             	}
-            	fileMeta.setSequence(invoiceVo.getInvoiceList().size() + 1);
-            	invoiceVo.getInvoiceList().add(fileMeta);
-            	return invoiceVo.getInvoiceList();
+            	fileMeta.setSequence(invoiceUploadVo.getInvoiceList().size() + 1);
+            	invoiceUploadVo.getInvoiceList().add(fileMeta);
+            	return invoiceUploadVo.getInvoiceList();
             }
        }
-        reshuffleFiles(invoiceVo.getInvoiceList());
+        reshuffleFiles(invoiceUploadVo.getInvoiceList());
         return null;
 	}
 	
 	@RequestMapping(value = "/removeUploadFile",method = RequestMethod.POST)
 	public @ResponseBody JsonResponseVO removeUploadFile(HttpServletRequest request,@RequestParam(value="fileName", required=false) String fileName, HttpServletResponse response) {
-		if(invoiceVo != null && invoiceVo.getInvoiceList() != null && invoiceVo.getInvoiceList().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
-			Iterator<FileMetaVO> iterator = invoiceVo.getInvoiceList().iterator();
+		if(invoiceUploadVo != null && invoiceUploadVo.getInvoiceList() != null && invoiceUploadVo.getInvoiceList().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
+			Iterator<FileMetaVO> iterator = invoiceUploadVo.getInvoiceList().iterator();
 			while(iterator.hasNext()){
 				FileMetaVO file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
@@ -181,15 +179,15 @@ public class InvoiceManagementController {
 					break;
 				}
 			}
-			reshuffleFiles(invoiceVo.getInvoiceList());
+			reshuffleFiles(invoiceUploadVo.getInvoiceList());
 		}
 		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/sortFile", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponseVO sortFile(@RequestBody List<String> orderList) {
-		if(invoiceVo.getInvoiceList() != null && invoiceVo.getInvoiceList().size() > 0){
-			for(FileMetaVO file : invoiceVo.getInvoiceList()){
+		if(invoiceUploadVo.getInvoiceList() != null && invoiceUploadVo.getInvoiceList().size() > 0){
+			for(FileMetaVO file : invoiceUploadVo.getInvoiceList()){
 				int index = orderList.indexOf(file.getFileName());
 				if(index < 0){
 					file.setSequence(0);
@@ -198,7 +196,7 @@ public class InvoiceManagementController {
 					file.setSequence(index + 1);
 				}
 			}
-			reshuffleFiles(invoiceVo.getInvoiceList());
+			reshuffleFiles(invoiceUploadVo.getInvoiceList());
 		}
 		return new JsonResponseVO("success");
 	}
@@ -215,12 +213,12 @@ public class InvoiceManagementController {
 	
 	@RequestMapping(value = "/uploadInvoice", method = RequestMethod.POST)
 	public String saveInvoice(final RedirectAttributes redirectAttributes) {
-		if(invoiceVo == null || invoiceVo.getInvoiceList() == null || invoiceVo.getInvoiceList().isEmpty()) {
+		if(invoiceUploadVo == null || invoiceUploadVo.getInvoiceList() == null || invoiceUploadVo.getInvoiceList().isEmpty()) {
 			redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Please upload at least one excel file!");
 		}else{
 			
-			int fileUploadCount = invoiceManagementService.saveInvoiceFromUploadFile(invoiceVo);
+			int fileUploadCount = invoiceManagementService.saveInvoiceFromUploadFile(invoiceUploadVo);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", fileUploadCount + " invoice(s) added successfully!");
 		}
@@ -262,7 +260,7 @@ public class InvoiceManagementController {
     		BindingResult result, Model model, HttpServletRequest request, HttpServletResponse response,
     		final RedirectAttributes redirectAttributes) {
 		if (!result.hasErrors()) {
-			List<Invoice> invoiceList = invoiceManagementService.searchInvoice(searchCriteria);
+			List<InvoiceVO> invoiceList = invoiceManagementService.searchInvoice(searchCriteria);
 			if(invoiceList != null && !invoiceList.isEmpty()){
 				String statementPeriod = getStatementPeriod(searchCriteria);
 				downloadExcel(invoiceList, statementPeriod, request, response);
@@ -275,7 +273,7 @@ public class InvoiceManagementController {
 				statusList.put(InvoiceStatusEnum.PAID.toString(), InvoiceStatusEnum.PAID.getStatus());
 		    	statusList.put(InvoiceStatusEnum.PENDING.toString(), InvoiceStatusEnum.PENDING.getStatus());
 		    	
-		    	model.addAttribute("invoiceForm", invoiceVo);
+		    	model.addAttribute("invoiceForm", invoiceUploadVo);
 		    	model.addAttribute("exportForm", searchCriteria);
 		    	model.addAttribute("statusList", statusList);
 				return "redirect:listInvoice";
@@ -286,7 +284,7 @@ public class InvoiceManagementController {
 		statusList.put(InvoiceStatusEnum.PAID.toString(), InvoiceStatusEnum.PAID.getStatus());
     	statusList.put(InvoiceStatusEnum.PENDING.toString(), InvoiceStatusEnum.PENDING.getStatus());
     	
-    	model.addAttribute("invoiceForm", invoiceVo);
+    	model.addAttribute("invoiceForm", invoiceUploadVo);
     	model.addAttribute("exportForm", searchCriteria);
     	model.addAttribute("statusList", statusList);
         return "listInvoice"; 
@@ -324,7 +322,7 @@ public class InvoiceManagementController {
 		return "";
 	}
 	
-	public void downloadExcel(List<Invoice> invoiceList, String statementPeriod, 
+	public void downloadExcel(List<InvoiceVO> invoiceList, String statementPeriod, 
 			HttpServletRequest request, HttpServletResponse response) {
 		String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/template/");
         File file = new File(dataDirectory+"/invoice_summary_template.xls");

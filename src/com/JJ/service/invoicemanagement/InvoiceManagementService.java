@@ -3,6 +3,7 @@ package com.JJ.service.invoicemanagement;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,76 +14,74 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.discountmanagement.vo.DiscountVO;
 import com.JJ.controller.invoicemanagement.InvoiceSearchCriteria;
+import com.JJ.controller.invoicemanagement.vo.InvoiceUploadVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
-import com.JJ.dao.InvoiceMapper;
+import com.JJ.dao.InvoiceDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Expense;
-import com.JJ.model.ExpenseExample;
-import com.JJ.model.Invoice;
-import com.JJ.model.InvoiceExample;
+import com.JJ.model.DiscountDbObject;
+import com.JJ.model.DiscountDbObjectExample;
+import com.JJ.model.InvoiceDbObject;
+import com.JJ.model.InvoiceDbObjectExample;
 
 @Service
 @Transactional
 public class InvoiceManagementService {
 	
-	private InvoiceMapper invoiceMapper;
+	private InvoiceDbObjectMapper invoiceDbObjectMapper;
 	private ExcelFileHelper excelFileHelper;
 	@Autowired
-	public InvoiceManagementService(InvoiceMapper invoiceMapper) {
-		this.invoiceMapper = invoiceMapper;
+	public InvoiceManagementService(InvoiceDbObjectMapper invoiceDbObjectMapper) {
+		this.invoiceDbObjectMapper = invoiceDbObjectMapper;
 	}
-		
-	/* Invoice START */
-	public List<Invoice> getAllInvoice() {
-		InvoiceExample invoiceExample = new InvoiceExample();
-		invoiceExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Invoice> invoiceList = invoiceMapper.selectByExample(invoiceExample);
-		return invoiceList;
+
+	public List<InvoiceVO> getAllInvoice() {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
 	}
 	
-	public List<Invoice> getAllInvoiceByIdList(List<Integer> idList) {
-		InvoiceExample example = new InvoiceExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andInvoiceidIn(idList);
-		example.setOrderByClause("invoiceDate desc");
-		List<Invoice> invoiceList = invoiceMapper.selectByExample(example);
-		return invoiceList;
+	public List<InvoiceVO> getAllInvoiceByIdList(List<Integer> idList) {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
+		invoiceDbObjectExample.setOrderByClause("invoiceDate desc");
+		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
 	}
 	
-	public Invoice getInvoiceById(Integer id) {
-		InvoiceExample invoiceExample = new InvoiceExample();
-		invoiceExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andInvoiceidEqualTo(id);
-		List<Invoice> invoiceList = invoiceMapper.selectByExample(invoiceExample);
-		if(invoiceList != null && invoiceList.size() > 0) {
-			return invoiceList.get(0);
+	public InvoiceVO getInvoiceById(Integer id) {
+		InvoiceDbObject invoiceDbObject = invoiceDbObjectMapper.selectByPrimaryKey(id);
+		if(invoiceDbObject != null && invoiceDbObject.getInvoiceId() != null){
+			return convertToInvoiceVOList(Arrays.asList(invoiceDbObject)).get(0);
+		}else{
+			return new InvoiceVO();
 		}
-		return null;
 	}
 	
-	public List<Invoice> searchInvoice(InvoiceSearchCriteria searchCriteria) {
-		List<Invoice> invoiceList = getAllInvoice();
-		List<Invoice> filteredList = new ArrayList<Invoice>();
+	public List<InvoiceVO> searchInvoice(InvoiceSearchCriteria searchCriteria) {
+		List<InvoiceVO> invoiceList = getAllInvoice();
+		List<InvoiceVO> filteredList = new ArrayList<InvoiceVO>();
 		
-		for(Invoice invoice : invoiceList) {
+		for(InvoiceVO invoice : invoiceList) {
 			if(!searchCriteria.getMessenger().trim().equalsIgnoreCase(invoice.getMessenger())) continue;
 			if(!searchCriteria.getStatus().equalsIgnoreCase("ALL")&& !searchCriteria.getStatus().trim().equalsIgnoreCase(invoice.getStatus())) continue;
 			if(!searchCriteria.getInvoicedatefrom().isEmpty()){
 				try {
-					if(null == invoice.getInvoicedate()) continue;
+					if(null == invoice.getInvoiceDate()) continue;
 					Date datefrom = new SimpleDateFormat("MM/dd/yyyy").parse(searchCriteria.getInvoicedatefrom());
-					if(invoice.getInvoicedate().compareTo(datefrom) < 0) continue; 
+					if(invoice.getInvoiceDate().compareTo(datefrom) < 0) continue; 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			if(!searchCriteria.getInvoicedateto().isEmpty()){
 				try {
-					if(null == invoice.getInvoicedate()) continue;
+					if(null == invoice.getInvoiceDate()) continue;
 					Date dateto = new SimpleDateFormat("MM/dd/yyyy").parse(searchCriteria.getInvoicedateto());
 					Calendar c = Calendar.getInstance();
 					c.setTime(dateto);
 					c.add(Calendar.DATE, 1);
-					if(invoice.getInvoicedate().compareTo(c.getTime()) > 0) continue; 
+					if(invoice.getInvoiceDate().compareTo(c.getTime()) > 0) continue; 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -93,46 +92,55 @@ public class InvoiceManagementService {
 	}
 	
 	
-	public void saveInvoice(Invoice invoice) {
-		invoiceMapper.insert(invoice);
+	public void saveInvoice(InvoiceVO invoiceVO) {
+		if(invoiceVO != null){
+			InvoiceDbObject dbObj = convertToInvoiceDbObjectList(Arrays.asList(invoiceVO)).get(0);
+			invoiceDbObjectMapper.insert(dbObj);
+		}
 	}
 	
-	public void updateInvoice(Invoice invoice) {
-		Invoice savedInvoice = getInvoiceById(invoice.getInvoiceid());
-		savedInvoice.setMessenger(invoice.getMessenger());
-		savedInvoice.setInvoicedate(invoice.getInvoicedate());
-		savedInvoice.setTotalprice(invoice.getTotalprice());
-		savedInvoice.setStatus(invoice.getStatus());
-		invoiceMapper.updateByPrimaryKey(savedInvoice);
+	public void updateInvoice(InvoiceVO invoiceVO) {
+		if(invoiceVO != null && invoiceVO.getDeleteInd() != null &&
+				invoiceVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			InvoiceDbObject dbObj = convertToInvoiceDbObjectList(Arrays.asList(invoiceVO)).get(0);
+			dbObj.setMessenger(invoiceVO.getMessenger());
+			dbObj.setInvoiceDate(invoiceVO.getInvoiceDate());
+			dbObj.setTotalAmt(invoiceVO.getTotalAmt());
+			dbObj.setStatus(invoiceVO.getStatus());
+			invoiceDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
 	}
 	
-	public void saveInvoiceList(List<Invoice> invoiceList) {
-		for(Invoice invoice : invoiceList)
-			saveInvoice(invoice);
+	public void saveInvoiceList(List<InvoiceVO> invoiceVOList) {
+		for(InvoiceVO invoiceVO : invoiceVOList)
+			saveInvoice(invoiceVO);
 	}
 	
-	public void deleteInvoice(Integer invoiceid) {
-		invoiceMapper.deleteByPrimaryKey(invoiceid);
+	public void deleteInvoice(Integer id) {
+		deleteInvoice(Arrays.asList(id));
 	}
 	
-	public void deleteInvoiceList(List<Integer> invoiceidList) {
-		for(Integer invoiceid : invoiceidList)
-			deleteInvoice(invoiceid);
+	public void deleteInvoice(List<Integer> idList) {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
+		InvoiceDbObject dbObj = new InvoiceDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		invoiceDbObjectMapper.updateByExampleSelective(dbObj, invoiceDbObjectExample);
 	}
 	
-	public int saveInvoiceFromUploadFile(InvoiceVO invoice) {
+	public int saveInvoiceFromUploadFile(InvoiceUploadVO invoice) {
 		excelFileHelper = new ExcelFileHelper();
-		Invoice invoicedata;
+		InvoiceVO invoicedata;
 		int fileUploadCount = 0;
 		for(FileMetaVO file : invoice.getInvoiceList()) {
 			invoicedata = excelFileHelper.readFromFile(file.getBytes());
 			if(invoicedata != null){
 				invoicedata.setStatus(GeneralUtils.STATUS_PENDING);
-				Invoice savedInvoice = getInvoiceById(invoicedata.getInvoiceid());
-				if(invoicedata.getInvoiceid() != null && savedInvoice == null) {
+				InvoiceVO savedInvoice = getInvoiceById(invoicedata.getInvoiceId());
+				if(invoicedata.getInvoiceId() != null && savedInvoice == null) {
 					saveInvoice(invoicedata);
 					fileUploadCount++;
-				}else if(invoicedata.getInvoiceid() != null && savedInvoice != null){
+				}else if(invoicedata.getInvoiceId() != null && savedInvoice != null){
 					updateInvoice(invoicedata);
 					fileUploadCount++;
 				}
@@ -141,13 +149,47 @@ public class InvoiceManagementService {
 		return fileUploadCount;
 	}
 	
-	public HSSFWorkbook writeToFile(File inputfile, List<Invoice> invoiceList, String statementPeriod) {
+	public HSSFWorkbook writeToFile(File inputfile, List<InvoiceVO> invoiceList, String statementPeriod) {
 		excelFileHelper = new ExcelFileHelper();
 		HSSFWorkbook wb = excelFileHelper.writeToFile(inputfile, invoiceList, statementPeriod);
 		return wb;
 	}
 	
-	/* Invoice END */
+	private List<InvoiceVO> convertToInvoiceVOList(List<InvoiceDbObject> invoiceDbObjectList) {
+		List<InvoiceVO> invoiceVOList = new ArrayList<InvoiceVO>();
+		if(invoiceDbObjectList != null && invoiceDbObjectList.size() > 0) {
+			for(InvoiceDbObject dbObj : invoiceDbObjectList) {
+				InvoiceVO vo = new InvoiceVO();
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setInvoiceDate(dbObj.getInvoiceDate());
+				vo.setInvoicedateString(GeneralUtils.convertDateToString(dbObj.getInvoiceDate(), "dd/MM/yyyy"));
+				vo.setInvoiceId(dbObj.getInvoiceId());
+				vo.setMessenger(dbObj.getMessenger());
+				vo.setStatus(dbObj.getStatus());
+				vo.setTotalAmt(dbObj.getTotalAmt());
+				vo.setVersion(dbObj.getVersion());
+				invoiceVOList.add(vo);
+			}
+		}
+		return invoiceVOList;
+	}
 	
+	private List<InvoiceDbObject> convertToInvoiceDbObjectList(List<InvoiceVO> invoiceVOList) {
+		List<InvoiceDbObject> invoiceDbObjectList = new ArrayList<InvoiceDbObject>();
+		if(invoiceVOList != null && invoiceVOList.size() > 0){
+			for(InvoiceVO vo : invoiceVOList){
+				InvoiceDbObject dbObj = new InvoiceDbObject();
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setInvoiceDate(vo.getInvoiceDate());
+				dbObj.setInvoiceId(vo.getInvoiceId());
+				dbObj.setMessenger(vo.getMessenger());
+				dbObj.setStatus(vo.getStatus());
+				dbObj.setTotalAmt(vo.getTotalAmt());
+				dbObj.setVersion(vo.getVersion());
+				invoiceDbObjectList.add(dbObj);
+			}
+		}
+		return invoiceDbObjectList;
+	}
 	
 }
