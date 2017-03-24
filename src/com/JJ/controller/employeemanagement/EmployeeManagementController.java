@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
-import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
@@ -61,7 +61,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/getEmployeeList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getEmployeeList() {
 		logger.debug("getting employee list");
-		List<EmployeeVO> employeeList = employeeManagementService.getAllEmployeeVo();
+		List<EmployeeVO> employeeList = employeeManagementService.getAllEmployee();
 		return GeneralUtils.convertListToJSONString(employeeList);
 	}
 	
@@ -120,9 +120,9 @@ public class EmployeeManagementController {
 		} else {
 			try{
 				employeeVo.setDob(GeneralUtils.convertStringToDate(employeeVo.getDobString(), "dd/MM/yyyy"));
-				employeeVo.setEmploystartdate(GeneralUtils.convertStringToDate(employeeVo.getEmploystartdateString(), "dd/MM/yyyy"));
-				employeeVo.setEmployenddate(GeneralUtils.convertStringToDate(employeeVo.getEmployenddateString(), "dd/MM/yyyy"));
-				employeeVo.setCdacind(employeeVo.getCdacindBoolean() == Boolean.TRUE ? "Y" : "N");
+				employeeVo.setEmploymentStartDate(GeneralUtils.convertStringToDate(employeeVo.getEmploymentStartDateString(), "dd/MM/yyyy"));
+				employeeVo.setEmploymentEndDate(GeneralUtils.convertStringToDate(employeeVo.getEmploymentEndDateString(), "dd/MM/yyyy"));
+				employeeVo.setCdacInd(employeeVo.getCdacIndBoolean() == Boolean.TRUE ? "Y" : "N");
 			}catch(Exception e) {
 				logger.info("Error parsing date string");
 			}
@@ -137,15 +137,15 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/viewEmployee", method = RequestMethod.POST)
 	public String viewEmployee(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		EmployeeVO employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
+		EmployeeVO employeeVo = employeeManagementService.findById(new Integer(id));
 		if (employeeVo == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Employee not found");
 		}else{
 			model.addAttribute("employee", employeeVo);
-			List<SalaryBonusVo> salaryList = salaryBonusManagementService.getAllSalaryByEmpId(employeeVo.getEmployeeid());
+			List<SalaryBonusVO> salaryList = salaryBonusManagementService.getAllSalaryByEmpId(employeeVo.getEmployeeId());
 			model.addAttribute("salaryList", salaryList);
-			List<SalaryBonusVo> bonusList = salaryBonusManagementService.getAllBonusByEmpId(employeeVo.getEmployeeid());
+			List<SalaryBonusVO> bonusList = salaryBonusManagementService.getAllBonusByEmpId(employeeVo.getEmployeeId());
 			model.addAttribute("bonusList", bonusList);
 		}
 		return "viewEmployee";
@@ -155,7 +155,7 @@ public class EmployeeManagementController {
 	@RequestMapping(value = "/updateEmployee", method = RequestMethod.POST)
 	public String getEmployeeToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		EmployeeVO employeeVo = employeeManagementService.getEmployeeById(new Integer(id));
+		EmployeeVO employeeVo = employeeManagementService.findById(new Integer(id));
 		logger.debug("Loading update employee page for " + employeeVo.toString());
 		initData();
 		model.addAttribute("employmentTypeList", employmentTypeList);

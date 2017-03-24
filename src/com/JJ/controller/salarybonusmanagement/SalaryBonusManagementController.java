@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
-import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
@@ -65,7 +65,7 @@ public class SalaryBonusManagementController {
 	@RequestMapping(value = "/getSalaryBonusList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getSalaryBonusList() {
 		logger.debug("getting salary and bonus list");
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryBonusVo();
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryBonusVo();
 		return GeneralUtils.convertListToJSONString(salaryBonusVoList);
 	}
 	
@@ -86,7 +86,7 @@ public class SalaryBonusManagementController {
 	@RequestMapping(value = "/createSalaryBonus", method = RequestMethod.GET)
     public String showAddSalaryBonusForm(Model model) {  
     	logger.debug("loading showAddSalaryBonusForm");
-    	SalaryBonusVo salaryBonusVo = new SalaryBonusVo();
+    	SalaryBonusVO salaryBonusVo = new SalaryBonusVO();
     	initData();
     	model.addAttribute("salaryBonusForm", salaryBonusVo);
     	model.addAttribute("employeeList", employeeList);
@@ -97,10 +97,10 @@ public class SalaryBonusManagementController {
 	//initialise for employment type dropdown
 	private void initData(){
 		employeeList = new LinkedHashMap<Integer,String>();
-		List<EmployeeVO> voList = employeeManagementService.getAllEmployeeVoInAscendingName();
+		List<EmployeeVO> voList = employeeManagementService.getAllEmployeeInAscendingName();
 		if(voList != null && voList.size() > 0){
 			for(EmployeeVO vo : voList) {
-				employeeList.put(vo.getEmployeeid(), vo.getName());
+				employeeList.put(vo.getEmployeeId(), vo.getName());
 			}
 		}
 		typeList = new LinkedHashMap<String,String>(); 
@@ -114,18 +114,18 @@ public class SalaryBonusManagementController {
 	}
 	
 	@RequestMapping(value = "/createSalaryBonus", method = RequestMethod.POST)
-    public String saveSalaryBonus(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVo salaryBonusVo, 
+    public String saveSalaryBonus(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVO salaryBonusVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("saveSalaryBonus() : " + salaryBonusVo.toString());
+		logger.debug("saveSalaryBonus() : " + salaryBonusVO.toString());
 		if (result.hasErrors()) {
 			initData();
 			model.addAttribute("employeeList", employeeList);
 	    	model.addAttribute("typeList", typeList);
 			return "createSalaryBonus";
 		} else {
-			salaryBonusVo.setDate(GeneralUtils.convertStringToDate(salaryBonusVo.getDateString(), "dd/MM/yyyy"));
-			salaryBonusManagementService.saveSalaryBonus(salaryBonusVo);
+			salaryBonusVO.setDate(GeneralUtils.convertStringToDate(salaryBonusVO.getDateString(), "dd/MM/yyyy"));
+			salaryBonusManagementService.saveSalaryBonus(salaryBonusVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Salary/Bonus added successfully!");
 		}
@@ -133,25 +133,25 @@ public class SalaryBonusManagementController {
     }  
 	
 	@RequestMapping(value = "/createSalaryBonusAndPay", method = RequestMethod.POST)
-    public String saveSalaryBonusAndPay(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVo salaryBonusVo, 
+    public String saveSalaryBonusAndPay(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVO salaryBonusVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		List<String> idList = new ArrayList<String>();
-		logger.debug("saveSalaryBonus() : " + salaryBonusVo.toString());
+		logger.debug("saveSalaryBonus() : " + salaryBonusVO.toString());
 		if (result.hasErrors()) {
 			initData();
 			model.addAttribute("employeeList", employeeList);
 	    	model.addAttribute("typeList", typeList);
 			return "createSalaryBonus";
 		} else {
-			salaryBonusVo.setDate(GeneralUtils.convertStringToDate(salaryBonusVo.getDateString(), "dd/MM/yyyy"));
-			salaryBonusManagementService.saveSalaryBonus(salaryBonusVo);
+			salaryBonusVO.setDate(GeneralUtils.convertStringToDate(salaryBonusVO.getDateString(), "dd/MM/yyyy"));
+			salaryBonusManagementService.saveSalaryBonus(salaryBonusVO);
 			
 		}
 
-		idList.add(salaryBonusVo.getId().toString());
-		if(salaryBonusVo.getType().equals(TypeEnum.SALARY.toString())) {
+		idList.add(salaryBonusVO.getId().toString());
+		if(salaryBonusVO.getType().equals(TypeEnum.SALARY.toString())) {
 			return paymentManagementController.createPaySalary(idList, redirectAttributes, model);
-		}else if(salaryBonusVo.getType().equals(TypeEnum.BONUS.toString())) {
+		}else if(salaryBonusVO.getType().equals(TypeEnum.BONUS.toString())) {
 			return paymentManagementController.createPayBonus(idList, redirectAttributes, model);
 		}
 		return "redirect:listSalaryBonus";
@@ -159,30 +159,30 @@ public class SalaryBonusManagementController {
 	
 	@RequestMapping(value = "/updateSalaryBonus", method = RequestMethod.POST)
 	public String getSalaryBonusToUpdate(@RequestParam("editBtn") String id, Model model) {
-		SalaryBonusVo salaryBonusVo = null;
+		SalaryBonusVO salaryBonusVO = null;
 		String[] splitId = id.split("-");
 		if(splitId[0] != null && splitId[1] != null){
 			if(splitId[1].toLowerCase().equals("salary")) {
-				salaryBonusVo = salaryBonusManagementService.getSalaryVoById(Integer.valueOf(splitId[0]));
+				salaryBonusVO = salaryBonusManagementService.findSalaryById(Integer.valueOf(splitId[0]));
 			}else if(splitId[1].toLowerCase().equals("bonus")) {
-				salaryBonusVo = salaryBonusManagementService.getBonusVoById(Integer.valueOf(splitId[0]));
+				salaryBonusVO = salaryBonusManagementService.findBonusById(Integer.valueOf(splitId[0]));
 			}
 		}
-		salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "dd/MM/yyyy"));
+		salaryBonusVO.setDateString(GeneralUtils.convertDateToString(salaryBonusVO.getDate(), "dd/MM/yyyy"));
 
-		logger.debug("Loading update salary bonus page for " + salaryBonusVo.toString());
+		logger.debug("Loading update salary bonus page for " + salaryBonusVO.toString());
 		initData();
-		model.addAttribute("salaryBonusForm", salaryBonusVo);
+		model.addAttribute("salaryBonusForm", salaryBonusVO);
     	model.addAttribute("employeeList", employeeList);
     	model.addAttribute("typeList", typeList);
 		return "updateSalaryBonus";
 	}
 	
 	@RequestMapping(value = "/updateSalaryBonusToDb", method = RequestMethod.POST)
-	public String updateSalaryBonus(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVo salaryBonusVo,
+	public String updateSalaryBonus(@ModelAttribute("salaryBonusForm") @Validated SalaryBonusVO salaryBonusVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateSalaryBonus() : " + salaryBonusVo.toString());
+		logger.debug("updateSalaryBonus() : " + salaryBonusVO.toString());
 		
 		if (result.hasErrors()) {
 			initData();
@@ -190,7 +190,7 @@ public class SalaryBonusManagementController {
 	    	model.addAttribute("typeList", typeList);
 			return "updateSalaryBonus";
 		} else {
-			salaryBonusManagementService.updateSalaryBonus(salaryBonusVo);
+			salaryBonusManagementService.updateSalaryBonus(salaryBonusVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Salary/Bonus updated successfully!");
 		}

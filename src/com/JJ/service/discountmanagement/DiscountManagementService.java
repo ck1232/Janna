@@ -8,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.batchintakemanagement.vo.BatchStockIntakeVO;
 import com.JJ.controller.discountmanagement.vo.DiscountVO;
 import com.JJ.dao.DiscountDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.BatchStockIntakeDbObject;
-import com.JJ.model.BatchStockIntakeDbObjectExample;
 import com.JJ.model.DiscountDbObject;
 import com.JJ.model.DiscountDbObjectExample;
 

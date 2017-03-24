@@ -2,6 +2,7 @@ package com.JJ.service.salarybonusmanagement;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.salarybonusmanagement.TypeEnum;
-import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.dao.EmployeeBonusDbObjectMapper;
-import com.JJ.dao.EmployeeBonusMapper;
 import com.JJ.dao.EmployeeSalaryDbObjectMapper;
-import com.JJ.dao.EmployeeSalaryMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Employee;
-import com.JJ.model.EmployeeBonus;
+import com.JJ.model.EmployeeBonusDbObject;
 import com.JJ.model.EmployeeBonusDbObjectExample;
-import com.JJ.model.EmployeeBonusExample;
-import com.JJ.model.EmployeeSalary;
+import com.JJ.model.EmployeeSalaryDbObject;
 import com.JJ.model.EmployeeSalaryDbObjectExample;
-import com.JJ.model.EmployeeSalaryExample;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
 
 @Service
@@ -31,131 +27,113 @@ import com.JJ.service.employeemanagement.EmployeeManagementService;
 public class SalaryBonusManagementService {
 	
 	private EmployeeManagementService employeeManagementService;
-	private EmployeeSalaryDbObjectMapper employeeSalaryMapper;
-	private EmployeeBonusDbObjectMapper employeeBonusMapper;
+	private EmployeeSalaryDbObjectMapper employeeSalaryDbObjectMapper;
+	private EmployeeBonusDbObjectMapper employeeBonusDbObjectMapper;
 	
 	@Autowired
 	public SalaryBonusManagementService(EmployeeManagementService employeeManagementService,
-			EmployeeSalaryDbObjectMapper employeeSalaryMapper,
-			EmployeeBonusDbObjectMapper employeeBonusMapper) {
+			EmployeeSalaryDbObjectMapper employeeSalaryDbObjectMapper,
+			EmployeeBonusDbObjectMapper employeeBonusDbObjectMapper) {
 		this.employeeManagementService = employeeManagementService;
-		this.employeeSalaryMapper = employeeSalaryMapper;
-		this.employeeBonusMapper = employeeBonusMapper;
+		this.employeeSalaryDbObjectMapper = employeeSalaryDbObjectMapper;
+		this.employeeBonusDbObjectMapper = employeeBonusDbObjectMapper;
 		
 	}
 	
 	//get all salary and bonus
-	public List<SalaryBonusVo> getAllSalaryBonusVo() {
-		List<SalaryBonusVo> salaryBonusVoList = new ArrayList<SalaryBonusVo>();
+	public List<SalaryBonusVO> getAllSalaryBonusVo() {
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
 		
-		List<EmployeeSalary> salaryList = getAllSalary();
+		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
+		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<EmployeeSalaryDbObject> salaryList = employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample);
 		if(salaryList != null && !salaryList.isEmpty()){
-			for(EmployeeSalary salary : salaryList) {
-				SalaryBonusVo vo = convertSalaryToVo(salary);
-				salaryBonusVoList.add(vo);
-			}
+			salaryBonusVoList.addAll(convertSalaryToSalaryBonusVOList(salaryList));
 		}
 		
-		List<EmployeeBonus> bonusList = getAllBonus();
+		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
+		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<EmployeeBonusDbObject> bonusList = employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample);
 		if(bonusList != null && !bonusList.isEmpty()) {
-			for(EmployeeBonus bonus : bonusList) {
-				SalaryBonusVo vo = convertBonusToVo(bonus);
-				salaryBonusVoList.add(vo);
-			}
+			salaryBonusVoList.addAll(convertBonusToSalaryBonusVOList(bonusList));
 		}
 		return salaryBonusVoList;
 	}
 	
-	public List<SalaryBonusVo> getAllSalaryByIdList(List<Integer> idList) {
-		List<EmployeeSalary> salaryList = getAllSalaryByIdListWithOrderBy(idList, "salaryDate desc");
-		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
-		if(salaryList != null && !salaryList.isEmpty()) {
-			for(EmployeeSalary salary : salaryList) {
-				SalaryBonusVo vo = convertSalaryToVo(salary);
-				voList.add(vo);
+	public SalaryBonusVO findSalaryById(Integer id) {
+		EmployeeSalaryDbObject employeeSalaryDbObject = employeeSalaryDbObjectMapper.selectByPrimaryKey(id);
+		if(employeeSalaryDbObject != null && employeeSalaryDbObject.getSalaryId() != null){
+			return convertSalaryToSalaryBonusVOList(Arrays.asList(employeeSalaryDbObject)).get(0);
+		}else{
+			return new SalaryBonusVO();
+		}
+	}
+	
+	public SalaryBonusVO findBonusById(Integer id) {
+		EmployeeBonusDbObject employeeBonusDbObject = employeeBonusDbObjectMapper.selectByPrimaryKey(id);
+		if(employeeBonusDbObject != null && employeeBonusDbObject.getBonusId() != null){
+			return convertBonusToSalaryBonusVOList(Arrays.asList(employeeBonusDbObject)).get(0);
+		}else{
+			return new SalaryBonusVO();
+		}
+	}
+	
+	public List<SalaryBonusVO> getAllSalaryByIdList(List<Integer> idList) {
+		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
+		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdIn(idList);
+		employeeSalaryDbObjectExample.setOrderByClause("salaryDate desc");
+		return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
+
+	}
+	
+	public List<SalaryBonusVO> getAllSalaryByEmpId(Integer employeeId) {
+		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
+		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andEmployeeIdEqualTo(employeeId);
+		employeeSalaryDbObjectExample.setOrderByClause("salaryDate desc");
+		return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
+	}
+	
+	public List<SalaryBonusVO> getAllBonusByIdList(List<Integer> idList) {
+		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
+		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdIn(idList);
+		employeeBonusDbObjectExample.setOrderByClause("bonusDate desc");
+		return convertBonusToSalaryBonusVOList(employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample));
+	}
+	
+	public List<SalaryBonusVO> getAllBonusByEmpId(Integer employeeId) {
+		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
+		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andEmployeeIdEqualTo(employeeId);
+		employeeBonusDbObjectExample.setOrderByClause("bonusDate desc");
+		return convertBonusToSalaryBonusVOList(employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample));
+	}
+	
+	public void saveSalaryBonus(SalaryBonusVO salaryBonusVO) {
+		if(salaryBonusVO != null){
+			salaryBonusVO.setStatus(ExpenseStatusEnum.UNPAID.toString());
+			if(salaryBonusVO.getType().equals(TypeEnum.SALARY.toString())) {
+				EmployeeSalaryDbObject dbObj = convertToSalaryDbObjectList(Arrays.asList(salaryBonusVO)).get(0);
+				employeeSalaryDbObjectMapper.insert(dbObj);
+				salaryBonusVO.setId(dbObj.getSalaryId());
+			}else if(salaryBonusVO.getType().equals(TypeEnum.BONUS.toString())) {
+				EmployeeBonusDbObject dbObj = convertToBonusDbObjectList(Arrays.asList(salaryBonusVO)).get(0);
+				employeeBonusDbObjectMapper.insert(dbObj);
+				salaryBonusVO.setId(dbObj.getBonusId());
 			}
 		}
-		return voList;
 	}
 	
-	public List<SalaryBonusVo> getAllSalaryByEmpId(Integer employeeId) {
-		List<EmployeeSalary> salaryList = getAllSalaryByEmpIdWithOrderBy(employeeId, "salaryDate desc");
-		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
-		if(salaryList != null && !salaryList.isEmpty()) {
-			for(EmployeeSalary salary : salaryList) {
-				SalaryBonusVo vo = convertSalaryToVo(salary);
-				voList.add(vo);
+
+	public void updateSalaryBonus(SalaryBonusVO salaryBonusVO) {
+		if(salaryBonusVO != null && salaryBonusVO.getDeleteInd() != null &&
+				salaryBonusVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			if(salaryBonusVO.getType().equals("Salary")) {
+				EmployeeSalaryDbObject dbObj = convertToSalaryDbObjectList(Arrays.asList(salaryBonusVO)).get(0);
+				employeeSalaryDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+				
+			}else if(salaryBonusVO.getType().equals("Bonus")) {
+				EmployeeBonusDbObject dbObj = convertToBonusDbObjectList(Arrays.asList(salaryBonusVO)).get(0);
+				employeeBonusDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 			}
-		}
-		return voList;
-	}
-	
-	public SalaryBonusVo getSalaryVoById(Integer id) {
-		EmployeeSalary salary = getSalaryById(id);
-		SalaryBonusVo vo = new SalaryBonusVo();
-		if(salary != null) {
-			vo = convertSalaryToVo(salary);
-		}
-		return vo;
-	}
-	
-	public List<SalaryBonusVo> getAllBonusByIdList(List<Integer> idList) {
-		List<EmployeeBonus> bonusList = getAllBonusByIdListWithOrderBy(idList, "bonusDate desc");
-		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
-		if(bonusList != null && !bonusList.isEmpty()) {
-			for(EmployeeBonus bonus : bonusList) {
-				SalaryBonusVo vo = convertBonusToVo(bonus);
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
-	
-	public SalaryBonusVo getBonusVoById(Integer id) {
-		EmployeeBonus bonus = getBonusById(id);
-		SalaryBonusVo vo = new SalaryBonusVo();
-		if(bonus != null) {
-			vo = convertBonusToVo(bonus);
-		}
-		return vo;
-	}
-	
-	public List<SalaryBonusVo> getAllBonusByEmpId(Integer employeeId) {
-		List<EmployeeBonus> bonusList = getAllBonusByEmpIdWithOrderBy(employeeId, "bonusDate desc");
-		List<SalaryBonusVo> voList = new ArrayList<SalaryBonusVo>();
-		if(bonusList != null && !bonusList.isEmpty()) {
-			for(EmployeeBonus bonus : bonusList) {
-				SalaryBonusVo vo = convertBonusToVo(bonus);
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
-	
-	public void saveSalaryBonus(SalaryBonusVo vo) {
-		vo.setStatus(ExpenseStatusEnum.UNPAID.toString());
-		if(vo.getType().equals(TypeEnum.SALARY.toString())) {
-			EmployeeSalary salary = convertVoToSalary(vo, new EmployeeSalary());
-			saveSalary(salary);
-			vo.setId(salary.getSalaryid());
-			
-		}else if(vo.getType().equals(TypeEnum.BONUS.toString())) {
-			EmployeeBonus bonus = convertVoToBonus(vo, new EmployeeBonus());
-			saveBonus(bonus);
-			vo.setId(bonus.getBonusid());
-		}
-	}
-	
-	public void updateSalaryBonus(SalaryBonusVo vo) {
-		if(vo.getType().equals("Salary")) {
-			EmployeeSalary salary = getSalaryById(vo.getId());
-			salary = convertVoToSalary(vo, salary);
-			updateSalary(salary);
-			
-		}else if(vo.getType().equals("Bonus")) {
-			EmployeeBonus bonus = getBonusById(vo.getId());
-			bonus = convertVoToBonus(vo, bonus);
-			updateBonus(bonus);
 		}
 	}
 	
@@ -166,108 +144,38 @@ public class SalaryBonusManagementService {
 			String[] splitId = id.split("-");
 			if(splitId[0] != null && splitId[1] != null){
 				if(splitId[1].toLowerCase().equals("salary")) {
-					deleteSalary(Integer.valueOf(splitId[0]));
+					deleteSalary(Arrays.asList(Integer.valueOf(splitId[0])));
 				}else if(splitId[1].toLowerCase().equals("bonus")) {
-					deleteBonus(Integer.valueOf(splitId[0]));
+					deleteBonus(Arrays.asList(Integer.valueOf(splitId[0])));
 				}
 			}
 		}
 	}
 	
-	public void deleteSalaryList(List<Integer> idList) {
-		for(Integer id : idList)
-			deleteSalary(id);
+	public void deleteSalary(List<Integer> idList) {
+		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
+		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdIn(idList);
+		EmployeeSalaryDbObject dbObj = new EmployeeSalaryDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		employeeSalaryDbObjectMapper.updateByExampleSelective(dbObj, employeeSalaryDbObjectExample);
 	}
 	
-	public void deleteBonusList(List<Integer> idList) {
-		for(Integer id : idList)
-			deleteBonus(id);
-	}
-	
-	public SalaryBonusVo convertSalaryToVo(EmployeeSalary salary) {
-		SalaryBonusVo vo = new SalaryBonusVo();
-		vo.setId(salary.getSalaryid());
-		vo.setDate(salary.getSalarydate());
-		vo.setDateString(GeneralUtils.convertDateToString(salary.getSalarydate(), "MMM-yyyy"));
-		EmployeeVO employee = employeeManagementService.findById(salary.getEmployeeid());
-		vo.setEmployeeid(employee.getEmployeeid());
-		vo.setName(employee.getName());
-		vo.setEmploymenttype(employee.getEmploymenttype());
-		vo.setDob(employee.getDob());
-		vo.setNationality(employee.getNationality());
-		vo.setBasicsalary(employee.getBasicsalary());
-		vo.setEmploystartdate(employee.getEmploystartdate());
-		vo.setEmployenddate(employee.getEmployenddate());
-		vo.setCdacind(employee.getCdacind());
-		vo.setGrossamount(calculateGrossAmount(salary));
-		vo.setTakehomeamount(calculateTakeHomeAmount(vo, salary));
-		vo.setType(GeneralUtils.TYPE_SALARY);
-		vo.setStatus(salary.getStatus());
-		return vo;
-	}
-	
-	public EmployeeSalary convertVoToSalary(SalaryBonusVo vo, EmployeeSalary salary) {
-		if(salary == null)
-			salary = new EmployeeSalary();
-		salary.setSalarydate(vo.getDate());
-		salary.setEmployeeid(vo.getEmployeeid());
-		salary.setBasicsalaryamount(vo.getBasicsalary());
-		salary.setOvertimeamount(vo.getOvertimeamount());
-		salary.setOvertimehours(vo.getOvertimehours());
-		salary.setOvertimeremark(vo.getOvertimeremark());
-		salary.setAllowance(vo.getAllowance());
-		salary.setUnpaidleaveamount(vo.getUnpaidleaveamount());
-		salary.setUnpaidleaveremark(vo.getUnpaidleaveremark());
-		salary.setEmployeecpf(vo.getEmployeecpf());
-		salary.setEmployercpf(vo.getEmployercpf());
-		salary.setCdacamount(vo.getCdacamount());
-		salary.setSdlamount(vo.getSdlamount());
-		salary.setFwlevy(vo.getFwlevy());
-		salary.setStatus(vo.getStatus());
-		return salary;
-	}
-	
-	public SalaryBonusVo convertBonusToVo(EmployeeBonus bonus) {
-		SalaryBonusVo vo = new SalaryBonusVo();
-		vo.setId(bonus.getBonusid());
-		vo.setDate(bonus.getBonusdate());
-		vo.setDateString(GeneralUtils.convertDateToString(bonus.getBonusdate(), "yyyy"));
-		EmployeeVO employee = employeeManagementService.findById(bonus.getEmployeeid());
-		vo.setEmployeeid(employee.getEmployeeid());
-		vo.setName(employee.getName());
-		vo.setEmploymenttype(employee.getEmploymenttype());
-		vo.setDob(employee.getDob());
-		vo.setNationality(employee.getNationality());
-		vo.setBasicsalary(employee.getBasicsalary());
-		vo.setEmploystartdate(employee.getEmploystartdate());
-		vo.setEmployenddate(employee.getEmployenddate());
-		vo.setCdacind(employee.getCdacind());
-		vo.setBonusamount(bonus.getBonusamount());
-		vo.setType(GeneralUtils.TYPE_BONUS);
-		vo.setStatus(bonus.getStatus());
-		return vo;
-	}
+	public void deleteBonus(List<Integer> idList) {
+		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
+		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdIn(idList);
+		EmployeeBonusDbObject dbObj = new EmployeeBonusDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		employeeBonusDbObjectMapper.updateByExampleSelective(dbObj, employeeBonusDbObjectExample);
+	}	
 
-	public EmployeeBonus convertVoToBonus(SalaryBonusVo vo, EmployeeBonus bonus) {
-		if(bonus == null)
-			bonus = new EmployeeBonus();
-		bonus.setBonusdate(vo.getDate());
-		bonus.setEmployeeid(vo.getEmployeeid());
-		bonus.setBonusamount(vo.getBonusamount());
-		bonus.setEmployeecpf(vo.getEmployeecpf());
-		bonus.setEmployercpf(vo.getEmployercpf());
-		bonus.setStatus(vo.getStatus());
-		return bonus;
-	}
-	
 	//calculate gross amount from EmployeeSalary
 	//gross amount = basic salary amount + overtime amount + allowance
-	private BigDecimal calculateGrossAmount(EmployeeSalary salary) {
+	private BigDecimal calculateGrossAmount(EmployeeSalaryDbObject salary) {
 		BigDecimal grossamount = BigDecimal.ZERO;
-		if(salary.getBasicsalaryamount() != null)
-			grossamount = grossamount.add(salary.getBasicsalaryamount());
-		if(salary.getOvertimeamount() != null)
-			grossamount = grossamount.add(salary.getOvertimeamount());
+		if(salary.getBasicSalaryAmt() != null)
+			grossamount = grossamount.add(salary.getBasicSalaryAmt());
+		if(salary.getOverTimeAmt() != null)
+			grossamount = grossamount.add(salary.getOverTimeAmt());
 		if(salary.getAllowance() != null)
 			grossamount = grossamount.add(salary.getAllowance());
 		return grossamount;
@@ -275,122 +183,122 @@ public class SalaryBonusManagementService {
 	
 	//calculate take home amount from EmployeeSalary and gross amount
 	//take home amount = gross amount - employee cpf - cdac amount
-	private BigDecimal calculateTakeHomeAmount(SalaryBonusVo vo, EmployeeSalary salary) {
-		BigDecimal takehomeamount = vo.getGrossamount();
-		if(salary.getEmployeecpf() != null)
-			takehomeamount = takehomeamount.subtract(salary.getEmployeecpf());
-		if(salary.getCdacamount() != null)
-			takehomeamount = takehomeamount.subtract(salary.getCdacamount());
+	private BigDecimal calculateTakeHomeAmount(SalaryBonusVO vo, EmployeeSalaryDbObject salary) {
+		BigDecimal takehomeamount = vo.getGrossAmt();
+		if(salary.getEmployeeCpf() != null)
+			takehomeamount = takehomeamount.subtract(salary.getEmployeeCpf());
+		if(salary.getCdacAmt() != null)
+			takehomeamount = takehomeamount.subtract(salary.getCdacAmt());
 		return takehomeamount;
 	}
+	
+	public List<SalaryBonusVO> convertBonusToSalaryBonusVOList(List<EmployeeBonusDbObject> bonusDbObjectList) {
+		List<SalaryBonusVO> voList = new ArrayList<SalaryBonusVO>();
+		if(bonusDbObjectList != null && bonusDbObjectList.size() > 0){
+			for(EmployeeBonusDbObject dbObj : bonusDbObjectList) {
+				SalaryBonusVO vo = new SalaryBonusVO();
+				vo.setId(dbObj.getBonusId());
+				vo.setDate(dbObj.getBonusDate());
+				vo.setDateString(GeneralUtils.convertDateToString(dbObj.getBonusDate(), "yyyy"));
+				EmployeeVO employeeVO = employeeManagementService.findById(dbObj.getEmployeeId());
+				vo.setEmployeeId(employeeVO.getEmployeeId());
+				vo.setName(employeeVO.getName());
+				vo.setEmployeeType(employeeVO.getEmployeeType());
+				vo.setDob(employeeVO.getDob());
+				vo.setNationality(employeeVO.getNationality());
+				vo.setBasicSalaryAmt(employeeVO.getBasicSalary());
+				vo.setEmploymentStartDate(employeeVO.getEmploymentStartDate());
+				vo.setEmploymentEndDate(employeeVO.getEmploymentEndDate());
+				vo.setCdacInd(employeeVO.getCdacInd());
+				vo.setBonusAmt(dbObj.getBonusAmt());
+				vo.setType(GeneralUtils.TYPE_BONUS);
+				vo.setStatus(dbObj.getStatus());
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setVersion(dbObj.getVersion());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+
+	public List<SalaryBonusVO> convertSalaryToSalaryBonusVOList(List<EmployeeSalaryDbObject> salaryDbObjectList) {
+		List<SalaryBonusVO> voList = new ArrayList<SalaryBonusVO>();
+		if(salaryDbObjectList != null && salaryDbObjectList.size() > 0){
+			for(EmployeeSalaryDbObject dbObj : salaryDbObjectList){
+				SalaryBonusVO vo = new SalaryBonusVO();
+				vo.setId(dbObj.getSalaryId());
+				vo.setDate(dbObj.getSalaryDate());
+				vo.setDateString(GeneralUtils.convertDateToString(dbObj.getSalaryDate(), "MMM-yyyy"));
+				EmployeeVO employee = employeeManagementService.findById(dbObj.getEmployeeId());
+				vo.setEmployeeId(employee.getEmployeeId());
+				vo.setName(employee.getName());
+				vo.setEmployeeType(employee.getEmployeeType());
+				vo.setDob(employee.getDob());
+				vo.setNationality(employee.getNationality());
+				vo.setBasicSalaryAmt(employee.getBasicSalary());
+				vo.setEmploymentStartDate(employee.getEmploymentStartDate());
+				vo.setEmploymentEndDate(employee.getEmploymentEndDate());
+				vo.setCdacInd(employee.getCdacInd());
+				vo.setGrossAmt(calculateGrossAmount(dbObj));
+				vo.setTakehomeAmt(calculateTakeHomeAmount(vo, dbObj));
+				vo.setType(GeneralUtils.TYPE_SALARY);
+				vo.setStatus(dbObj.getStatus());
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setVersion(dbObj.getVersion());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
+	private List<EmployeeSalaryDbObject> convertToSalaryDbObjectList(List<SalaryBonusVO> salaryBonusVoList) {
+		List<EmployeeSalaryDbObject> employeeSalaryDbObjectList = new ArrayList<EmployeeSalaryDbObject>();
+		if(salaryBonusVoList != null && !salaryBonusVoList.isEmpty()) {
+			for(SalaryBonusVO vo : salaryBonusVoList) {
+				EmployeeSalaryDbObject dbObj = new EmployeeSalaryDbObject();
+				dbObj.setSalaryId(vo.getId());
+				dbObj.setSalaryDate(vo.getDate());
+				dbObj.setEmployeeId(vo.getEmployeeId());
+				dbObj.setBasicSalaryAmt(vo.getBasicSalaryAmt());
+				dbObj.setOverTimeAmt(vo.getOverTimeAmt());
+				dbObj.setOverTimeHours(vo.getOverTimeHours());
+				dbObj.setOverTimeRemarks(vo.getOverTimeRemarks());
+				dbObj.setAllowance(vo.getAllowance());
+				dbObj.setUnpaidLeaveAmt(vo.getUnpaidLeaveAmt());
+				dbObj.setUnpaidLeaveRemarks(vo.getUnpaidLeaveRemarks());
+				dbObj.setEmployeeCpf(vo.getEmployeeCpf());
+				dbObj.setEmployerCpf(vo.getEmployerCpf());
+				dbObj.setCdacAmt(vo.getCdacAmt());
+				dbObj.setSdlAmt(vo.getSdlAmt());
+				dbObj.setFwLevy(vo.getFwLevy());
+				dbObj.setStatus(vo.getStatus());
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setVersion(vo.getVersion());
+				employeeSalaryDbObjectList.add(dbObj);
+			}
+		}
 		
-	
-	public List<EmployeeSalary> getAllSalary() {
-		EmployeeSalaryExample example = new EmployeeSalaryExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
-		return salaryList;
+		return employeeSalaryDbObjectList;
 	}
 	
-	public List<EmployeeSalary> getAllSalaryWithOrderBy(String orderByClause) {
-		EmployeeSalaryExample example = new EmployeeSalaryExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		example.setOrderByClause(orderByClause);
-		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
-		return salaryList;
-	}
-	
-	public List<EmployeeSalary> getAllSalaryByIdListWithOrderBy(List<Integer> idList, String orderByClause) {
-		EmployeeSalaryExample example = new EmployeeSalaryExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andSalaryidIn(idList);
-		example.setOrderByClause(orderByClause);
-		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
-		return salaryList;
-	}
-	
-	public List<EmployeeSalary> getAllSalaryByEmpIdWithOrderBy(Integer empId, String orderByClause) {
-		EmployeeSalaryExample example = new EmployeeSalaryExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andEmployeeidEqualTo(empId);
-		example.setOrderByClause(orderByClause);
-		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
-		return salaryList;
-	}
-	
-	public List<EmployeeBonus> getAllBonus() {
-		EmployeeBonusExample example = new EmployeeBonusExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
-		return bonusList;
-	}
-	
-	public List<EmployeeBonus> getAllBonusWithOrderBy(String orderByClause) {
-		EmployeeBonusExample example = new EmployeeBonusExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		example.setOrderByClause(orderByClause);
-		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
-		return bonusList;
-	}
-	
-	public List<EmployeeBonus> getAllBonusByIdListWithOrderBy(List<Integer> idList, String orderByClause) {
-		EmployeeBonusExample example = new EmployeeBonusExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andBonusidIn(idList);
-		example.setOrderByClause(orderByClause);
-		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
-		return bonusList;
-	}
-	
-	public List<EmployeeBonus> getAllBonusByEmpIdWithOrderBy(Integer empId, String orderByClause) {
-		EmployeeBonusExample example = new EmployeeBonusExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andEmployeeidEqualTo(empId);
-		example.setOrderByClause(orderByClause);
-		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
-		return bonusList;
-	}
-	
-	public EmployeeSalary getSalaryById(Integer id) {
-		EmployeeSalaryDbObjectExample example = new EmployeeSalaryDbObjectExample();
-		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdEqualTo(id);
-		List<EmployeeSalary> salaryList = employeeSalaryMapper.selectByExample(example);
-		if(salaryList != null && !salaryList.isEmpty()) {
-			return salaryList.get(0);
+	private List<EmployeeBonusDbObject> convertToBonusDbObjectList(List<SalaryBonusVO> salaryBonusVoList) {
+		List<EmployeeBonusDbObject> employeeBonusDbObjectList = new ArrayList<EmployeeBonusDbObject>();
+		if(salaryBonusVoList != null && !salaryBonusVoList.isEmpty()) {
+			for(SalaryBonusVO vo : salaryBonusVoList) {
+				EmployeeBonusDbObject dbObj = new EmployeeBonusDbObject();
+				dbObj.setBonusId(vo.getId());
+				dbObj.setBonusDate(vo.getDate());
+				dbObj.setEmployeeId(vo.getEmployeeId());
+				dbObj.setBonusAmt(vo.getBonusAmt());
+				dbObj.setEmployeeCpf(vo.getEmployeeCpf());
+				dbObj.setEmployerCpf(vo.getEmployerCpf());
+				dbObj.setStatus(vo.getStatus());
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setVersion(vo.getVersion());
+				employeeBonusDbObjectList.add(dbObj);
+			}
 		}
-		return null;
-	}
-	
-	public EmployeeBonus getBonusById(Integer id) {
-		EmployeeBonusDbObjectExample example = new EmployeeBonusDbObjectExample();
-		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdEqualTo(id);
-		List<EmployeeBonus> bonusList = employeeBonusMapper.selectByExample(example);
-		if(bonusList != null && !bonusList.isEmpty()) {
-			return bonusList.get(0);
-		}
-		return null;
-	}
-	
-	
-	public void deleteSalary(Integer id) {
-		employeeSalaryMapper.deleteByPrimaryKey(id);
-	}
-	
-	public void deleteBonus(Integer id) {
-		employeeBonusMapper.deleteByPrimaryKey(id);
-	}
-	
-	public void saveSalary(EmployeeSalary salary) {
-		employeeSalaryMapper.insert(salary);
-	}
-	
-	public void saveBonus(EmployeeBonus bonus) {
-		employeeBonusMapper.insert(bonus);
-	}
-	
-	public void updateSalary(EmployeeSalary salary) {
-		if(salary.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			employeeSalaryMapper.updateByPrimaryKeySelective(salary);
-	}
-	
-	public void updateBonus(EmployeeBonus bonus) {
-		if(bonus.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			employeeBonusMapper.updateByPrimaryKeySelective(bonus);
+		
+		return employeeBonusDbObjectList;
 	}
 }

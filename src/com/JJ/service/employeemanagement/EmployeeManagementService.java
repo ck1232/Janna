@@ -1,6 +1,7 @@
 package com.JJ.service.employeemanagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,140 +10,112 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.employeemanagement.EmploymentTypeEnum;
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
-import com.JJ.dao.EmployeeMapper;
+import com.JJ.dao.EmployeeDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Employee;
-import com.JJ.model.EmployeeExample;
+import com.JJ.model.EmployeeDbObject;
+import com.JJ.model.EmployeeDbObjectExample;
 
 @Service
 @Transactional
 public class EmployeeManagementService {
 	
-	private EmployeeMapper employeeMapper;
+	private EmployeeDbObjectMapper employeeDbObjectMapper;
 	
 	@Autowired
-	public EmployeeManagementService(EmployeeMapper employeeMapper) {
-		this.employeeMapper = employeeMapper;
+	public EmployeeManagementService(EmployeeDbObjectMapper employeeDbObjectMapper) {
+		this.employeeDbObjectMapper = employeeDbObjectMapper;
 	}
 	
-	public List<EmployeeVO> getAllEmployeeVo() {
-		List<Employee> employeeList = getAllEmployees();
-		List<EmployeeVO> voList = new ArrayList<EmployeeVO>();
-		if(employeeList != null && employeeList.size() > 0) {
-			for(Employee employee : employeeList) {
-				EmployeeVO vo = convertEmployeeToVo(employee);
-				voList.add(vo);
-			}
-		}
-		return voList;
+	public List<EmployeeVO> getAllEmployee() {
+		EmployeeDbObjectExample employeeDbObjectExample = new EmployeeDbObjectExample();
+		employeeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToEmployeeVOList(employeeDbObjectMapper.selectByExample(employeeDbObjectExample));
 	}
 	
-	public List<EmployeeVO> getAllEmployeeVoInAscendingName() {
-		List<Employee> employeeList = getAllEmployees("name asc");
-		List<EmployeeVO> voList = new ArrayList<EmployeeVO>();
-		if(employeeList != null && employeeList.size() > 0) {
-			for(Employee employee : employeeList) {
-				EmployeeVO vo = convertEmployeeToVo(employee);
-				voList.add(vo);
-			}
-		}
-		return voList;
+	public List<EmployeeVO> getAllEmployeeInAscendingName() {
+		EmployeeDbObjectExample employeeDbObjectExample = new EmployeeDbObjectExample();
+		employeeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		employeeDbObjectExample.setOrderByClause("name asc");
+		return convertToEmployeeVOList(employeeDbObjectMapper.selectByExample(employeeDbObjectExample));
 	}
 	
-	public EmployeeVO getEmployeeById(Integer id) {
-		EmployeeVO vo = new EmployeeVO();
-		Employee employee = findById(id);
-		if(employee != null) {
-			vo = convertEmployeeToVo(employee);
-		}
-		return vo;
-	}
-	
-	public void saveEmployee(EmployeeVO vo) {
-		Employee employee = convertVoToEmployee(vo, new Employee());
-		saveEmployee(employee);
-	}
-	
-	public void updateEmployee(EmployeeVO vo) {
-		Employee employee = findById(vo.getEmployeeid());
-		if(employee!=null){
-			employee = convertVoToEmployee(vo, employee);
-			updateEmployee(employee);
+	public EmployeeVO findById(Integer id) {
+		EmployeeDbObject employeeDbObject = employeeDbObjectMapper.selectByPrimaryKey(id);
+		if(employeeDbObject != null && employeeDbObject.getEmployeeId() != null){
+			return convertToEmployeeVOList(Arrays.asList(employeeDbObject)).get(0);
+		}else{
+			return new EmployeeVO();
 		}
 	}
 	
-	//convert employeeVo to employee
-	public Employee convertVoToEmployee(EmployeeVO vo, Employee employee) {
-		if(employee == null) {
-			employee = new Employee();
+	public void saveEmployee(EmployeeVO employeeVO) {
+		if(employeeVO != null){
+			EmployeeDbObject dbObj = convertToEmployeeDbObjectList(Arrays.asList(employeeVO)).get(0);
+			employeeDbObjectMapper.insert(dbObj);
 		}
-		employee.setName(vo.getName());
-		employee.setEmploymenttype(vo.getEmploymenttype());
-		employee.setDob(vo.getDob());
-		employee.setNationality(vo.getNationality());
-		employee.setBasicsalary(vo.getBasicsalary());
-		employee.setEmploystartdate(vo.getEmploystartdate());
-		employee.setEmployenddate(vo.getEmployenddate());
-		employee.setCdacind(vo.getCdacind());
-		return employee;
-	}
-	
-	//convert employeeVo to employee
-	public EmployeeVO convertEmployeeToVo(Employee employee) {
-		EmployeeVO vo = new EmployeeVO();
-		vo.setEmployeeid(employee.getEmployeeid());
-		vo.setName(employee.getName());
-		vo.setEmploymenttype(employee.getEmploymenttype());
-		vo.setEmploymenttypeString(EmploymentTypeEnum.getEnum(employee.getEmploymenttype()));
-		vo.setDob(employee.getDob());
-		vo.setDobString(GeneralUtils.convertDateToString(employee.getDob(), "dd/MM/yyyy"));
-		vo.setNationality(employee.getNationality());
-		vo.setBasicsalary(employee.getBasicsalary());
-		vo.setEmploystartdate(employee.getEmploystartdate());
-		vo.setEmploystartdateString(GeneralUtils.convertDateToString(employee.getEmploystartdate(), "dd/MM/yyyy"));
-		vo.setEmployenddate(employee.getEmployenddate());
-		vo.setEmployenddateString(GeneralUtils.convertDateToString(employee.getEmployenddate(), "dd/MM/yyyy"));
-		vo.setCdacind(employee.getCdacind());
-		vo.setCdacindBoolean(employee.getCdacind().equals("Y") ? Boolean.TRUE: Boolean.FALSE);
-		return vo;
-	}
-	
-	public Employee findById(Integer id) {
-		return employeeMapper.selectByPrimaryKey(id);
-	}
-	
-	public List<Employee> getAllEmployees() {
-		EmployeeExample example = new EmployeeExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Employee> employeeList = employeeMapper.selectByExample(example);
-		return employeeList;
-	}
-	
-	public List<Employee> getAllEmployees(String ordByClause) {
-		EmployeeExample example = new EmployeeExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		example.setOrderByClause(ordByClause);
-		List<Employee> employeeList = employeeMapper.selectByExample(example);
-		return employeeList;
-	}
-	
-	public void saveEmployee(Employee employee) {
-		employeeMapper.insert(employee);
 	}
 	
 	public void deleteEmployee(Integer id) {
-		Employee employee = findById(id);
-		if(employee.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-			employee.setDeleteInd(GeneralUtils.DELETED);
-			employeeMapper.updateByPrimaryKey(employee);
+		deleteEmployee(Arrays.asList(id));
+	}
+	
+	public void deleteEmployee(List<Integer> idList) {
+		EmployeeDbObjectExample employeeDbObjectExample = new EmployeeDbObjectExample();
+		employeeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andEmployeeIdIn(idList);
+		EmployeeDbObject dbObj = new EmployeeDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		employeeDbObjectMapper.updateByExampleSelective(dbObj, employeeDbObjectExample);
+	}	
+	
+	public void updateEmployee(EmployeeVO employeeVO) {
+		if(employeeVO != null && employeeVO.getDeleteInd() != null &&
+				employeeVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			EmployeeDbObject dbObj = convertToEmployeeDbObjectList(Arrays.asList(employeeVO)).get(0);
+			employeeDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
 	}
 	
-	public void updateEmployee(Employee employee) {
-		if(employee.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			employeeMapper.updateByPrimaryKeySelective(employee);
+	public List<EmployeeVO> convertToEmployeeVOList(List<EmployeeDbObject> employeeDbObjectList) {
+		List<EmployeeVO> voList = new ArrayList<EmployeeVO>();
+		if(employeeDbObjectList != null && !employeeDbObjectList.isEmpty()) {
+			for(EmployeeDbObject dbObj : employeeDbObjectList) {
+				EmployeeVO vo = new EmployeeVO();
+				vo.setEmployeeId(dbObj.getEmployeeId());
+				vo.setName(dbObj.getName());
+				vo.setEmployeeType(dbObj.getEmployeeType());
+				vo.setEmployeeTypeString(EmploymentTypeEnum.getEnum(dbObj.getEmployeeType()));
+				vo.setDob(dbObj.getDob());
+				vo.setDobString(GeneralUtils.convertDateToString(dbObj.getDob(), "dd/MM/yyyy"));
+				vo.setNationality(dbObj.getNationality());
+				vo.setBasicSalary(dbObj.getBasicSalary());
+				vo.setEmploymentStartDate(dbObj.getEmploymentStartDate());
+				vo.setEmploymentStartDateString(GeneralUtils.convertDateToString(dbObj.getEmploymentStartDate(), "dd/MM/yyyy"));
+				vo.setEmploymentEndDate(dbObj.getEmploymentEndDate());
+				vo.setEmploymentEndDateString(GeneralUtils.convertDateToString(dbObj.getEmploymentEndDate(), "dd/MM/yyyy"));
+				vo.setCdacInd(dbObj.getCdacInd());
+				vo.setCdacIndBoolean(dbObj.getCdacInd().equals("Y") ? Boolean.TRUE: Boolean.FALSE);
+				voList.add(vo);
+			}
+		}
+		return voList;
 	}
-	 
 	
-	
+	public List<EmployeeDbObject> convertToEmployeeDbObjectList(List<EmployeeVO> employeeVOList/*, Employee employee*/) {
+		List<EmployeeDbObject> employeeDbObjectList = new ArrayList<EmployeeDbObject>();
+		if(employeeVOList != null && !employeeVOList.isEmpty()) {
+			for(EmployeeVO vo : employeeVOList) {
+				EmployeeDbObject dbObj = new EmployeeDbObject();
+				dbObj.setName(vo.getName());
+				dbObj.setEmployeeType(vo.getEmployeeType());
+				dbObj.setDob(vo.getDob());
+				dbObj.setNationality(vo.getNationality());
+				dbObj.setBasicSalary(vo.getBasicSalary());
+				dbObj.setEmploymentStartDate(vo.getEmploymentStartDate());
+				dbObj.setEmploymentEndDate(vo.getEmploymentEndDate());
+				dbObj.setCdacInd(vo.getCdacInd());
+				employeeDbObjectList.add(dbObj);
+			}
+		}
+		return employeeDbObjectList;
+	}
 }
