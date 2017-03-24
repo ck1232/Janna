@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.expensemanagement.VO.ExpenseVO;
+import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentVO;
-import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
-import com.JJ.model.Expense;
-import com.JJ.model.Invoice;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
@@ -78,12 +78,12 @@ public class PaymentManagementController {
 		for(String id : ids){
 			idList.add(Integer.valueOf(id));
 		}
-		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(idList);
+		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
-		for(Expense expense : expenseList) {
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
-			totalamount = totalamount.add(expense.getTotalamount());
+		for(ExpenseVO expense : expenseList) {
+			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpenseDate()));
+			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
+			totalamount = totalamount.add(expense.getTotalAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
@@ -109,10 +109,10 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveExpensePayment() : " + paymentVo.toString());
-		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
-		for(Expense expense : expenseList) {
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpensedate()));
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
+		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
+		for(ExpenseVO expense : expenseList) {
+			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpenseDate()));
+			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
 		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
@@ -172,11 +172,11 @@ public class PaymentManagementController {
 		for(String id : ids){
 			idList.add(Integer.valueOf(id));
 		}
-		List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(idList);
+		List<InvoiceVO> invoiceList = invoiceManagementService.getAllInvoiceByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
-		for(Invoice invoice : invoiceList) {
-			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
-			totalamount = totalamount.add(invoice.getTotalprice());
+		for(InvoiceVO invoice : invoiceList) {
+			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoiceDate()));
+			totalamount = totalamount.add(invoice.getTotalAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
@@ -229,9 +229,9 @@ public class PaymentManagementController {
 		        return "redirect:/invoice/listInvoice"; 
 			}
 		}
-		List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceIdList);
-		for(Invoice invoice : invoiceList) {
-			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoicedate()));
+		List<InvoiceVO> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceIdList);
+		for(InvoiceVO invoice : invoiceList) {
+			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoiceDate()));
 		}
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("invoiceList", invoiceList);
@@ -288,11 +288,11 @@ public class PaymentManagementController {
 		for(String id : ids){
 			idList.add(Integer.valueOf(id));
 		}
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(idList);
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
-		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MMM-yyyy"));
-			totalamount = totalamount.add(salaryBonusVo.getTakehomeamount());
+			totalamount = totalamount.add(salaryBonusVo.getTakehomeAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
@@ -313,8 +313,8 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveSalaryPayment() : " + paymentVo.toString());
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
-		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
+		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MMM-yyyy"));
 		}
 		if (!result.hasErrors()) {
@@ -375,11 +375,11 @@ public class PaymentManagementController {
 		for(String id : ids){
 			idList.add(Integer.valueOf(id));
 		}
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(idList);
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
-		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
-			totalamount = totalamount.add(salaryBonusVo.getBonusamount());
+			totalamount = totalamount.add(salaryBonusVo.getBonusAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
@@ -400,8 +400,8 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveBonusPayment() : " + paymentVo.toString());
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusIdList);
-		for(SalaryBonusVo salaryBonusVo : salaryBonusVoList) {
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusIdList);
+		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
 		}
 		if (!result.hasErrors()) {
