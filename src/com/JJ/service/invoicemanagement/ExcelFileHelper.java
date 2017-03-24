@@ -173,7 +173,7 @@ public class ExcelFileHelper {
             int[] dateHeaderIndex = findIndex(sheet, "Date");
             int[] invoiceNoHeaderIndex = findIndex(sheet, "Invoice");
             int[] statusHeaderIndex = findIndex(sheet, "Status");
-            int[] chequeNoHeaderIndex = findIndex(sheet, "Cheque No.");
+//            int[] chequeNoHeaderIndex = findIndex(sheet, "Cheque No.");
             int[] amountHeaderIndex = findIndex(sheet, "($)    Amount");
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM");
             int row = dateHeaderIndex[0] + 1;

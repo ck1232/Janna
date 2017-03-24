@@ -9,7 +9,6 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
@@ -55,6 +54,7 @@ public class ExcelFileHelper {
             
 			return workbook;
 		} catch (Exception e) {
+			logger.error("ExcelFileHelper", e);
 			e.printStackTrace();
 		}
 		return null;
