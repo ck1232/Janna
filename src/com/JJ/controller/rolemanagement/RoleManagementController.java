@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.rolemanagement.vo.RoleVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Role;
 import com.JJ.service.rolemanagement.RoleManagementService;
 import com.JJ.validator.RoleFormValidator;
 
@@ -50,14 +50,14 @@ public class RoleManagementController {
 	@RequestMapping(value = "/getRoleList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getRoleList() {
 		logger.debug("getting role list");
-		List<Role> roleList = roleManagementService.getAllRoles();
+		List<RoleVO> roleList = roleManagementService.getAllRoles();
 		return GeneralUtils.convertListToJSONString(roleList);
 	}
 	
 	@RequestMapping(value = "/createRole", method = RequestMethod.GET)
     public String showAddRoleForm(Model model) {  
     	logger.debug("loading showAddRoleForm");
-    	Role role = new Role();
+    	RoleVO role = new RoleVO();
     	model.addAttribute("roleForm", role);
         return "createRole";  
     }  
@@ -68,15 +68,15 @@ public class RoleManagementController {
 	}
 	
 	@RequestMapping(value = "/createRole", method = RequestMethod.POST)
-    public String saveRole(@ModelAttribute("roleForm") @Validated Role role, 
+    public String saveRole(@ModelAttribute("roleForm") @Validated RoleVO role, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
 		logger.debug("saveRole() : " + role.toString());
 		if (result.hasErrors()) {
 			return "createRole";
 		} else {
-			List<Role> roleList = roleManagementService.getAllRoles();
-			for(Role r: roleList){
+			List<RoleVO> roleList = roleManagementService.getAllRoles();
+			for(RoleVO r: roleList){
 				if(role.getName().equals(r.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.roleform.name");
 					return "createRole";
@@ -112,7 +112,7 @@ public class RoleManagementController {
 	@RequestMapping(value = "/updateRole", method = RequestMethod.POST)
 	public String getRoleToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Role role = roleManagementService.findById(new Integer(id));
+		RoleVO role = roleManagementService.findById(new Integer(id));
 		logger.debug("Loading update role page for " + role.toString());
 		
 		model.addAttribute("roleForm", role);
@@ -121,7 +121,7 @@ public class RoleManagementController {
 	}
 	
 	@RequestMapping(value = "/updateRoleToDb", method = RequestMethod.POST)
-	public String updateRole(@ModelAttribute("roleForm") @Validated Role role,
+	public String updateRole(@ModelAttribute("roleForm") @Validated RoleVO role,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("updateRole() : " + role.toString());
@@ -129,9 +129,9 @@ public class RoleManagementController {
 		if (result.hasErrors()) {
 			return "updateRole";
 		} else {
-			List<Role> roleList = roleManagementService.getAllRoles();
-			Role currentRole = roleManagementService.findById(role.getId());
-			for(Role r: roleList){
+			List<RoleVO> roleList = roleManagementService.getAllRoles();
+			RoleVO currentRole = roleManagementService.findById(role.getRoleId());
+			for(RoleVO r: roleList){
 				if(!currentRole.getName().equals(r.getName()) && role.getName().equals(r.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.roleform.name");
 					return "updateRole";

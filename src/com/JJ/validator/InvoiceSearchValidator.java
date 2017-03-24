@@ -8,7 +8,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.controller.inventorymanagement.InventoryHistorySearchCriteria;
 import com.JJ.controller.invoicemanagement.InvoiceSearchCriteria;
 
 @Component

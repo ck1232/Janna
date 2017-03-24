@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Role;
+import com.JJ.controller.rolemanagement.vo.RoleVO;
 
 @Component
 public class RoleFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Role.class.equals(clazz);
+		return RoleVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Role role = (Role) target;
+		//RoleVO roleVO = (RoleVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.roleform.name");
 

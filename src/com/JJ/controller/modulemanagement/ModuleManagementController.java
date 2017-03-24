@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.common.vo.ModuleVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Module;
 import com.JJ.service.modulemanagement.ModuleManagementService;
 import com.JJ.validator.ModuleFormValidator;
 
@@ -51,17 +51,17 @@ public class ModuleManagementController {
 	@RequestMapping(value = "/getModuleList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getModuleList() {
 		logger.debug("getting Module list");
-		List<Module> moduleList = moduleManagementService.getAllModules();
+		List<ModuleVO> moduleList = moduleManagementService.getAllModules();
 		return GeneralUtils.convertListToJSONString(moduleList);
 	}
 	
 	@RequestMapping(value = "/createModule", method = RequestMethod.GET)
     public String showAddModuleForm(Model model) {  
     	logger.debug("loading showAddModuleForm");
-    	Module module = new Module();
-    	module.setDeleteInd(GeneralUtils.NOT_DELETED);
+    	ModuleVO moduleVO = new ModuleVO();
+    	moduleVO.setDeleteInd(GeneralUtils.NOT_DELETED);
     	
-    	model.addAttribute("moduleForm", module);
+    	model.addAttribute("moduleForm", moduleVO);
         return "createModule";  
     }  
 	
@@ -71,10 +71,10 @@ public class ModuleManagementController {
 	}
 	
 	@RequestMapping(value = "/createModule", method = RequestMethod.POST)
-    public String saveModule(@ModelAttribute("moduleForm") @Validated Module module, 
+    public String saveModule(@ModelAttribute("moduleForm") @Validated ModuleVO moduleVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveModule() : " + module.toString());
+		logger.debug("saveModule() : " + moduleVO.toString());
 		if (result.hasErrors()) {
 			return "createModule";
 		} else {
@@ -82,7 +82,7 @@ public class ModuleManagementController {
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Module added successfully!");
 		}
-		moduleManagementService.saveModule(module);
+		moduleManagementService.saveModule(moduleVO);
 		
         return "redirect:listModule";  
     }  
@@ -107,25 +107,25 @@ public class ModuleManagementController {
 	@RequestMapping(value = "/updateModule", method = RequestMethod.POST)
 	public String getModuleToUpdate(@RequestParam("editBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Module module = moduleManagementService.findById(new Integer(id));
-		if (module == null) {
+		ModuleVO moduleVO = moduleManagementService.findById(new Integer(id));
+		if (moduleVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Module not found");
 		}
-		model.addAttribute("moduleForm", module);
+		model.addAttribute("moduleForm", moduleVO);
 		return "updateModule";
 	}
 	
 	@RequestMapping(value = "/updateModuleToDb", method = RequestMethod.POST)
-	public String updateModule(@ModelAttribute("moduleForm") @Validated Module module,
+	public String updateModule(@ModelAttribute("moduleForm") @Validated ModuleVO moduleVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateModule() : " + module.toString());
+		logger.debug("updateModule() : " + moduleVO.toString());
 		
 		if (result.hasErrors()) {
 			return "updateModule";
 		} else {
-			moduleManagementService.updateModule(module);
+			moduleManagementService.updateModule(moduleVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Module updated successfully!");
 		}

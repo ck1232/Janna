@@ -27,19 +27,19 @@ public class EmployeeFormValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employmenttype", "error.notempty.employeeform.employmenttype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nationality", "error.notempty.employeeform.nationality");
 		
-		if(employeeVo.getBasicsalary() == null) {
+		if(employeeVo.getBasicSalary() == null) {
 			errors.rejectValue("basicsalary", "error.notempty.employeeform.basicsalary");
 		}else{
-			BigDecimal value = employeeVo.getBasicsalary();
+			BigDecimal value = employeeVo.getBasicSalary();
 			if(value.compareTo(BigDecimal.ZERO) < 0) {
 				errors.rejectValue("basicsalary", "error.negative.employeeform.basicsalary");
 			}
 		}
 		
-		if(employeeVo.getEmploystartdateString() != null && employeeVo.getEmployenddateString() != null) {
+		if(employeeVo.getEmploymentStartDateString() != null && employeeVo.getEmploymentEndDateString() != null) {
 			try{
-				Date startdate = new SimpleDateFormat("dd/MM/yyyy").parse(employeeVo.getEmploystartdateString());
-				Date enddate = new SimpleDateFormat("dd/MM/yyyy").parse(employeeVo.getEmployenddateString());
+				Date startdate = new SimpleDateFormat("dd/MM/yyyy").parse(employeeVo.getEmploymentStartDateString());
+				Date enddate = new SimpleDateFormat("dd/MM/yyyy").parse(employeeVo.getEmploymentEndDateString());
 				if(startdate.after(enddate)) {
 					errors.rejectValue("employstartdateString", "error.employeeform.startdate.after.enddate");
 					errors.rejectValue("employenddateString", "error.employeeform.enddate.before.startdate");

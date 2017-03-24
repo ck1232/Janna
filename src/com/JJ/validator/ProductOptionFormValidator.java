@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Productoption;
+import com.JJ.controller.productmanagement.vo.ProductOptionVO;
 
 @Component
 public class ProductOptionFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Productoption.class.equals(clazz);
+		return ProductOptionVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Productoption productoption = (Productoption) target;
+//		ProductOptionVO productOptionVO = (ProductOptionVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.productoptionform.name");
 	}

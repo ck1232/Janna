@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Submodulepermissiontype;
+import com.JJ.controller.common.vo.SubModulePermissionTypeVO;
 
 @Component
 public class PermissionTypeFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Submodulepermissiontype.class.equals(clazz);
+		return SubModulePermissionTypeVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Submodulepermissiontype submodulepermissiontype = (Submodulepermissiontype) target;
+//		SubModulePermissionTypeVO subModulePermissionTypeVO = (SubModulePermissionTypeVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "permissiontype", "error.notempty.permissiontypeform.permissiontype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "url", "error.notempty.permissiontypeform.url");

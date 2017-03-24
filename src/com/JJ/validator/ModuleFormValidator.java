@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Module;
+import com.JJ.controller.common.vo.ModuleVO;
 
 @Component
 public class ModuleFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Module.class.equals(clazz);
+		return ModuleVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Module module = (Module) target;
+		//ModuleVO moduleVO = (ModuleVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.moduleform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "icon", "error.notempty.moduleform.icon");

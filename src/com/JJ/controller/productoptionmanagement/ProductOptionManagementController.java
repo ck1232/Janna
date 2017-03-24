@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.productmanagement.vo.ProductOptionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Productoption;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.validator.ProductOptionFormValidator;
 
@@ -51,16 +51,16 @@ public class ProductOptionManagementController {
 	@RequestMapping(value = "/getProductOptionList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getProductOptionList() {
 		logger.debug("getting productOption list");
-		List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
+		List<ProductOptionVO> optionList = productOptionManagementService.getAllProductoptions();
 		return GeneralUtils.convertListToJSONString(optionList);
 	}
 	
 	@RequestMapping(value = "/createProductOption", method = RequestMethod.GET)
     public String showAddProductOptionForm(Model model) {  
     	logger.debug("loading showAddProductOptionForm");
-    	Productoption productoption = new Productoption();
-    	productoption.setDisplayind(true);
-    	model.addAttribute("productOptionForm", productoption);
+    	ProductOptionVO productOptionVO = new ProductOptionVO();
+    	productOptionVO.setDisplayInd("1");
+    	model.addAttribute("productOptionForm", productOptionVO);
         return "createProductOption";  
     }  
 	
@@ -70,22 +70,22 @@ public class ProductOptionManagementController {
 	}
 	
 	@RequestMapping(value = "/createProductOption", method = RequestMethod.POST)
-    public String saveProductOption(@ModelAttribute("productOptionForm") @Validated Productoption productoption, 
+    public String saveProductOption(@ModelAttribute("productOptionForm") @Validated ProductOptionVO productOptionVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveProductOption() : " + productoption.toString());
+		logger.debug("saveProductOption() : " + productOptionVO.toString());
 		if (result.hasErrors()) {
 			return "createProductOption";
 		} else {
-			List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
-			for(Productoption o: optionList){
-				if(productoption.getName().equals(o.getName())) { //if exist name
+			List<ProductOptionVO> productOptionVOList = productOptionManagementService.getAllProductoptions();
+			for(ProductOptionVO o: productOptionVOList){
+				if(productOptionVO.getName().equals(o.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.productoptionform.name");
 					return "createProductOption";
 				}
 			}
-			productoption.setDeleteInd(GeneralUtils.NOT_DELETED);
-			productOptionManagementService.saveProductoption(productoption);
+			productOptionVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+			productOptionManagementService.saveProductoption(productOptionVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product option added successfully!");
 		}
@@ -105,11 +105,11 @@ public class ProductOptionManagementController {
 			return "redirect:listProductOption";
 		}
 		for (String id : ids) {
-			Productoption option = productOptionManagementService.findById(new Integer(id));
-			List<Productoption> optionList = productOptionManagementService.getAllProductoptionsByName(option.getName());
-			for(Productoption o: optionList){
+			ProductOptionVO option = productOptionManagementService.findById(new Integer(id));
+			List<ProductOptionVO> optionList = productOptionManagementService.getAllProductoptionsByName(option.getName());
+			for(ProductOptionVO o: optionList){
 				productOptionManagementService.deleteProductoption(o);
-				logger.debug("deleted "+ o.getProductoptionid());
+				logger.debug("deleted "+ o.getProductOptionId());
 			}
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
@@ -120,7 +120,7 @@ public class ProductOptionManagementController {
 	@RequestMapping(value = "/updateProductOption", method = RequestMethod.POST)
 	public String getProductOptionToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Productoption option = productOptionManagementService.findById(new Integer(id));
+		ProductOptionVO option = productOptionManagementService.findById(new Integer(id));
 		logger.debug("Loading update product option page for " + option.toString());
 		
 		model.addAttribute("productOptionForm", option);
@@ -129,28 +129,28 @@ public class ProductOptionManagementController {
 	}
 	
 	@RequestMapping(value = "/updateProductOptionToDb", method = RequestMethod.POST)
-	public String updateProductOption(@ModelAttribute("productOptionForm") @Validated Productoption option,
+	public String updateProductOption(@ModelAttribute("productOptionForm") @Validated ProductOptionVO productOptionVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateProductOption() : " + option.toString());
+		logger.debug("updateProductOption() : " + productOptionVO.toString());
 		
 		if (result.hasErrors()) {
 			return "updateProductOption";
 		} else {
-			List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
-			Productoption currentOption = productOptionManagementService.findById(option.getProductoptionid());
-			for(Productoption o: optionList){
-				if(!currentOption.getName().equals(o.getName()) && option.getName().equals(o.getName())) { //if exist name
+			List<ProductOptionVO> optionList = productOptionManagementService.getAllProductoptions();
+			ProductOptionVO currentOption = productOptionManagementService.findById(productOptionVO.getProductOptionId());
+			for(ProductOptionVO o: optionList){
+				if(!currentOption.getName().equals(o.getName()) && productOptionVO.getName().equals(o.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.productoptionform.name");
 					return "updateProductOption";
 				}
 			}
-			List<Productoption> optionListByName = productOptionManagementService.getAllProductoptionsByName(currentOption.getName());
-			for(Productoption o: optionListByName){
-				o.setName(option.getName());
-				o.setDisplayind(option.getDisplayind());
+			List<ProductOptionVO> optionListByName = productOptionManagementService.getAllProductoptionsByName(currentOption.getName());
+			for(ProductOptionVO o: optionListByName){
+				o.setName(productOptionVO.getName());
+				o.setDisplayInd(productOptionVO.getDisplayInd());
 				productOptionManagementService.updateProductoption(o);
-				logger.debug("updated "+ o.getProductoptionid());
+				logger.debug("updated "+ o.getProductOptionId());
 			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product Option updated successfully!");

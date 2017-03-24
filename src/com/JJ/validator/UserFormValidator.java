@@ -6,25 +6,25 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.User;
+import com.JJ.controller.common.vo.UserVO;
 
 @Component
 public class UserFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return User.class.equals(clazz);
+		return UserVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		User user = (User) target;
+		UserVO userVO = (UserVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.userform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailaddress", "error.notempty.userform.email");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userid", "error.notempty.userform.username");
-		if(StringUtils.isNotEmpty(user.getEmailaddress())){
-			if(!isValidEmailAddress(user.getEmailaddress()))
+		if(StringUtils.isNotEmpty(userVO.getEmailAddress())){
+			if(!isValidEmailAddress(userVO.getEmailAddress()))
 				errors.rejectValue("emailaddress", "error.notvalid.userform.email");
 		}
 		

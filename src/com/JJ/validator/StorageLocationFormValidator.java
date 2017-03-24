@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Storagelocation;
+import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
 
 @Component
 public class StorageLocationFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Storagelocation.class.equals(clazz);
+		return StorageLocationVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Storagelocation location = (Storagelocation) target;
+//		StorageLocationVO storageLocationVO = (StorageLocationVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "locationname", "error.notempty.storagelocationform.locationname");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "error.notempty.storagelocationform.address");

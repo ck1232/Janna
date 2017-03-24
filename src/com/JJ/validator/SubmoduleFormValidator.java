@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Submodule;
+import com.JJ.controller.common.vo.SubModuleVO;
 
 @Component
 public class SubmoduleFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Submodule.class.equals(clazz);
+		return SubModuleVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Submodule submodule = (Submodule) target;
+//		SubModuleVO subModuleVO = (SubModuleVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.submoduleform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "icon", "error.notempty.submoduleform.icon");

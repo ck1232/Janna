@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.common.vo.UserVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.User;
 import com.JJ.service.usermanagement.UserManagementService;
 import com.JJ.validator.UserFormValidator;
 
@@ -52,17 +52,17 @@ public class UserManagementController {
 	@RequestMapping(value = "/getUserList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getUserList() {
 		logger.debug("getting user list");
-		List<User> userList = userManagementService.getAllUsers();
+		List<UserVO> userList = userManagementService.getAllUsers();
 		return GeneralUtils.convertListToJSONString(userList);
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.GET)
     public String showAddUserForm(Model model) {  
     	logger.debug("loading showAddUserForm");
-    	User user = new User();
+    	UserVO userVO = new UserVO();
     	
-    	user.setEnabled(true);
-    	model.addAttribute("userForm", user);
+    	userVO.setEnabled("1");
+    	model.addAttribute("userForm", userVO);
         return "createUser";  
     }  
 	
@@ -72,15 +72,15 @@ public class UserManagementController {
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("userForm") @Validated User user, 
+    public String saveUser(@ModelAttribute("userForm") @Validated UserVO userVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveUser() : " + user.toString());
+		logger.debug("saveUser() : " + userVO.toString());
 		if (result.hasErrors()) {
 			return "createUser";
 		} else {
 			
-			userManagementService.saveUser(user);
+			userManagementService.saveUser(userVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User added successfully!");
 		}
@@ -109,18 +109,18 @@ public class UserManagementController {
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	public String getUserToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		User user = userManagementService.findById(new Integer(id));
-		logger.debug("Loading update user page for " + user.toString());
+		UserVO userVO = userManagementService.findById(new Integer(id));
+		logger.debug("Loading update user page for " + userVO.toString());
 		
-		model.addAttribute("userForm", user);
+		model.addAttribute("userForm", userVO);
 		return "updateUser";
 	}
 	
 	@RequestMapping(value = "/updateUserById/{userid}", method = RequestMethod.GET)
 	public String getUserToUpdateByUserId(@PathVariable String userid, Model model) {
-		User user = userManagementService.findByUserName(userid);
-		logger.debug("Loading update user page for " + user.toString());
-		model.addAttribute("userForm", user);
+		UserVO userVO = userManagementService.findByUserName(userid);
+		logger.debug("Loading update user page for " + userVO.toString());
+		model.addAttribute("userForm", userVO);
 		return "updateUser";
 	}
 	
@@ -133,15 +133,15 @@ public class UserManagementController {
 	}
 	
 	@RequestMapping(value = "/updateUserToDb", method = RequestMethod.POST)
-	public String updateUser(@ModelAttribute("userForm") @Validated User user,
+	public String updateUser(@ModelAttribute("userForm") @Validated UserVO userVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateUser() : " + user.toString());
+		logger.debug("updateUser() : " + userVO.toString());
 		
 		if (result.hasErrors()) {
 			return "updateUser";
 		} else {
-			userManagementService.updateUser(user);
+			userManagementService.updateUser(userVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User updated successfully!");
 		}
@@ -152,12 +152,12 @@ public class UserManagementController {
 	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
 	public String viewUser(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		User user = userManagementService.findById(new Integer(id));
-		if (user == null) {
+		UserVO userVO = userManagementService.findById(new Integer(id));
+		if (userVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "User not found");
 		}
-		model.addAttribute("user", user);
+		model.addAttribute("user", userVO);
 
 		return "viewUser";
 
