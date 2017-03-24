@@ -14,14 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.FileMetaVO;
-import com.JJ.controller.discountmanagement.vo.DiscountVO;
 import com.JJ.controller.invoicemanagement.InvoiceSearchCriteria;
 import com.JJ.controller.invoicemanagement.vo.InvoiceUploadVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.dao.InvoiceDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.DiscountDbObject;
-import com.JJ.model.DiscountDbObjectExample;
 import com.JJ.model.InvoiceDbObject;
 import com.JJ.model.InvoiceDbObjectExample;
 

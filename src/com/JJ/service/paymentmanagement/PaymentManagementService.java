@@ -8,59 +8,56 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
+import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
+import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentVO;
-import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVo;
-import com.JJ.dao.PaymentRsMapper;
-import com.JJ.dao.PaymentdetailMapper;
+import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
+import com.JJ.dao.PaymentDetailDbObjectMapper;
+import com.JJ.dao.PaymentRsDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Expense;
-import com.JJ.model.Invoice;
-import com.JJ.model.PaymentRs;
-import com.JJ.model.PaymentRsExample;
-import com.JJ.model.Paymentdetail;
-import com.JJ.model.PaymentdetailExample;
+import com.JJ.lookup.ExpenseTypeLookup;
+import com.JJ.model.PaymentDetailDbObjectExample;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
-import com.JJ.lookup.ExpenseTypeLookup;
 
 @Service
 @Transactional
 public class PaymentManagementService {
 	
-	private PaymentRsMapper paymentRsMapper;
-	private PaymentdetailMapper paymentDetailMapper;
+	private PaymentRsDbObjectMapper paymentRsDbObjectMapper;
+	private PaymentDetailDbObjectMapper paymentDetailDbObjectMapper;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
 	private SalaryBonusManagementService salaryBonusManagementService;
 	
 	@Autowired
-	public PaymentManagementService(PaymentRsMapper paymentRsMapper, PaymentdetailMapper paymentDetailMapper,
+	public PaymentManagementService(PaymentRsDbObjectMapper paymentRsMapper, PaymentDetailDbObjectMapper paymentDetailMapper,
 			ExpenseTypeLookup expenseTypeLookup,  
 			ExpenseManagementService expenseManagementService, 
 			InvoiceManagementService invoiceManagementService,
 			SalaryBonusManagementService salaryBonusManagementService) {
-		this.paymentRsMapper = paymentRsMapper;
-		this.paymentDetailMapper = paymentDetailMapper;
+		this.paymentRsDbObjectMapper = paymentRsMapper;
+		this.paymentDetailDbObjectMapper = paymentDetailMapper;
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
 		this.salaryBonusManagementService = salaryBonusManagementService;
 	}
 	public void saveExpensePayment(PaymentVO paymentVo, List<Integer> expenseidList) {
-		List<Expense> expenseList = expenseManagementService.getAllExpenseByIdList(expenseidList);
+		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(expenseidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
 		for(Paymentdetail paymentdetail : paymentDetailList) {
-			for(Expense expense : expenseList) {
+			for(ExpenseVO expense : expenseList) {
 				expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpensetypeid()));
 				PaymentRs paymentrs = new PaymentRs();
 				paymentrs.setReferencetype("expense");
 				paymentrs.setReferenceid(expense.getExpenseid());
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
-				paymentRsMapper.insert(paymentrs);
+				paymentRsDbObjectMapper.insert(paymentrs);
 				if(expense.getexpensetype().toLowerCase().contains("china"))
 					expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
 				else
@@ -71,7 +68,7 @@ public class PaymentManagementService {
 	}
 	
 	public void saveInvoicePayment(PaymentVO paymentVo, List<Integer> invoiceidList) {
-		List<Invoice> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceidList);
+		List<InvoiceVO> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
 		for(Paymentdetail paymentdetail : paymentDetailList) {
@@ -80,7 +77,7 @@ public class PaymentManagementService {
 				paymentrs.setReferencetype("invoice");
 				paymentrs.setReferenceid(invoice.getInvoiceid());
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
-				paymentRsMapper.insert(paymentrs);
+				paymentRsDbObjectMapper.insert(paymentrs);
 				
 				invoice.setStatus(InvoiceStatusEnum.PAID.toString());
 				invoiceManagementService.updateInvoice(invoice);
@@ -89,7 +86,7 @@ public class PaymentManagementService {
 	}
 	
 	public void saveSalaryPayment(PaymentVO paymentVo, List<Integer> salaryidList) {
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryidList);
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
 		for(Paymentdetail paymentdetail : paymentDetailList) {
@@ -98,7 +95,7 @@ public class PaymentManagementService {
 				paymentrs.setReferencetype("salary");
 				paymentrs.setReferenceid(salary.getId());
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
-				paymentRsMapper.insert(paymentrs);
+				paymentRsDbObjectMapper.insert(paymentrs);
 				
 				salary.setStatus(ExpenseStatusEnum.PAID.toString());
 				salaryBonusManagementService.updateSalaryBonus(salary);
@@ -107,16 +104,16 @@ public class PaymentManagementService {
 	}
 	
 	public void saveBonusPayment(PaymentVO paymentVo, List<Integer> bonusidList) {
-		List<SalaryBonusVo> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusidList);
+		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusidList);
 		List<Paymentdetail> paymentDetailList = genPaymentDetail(paymentVo);
 		
 		for(Paymentdetail paymentdetail : paymentDetailList) {
-			for(SalaryBonusVo bonus : salaryBonusVoList) {
+			for(SalaryBonusVO bonus : salaryBonusVoList) {
 				PaymentRs paymentrs = new PaymentRs();
 				paymentrs.setReferencetype("bonus");
 				paymentrs.setReferenceid(bonus.getId());
 				paymentrs.setPaymentdetailid(paymentdetail.getPaymentdetailid());
-				paymentRsMapper.insert(paymentrs);
+				paymentRsDbObjectMapper.insert(paymentrs);
 				
 				bonus.setStatus(ExpenseStatusEnum.PAID.toString());
 				salaryBonusManagementService.updateSalaryBonus(bonus);
@@ -130,14 +127,14 @@ public class PaymentManagementService {
 		if(paymentVo.getPaymentmodecash()){
 			Paymentdetail paymentdetail = new Paymentdetail(
 					paymentVo.getPaymentDate(), 1, paymentVo.getCashamount(), "", null);
-			paymentDetailMapper.insert(paymentdetail);
+			paymentDetailDbObjectMapper.insert(paymentdetail);
 			paymentDetailList.add(paymentdetail);
 		}
 		
 		if(paymentVo.getPaymentmodecheque()){
 			Paymentdetail paymentdetail = new Paymentdetail(
 					paymentVo.getChequedate(), 2, paymentVo.getChequeamount(), paymentVo.getChequeno(), GeneralUtils.UNBOUNCED);
-			paymentDetailMapper.insert(paymentdetail);
+			paymentDetailDbObjectMapper.insert(paymentdetail);
 			paymentDetailList.add(paymentdetail);
 		}
 		return paymentDetailList;
@@ -146,19 +143,19 @@ public class PaymentManagementService {
 	public List<Paymentdetail> getAllPaymentByRefTypeAndRefId(String refType, Integer refId) {
 		List<Paymentdetail> paymentdetailList = new ArrayList<Paymentdetail>();
 		PaymentRsExample rsExample = new PaymentRsExample();
-		rsExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED)
+		rsExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
 								.andReferencetypeEqualTo(refType)
 								.andReferenceidEqualTo(refId);
-		List<PaymentRs> paymentRsList = paymentRsMapper.selectByExample(rsExample);
+		List<PaymentRs> paymentRsList = paymentRsDbObjectMapper.selectByExample(rsExample);
 		List<Integer> idList = new ArrayList<Integer>();
 		if(paymentRsList != null && paymentRsList.size() > 0) {
 			for(PaymentRs paymentRs : paymentRsList) {
 				idList.add(paymentRs.getPaymentdetailid());
 			}
-			PaymentdetailExample example = new PaymentdetailExample();
-			example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andPaymentdetailidIn(idList);
+			PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
+			example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andPaymentDetailIdIn(idList);
 			example.setOrderByClause("paymentDate desc, paymentMode asc, chequeNum asc");				
-			paymentdetailList = paymentDetailMapper.selectByExample(example);
+			paymentdetailList = paymentDetailDbObjectMapper.selectByExample(example);
 		}
 		return paymentdetailList;
 	}
@@ -167,21 +164,21 @@ public class PaymentManagementService {
 	/* Expense START */
 	/*public List<Expense> getAllExpense() {
 		ExpenseExample example = new ExpenseExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<Expense> expenseList = expenseMapper.selectByExample(example);
 		return expenseList;
 	}
 	
 	public List<Expense> getAllExpenseByIdList(List<Integer> idList) {
 		ExpenseExample example = new ExpenseExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andExpenseidIn(idList);
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andExpenseidIn(idList);
 		List<Expense> expenseList = expenseMapper.selectByExample(example);
 		return expenseList;
 	}
 	
 	public Expense findById(Integer id) {
 		ExpenseExample example = new ExpenseExample();
-		example.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED).andExpenseidEqualTo(id);
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andExpenseidEqualTo(id);
 		List<Expense> expenseList = expenseMapper.selectByExample(example);
 		if(expenseList != null && expenseList.size() > 0) {
 			return expenseList.get(0);

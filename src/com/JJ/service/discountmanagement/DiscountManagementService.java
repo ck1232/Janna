@@ -16,7 +16,7 @@ import com.JJ.model.DiscountDbObjectExample;
 
 @Service
 @Transactional
-public class DiscountManagementService<Discount> {
+public class DiscountManagementService {
 	
 	private DiscountDbObjectMapper discountDbObjectMapper;
 	

@@ -25,7 +25,6 @@ import com.JJ.controller.batchintakemanagement.vo.ProductInventoryVO;
 import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
-import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
 import com.JJ.validator.InventoryHistorySearchValidator;
 
