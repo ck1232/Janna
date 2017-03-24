@@ -30,25 +30,4 @@ public interface ProductTagsDbObjectMapper {
 
 	int updateByPrimaryKey(ProductTagsDbObject record);
 
-	int countByExample(ProductTagsDbObjectExample example);
-
-    int deleteByExample(ProductTagsDbObjectExample example);
-
-    int deleteByPrimaryKey(Integer tagsId);
-
-    int insert(ProductTagsDbObject record);
-
-    int insertSelective(ProductTagsDbObject record);
-
-    List<ProductTagsDbObject> selectByExample(ProductTagsDbObjectExample example);
-
-    ProductTagsDbObject selectByPrimaryKey(Integer tagsId);
-
-    int updateByExampleSelective(@Param("record") ProductTagsDbObject record, @Param("example") ProductTagsDbObjectExample example);
-
-    int updateByExample(@Param("record") ProductTagsDbObject record, @Param("example") ProductTagsDbObjectExample example);
-
-    int updateByPrimaryKeySelective(ProductTagsDbObject record);
-
-    int updateByPrimaryKey(ProductTagsDbObject record);
 }

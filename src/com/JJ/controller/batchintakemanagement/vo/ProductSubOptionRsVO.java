@@ -3,7 +3,7 @@ package com.JJ.controller.batchintakemanagement.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.JJ.controller.productmanagement.vo.OptionVO;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.model.Base;
 
@@ -32,11 +32,11 @@ public class ProductSubOptionRsVO extends Base implements Serializable {
     
     private ProductVO product;
     
-    private OptionVO subOption1;
+    private ProductSubOptionVO subOption1;
     
-    private OptionVO subOption2;
+    private ProductSubOptionVO subOption2;
     
-    private OptionVO subOption3;
+    private ProductSubOptionVO subOption3;
 
     private static final long serialVersionUID = 1L;
 
@@ -128,15 +128,15 @@ public class ProductSubOptionRsVO extends Base implements Serializable {
 		return product;
 	}
 
-	public OptionVO getSubOption1() {
+	public ProductSubOptionVO getSubOption1() {
 		return subOption1;
 	}
 
-	public OptionVO getSubOption2() {
+	public ProductSubOptionVO getSubOption2() {
 		return subOption2;
 	}
 
-	public OptionVO getSubOption3() {
+	public ProductSubOptionVO getSubOption3() {
 		return subOption3;
 	}
 
@@ -144,15 +144,15 @@ public class ProductSubOptionRsVO extends Base implements Serializable {
 		this.product = product;
 	}
 
-	public void setSubOption1(OptionVO subOption1) {
+	public void setSubOption1(ProductSubOptionVO subOption1) {
 		this.subOption1 = subOption1;
 	}
 
-	public void setSubOption2(OptionVO subOption2) {
+	public void setSubOption2(ProductSubOptionVO subOption2) {
 		this.subOption2 = subOption2;
 	}
 
-	public void setSubOption3(OptionVO subOption3) {
+	public void setSubOption3(ProductSubOptionVO subOption3) {
 		this.subOption3 = subOption3;
 	}
 

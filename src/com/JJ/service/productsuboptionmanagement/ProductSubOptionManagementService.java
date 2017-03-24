@@ -141,14 +141,4 @@ public class ProductSubOptionManagementService {
 		}
 		return dbObjList;
 	}
-	
-	
-	
-	/*public SubOptionVO convertSubOptionToVo(Productsuboption suboption){
-		SubOptionVO vo = new SubOptionVO();
-		vo.setSubOptionId(suboption.getProductsuboptionid());
-		vo.setSubOptionName(suboption.getName());
-		return vo;
-	}*/
-	
 }

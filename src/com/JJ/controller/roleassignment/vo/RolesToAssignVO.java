@@ -1,6 +1,6 @@
-package com.JJ.model;
+package com.JJ.controller.roleassignment.vo;
 
-public class RolesToAssign {
+public class RolesToAssignVO {
 	
 	private String roleid;
 	private String name;

@@ -24,7 +24,10 @@ public class UserRoleDbObject extends Base implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public UserRoleDbObject(Integer userRoleId, Integer roleId, Integer userId, Integer version, String createdBy, Date createdOn, String updatedBy, Date updatedOn, String deleteInd) {
+    public UserRoleDbObject() {
+	}
+
+	public UserRoleDbObject(Integer userRoleId, Integer roleId, Integer userId, Integer version, String createdBy, Date createdOn, String updatedBy, Date updatedOn, String deleteInd) {
         this.userRoleId = userRoleId;
         this.roleId = roleId;
         this.userId = userId;
@@ -36,7 +39,43 @@ public class UserRoleDbObject extends Base implements Serializable {
         this.deleteInd = deleteInd;
     }
 
-    public Integer getUserRoleId() {
+    public void setUserRoleId(Integer userRoleId) {
+		this.userRoleId = userRoleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public void setDeleteInd(String deleteInd) {
+		this.deleteInd = deleteInd;
+	}
+
+	public Integer getUserRoleId() {
         return userRoleId;
     }
 

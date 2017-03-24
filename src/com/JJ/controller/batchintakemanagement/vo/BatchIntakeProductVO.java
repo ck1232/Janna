@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
-import com.JJ.controller.productmanagement.vo.SubOptionVO;
 
 public class BatchIntakeProductVO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private Integer batchProductId;
 	private ProductVO product;
-	private List<SubOptionVO> subOptionList;
+	private List<ProductSubOptionVO> subOptionList;
 	private BigDecimal unitcost;
 	private Integer qty;
 	private int hashCode;
@@ -34,10 +34,10 @@ public class BatchIntakeProductVO implements Serializable {
 	public void setQty(Integer qty) {
 		this.qty = qty;
 	}
-	public List<SubOptionVO> getSubOptionList() {
+	public List<ProductSubOptionVO> getSubOptionList() {
 		return subOptionList;
 	}
-	public void setSubOptionList(List<SubOptionVO> subOptionList) {
+	public void setSubOptionList(List<ProductSubOptionVO> subOptionList) {
 		this.subOptionList = subOptionList;
 	}
 	public BigDecimal getUnitcost() {

@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.common.vo.SubModulePermissionVO;
+import com.JJ.controller.common.vo.UserRoleVO;
+import com.JJ.controller.common.vo.UserVO;
+import com.JJ.controller.roleassignment.vo.RolesToAssignVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.RolesToAssign;
-import com.JJ.model.Submodulepermission;
-import com.JJ.model.User;
-import com.JJ.model.UserRole;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
 import com.JJ.service.roleassignment.RoleAssignmentService;
 import com.JJ.service.usermanagement.UserManagementService;
@@ -48,19 +48,19 @@ public class RoleAssignmentController {
 	
 	@RequestMapping(value = "/assignRole", method = RequestMethod.POST)
 	public String getUserToAssignRole(@RequestParam("assignRoleBtn") String id, Model model) {
-		User user = userManagementService.findById(new Integer(id));
-		List<RolesToAssign> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
-		Map input = new HashMap();
+		UserVO user = userManagementService.findById(new Integer(id));
+		List<RolesToAssignVO> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
+		Map<String, List<String>> input = new HashMap<String, List<String>>();
 		List<String> rIdList = new ArrayList<String>();
 		if(rolesToAssign != null && rolesToAssign.size() > 0){
-			for(RolesToAssign role : rolesToAssign) {
+			for(RolesToAssignVO role : rolesToAssign) {
 				if(role.getChecked().equals("Y")) {
 					rIdList.add(role.getRoleid());
 				}
 			}
 		}
 		input.put("list", rIdList);
-		List<Submodulepermission> smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(input);
+		List<SubModulePermissionVO> smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(input);
 		/*List<Submodulepermission> smpList = permissionManagementService.getSubmoduleByRole(rIdList);
 		List<Submodule> subModuleList = subModuleManagementService.getAllSubmodules();
 		Map<Integer, Submodule> submoduleMap = new HashMap<Integer, Submodule>();
@@ -86,19 +86,19 @@ public class RoleAssignmentController {
 	
 	@RequestMapping(value = "/assignRole/{id}", method = RequestMethod.GET)
 	public String getUserToAssignRoleForRedirect(@PathVariable String id, Model model) {
-		User user = userManagementService.findById(new Integer(id));
-		List<RolesToAssign> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
-		Map input = new HashMap();
+		UserVO user = userManagementService.findById(new Integer(id));
+		List<RolesToAssignVO> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
+		Map<String, List<String>> input = new HashMap<String, List<String>>();
 		List<String> rIdList = new ArrayList<String>();
 		if(rolesToAssign != null && rolesToAssign.size() > 0){
-			for(RolesToAssign role : rolesToAssign) {
+			for(RolesToAssignVO role : rolesToAssign) {
 				if(role.getChecked().equals("Y")) {
 					rIdList.add(role.getRoleid());
 				}
 			}
 		}
 		input.put("list", rIdList);
-		List<Submodulepermission> smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(input);
+		List<SubModulePermissionVO> smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(input);
 		
 		model.addAttribute("user", user);
 		model.addAttribute("roleList", rolesToAssign);
@@ -109,24 +109,24 @@ public class RoleAssignmentController {
 	@RequestMapping(value = "/getRolesToAssignList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getRoleList(@RequestParam("userid") String id) {
 		logger.debug("getting roles to assign list");
-		List<RolesToAssign> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
+		List<RolesToAssignVO> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
 		return GeneralUtils.convertListToJSONString(rolesToAssign);
 	}
 	
 	@RequestMapping(value = "/saveRoleToUser", method = RequestMethod.POST)
-	public String saveRoleToUser(@ModelAttribute("user") User user, 
+	public String saveRoleToUser(@ModelAttribute("user") UserVO user, 
 			@RequestParam(value="userRole", required=false) List<String> ids,
 			Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("saveRoleToUser() : user = " + user.getId());
+		logger.debug("saveRoleToUser() : user = " + user.getUserId());
 		
-		roleAssignmentService.deleteRoleListByUserId(user.getId());
+		roleAssignmentService.deleteRoleListByUserId(user.getUserId());
 		if(ids != null && ids.size() > 0){
 			for(String roleId: ids){
 				logger.debug("saveRoleToUser() : role id = " + roleId);
-				UserRole userRole = new UserRole();
-				userRole.setUserid(user.getId());
-				userRole.setRoleid(new Integer(roleId));
+				UserRoleVO userRole = new UserRoleVO();
+				userRole.setUserId(user.getUserId());
+				userRole.setRoleId(new Integer(roleId));
 				roleAssignmentService.saveUserRole(userRole);
 			}
 		}
@@ -135,7 +135,7 @@ public class RoleAssignmentController {
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Role saved to user successfully!");
 		
-		return "redirect:assignRole/"+user.getId();
+		return "redirect:assignRole/"+user.getUserId();
 	}
 	
 	

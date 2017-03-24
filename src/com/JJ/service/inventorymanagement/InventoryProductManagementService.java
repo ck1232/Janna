@@ -23,8 +23,8 @@ import com.JJ.controller.inventorymanagement.vo.ViewItemCodeVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryLocationVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductSubOptionInventoryVO;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
-import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.dao.ProductInventoryDbObjectMapper;
 import com.JJ.dao.ViewProductInventoryDbObjectMapper;
 import com.JJ.dao.ViewProductInventoryLocationDbObjectMapper;
@@ -315,8 +315,8 @@ public class InventoryProductManagementService {
 		if(inventoryVo.getProductItems() != null && inventoryVo.getProductItems().size() > 0){
 			for(BatchIntakeProductVO batchProduct:inventoryVo.getProductItems()){
 				List<Integer> suboptionIdList = new ArrayList<Integer>();
-				for(SubOptionVO suboption: batchProduct.getSubOptionList()) {
-					suboptionIdList.add(suboption.getSubOptionId());
+				for(ProductSubOptionVO suboption: batchProduct.getSubOptionList()) {
+					suboptionIdList.add(suboption.getProductSuboptionId());
 				}
 				ProductSubOptionRsVO rs = productService.findProductSubOptionRs(batchProduct.getProduct().getProductId(), suboptionIdList);
 				if(rs == null || rs.getProductSuboptionRsId() == null){

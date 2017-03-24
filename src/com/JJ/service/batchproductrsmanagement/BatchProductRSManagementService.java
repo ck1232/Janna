@@ -178,7 +178,7 @@ public class BatchProductRSManagementService {
 		if(rsList.size() != 0){
 			for(BatchProductRsVO rs: rsList){
 				BatchIntakeProductVO batchProduct = new BatchIntakeProductVO();
-				ProductSubOptionRsVO productoptionrs = productService.getProductsuboptionRsById(rs.getProductSubOptionId());
+				ProductSubOptionRsVO productoptionrs = productService.getProductSubOptionRsById(rs.getProductSubOptionId());
 				ProductVO product = productService.getProductsById(productoptionrs.getProductId());
 				batchProduct.setProduct(product);
 				batchProduct.setQty(rs.getQty());

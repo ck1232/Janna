@@ -1,7 +1,6 @@
 package com.JJ.controller.inventorymanagement;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.JJ.controller.productmanagement.vo.ProductSubOptionRsVO;
-import com.JJ.controller.productmanagement.vo.ProductVO;
+import com.JJ.controller.batchintakemanagement.vo.ProductInventoryVO;
+import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Product;
-import com.JJ.model.Productinventory;
-import com.JJ.model.Storagelocation;
-import com.JJ.model.ViewItemCode;
-import com.JJ.model.ViewProductInventory;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
@@ -43,23 +37,20 @@ public class InventoryHistoryManagementController {
 	private static final Logger logger = Logger.getLogger(InventoryHistoryManagementController.class);
 	
 	private InventoryProductManagementService inventoryProductManagementService;
-	private ProductService productService;
 	private StorageLocationManagementService storageLocationManagementService;
 	private InventoryHistorySearchValidator inventoryHistorySearchValidator;
 	
 	boolean searchBefore;
-	List<Productinventory> productInventoryList;
+	List<ProductInventoryVO> productInventoryList;
 	Map<String,String> modeList;
 	Map<String,String> locationList;
 	InventoryHistorySearchCriteria searchCriteria;
 	
 	@Autowired
 	public InventoryHistoryManagementController(InventoryProductManagementService inventoryProductManagementService,
-			ProductService productService,
 			StorageLocationManagementService storageLocationManagementService,
 			InventoryHistorySearchValidator inventoryHistorySearchValidator) {
 		this.inventoryProductManagementService = inventoryProductManagementService;
-		this.productService = productService;
 		this.storageLocationManagementService = storageLocationManagementService;
 		this.inventoryHistorySearchValidator = inventoryHistorySearchValidator;
 	}
@@ -76,7 +67,7 @@ public class InventoryHistoryManagementController {
     }
 	
 	private void initSearchData(){
-		productInventoryList = new ArrayList<Productinventory>();
+		productInventoryList = new ArrayList<ProductInventoryVO>();
     	if(null == searchCriteria) {
     		searchCriteria = new InventoryHistorySearchCriteria();
     	}
@@ -86,9 +77,9 @@ public class InventoryHistoryManagementController {
     	modeList.put("ADHOC", "Adhoc Creation");
     	
     	locationList = new LinkedHashMap<String,String>();
-    	List<Storagelocation> storageLocationList = storageLocationManagementService.getAllStorageLocations();
-    	for(Storagelocation storageLocation : storageLocationList) {
-    		locationList.put(String.valueOf(storageLocation.getLocationid()), storageLocation.getLocationname());
+    	List<StorageLocationVO> storageLocationList = storageLocationManagementService.getAllStorageLocations();
+    	for(StorageLocationVO storageLocation : storageLocationList) {
+    		locationList.put(String.valueOf(storageLocation.getLocationId()), storageLocation.getName());
     	}
 	}
 	

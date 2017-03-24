@@ -31,8 +31,8 @@ import com.JJ.controller.inventorymanagement.vo.InventoryVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryLocationVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductSubOptionInventoryVO;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
-import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
@@ -151,8 +151,8 @@ public class InventoryManagementController {
 				product.getQty() == null){
 			pass = false;
 		}else if(product.getSubOptionList().size() > 0){
-			for(SubOptionVO vo : product.getSubOptionList()){
-				if(vo.getSubOptionId() == null){
+			for(ProductSubOptionVO vo : product.getSubOptionList()){
+				if(vo.getProductSuboptionId() == null){
 					pass = false;
 					break;
 				}
@@ -183,12 +183,12 @@ public class InventoryManagementController {
 		}
 		*/
 		//for generating suboption
-		Iterator<SubOptionVO> i = product.getSubOptionList().iterator();
+		Iterator<ProductSubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
-			SubOptionVO subOptionVo = i.next();
-			SubOptionVO generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getSubOptionId());
+			ProductSubOptionVO subOptionVo = i.next();
+			ProductSubOptionVO generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getProductSuboptionId());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
-			subOptionVo.setSubOptionName(generatedSubOptionVo.getSubOptionName());
+			subOptionVo.setName(generatedSubOptionVo.getName());
 		}
 		for(BatchIntakeProductVO p : inventoryVO.getProductItems()){
 			if(p.hashCode() == product.hashCode()) {

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.SubModulePermissionTypeVO;
 import com.JJ.controller.common.vo.SubModulePermissionVO;
-import com.JJ.dao.RolesToPermissionCustomDbObjectMapper;
+import com.JJ.dao.PermissionCustomDbObjectMapper;
 import com.JJ.dao.SubModulePermissionDbObjectMapper;
 import com.JJ.dao.SubModulePermissionTypeDbObjectMapper;
 import com.JJ.model.RolesToPermissionCustomDbObject;
@@ -26,11 +26,11 @@ public class PermissionManagementService {
 	
 	private SubModulePermissionDbObjectMapper subModulePermissionDbObjectMapper;
 	private SubModulePermissionTypeDbObjectMapper subModulePermissionTypeDbObjectMapper;
-	private RolesToPermissionCustomDbObjectMapper rolesToPermissionCustomDbObjectMapper;
+	private PermissionCustomDbObjectMapper rolesToPermissionCustomDbObjectMapper;
 	@Autowired
 	public PermissionManagementService(SubModulePermissionDbObjectMapper subModulePermissionDbObjectMapper,
 			SubModulePermissionTypeDbObjectMapper subModulePermissionTypeDbObjectMapper,
-			RolesToPermissionCustomDbObjectMapper rolesToPermissionCustomDbObjectMapper) {
+			PermissionCustomDbObjectMapper rolesToPermissionCustomDbObjectMapper) {
 		this.subModulePermissionDbObjectMapper = subModulePermissionDbObjectMapper;
 		this.subModulePermissionTypeDbObjectMapper = subModulePermissionTypeDbObjectMapper;
 		this.rolesToPermissionCustomDbObjectMapper = rolesToPermissionCustomDbObjectMapper;
@@ -75,8 +75,20 @@ public class PermissionManagementService {
 	}
 	
 	private List<SubModulePermissionDbObject> convertToSubModulePermissionDbObjectList(
-			List<SubModulePermissionVO> asList) {
-		// TODO Auto-generated method stub
+			List<SubModulePermissionVO> voList) {
+		List<SubModulePermissionDbObject> objList = new ArrayList<SubModulePermissionDbObject>();
+		if(voList != null && voList.size() > 0){
+			for(SubModulePermissionVO vo : voList){
+				SubModulePermissionDbObject obj = new SubModulePermissionDbObject();
+				obj.setDeleteInd(vo.getDeleteInd());
+				obj.setPermissionId(vo.getPermissionId());
+				obj.setPermissionTypeId(vo.getPermissionTypeId());
+				obj.setRoleId(vo.getRoleId());
+				obj.setSubmoduleId(vo.getSubmoduleId());
+				obj.setVersion(vo.getVersion());
+				objList.add(obj);
+			}
+		}
 		return null;
 	}
 
@@ -86,13 +98,7 @@ public class PermissionManagementService {
 		}
 		SubModulePermissionDbObjectExample example = new SubModulePermissionDbObjectExample();
 		example.createCriteria().andRoleIdIn(roleIdList);
-		return convertToSubModulePerssionVO(subModulePermissionDbObjectMapper.selectByExample(example));
-	}
-	
-	private List<SubModulePermissionVO> convertToSubModulePerssionVO(
-			List<SubModulePermissionDbObject> selectByExample) {
-		// TODO Auto-generated method stub
-		return null;
+		return convertToSubModulePermissionVOList(subModulePermissionDbObjectMapper.selectByExample(example));
 	}
 
 	public List<SubModulePermissionVO> getSubmodulePermissionByRoleIdList(Map<String, List<String>> roleList){
@@ -119,9 +125,22 @@ public class PermissionManagementService {
 	}
 	
 	private List<SubModulePermissionTypeVO> convertToSubModulePermissionTypeVOList(
-			List<SubModulePermissionTypeDbObject> submodulepermissiontypeList) {
-		// TODO Auto-generated method stub
-		return null;
+			List<SubModulePermissionTypeDbObject> dbObjList) {
+		List<SubModulePermissionTypeVO> voList = new ArrayList<SubModulePermissionTypeVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(SubModulePermissionTypeDbObject obj : dbObjList){
+				SubModulePermissionTypeVO vo = new SubModulePermissionTypeVO();
+				vo.setDeleteInd(obj.getDeleteInd());
+				vo.setPermissionType(obj.getPermissionType());
+				vo.setSeqNum(obj.getSeqNum());
+				vo.setSubmoduleId(obj.getSubmoduleId());
+				vo.setTypeId(obj.getTypeId());
+				vo.setUrl(obj.getUrl());
+				vo.setVersion(obj.getVersion());
+				voList.add(vo);
+			}
+		}
+		return voList;
 	}
 
 	public SubModulePermissionTypeVO getSubmodulepermissiontypeByUrl(String url){
@@ -145,19 +164,35 @@ public class PermissionManagementService {
 	}
 	
 	public SubModulePermissionTypeVO findById(Integer id) {
-		return subModulePermissionTypeDbObjectMapper.selectByPrimaryKey(id);
+		SubModulePermissionTypeDbObject dbObj = subModulePermissionTypeDbObjectMapper.selectByPrimaryKey(id);
+		List<SubModulePermissionTypeVO> voList= convertToSubModulePermissionTypeVOList(Arrays.asList(dbObj));
+		if(voList != null && voList.size() > 0){
+			return voList.get(0);
+		}
+		return new SubModulePermissionTypeVO();
 	}
 	
 	public void saveSubmodulepermissiontype(SubModulePermissionTypeVO submodulepermissiontype) {
-		subModulePermissionTypeDbObjectMapper.insert(submodulepermissiontype);
+		if(submodulepermissiontype != null){
+			SubModulePermissionTypeDbObject dbObj = convertToSubModulePermissionTypeDbObjectList(Arrays.asList(submodulepermissiontype)).get(0);
+			subModulePermissionTypeDbObjectMapper.insert(dbObj);
+		}
+		
 	}
 	
+	private List<SubModulePermissionTypeDbObject> convertToSubModulePermissionTypeDbObjectList(
+			List<SubModulePermissionTypeVO> asList) {
+		return null;
+		
+	}
+
 	public void deleteSubmodulepermissiontype(Integer id){
 		subModulePermissionTypeDbObjectMapper.deleteByPrimaryKey(id);
 	}
 	
 	public void updateSubmodulepermissiontype(SubModulePermissionTypeVO submodulepermissiontype) {
-		subModulePermissionTypeDbObjectMapper.updateByPrimaryKeySelective(submodulepermissiontype);
+		SubModulePermissionTypeDbObject obj = convertToSubModulePermissionTypeDbObjectList(Arrays.asList(submodulepermissiontype)).get(0);
+		subModulePermissionTypeDbObjectMapper.updateByPrimaryKeySelective(obj);
 	}
 
 	//Submodulepermissiontype functions END

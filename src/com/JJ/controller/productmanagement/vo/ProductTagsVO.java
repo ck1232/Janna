@@ -1,9 +1,11 @@
-package com.JJ.model;
+package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProductTagsDbObject extends Base implements Serializable {
+import com.JJ.model.Base;
+
+public class ProductTagsVO extends Base implements Serializable {
     private Integer tagsId;
 
 	private String name;
