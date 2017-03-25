@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.JJ.lookup.VO.PaymentModeVO;
 import com.JJ.lookupservice.PaymentModeService;
-import com.JJ.model.PaymentMode;
 @Lazy
 @Component
 public class PaymentModeLookup {
 	private static final Logger logger = Logger.getLogger(PaymentModeLookup.class);
 	private PaymentModeService paymentModeService;
-	private List<PaymentMode> paymentModeList;
-	private Map<String, PaymentMode> paymentModeByValueMap = new HashMap<String, PaymentMode>();
-	private Map<Integer, PaymentMode> paymentModeByIdMap = new HashMap<Integer, PaymentMode>();
+	private List<PaymentModeVO> paymentModeList;
+	private Map<String, PaymentModeVO> paymentModeByValueMap = new HashMap<String, PaymentModeVO>();
+	private Map<Integer, PaymentModeVO> paymentModeByIdMap = new HashMap<Integer, PaymentModeVO>();
 	
 	@Autowired
 	public PaymentModeLookup(PaymentModeService paymentModeService){
@@ -29,33 +29,33 @@ public class PaymentModeLookup {
 	private void load() {
 		paymentModeList = paymentModeService.getPaymentMode();
 		if(paymentModeList != null){
-			for(PaymentMode paymentMode : paymentModeList){
-				paymentModeByValueMap.put(paymentMode.getMode(), paymentMode);
-				paymentModeByIdMap.put(paymentMode.getPaymentmodeid(), paymentMode);
+			for(PaymentModeVO paymentMode : paymentModeList){
+				paymentModeByValueMap.put(paymentMode.getPaymentMode(), paymentMode);
+				paymentModeByIdMap.put(paymentMode.getPaymentModeId(), paymentMode);
 			}
 		}
 	}
-	public List<PaymentMode> getPaymentModeList() {
+	public List<PaymentModeVO> getPaymentModeList() {
 		return paymentModeList;
 	}
-	public void setPaymentModeList(List<PaymentMode> paymentModeList) {
+	public void setPaymentModeList(List<PaymentModeVO> paymentModeList) {
 		this.paymentModeList = paymentModeList;
 	}
-	public Map<String, PaymentMode> getPaymentModeByValueMap() {
+	public Map<String, PaymentModeVO> getPaymentModeByValueMap() {
 		return paymentModeByValueMap;
 	}
 	public void setPaymentModeByValueMap(
-			Map<String, PaymentMode> paymentModeByValueMap) {
+			Map<String, PaymentModeVO> paymentModeByValueMap) {
 		this.paymentModeByValueMap = paymentModeByValueMap;
 	}
-	public Map<Integer, PaymentMode> getPaymentModeByIdMap() {
+	public Map<Integer, PaymentModeVO> getPaymentModeByIdMap() {
 		return paymentModeByIdMap;
 	}
-	public void setPaymentModeByIdMap(Map<Integer, PaymentMode> paymentModeByIdMap) {
+	public void setPaymentModeByIdMap(Map<Integer, PaymentModeVO> paymentModeByIdMap) {
 		this.paymentModeByIdMap = paymentModeByIdMap;
 	}
 	
 	public String getPaymentModeById(Integer id){
-		return paymentModeByIdMap.get(id).getMode();
+		return paymentModeByIdMap.get(id).getPaymentMode();
 	}
 }

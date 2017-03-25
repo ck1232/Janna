@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.JJ.lookup.VO.ExpenseTypeVO;
 import com.JJ.lookupservice.ExpenseTypeService;
-import com.JJ.model.ExpenseType;
 @Lazy
 @Component
 public class ExpenseTypeLookup {
 	private static final Logger logger = Logger.getLogger(ExpenseTypeLookup.class);
 	private ExpenseTypeService expenseTypeService;
-	private List<ExpenseType> expenseTypeList;
-	private Map<String, ExpenseType> expenseTypeByValueMap = new HashMap<String, ExpenseType>();
-	private Map<Integer, ExpenseType> expenseTypeByIdMap = new HashMap<Integer, ExpenseType>();
+	private List<ExpenseTypeVO> expenseTypeList;
+	private Map<String, ExpenseTypeVO> expenseTypeByValueMap = new HashMap<String, ExpenseTypeVO>();
+	private Map<Integer, ExpenseTypeVO> expenseTypeByIdMap = new HashMap<Integer, ExpenseTypeVO>();
 	private Map<String, String> expenseTypeMap = new LinkedHashMap<String,String>();
 	
 	@Autowired
@@ -31,29 +31,29 @@ public class ExpenseTypeLookup {
 	private void load() {
 		expenseTypeList = expenseTypeService.getExpenseType();
 		if(expenseTypeList != null){
-			for(ExpenseType expenseType : expenseTypeList){
-				expenseTypeByValueMap.put(expenseType.getExpensetype(), expenseType);
-				expenseTypeByIdMap.put(expenseType.getExpensetypeid(), expenseType);
-				expenseTypeMap.put(expenseType.getExpensetypeid().toString(), expenseType.getExpensetype());
+			for(ExpenseTypeVO expenseType : expenseTypeList){
+				expenseTypeByValueMap.put(expenseType.getExpenseType(), expenseType);
+				expenseTypeByIdMap.put(expenseType.getExpenseTypeId(), expenseType);
+				expenseTypeMap.put(expenseType.getExpenseTypeId().toString(), expenseType.getExpenseType());
 			}
 		}
 	}
-	public List<ExpenseType> getExpenseTypeList() {
+	public List<ExpenseTypeVO> getExpenseTypeList() {
 		return expenseTypeList;
 	}
-	public void setExpenseTypeList(List<ExpenseType> expenseTypeList) {
+	public void setExpenseTypeList(List<ExpenseTypeVO> expenseTypeList) {
 		this.expenseTypeList = expenseTypeList;
 	}
-	public Map<String, ExpenseType> getExpenseTypeByValueMap() {
+	public Map<String, ExpenseTypeVO> getExpenseTypeByValueMap() {
 		return expenseTypeByValueMap;
 	}
-	public void setExpenseTypeByValueMap(Map<String, ExpenseType> expenseTypeByValueMap) {
+	public void setExpenseTypeByValueMap(Map<String, ExpenseTypeVO> expenseTypeByValueMap) {
 		this.expenseTypeByValueMap = expenseTypeByValueMap;
 	}
-	public Map<Integer, ExpenseType> getExpenseTypeByIdMap() {
+	public Map<Integer, ExpenseTypeVO> getExpenseTypeByIdMap() {
 		return expenseTypeByIdMap;
 	}
-	public void setExpenseTypeByIdMap(Map<Integer, ExpenseType> expenseTypeByIdMap) {
+	public void setExpenseTypeByIdMap(Map<Integer, ExpenseTypeVO> expenseTypeByIdMap) {
 		this.expenseTypeByIdMap = expenseTypeByIdMap;
 	}
 	public Map<String, String> getExpenseTypeMap() {
@@ -64,6 +64,6 @@ public class ExpenseTypeLookup {
 	}
 	
 	public String getExpenseTypeById(Integer id){
-		return expenseTypeByIdMap.get(id).getExpensetype();
+		return expenseTypeByIdMap.get(id).getExpenseType();
 	}
 }
