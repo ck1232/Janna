@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Product;
-import com.JJ.model.Productcategory;
-import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
@@ -63,25 +63,18 @@ public class ProductCategoryManagementController {
 	@RequestMapping(value = "/getProductCategoryList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getProductCategoryList() {
 		logger.debug("getting Product Category list");
-		List<Productcategory> productCategoryList = productCategoryManagementService.getAllCategories();
-		if(productCategoryList != null){
-			for(Productcategory category: productCategoryList) {
-				category.setDisplayindString();
-				category.setIsparentString();
-			}
-		}
-		
+		List<ProductCategoryVO> productCategoryList = productCategoryManagementService.getAllCategories();
 		return GeneralUtils.convertListToJSONString(productCategoryList);
 	}
 	
 	@RequestMapping(value = "/createProductCategory", method = RequestMethod.GET)
     public String showAddProductCategoryForm(Model model) {  
     	logger.debug("loading showAddProductCategoryForm");
-    	Productcategory productcategory = new Productcategory();
-    	productcategory.setIsparent(true);
-    	productcategory.setDisplayind(true);
+    	ProductCategoryVO productCategoryVO = new ProductCategoryVO();
+    	productCategoryVO.setIsParent("1");
+    	productCategoryVO.setDisplayInd("1");
     	
-    	model.addAttribute("categoryForm", productcategory);
+    	model.addAttribute("categoryForm", productCategoryVO);
         return "createProductCategory";  
     }  
 	
@@ -91,21 +84,21 @@ public class ProductCategoryManagementController {
 	}
 	
 	@RequestMapping(value = "/createProductCategory", method = RequestMethod.POST)
-    public String saveProductCategory(@ModelAttribute("categoryForm") @Validated Productcategory productcategory, 
+    public String saveProductCategory(@ModelAttribute("categoryForm") @Validated ProductCategoryVO productCategoryVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {  
-		productcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
-		logger.debug("saveProductcategory() : " + productcategory.toString());
+		productCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+		logger.debug("saveProductcategory() : " + productCategoryVO.toString());
 		if (result.hasErrors()) {
 			return "createProductCategory";
 		} else {
-			productCategoryManagementService.saveProductCategory(productcategory);
-			if(!productcategory.getIsparent()) {
-				Productsubcategory productsubcategory = new Productsubcategory();
-				productsubcategory.setName(productcategory.getName());
-		    	productsubcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
-		    	productsubcategory.setProductcategoryid(new Integer(productcategory.getId()));
-		    	productsubcategory.setDisplayind(productcategory.getDisplayind());
-				productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
+			productCategoryManagementService.saveProductCategory(productCategoryVO);
+			if(!productCategoryVO.getIsParent().equals("1")) {
+				ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
+				productSubCategoryVO.setName(productCategoryVO.getCategoryName());
+		    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+		    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
+		    	productSubCategoryVO.setDisplayInd(productCategoryVO.getDisplayInd());
+				productSubCategoryManagementService.saveProductSubCategory(productSubCategoryVO);
 			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product Category added successfully!");
@@ -137,59 +130,59 @@ public class ProductCategoryManagementController {
 	@RequestMapping(value = "/updateProductCategory", method = RequestMethod.POST)
 	public String getCategoryToUpdate(@RequestParam("editBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Productcategory productcategory = productCategoryManagementService.findById(new Integer(id));
-		if (productcategory == null) {
+		ProductCategoryVO productCategoryVO = productCategoryManagementService.findById(new Integer(id));
+		if (productCategoryVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Product Category not found");
 		}
-		model.addAttribute("categoryForm", productcategory);
+		model.addAttribute("categoryForm", productCategoryVO);
 		return "updateProductCategory";
 	}
 	
 	@RequestMapping(value = "/updateProductCategory/{id}", method = RequestMethod.GET)
 	public String getCategoryToUpdateByRedirect(@PathVariable String id, Model model) {
 		logger.debug("id = " + id);
-		Productcategory productcategory = productCategoryManagementService.findById(new Integer(id));
-		if (productcategory == null) {
+		ProductCategoryVO productCategoryVO = productCategoryManagementService.findById(new Integer(id));
+		if (productCategoryVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Product Category not found");
 		}
-		model.addAttribute("categoryForm", productcategory);
+		model.addAttribute("categoryForm", productCategoryVO);
 		return "updateProductCategory";
 	}
 	
 	@RequestMapping(value = "/updateProductCategoryToDb", method = RequestMethod.POST)
-	public String updateProductCategory(@ModelAttribute("categoryForm") @Validated Productcategory productcategory,
+	public String updateProductCategory(@ModelAttribute("categoryForm") @Validated ProductCategoryVO productCategoryVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateProductCategory() : " + productcategory.toString());
+		logger.debug("updateProductCategory() : " + productCategoryVO.toString());
 		
 		if (result.hasErrors()) {
 			return "updateProductCategory";
 		} else {
-			Productcategory currentCategory = productCategoryManagementService.findById(productcategory.getId());
-			if(productcategory.getIsparent() != currentCategory.getIsparent()){ // to parent
+			ProductCategoryVO currentCategory = productCategoryManagementService.findById(productCategoryVO.getCategoryId());
+			if(productCategoryVO.getIsParent() != currentCategory.getIsParent()){ // to parent
 				//check if have products
-				List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productcategory.getId());
-				for(Productsubcategory psc: subcategoryList) {
-					List<Product> productList = productService.getAllProductsBySubCategory(psc.getId());
+				List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productCategoryVO.getCategoryId());
+				for(ProductSubCategoryVO psc: subcategoryList) {
+					List<ProductVO> productList = productService.getAllProductsBySubCategory(psc.getSubCategoryId());
 					if(productList.size() > 0){
 						redirectAttributes.addFlashAttribute("css", "danger");
 						redirectAttributes.addFlashAttribute("msg", "Please remove products from the category!");
-						return "redirect:updateProductCategory/" + productcategory.getId();
+						return "redirect:updateProductCategory/" + productCategoryVO.getCategoryId();
 						
 					}
 				}
 			}
-			productSubCategoryManagementService.deleteProductSubCategoryByCategory(productcategory.getId());
-			productCategoryManagementService.updateProductcategory(productcategory);
-			if(!productcategory.getIsparent()) {
-				Productsubcategory productsubcategory = new Productsubcategory();
-				productsubcategory.setName(productcategory.getName());
-		    	productsubcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
-		    	productsubcategory.setProductcategoryid(new Integer(productcategory.getId()));
-		    	productsubcategory.setDisplayind(productcategory.getDisplayind());
-				productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
+			productSubCategoryManagementService.deleteProductSubCategoryByCategory(productCategoryVO.getCategoryId());
+			productCategoryManagementService.updateProductcategory(productCategoryVO);
+			if(!productCategoryVO.getIsParent().equals("1")) {
+				ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
+				productSubCategoryVO.setName(productCategoryVO.getCategoryName());
+		    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+		    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
+		    	productSubCategoryVO.setDisplayInd(productCategoryVO.getDisplayInd());
+				productSubCategoryManagementService.saveProductSubCategory(productSubCategoryVO);
 			}
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Product Category updated successfully!");

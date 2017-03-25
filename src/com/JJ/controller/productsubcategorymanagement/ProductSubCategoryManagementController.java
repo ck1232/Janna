@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Productcategory;
-import com.JJ.model.Productsubcategory;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 import com.JJ.validator.ProductSubCategoryFormValidator;
@@ -50,12 +50,7 @@ public class ProductSubCategoryManagementController {
 	@RequestMapping(value = "/getProductSubCategoryListByCategory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getProductSubCategoryListByCategory(@RequestParam("categoryid") String id, Model model) {
 		logger.debug("getting product subcategory list by category");
-		List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(new Integer(id));
-		if(subcategoryList != null)	{
-			for(Productsubcategory subcategory: subcategoryList) {
-				subcategory.setDisplayindString();
-			}
-		}
+		List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(new Integer(id));
 		return GeneralUtils.convertListToJSONString(subcategoryList);
 	}
 	
@@ -63,24 +58,24 @@ public class ProductSubCategoryManagementController {
 	@RequestMapping(value = "/listSubCategory", method = RequestMethod.POST)
 	public String listSubCategory(@RequestParam("manageSubCategoryBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		Productcategory productcategory = productCategoryManagementService.findById(new Integer(id));
-		if (productcategory == null) {
+		ProductCategoryVO productCategoryVO = productCategoryManagementService.findById(new Integer(id));
+		if (productCategoryVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Product Category not found");
 		}
-		model.addAttribute("category", productcategory);
+		model.addAttribute("category", productCategoryVO);
 		return "listSubCategory";
 	}
 	
 	@RequestMapping(value = "/listSubCategory/{id}", method = RequestMethod.GET)
 	public String listSubCategoryForRedirect(@PathVariable String id, Model model) {
 		logger.debug("id = " + id);
-		Productcategory productcategory = productCategoryManagementService.findById(new Integer(id));
-		if (productcategory == null) {
+		ProductCategoryVO productCategoryVO = productCategoryManagementService.findById(new Integer(id));
+		if (productCategoryVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Product Category not found");
 		}
-		model.addAttribute("category", productcategory);
+		model.addAttribute("category", productCategoryVO);
 		return "listSubCategory";
 	}
 	
@@ -88,17 +83,17 @@ public class ProductSubCategoryManagementController {
     public String showAddSubCategoryForm(@RequestParam("categoryid") String id, Model model, final RedirectAttributes redirectAttributes) {  
     	logger.debug("loading showAddProductCategoryForm");
     	
-    	List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(new Integer(id));
+    	List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(new Integer(id));
     	if(subcategoryList.size() >= 10){
     		redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Only 10 subcategory are allowed in each category!");
 			return "redirect:listSubCategory/"+id;
     	}
-    	Productsubcategory productsubcategory = new Productsubcategory();
-    	productsubcategory.setDeleteInd(GeneralUtils.NOT_DELETED);
-    	productsubcategory.setProductcategoryid(new Integer(id));
-    	productsubcategory.setDisplayind(true);
-    	model.addAttribute("subcategoryForm", productsubcategory);
+    	ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
+    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+    	productSubCategoryVO.setCategoryId(new Integer(id));
+    	productSubCategoryVO.setDisplayInd("1");
+    	model.addAttribute("subcategoryForm", productSubCategoryVO);
         return "createSubCategory";  
     }  
 	
@@ -108,17 +103,17 @@ public class ProductSubCategoryManagementController {
 	}
 	
 	@RequestMapping(value = "/createSubCategoryToDb", method = RequestMethod.POST)
-    public String saveSubCategory(@ModelAttribute("subcategoryForm") @Validated Productsubcategory productsubcategory, 
+    public String saveSubCategory(@ModelAttribute("subcategoryForm") @Validated ProductSubCategoryVO productSubCategoryVO, 
     		BindingResult result, final RedirectAttributes redirectAttributes) {  
     	
-		logger.debug("saveSubCategory() : " + productsubcategory.toString());
+		logger.debug("saveSubCategory() : " + productSubCategoryVO.toString());
 		if (result.hasErrors()) {
 			return "createSubCategory";
 		} else {
 			boolean pass = true;
-			List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productsubcategory.getProductcategoryid());
-			for(Productsubcategory psc: subcategoryList){
-				if(productsubcategory.getName().equals(psc.getName())) { //if exist name
+			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productSubCategoryVO.getCategoryId());
+			for(ProductSubCategoryVO psc: subcategoryList){
+				if(productSubCategoryVO.getName().equals(psc.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.submoduleform.name");;
 					pass = false;
 					break;
@@ -127,12 +122,12 @@ public class ProductSubCategoryManagementController {
 			if(!pass){
 				return "createSubCategory";
 			}
-			productSubCategoryManagementService.saveProductSubCategory(productsubcategory);
+			productSubCategoryManagementService.saveProductSubCategory(productSubCategoryVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "SubCategory added successfully!");
 			
 		}
-		return "redirect:listSubCategory/"+productsubcategory.getProductcategoryid();
+		return "redirect:listSubCategory/"+productSubCategoryVO.getCategoryId();
     }  
 	
 	@RequestMapping(value = "/deleteSubCategory", method = RequestMethod.POST)
@@ -157,28 +152,28 @@ public class ProductSubCategoryManagementController {
 	@RequestMapping(value = "/updateSubCategory", method = RequestMethod.POST)
 	public String getSubCategoryToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		Productsubcategory subcategory = productSubCategoryManagementService.findById(new Integer(id));
-		logger.debug("Loading update subcategory page for " + subcategory.toString());
+		ProductSubCategoryVO productSubCategoryVO = productSubCategoryManagementService.findById(new Integer(id));
+		logger.debug("Loading update subcategory page for " + productSubCategoryVO.toString());
 		
-		model.addAttribute("subcategoryForm", subcategory);
+		model.addAttribute("subcategoryForm", productSubCategoryVO);
 		
 		return "updateSubCategory";
 	}
 	
 	@RequestMapping(value = "/updateSubCategoryToDb", method = RequestMethod.POST)
-	public String updateSubCategory(@ModelAttribute("subcategoryForm") @Validated Productsubcategory productsubcategory,
+	public String updateSubCategory(@ModelAttribute("subcategoryForm") @Validated ProductSubCategoryVO productSubCategoryVO,
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
-		logger.debug("updateSubCategory() : " + productsubcategory.toString());
+		logger.debug("updateSubCategory() : " + productSubCategoryVO.toString());
 		
 		if (result.hasErrors()) {
 			return "updateSubCategory";
 		} else {
 			boolean pass = true;
-			List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productsubcategory.getProductcategoryid());
-			Productsubcategory currentpsc = productSubCategoryManagementService.findById(productsubcategory.getId());
-			for(Productsubcategory psc: subcategoryList){
-				if(!currentpsc.getName().equals(psc.getName()) && productsubcategory.getName().equals(psc.getName())) { //if exist name
+			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productSubCategoryVO.getCategoryId());
+			ProductSubCategoryVO currentpsc = productSubCategoryManagementService.findById(productSubCategoryVO.getSubCategoryId());
+			for(ProductSubCategoryVO psc: subcategoryList){
+				if(!currentpsc.getName().equals(psc.getName()) && productSubCategoryVO.getName().equals(psc.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.submoduleform.name");;
 					pass = false;
 					break;
@@ -191,8 +186,8 @@ public class ProductSubCategoryManagementController {
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Subcategory updated successfully!");
 		}
-		productSubCategoryManagementService.updateProductsubcategory(productsubcategory);
-		return "redirect:listSubCategory/"+productsubcategory.getProductcategoryid();
+		productSubCategoryManagementService.updateProductsubcategory(productSubCategoryVO);
+		return "redirect:listSubCategory/"+productSubCategoryVO.getCategoryId();
 	}
 
 	

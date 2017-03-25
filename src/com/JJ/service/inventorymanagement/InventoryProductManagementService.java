@@ -38,6 +38,7 @@ import com.JJ.model.ViewProductInventoryLocationDbObject;
 import com.JJ.model.ViewProductInventoryLocationDbObjectExample;
 import com.JJ.model.ViewProductSubOptionInventoryDbObject;
 import com.JJ.model.ViewProductSubOptionInventoryDbObjectExample;
+import com.JJ.service.productmanagement.ItemCodeService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
 
@@ -51,6 +52,7 @@ public class InventoryProductManagementService {
 	private ProductInventoryDbObjectMapper productInventoryDbObjectMapper;
 	private ProductService productService;
 	private StorageLocationManagementService storageLocationManagementService;
+	private ItemCodeService itemCodeService;
 	
 	@Autowired
 	public InventoryProductManagementService(ViewProductInventoryDbObjectMapper viewProductInventoryDbObjectMapper,
@@ -58,13 +60,15 @@ public class InventoryProductManagementService {
 			ViewProductSubOptionInventoryDbObjectMapper viewProductSubOptionInventoryDbObjectMapper,
 			ProductInventoryDbObjectMapper inventoryMapper,
 			ProductService productService,
-			StorageLocationManagementService storageLocationManagementService) {
+			StorageLocationManagementService storageLocationManagementService,
+			ItemCodeService itemCodeService) {
 		this.viewProductInventoryDbObjectMapper = viewProductInventoryDbObjectMapper;
 		this.viewProductInventoryLocationDbObjectMapper = viewProductInventoryLocationDbObjectMapper;
 		this.viewProductSubOptionInventoryDbObjectMapper = viewProductSubOptionInventoryDbObjectMapper;
 		this.productInventoryDbObjectMapper = inventoryMapper;
 		this.productService = productService;
 		this.storageLocationManagementService = storageLocationManagementService;
+		this.itemCodeService = itemCodeService;
 	}
 	
 	/* Inventory Products START */
@@ -170,7 +174,7 @@ public class InventoryProductManagementService {
 		List<ProductInventoryDbObject> dbObjList = productInventoryDbObjectMapper.selectByExample(productInventoryExample);
 		List<ProductInventoryVO> productInventoryList = convertToProductInventoryVO(dbObjList);
 		List<ProductVO> productList = productService.getAllProducts();
-		List<ViewItemCodeVO> itemCodeList = productService.getAllItemCode();
+		List<ViewItemCodeVO> itemCodeList = itemCodeService.getAllItemCode();
 		List<ProductSubOptionRsVO> productSuboptionList = productService.getAllProductSubOptionVo();
 		List<StorageLocationVO> storageLocationList = storageLocationManagementService.getAllStorageLocations();
 		

@@ -11,13 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
 import com.JJ.controller.batchintakemanagement.vo.BatchProductRsVO;
 import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
-import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.dao.BatchProductRsDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.BatchProductRsDbObject;
 import com.JJ.model.BatchProductRsDbObjectExample;
 import com.JJ.service.productmanagement.ProductService;
+import com.JJ.service.productmanagement.ProductSubOptionRsService;
+import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
 @Transactional(rollbackFor=Exception.class)
@@ -25,12 +27,16 @@ public class BatchProductRSManagementService {
 	
 	private BatchProductRsDbObjectMapper batchProductRsDbObjectMapper;
 	private ProductService productService;
-	
+	private ProductSubOptionRsService productSubOptionRsService;
+	private ProductSubOptionManagementService productSubOptionManagementService;
 	@Autowired
 	public BatchProductRSManagementService(BatchProductRsDbObjectMapper batchProductRsDbObjectMapper,
-			ProductService productService) {
+			ProductService productService, ProductSubOptionRsService productSubOptionRsService,
+			ProductSubOptionManagementService productSubOptionManagementService) {
 		this.batchProductRsDbObjectMapper = batchProductRsDbObjectMapper;
 		this.productService = productService;
+		this.productSubOptionRsService = productSubOptionRsService;
+		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
 	public BatchProductRsVO findById(Integer id) {
@@ -178,27 +184,27 @@ public class BatchProductRSManagementService {
 		if(rsList.size() != 0){
 			for(BatchProductRsVO rs: rsList){
 				BatchIntakeProductVO batchProduct = new BatchIntakeProductVO();
-				ProductSubOptionRsVO productoptionrs = productService.getProductSubOptionRsById(rs.getProductSubOptionId());
+				ProductSubOptionRsVO productoptionrs = productSubOptionRsService.getProductSubOptionRsById(rs.getProductSubOptionId());
 				ProductVO product = productService.getProductsById(productoptionrs.getProductId());
 				batchProduct.setProduct(product);
 				batchProduct.setQty(rs.getQty());
 				batchProduct.setUnitcost(rs.getUnitCost());
 				batchProduct.setBatchProductId(rs.getBatchProductRsId());
-				batchProduct.setSubOptionList(new ArrayList<SubOptionVO>());
+				batchProduct.setSubOptionList(new ArrayList<ProductSubOptionVO>());
 				if(productoptionrs.getSuboption1Id() != null && productoptionrs.getSuboption1Id() > 0){
-					SubOptionVO subOption1 = productService.getSubOptionVo(productoptionrs.getSuboption1Id());
+					ProductSubOptionVO subOption1 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption1Id());
 					if(subOption1 != null){
 						batchProduct.getSubOptionList().add(subOption1);
 					}
 				}
 				if(productoptionrs.getSuboption2Id() != null && productoptionrs.getSuboption2Id() > 0){
-					SubOptionVO subOption2 = productService.getSubOptionVo(productoptionrs.getSuboption2Id());
+					ProductSubOptionVO subOption2 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption2Id());
 					if(subOption2 != null){
 						batchProduct.getSubOptionList().add(subOption2);
 					}
 				}
 				if(productoptionrs.getSuboption3Id() != null && productoptionrs.getSuboption3Id() > 0){
-					SubOptionVO subOption3 = productService.getSubOptionVo(productoptionrs.getSuboption3Id());
+					ProductSubOptionVO subOption3 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption3Id());
 					if(subOption3 != null){
 						batchProduct.getSubOptionList().add(subOption3);
 					}

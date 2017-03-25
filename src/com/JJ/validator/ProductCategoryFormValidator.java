@@ -5,19 +5,19 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.JJ.model.Productcategory;
+import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
 
 @Component
 public class ProductCategoryFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Productcategory.class.equals(clazz);
+		return ProductCategoryVO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Productcategory productcategory = (Productcategory) target;
+//		ProductCategoryVO productCategoryVO = (ProductCategoryVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.productcategoryform.name");
 		

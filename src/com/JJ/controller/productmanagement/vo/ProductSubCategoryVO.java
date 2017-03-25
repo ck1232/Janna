@@ -13,6 +13,8 @@ public class ProductSubCategoryVO extends Base implements Serializable {
     private Integer categoryId;
 
     private String displayInd;
+    
+    private String displayIndString;
 
     private Integer version;
 
@@ -60,7 +62,15 @@ public class ProductSubCategoryVO extends Base implements Serializable {
         this.displayInd = displayInd == null ? null : displayInd.trim();
     }
 
-    public Integer getVersion() {
+    public String getDisplayIndString() {
+		return displayIndString;
+	}
+
+	public void setDisplayIndString(String displayIndString) {
+		this.displayIndString = displayIndString;
+	}
+
+	public Integer getVersion() {
         return version;
     }
 

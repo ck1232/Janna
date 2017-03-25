@@ -1,73 +1,134 @@
 package com.JJ.service.productsubcategorymanagement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
-import com.JJ.dao.ProductsubcategoryMapper;
+import com.JJ.dao.ProductSubCategoryDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Productsubcategory;
-import com.JJ.model.ProductsubcategoryExample;
+import com.JJ.model.ProductSubCategoryDbObject;
+import com.JJ.model.ProductSubCategoryDbObjectExample;
 
 @Service
 @Transactional
 public class ProductSubCategoryManagementService {
-	private ProductsubcategoryMapper productSubCategoryMapper;
+	private ProductSubCategoryDbObjectMapper productSubCategoryDbObjectMapper;
 	
 	@Autowired
-	public ProductSubCategoryManagementService(ProductsubcategoryMapper productSubCategoryMapper) {
-		this.productSubCategoryMapper = productSubCategoryMapper;
+	public ProductSubCategoryManagementService(ProductSubCategoryDbObjectMapper ProductSubCategoryDbObjectMapper) {
+		this.productSubCategoryDbObjectMapper = ProductSubCategoryDbObjectMapper;
 	}
 	
-	public Productsubcategory findById(Integer id) {
-		return productSubCategoryMapper.selectByPrimaryKey(id);
+	public ProductSubCategoryVO findById(Integer id) {
+		ProductSubCategoryDbObject productSubCategoryDbObject = productSubCategoryDbObjectMapper.selectByPrimaryKey(id);
+		if(productSubCategoryDbObject != null && productSubCategoryDbObject.getSubCategoryId() != null){
+			return convertToProductSubCategoryVOList(Arrays.asList(productSubCategoryDbObject)).get(0);
+		}else{
+			return new ProductSubCategoryVO();
+		}
 	}
 	
 	public List<ProductSubCategoryVO> getAllSubCategories() {
-		ProductsubcategoryExample subcategoryExample = new ProductsubcategoryExample();
-		subcategoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Productsubcategory> subcategoryList = productSubCategoryMapper.selectByExample(subcategoryExample);
-		return subcategoryList;
+		ProductSubCategoryDbObjectExample productSubCategoryDbObjectExample = new ProductSubCategoryDbObjectExample();
+		productSubCategoryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToProductSubCategoryVOList(productSubCategoryDbObjectMapper.selectByExample(productSubCategoryDbObjectExample));
 	}
 	
-	public List<Productsubcategory> getAllProductSubCategoryByCategory(Integer productcategoryid) {
-		ProductsubcategoryExample subcategoryExample = new ProductsubcategoryExample();
-		subcategoryExample.createCriteria().andProductcategoryidEqualTo(productcategoryid)
-										.andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Productsubcategory> subcategoryList = productSubCategoryMapper.selectByExample(subcategoryExample);
-		return subcategoryList;
+	public Map<Integer, ProductSubCategoryVO> getProductsubcategoryMap(){
+		List<ProductSubCategoryVO> subcatergoryList = this.getAllSubCategories();
+		Map<Integer, ProductSubCategoryVO> map = new HashMap<Integer, ProductSubCategoryVO>();
+		if(subcatergoryList != null && subcatergoryList.size() > 0){
+			for(ProductSubCategoryVO subcategory : subcatergoryList){
+				map.put(subcategory.getSubCategoryId(), subcategory);
+			}
+		}
+		return map;
 	}
 	
-	public void saveProductSubCategory(Productsubcategory productsubcategory) {
-		productSubCategoryMapper.insert(productsubcategory);
+	public List<ProductSubCategoryVO> getAllProductSubCategoryByCategory(Integer productcategoryid) {
+		ProductSubCategoryDbObjectExample subcategoryExample = new ProductSubCategoryDbObjectExample();
+		subcategoryExample.createCriteria().andCategoryIdEqualTo(productcategoryid).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToProductSubCategoryVOList(productSubCategoryDbObjectMapper.selectByExample(subcategoryExample));
+	}
+	
+	public void saveProductSubCategory(ProductSubCategoryVO productSubCategoryVO) {
+		if(productSubCategoryVO != null){
+			ProductSubCategoryDbObject dbObj = convertToProductSubCategoryDbObjectList(Arrays.asList(productSubCategoryVO)).get(0);
+			productSubCategoryDbObjectMapper.insert(dbObj);
+		}
 	}
 	
 	public void deleteProductSubCategory(Integer id) {
-		Productsubcategory productsubcategory = findById(id);
-		if(productsubcategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-			productsubcategory.setDeleteInd(GeneralUtils.DELETED);
-			productSubCategoryMapper.updateByPrimaryKey(productsubcategory);
-		}
+		deleteProductSubCategory(Arrays.asList(id));
+	}
+	
+	public void deleteProductSubCategory(List<Integer> idList) {
+		ProductSubCategoryDbObjectExample productSubCategoryDbObjectExample = new ProductSubCategoryDbObjectExample();
+		productSubCategoryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSubCategoryIdIn(idList);
+		ProductSubCategoryDbObject dbObj = new ProductSubCategoryDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		productSubCategoryDbObjectMapper.updateByExampleSelective(dbObj, productSubCategoryDbObjectExample);
 	}
 	
 	public void deleteProductSubCategoryByCategory(Integer id) {
-		List<Productsubcategory> subcategoryList = getAllProductSubCategoryByCategory(id);
-		for(Productsubcategory psc: subcategoryList){
-			if(psc.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-				psc.setDeleteInd(GeneralUtils.DELETED);
-				productSubCategoryMapper.updateByPrimaryKey(psc);
-			}
+		if(id != null) {
+			ProductSubCategoryDbObjectExample productSubCategoryDbObjectExample = new ProductSubCategoryDbObjectExample();
+			productSubCategoryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andCategoryIdEqualTo(id);
+			ProductSubCategoryDbObject dbObj = new ProductSubCategoryDbObject();
+			dbObj.setDeleteInd(GeneralUtils.DELETED);
+			productSubCategoryDbObjectMapper.updateByExampleSelective(dbObj, productSubCategoryDbObjectExample);
 		}
 	}
 	
 	
+	public void updateProductsubcategory(ProductSubCategoryVO productSubCategoryVO) {
+		if(productSubCategoryVO != null && productSubCategoryVO.getDeleteInd() != null &&
+				productSubCategoryVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			ProductSubCategoryDbObject dbObj = convertToProductSubCategoryDbObjectList(Arrays.asList(productSubCategoryVO)).get(0);
+			productSubCategoryDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
+	}
 	
-	public void updateProductsubcategory(Productsubcategory productSubCategory) {
-		if(productSubCategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			productSubCategoryMapper.updateByPrimaryKeySelective(productSubCategory);
+	private List<ProductSubCategoryVO> convertToProductSubCategoryVOList(List<ProductSubCategoryDbObject> productSubCategoryDbObjectList) {
+		List<ProductSubCategoryVO> productSubCategoryVOList = new ArrayList<ProductSubCategoryVO>();
+		if(productSubCategoryDbObjectList != null && !productSubCategoryDbObjectList.isEmpty()) {
+			for(ProductSubCategoryDbObject dbObj : productSubCategoryDbObjectList) {
+				ProductSubCategoryVO vo = new ProductSubCategoryVO();
+				vo.setCategoryId(dbObj.getCategoryId());
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setDisplayInd(dbObj.getDisplayInd());
+				vo.setDisplayIndString(dbObj.getDisplayInd().equals("1") ? "Y" : "N");
+				vo.setName(dbObj.getName());
+				vo.setSubCategoryId(dbObj.getSubCategoryId());
+				vo.setVersion(dbObj.getVersion());
+				productSubCategoryVOList.add(vo);
+			}
+		}
+		return productSubCategoryVOList;
+	}
+	
+	private List<ProductSubCategoryDbObject> convertToProductSubCategoryDbObjectList(List<ProductSubCategoryVO> productSubCategoryVOList) {
+		List<ProductSubCategoryDbObject> productSubCategoryDbObjectList = new ArrayList<ProductSubCategoryDbObject>();
+		if(productSubCategoryVOList != null && !productSubCategoryVOList.isEmpty()) {
+			for(ProductSubCategoryVO vo : productSubCategoryVOList) {
+				ProductSubCategoryDbObject dbObj = new ProductSubCategoryDbObject();
+				dbObj.setCategoryId(vo.getCategoryId());
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setDisplayInd(vo.getDisplayInd());
+				dbObj.setName(vo.getName());
+				dbObj.setSubCategoryId(vo.getSubCategoryId());
+				dbObj.setVersion(vo.getVersion());
+				productSubCategoryDbObjectList.add(dbObj);
+			}
+		}
+		return productSubCategoryDbObjectList;
 	}
 
 }

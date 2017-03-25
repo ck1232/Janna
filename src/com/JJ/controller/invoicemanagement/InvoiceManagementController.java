@@ -43,8 +43,8 @@ import com.JJ.controller.common.vo.JsonResponseVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceUploadVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
+import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.lookup.PaymentModeLookup;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.validator.InvoiceSearchValidator;
@@ -60,7 +60,6 @@ public class InvoiceManagementController {
 	private InvoiceManagementService invoiceManagementService;
 	private PaymentManagementService paymentManagementService;
 	private InvoiceSearchValidator invoiceSearchValidator;
-	private PaymentModeLookup paymentModeLookup;
 	List<InvoiceVO> invoiceList;
 	InvoiceUploadVO invoiceUploadVo;
 	InvoiceSearchCriteria searchCriteria;
@@ -70,13 +69,11 @@ public class InvoiceManagementController {
 	public InvoiceManagementController(PaymentManagementController paymentManagementController,
 			InvoiceManagementService invoiceManagementService,
 			PaymentManagementService paymentManagementService,
-			InvoiceSearchValidator invoiceSearchValidator,
-			PaymentModeLookup paymentModeLookup) {
+			InvoiceSearchValidator invoiceSearchValidator) {
 		this.paymentManagementController = paymentManagementController;
 		this.invoiceManagementService = invoiceManagementService;
 		this.paymentManagementService = paymentManagementService;
 		this.invoiceSearchValidator = invoiceSearchValidator;
-		this.paymentModeLookup = paymentModeLookup;
 	}
 	
 	
@@ -113,13 +110,7 @@ public class InvoiceManagementController {
 			model.addAttribute("msg", "Invoice not found");
 		}else{
 			model.addAttribute("invoice", invoiceVO);
-			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("invoice", invoiceVO.getInvoiceid());
-			if(paymentList != null && paymentList.size() > 0){
-				for(Paymentdetail payment : paymentList) {
-					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
-					payment.setPaymentmodeString(paymentModeLookup.getPaymentModeById(payment.getPaymentmode()));
-				}
-			}
+			List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("invoice", invoiceVO.getInvoiceId());
 			model.addAttribute("paymentList", paymentList);
 		}
 		return "viewInvoice";

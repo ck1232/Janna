@@ -36,6 +36,7 @@ import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
+import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 import com.mysql.jdbc.StringUtils;
 
 
@@ -47,16 +48,17 @@ public class InventoryManagementController {
 	
 	private InventoryProductManagementService inventoryProductManagementService;
 	private ProductService productService;
-
+	private ProductSubOptionManagementService productSubOptionManagementService;
 	private InventoryVO inventoryVO;
 	private ProductVO productVo;
 	
 	private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	@Autowired
 	public InventoryManagementController(InventoryProductManagementService inventoryProductManagementService,
-			ProductService productService) {
+			ProductService productService, ProductSubOptionManagementService productSubOptionManagementService) {
 		this.inventoryProductManagementService = inventoryProductManagementService;
 		this.productService = productService;
+		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
 	
@@ -186,7 +188,7 @@ public class InventoryManagementController {
 		Iterator<ProductSubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
 			ProductSubOptionVO subOptionVo = i.next();
-			ProductSubOptionVO generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getProductSuboptionId());
+			ProductSubOptionVO generatedSubOptionVo = productSubOptionManagementService.getSubOptionVo(subOptionVo.getProductSuboptionId());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 			subOptionVo.setName(generatedSubOptionVo.getName());
 		}

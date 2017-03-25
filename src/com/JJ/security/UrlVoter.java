@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.Authentication;
@@ -15,14 +14,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Service;
 
-import com.JJ.service.permissionmanagement.PermissionManagementService;
-
 
 @Service
 public class UrlVoter implements AccessDecisionVoter<FilterInvocation>{
 	
-	@Autowired
-	private PermissionManagementService permissionManagementService;
 	private static final Logger logger = Logger.getLogger(UrlVoter.class);
     @Override
     public int vote(Authentication authentication, FilterInvocation fi, Collection<ConfigAttribute> collection) {

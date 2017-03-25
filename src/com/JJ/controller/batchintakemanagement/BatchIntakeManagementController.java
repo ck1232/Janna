@@ -41,6 +41,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.service.batchintakemanagement.BatchIntakeManagementService;
 import com.JJ.service.batchproductrsmanagement.BatchProductRSManagementService;
 import com.JJ.service.productmanagement.ProductService;
+import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 import com.JJ.service.storagelocationmanagement.StorageLocationManagementService;
 import com.JJ.validator.BatchIntakeFormValidator;
 import com.mysql.jdbc.StringUtils;
@@ -57,7 +58,7 @@ public class BatchIntakeManagementController {
 	private BatchProductRSManagementService batchProductRSManagementService;
 	private StorageLocationManagementService storageLocationManagementService;
 	private BatchIntakeFormValidator batchIntakeFormValidator;
-	
+	private ProductSubOptionManagementService productSubOptionManagementService;
 	private ProductVO productVo;
 	private List<BatchIntakeProductVO> batchIntakeProductList; 
 	
@@ -66,12 +67,14 @@ public class BatchIntakeManagementController {
 			ProductService productService,
 			BatchProductRSManagementService batchProductRSManagementService,
 			StorageLocationManagementService storageLocationManagementService,
-			BatchIntakeFormValidator batchIntakeFormValidator) {
+			BatchIntakeFormValidator batchIntakeFormValidator,
+			ProductSubOptionManagementService productSubOptionManagementService) {
 		this.batchIntakeManagementService = batchIntakeManagementService;
 		this.productService = productService;
 		this.batchProductRSManagementService = batchProductRSManagementService;
 		this.storageLocationManagementService = storageLocationManagementService;
 		this.batchIntakeFormValidator = batchIntakeFormValidator;
+		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
 	
@@ -299,7 +302,7 @@ public class BatchIntakeManagementController {
 		Iterator<ProductSubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
 			ProductSubOptionVO subOptionVo = i.next();
-			ProductSubOptionVO generatedSubOptionVo = productService.getSubOptionVo(subOptionVo.getProductSuboptionId());
+			ProductSubOptionVO generatedSubOptionVo = productSubOptionManagementService.getSubOptionVo(subOptionVo.getProductSuboptionId());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 			subOptionVo.setName(generatedSubOptionVo.getName());
 		}

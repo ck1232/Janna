@@ -8,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.discountmanagement.vo.DiscountVO;
 import com.JJ.controller.promotionmanagement.vo.PromotionVO;
 import com.JJ.dao.PromotionDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.DiscountDbObject;
-import com.JJ.model.DiscountDbObjectExample;
 import com.JJ.model.PromotionDbObject;
 import com.JJ.model.PromotionDbObjectExample;
 

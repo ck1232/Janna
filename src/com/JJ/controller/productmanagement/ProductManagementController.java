@@ -37,16 +37,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.common.vo.JsonResponseVO;
-import com.JJ.controller.productmanagement.vo.OptionVO;
+import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductOptionVO;
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
-import com.JJ.controller.productmanagement.vo.SubOptionVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Product;
-import com.JJ.model.Productcategory;
-import com.JJ.model.ProductimageWithBLOBs;
-import com.JJ.model.Productoption;
-import com.JJ.model.Productsubcategory;
+import com.JJ.model.ProductImageDbObjectWithBLOBs;
 import com.JJ.service.productcategorymanagement.ProductCategoryManagementService;
+import com.JJ.service.productmanagement.ProductImageService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productoptionmanagement.ProductOptionManagementService;
 import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
@@ -61,44 +60,48 @@ public class ProductManagementController {
 	private ProductCategoryManagementService productCategoryManagementService;
 	private ProductSubCategoryManagementService productSubCategoryManagementService;
     private ProductOptionManagementService productOptionManagementService;
+    private ProductImageService productImageService;
     private ProductVO newProduct;
-    private OptionVO selectedOption;
+    private ProductOptionVO selectedOption;
     private static final int code_limit = 6;
 	@Autowired
 	public ProductManagementController(ProductService productService, ProductCategoryManagementService productCategoryManagementService,
-			ProductSubCategoryManagementService productSubCategoryManagementService, ProductOptionManagementService productOptionManagementService){
+			ProductSubCategoryManagementService productSubCategoryManagementService, 
+			ProductOptionManagementService productOptionManagementService,
+			ProductImageService productImageService){
 		this.productService = productService;
 		this.productCategoryManagementService = productCategoryManagementService;
 		this.productSubCategoryManagementService = productSubCategoryManagementService;
 		this.productOptionManagementService = productOptionManagementService;
+		this.productImageService = productImageService;
 	}
 	
-	public List<Productcategory> getProductCategoryList(){
-		List<Productcategory> categoryList = productCategoryManagementService.getAllCategories();
+	public List<ProductCategoryVO> getProductCategoryList(){
+		List<ProductCategoryVO> categoryList = productCategoryManagementService.getAllCategories();
 		if(categoryList != null && categoryList.size() > 0){
-			List<Productsubcategory> subcategoryList = productSubCategoryManagementService.getAllSubCategories();
+			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllSubCategories();
 			if(subcategoryList != null && subcategoryList.size() > 0){
-				Map<Integer, List<Productsubcategory>> subcategoryMap = new HashMap<Integer, List<Productsubcategory>>();
-				for(Productsubcategory subcategory : subcategoryList){
-					if(!subcategoryMap.containsKey(subcategory.getProductcategoryid())){
-						subcategoryMap.put(subcategory.getProductcategoryid(), new ArrayList<Productsubcategory>());
+				Map<Integer, List<ProductSubCategoryVO>> subcategoryMap = new HashMap<Integer, List<ProductSubCategoryVO>>();
+				for(ProductSubCategoryVO subcategory : subcategoryList){
+					if(!subcategoryMap.containsKey(subcategory.getCategoryId())){
+						subcategoryMap.put(subcategory.getCategoryId(), new ArrayList<ProductSubCategoryVO>());
 					}
-					subcategoryMap.get(subcategory.getProductcategoryid()).add(subcategory);
+					subcategoryMap.get(subcategory.getCategoryId()).add(subcategory);
 				}
-				for(Productcategory category : categoryList){
-					category.setSubcategoryList(subcategoryMap.get(category.getId()));
+				for(ProductCategoryVO category : categoryList){
+					category.setSubcategoryList(subcategoryMap.get(category.getCategoryId()));
 				}
 			}
 			return categoryList;
 		}else{
-			return new ArrayList<Productcategory>();
+			return new ArrayList<ProductCategoryVO>();
 		}
 	}
 	
 	@RequestMapping("/listProduct")  
     public String listProduct(HttpSession session, Model model) {
     	logger.debug("loading listProduct");
-    	List<Product> productList = productService.getAllProducts();
+    	List<ProductVO> productList = productService.getAllProducts();
     	model.addAttribute("productList", productList);
         return "listProduct";  
     } 
@@ -106,7 +109,7 @@ public class ProductManagementController {
 	@RequestMapping(value = "/getProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getProductList() {
 		logger.debug("getting Product list");
-		List<Product> productList = productService.getAllProducts();
+		List<ProductVO> productList = productService.getAllProducts();
 		return GeneralUtils.convertListToJSONString(productList);
 	}
 	
@@ -141,7 +144,7 @@ public class ProductManagementController {
 		if(newProduct != null && newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
 			return GeneralUtils.convertListToJSONString(newProduct.getOptionList());
 		}else{
-			return GeneralUtils.convertListToJSONString(new ArrayList<OptionVO>());
+			return GeneralUtils.convertListToJSONString(new ArrayList<ProductOptionVO>());
 		}
 	}
 	
@@ -235,9 +238,9 @@ public class ProductManagementController {
 	public @ResponseBody List<String> getProductOptionList() {
 		logger.debug("getting product productOption list");
 		List<String> productOptionList = new ArrayList<String>();
-		List<Productoption> optionList = productOptionManagementService.getAllProductoptions();
+		List<ProductOptionVO> optionList = productOptionManagementService.getAllProductoptions();
 		if(optionList != null && optionList.size() > 0){
-			for(Productoption option : optionList){
+			for(ProductOptionVO option : optionList){
 				productOptionList.add(option.getName());
 			}
 		}
@@ -285,10 +288,10 @@ public class ProductManagementController {
 		}
 		return code;
 	}
-	private OptionVO generateSubOptionCode(OptionVO option){
+	private ProductOptionVO generateSubOptionCode(ProductOptionVO option){
 		if(option != null && option.getSubOptionList() != null && option.getSubOptionList().size() > 0){
-			for(SubOptionVO subOption : option.getSubOptionList()){
-				String name = subOption.getSubOptionName();
+			for(ProductSubOptionVO subOption : option.getSubOptionList()){
+				String name = subOption.getName();
 				subOption.setCode(generateCode(name));
 			}
 		}
@@ -308,7 +311,7 @@ public class ProductManagementController {
 			
 		}
 		//TODO check for duplicate, add running number if duplicate
-		List<String> productCodeList = productService.getExisitingProductCode(product.getId());
+		List<String> productCodeList = productService.getExisitingProductCode(product.getProductId());
 		int counter = 1;
 		String productCode = product.getProductCode();
 		while(productCodeList.contains(productCode)){
@@ -317,7 +320,7 @@ public class ProductManagementController {
 		product.setProductCode(productCode);
 		//generate suboption code
 		if(product.getOptionList() != null && product.getOptionList().size() > 0){
-			for(OptionVO option : product.getOptionList()){
+			for(ProductOptionVO option : product.getOptionList()){
 				option = generateSubOptionCode(option);
 			}
 		}
@@ -326,13 +329,13 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping(value = "/saveAddOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO saveAddOption(@RequestBody OptionVO option) {
+	public @ResponseBody JsonResponseVO saveAddOption(@RequestBody ProductOptionVO option) {
 		if(newProduct != null){
 			if(newProduct.getOptionList() == null){
-				newProduct.setOptionList(new ArrayList<OptionVO>());
+				newProduct.setOptionList(new ArrayList<ProductOptionVO>());
 			}
-			for(OptionVO optionVo : newProduct.getOptionList()){
-				if(optionVo.getOptionName().equalsIgnoreCase(option.getOptionName())){
+			for(ProductOptionVO optionVo : newProduct.getOptionList()){
+				if(optionVo.getName().equalsIgnoreCase(option.getName())){
 					return new JsonResponseVO("fail", "Option Name already exists.");
 				}
 			}
@@ -342,17 +345,17 @@ public class ProductManagementController {
 	}
 	
 	@RequestMapping(value = "/saveEditOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO saveEditOption(@RequestBody OptionVO option) {
+	public @ResponseBody JsonResponseVO saveEditOption(@RequestBody ProductOptionVO option) {
 		if(newProduct != null && newProduct.getOptionList() != null){
-			for(OptionVO optionVo : newProduct.getOptionList()){
-				if(optionVo.getOptionName().equalsIgnoreCase(option.getOptionName()) && optionVo.getOptionId() != option.getOptionId()){
+			for(ProductOptionVO optionVo : newProduct.getOptionList()){
+				if(optionVo.getName().equalsIgnoreCase(option.getName()) && optionVo.getProductOptionId() != option.getProductOptionId()){
 					return new JsonResponseVO("fail", "Option Name already exists.");
 				}
 			}
 		}
 		if(selectedOption != null){
-			selectedOption.setOptionName(option.getOptionName());
-			selectedOption.setOptionId(option.getOptionId());
+			selectedOption.setName(option.getName());
+			selectedOption.setProductOptionId(option.getProductOptionId());
 			selectedOption.setSequence(option.getSequence());
 			selectedOption.setSubOptionList(option.getSubOptionList());
 			selectedOption = null;
@@ -362,34 +365,34 @@ public class ProductManagementController {
 	
 	//current not in use
 	@RequestMapping(value = "/sortOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO sortOption(@RequestBody List<OptionVO> optionList) {
+	public @ResponseBody JsonResponseVO sortOption(@RequestBody List<ProductOptionVO> optionList) {
 		logger.debug(optionList);
 		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/editOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody OptionVO sortOption(@RequestBody OptionVO optionName) {
-		logger.debug(optionName.getOptionName());
+	public @ResponseBody ProductOptionVO sortOption(@RequestBody ProductOptionVO optionName) {
+		logger.debug(optionName.getName());
 
 		if(newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
-			for(OptionVO option: newProduct.getOptionList()){
-				if(option.getOptionName() != null && option.getOptionName().compareToIgnoreCase(optionName.getOptionName()) == 0){
+			for(ProductOptionVO option: newProduct.getOptionList()){
+				if(option.getName() != null && option.getName().compareToIgnoreCase(optionName.getName()) == 0){
 					selectedOption = option;
 					return option;
 				}
 			}
 		}
-		return new OptionVO();
+		return new ProductOptionVO();
 	}
 	
 	@RequestMapping(value = "/deleteOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonResponseVO deleteOption(@RequestBody List<String> selectedOptions) {
 		if(selectedOptions != null && selectedOptions.size() > 0 && newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
 			for(String option : selectedOptions){
-				Iterator<OptionVO> i = newProduct.getOptionList().iterator();
+				Iterator<ProductOptionVO> i = newProduct.getOptionList().iterator();
 				while(i.hasNext()){
-					OptionVO optionVo = i.next();
-					if(optionVo.getOptionName() != null && optionVo.getOptionName().compareToIgnoreCase(option) == 0){
+					ProductOptionVO optionVo = i.next();
+					if(optionVo.getName() != null && optionVo.getName().compareToIgnoreCase(option) == 0){
 						i.remove();
 						break;
 					}
@@ -418,7 +421,7 @@ public class ProductManagementController {
 		
 		productService.saveProduct(product);
 		redirectAttributes.addFlashAttribute("css", "success");
-		if(product.getId() != null){
+		if(product.getProductId() != null){
 			redirectAttributes.addFlashAttribute("msg", "Product saved successfully!");
 		}else{
 			redirectAttributes.addFlashAttribute("msg", "Product added successfully!");
@@ -471,11 +474,11 @@ public class ProductManagementController {
 	
 	@RequestMapping(value="/getProductImage/{productId}", method = RequestMethod.GET)
 	public void getProductImage(@PathVariable Integer productId, HttpServletRequest request, HttpServletResponse response){
-		ProductimageWithBLOBs image = productService.getCoverImageByProductId(productId);
+		ProductImageDbObjectWithBLOBs image = productImageService.getCoverImageByProductId(productId);
 		if(image != null){
 			 try {
-				response.setContentType(image.getFiletype());
-				response.getOutputStream().write(image.getThumbnailimage(),0,image.getThumbnailimage().length);
+				response.setContentType(image.getFileType());
+				response.getOutputStream().write(image.getThumbNailImage(),0,image.getThumbNailImage().length);
 				response.getOutputStream().flush();  
 				return;
 			} catch (IOException e) {

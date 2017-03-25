@@ -1,14 +1,24 @@
-package com.JJ.controller.productmanagement.vo;
+package com.JJ.controller.productcategorymanagement.VO;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.model.Base;
 
-public class ProductSpecificationVO extends Base implements Serializable {
-    private Integer productSpecificationId;
+public class ProductCategoryVO extends Base implements Serializable {
+    private Integer categoryId;
 
-    private Integer productId;
+    private String categoryName;
+
+    private String isParent;
+    
+    private String isParentString;
+
+    private String displayInd;
+    
+    private String displayIndString;
 
     private Integer version;
 
@@ -22,27 +32,59 @@ public class ProductSpecificationVO extends Base implements Serializable {
 
     private String deleteInd;
 
-    private String content;
+    private List<ProductSubCategoryVO> subcategoryList;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getProductSpecificationId() {
-        return productSpecificationId;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setProductSpecificationId(Integer productSpecificationId) {
-        this.productSpecificationId = productSpecificationId;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName == null ? null : categoryName.trim();
     }
 
-    public Integer getVersion() {
+    public String getIsParent() {
+        return isParent;
+    }
+
+    public void setIsParent(String isParent) {
+        this.isParent = isParent == null ? null : isParent.trim();
+    }
+
+    public String getIsParentString() {
+		return isParentString;
+	}
+
+	public void setIsParentString(String isParentString) {
+		this.isParentString = isParentString;
+	}
+
+	public String getDisplayInd() {
+        return displayInd;
+    }
+
+    public void setDisplayInd(String displayInd) {
+        this.displayInd = displayInd == null ? null : displayInd.trim();
+    }
+
+    public String getDisplayIndString() {
+		return displayIndString;
+	}
+
+	public void setDisplayIndString(String displayIndString) {
+		this.displayIndString = displayIndString;
+	}
+
+	public Integer getVersion() {
         return version;
     }
 
@@ -90,29 +132,30 @@ public class ProductSpecificationVO extends Base implements Serializable {
         this.deleteInd = deleteInd == null ? null : deleteInd.trim();
     }
 
-    public String getContent() {
-        return content;
-    }
+    public List<ProductSubCategoryVO> getSubcategoryList() {
+		return subcategoryList;
+	}
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
-    }
+	public void setSubcategoryList(List<ProductSubCategoryVO> subcategoryList) {
+		this.subcategoryList = subcategoryList;
+	}
 
-    @Override
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", productSpecificationId=").append(productSpecificationId);
-        sb.append(", productId=").append(productId);
+        sb.append(", categoryId=").append(categoryId);
+        sb.append(", categoryName=").append(categoryName);
+        sb.append(", isParent=").append(isParent);
+        sb.append(", displayInd=").append(displayInd);
         sb.append(", version=").append(version);
         sb.append(", createdBy=").append(createdBy);
         sb.append(", createdOn=").append(createdOn);
         sb.append(", updatedBy=").append(updatedBy);
         sb.append(", updatedOn=").append(updatedOn);
         sb.append(", deleteInd=").append(deleteInd);
-        sb.append(", content=").append(content);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");

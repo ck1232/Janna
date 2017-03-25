@@ -1,52 +1,105 @@
 package com.JJ.service.productcategorymanagement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.dao.ProductcategoryMapper;
+import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
+import com.JJ.dao.ProductCategoryDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.Productcategory;
-import com.JJ.model.ProductcategoryExample;
+import com.JJ.model.ProductCategoryDbObject;
+import com.JJ.model.ProductCategoryDbObjectExample;
 
 @Service
 @Transactional
 public class ProductCategoryManagementService {
-	private ProductcategoryMapper productCategoryMapper;
+	private ProductCategoryDbObjectMapper productCategoryDbObjectMapper;
 	
 	@Autowired
-	public ProductCategoryManagementService(ProductcategoryMapper productCategoryMapper) {
-		this.productCategoryMapper = productCategoryMapper;
+	public ProductCategoryManagementService(ProductCategoryDbObjectMapper productCategoryDbObjectMapper) {
+		this.productCategoryDbObjectMapper = productCategoryDbObjectMapper;
 		
 	}
 	
-	public Productcategory findById(Integer id) {
-		return productCategoryMapper.selectByPrimaryKey(id);
-	}
-	
-	public List<Productcategory> getAllCategories() {
-		ProductcategoryExample categoryExample = new ProductcategoryExample();
-		categoryExample.createCriteria().andDeleteindEqualTo(GeneralUtils.NOT_DELETED);
-		List<Productcategory> categoryList = productCategoryMapper.selectByExample(categoryExample);
-		return categoryList;
-	}
-	
-	public void saveProductCategory(Productcategory productcategory) {
-		productCategoryMapper.insert(productcategory);
-	}
-	
-	public void deleteProductCategory(Integer id) {
-		Productcategory productcategory = findById(id);
-		if(productcategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-			productcategory.setDeleteInd(GeneralUtils.DELETED);
-			productCategoryMapper.updateByPrimaryKey(productcategory);
+	public ProductCategoryVO findById(Integer id) {
+		ProductCategoryDbObject productCategoryDbObject = productCategoryDbObjectMapper.selectByPrimaryKey(id);
+		if(productCategoryDbObject != null && productCategoryDbObject.getCategoryId() != null){
+			return convertToProductCategoryVOList(Arrays.asList(productCategoryDbObject)).get(0);
+		}else{
+			return new ProductCategoryVO();
 		}
 	}
 	
-	public void updateProductcategory(Productcategory productCategory) {
-		if(productCategory.getDeleteInd().equals(GeneralUtils.NOT_DELETED))
-			productCategoryMapper.updateByPrimaryKeySelective(productCategory);
+	public List<ProductCategoryVO> getAllCategories() {
+		ProductCategoryDbObjectExample productCategoryDbObjectExample = new ProductCategoryDbObjectExample();
+		productCategoryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToProductCategoryVOList(productCategoryDbObjectMapper.selectByExample(productCategoryDbObjectExample));
+	}
+	
+	public void saveProductCategory(ProductCategoryVO ProductCategoryVO) {
+		if(ProductCategoryVO != null){
+			ProductCategoryDbObject dbObj = convertToProductCategoryDbObjectList(Arrays.asList(ProductCategoryVO)).get(0);
+			productCategoryDbObjectMapper.insert(dbObj);
+		}
+	}
+	
+	public void deleteProductCategory(Integer id) {
+		deleteProductCategory(Arrays.asList(id));
+	}
+	
+	public void deleteProductCategory(List<Integer> idList) {
+		ProductCategoryDbObjectExample productCategoryDbObjectExample = new ProductCategoryDbObjectExample();
+		productCategoryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andCategoryIdIn(idList);
+		ProductCategoryDbObject dbObj = new ProductCategoryDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		productCategoryDbObjectMapper.updateByExampleSelective(dbObj, productCategoryDbObjectExample);
+	}
+	
+	public void updateProductcategory(ProductCategoryVO productCategoryVO) {
+		if(productCategoryVO != null && productCategoryVO.getDeleteInd() != null &&
+				productCategoryVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+			ProductCategoryDbObject dbObj = convertToProductCategoryDbObjectList(Arrays.asList(productCategoryVO)).get(0);
+			productCategoryDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
+	}
+	
+	private List<ProductCategoryVO> convertToProductCategoryVOList(List<ProductCategoryDbObject> productCategoryDbObjectList) {
+		List<ProductCategoryVO> productCategoryVOList = new ArrayList<ProductCategoryVO>();
+		if(productCategoryDbObjectList != null && !productCategoryDbObjectList.isEmpty()) {
+			for(ProductCategoryDbObject dbObj : productCategoryDbObjectList) {
+				ProductCategoryVO vo = new ProductCategoryVO();
+				vo.setCategoryId(dbObj.getCategoryId());
+				vo.setCategoryName(dbObj.getCategoryName());
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setDisplayInd(dbObj.getDisplayInd());
+				vo.setDisplayIndString(dbObj.getDisplayInd().equals("1") ? "Y" : "N");
+				vo.setIsParent(dbObj.getIsParent());
+				vo.setIsParentString(dbObj.getIsParent().equals("1") ? "Y" : "N");
+				vo.setVersion(dbObj.getVersion());
+				productCategoryVOList.add(vo);
+			}
+		}
+		return productCategoryVOList;
+	}
+	
+	private List<ProductCategoryDbObject> convertToProductCategoryDbObjectList(List<ProductCategoryVO> productCategoryVOList) {
+		List<ProductCategoryDbObject> productCategoryDbObjectList = new ArrayList<ProductCategoryDbObject>();
+		if(productCategoryVOList != null && !productCategoryVOList.isEmpty()) {
+			for(ProductCategoryVO vo : productCategoryVOList) {
+				ProductCategoryDbObject dbObj = new ProductCategoryDbObject();
+				dbObj.setCategoryId(vo.getCategoryId());
+				dbObj.setCategoryName(vo.getCategoryName());
+				dbObj.setDeleteInd(vo.getDeleteInd());
+				dbObj.setDisplayInd(vo.getDisplayInd());
+				dbObj.setIsParent(vo.getIsParent());
+				dbObj.setVersion(vo.getVersion());
+				productCategoryDbObjectList.add(dbObj);
+			}
+		}
+		return productCategoryDbObjectList;
 	}
 }
