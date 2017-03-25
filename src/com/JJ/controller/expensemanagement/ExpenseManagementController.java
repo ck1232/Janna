@@ -23,9 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
+import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
-import com.JJ.lookup.PaymentModeLookup;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.validator.ExpenseFormValidator;
@@ -41,19 +41,16 @@ public class ExpenseManagementController {
 	private PaymentManagementService paymentManagementService;
 	private PaymentManagementController paymentManagementController;
 	private ExpenseTypeLookup expenseTypeLookup;
-	private PaymentModeLookup paymentModeLookup;
 	private ExpenseFormValidator expenseFormValidator;
 	@Autowired
 	public ExpenseManagementController(ExpenseManagementService expenseManagementService, 
 			PaymentManagementService paymentManagementService,
 			PaymentManagementController paymentManagementController,
 			ExpenseTypeLookup expenseTypeLookup,
-			PaymentModeLookup paymentModeLookup,
 			ExpenseFormValidator expenseFormValidator) {
 		this.expenseManagementService = expenseManagementService;
 		this.paymentManagementService = paymentManagementService;
 		this.expenseTypeLookup = expenseTypeLookup;
-		this.paymentModeLookup = paymentModeLookup;
 		this.expenseFormValidator = expenseFormValidator;
 		this.paymentManagementController = paymentManagementController;
 	}
@@ -158,13 +155,7 @@ public class ExpenseManagementController {
 			model.addAttribute("msg", "Expense not found");
 		}else{
 			model.addAttribute("expense", expenseVO);
-			List<Paymentdetail> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expenseVO.getExpenseId());
-			if(paymentList != null && paymentList.size() > 0){
-				for(Paymentdetail payment : paymentList) {
-					payment.setPaymentdateString(new SimpleDateFormat("dd/MM/yyyy").format(payment.getPaymentdate()));
-					payment.setPaymentmodeString(paymentModeLookup.getPaymentModeById(payment.getPaymentmode()));
-				}
-			}
+			List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expenseVO.getExpenseId());
 			model.addAttribute("paymentList", paymentList);
 		}
 		return "viewExpense";

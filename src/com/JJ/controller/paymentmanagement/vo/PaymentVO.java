@@ -13,6 +13,7 @@ public class PaymentVO implements Serializable {
 	private Boolean paymentmodecash;
 	private BigDecimal cashamount;
 	private Boolean paymentmodecheque;
+	private String chequeId;
 	private String chequeno;
 	private BigDecimal chequeamount;
 	private Date chequedate;
@@ -58,6 +59,14 @@ public class PaymentVO implements Serializable {
 
 	public void setPaymentmodecheque(Boolean paymentmodecheque) {
 		this.paymentmodecheque = paymentmodecheque;
+	}
+
+	public String getChequeId() {
+		return chequeId;
+	}
+
+	public void setChequeId(String chequeId) {
+		this.chequeId = chequeId;
 	}
 
 	public String getChequeno() {

@@ -86,7 +86,7 @@ public class DiscountManagementService {
 	 
 	private List<DiscountVO> convertToDiscountVOList(List<DiscountDbObject> discountDbObjectList) {
 		List<DiscountVO> discountVOList = new ArrayList<DiscountVO>();
-		if(discountDbObjectList != null && discountDbObjectList.size() > 0) {
+		if(discountDbObjectList != null && !discountDbObjectList.isEmpty()) {
 			for(DiscountDbObject dbObj : discountDbObjectList) {
 				DiscountVO discountVO = new DiscountVO();
 				discountVO.setApplyType(dbObj.getApplyType());
@@ -105,7 +105,7 @@ public class DiscountManagementService {
 	
 	private List<DiscountDbObject> convertToDiscountDbObjectList(List<DiscountVO> discountVOList) {
 		List<DiscountDbObject> discountDbObjectList = new ArrayList<DiscountDbObject>();
-		if(discountVOList != null && discountVOList.size() > 0){
+		if(discountVOList != null && !discountVOList.isEmpty()){
 			for(DiscountVO vo : discountVOList){
 				DiscountDbObject dbObj = new DiscountDbObject();
 				dbObj.setApplyType(vo.getApplyType());
