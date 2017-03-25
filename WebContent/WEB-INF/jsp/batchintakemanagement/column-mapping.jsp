@@ -4,11 +4,11 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "batchid"},
+{"data": "batchId"},
 {"data": "remarks"},
 {"data": "date"},
-{"data": "storagelocationname"},
-{"data": "totalcost"},
+{"data": "storageLocationName"},
+{"data": "totalCost"},
 {
     "className":      '',
     "orderable":      false,

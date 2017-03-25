@@ -6,13 +6,13 @@
 <script>
 
      var productList = new Bloodhound({
-    	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('productname'),
+    	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('productName'),
     	  queryTokenizer: Bloodhound.tokenizers.whitespace,
     	  prefetch: '<c:url context="/JJ" value="/batchintake/getProductList" />'
     	}); 
 
      var locationList = new Bloodhound({
-   	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationname'),
+   	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
    	  queryTokenizer: Bloodhound.tokenizers.whitespace,
    	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
    	}); 
@@ -35,12 +35,12 @@
 	    
     	$('#addProductNameDiv .typeahead').typeahead(null, {
     		 name: 'productList',
-    		  display: 'productname',
+    		  display: 'productName',
     		source: productList
 		});
 		
     	$('#addProductNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
-        	$("#productId").val(item.productid);
+        	$("#productId").val(item.productId);
     		getList(item);
     	});
 
@@ -50,19 +50,19 @@
 
     	$('#addLocationNameDiv .typeahead').typeahead(null, {
    		 name: 'locationList',
-   		  display: 'locationname',
+   		  display: 'name',
    		source: locationList
 		});
 
     	$('#addLocationNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
-        	$("#storagelocation").val(item.locationid);
+        	$("#storagelocation").val(item.locationId);
     	});
 	 } );
 
 	function getList(item) {
-		var id = item.productid;
+		var id = item.productId;
 		var data = {
-	  	        "productid" : id
+	  	        "productId" : id
 	    	}
 		$.ajax({
 	  		  type: "POST",
@@ -265,7 +265,7 @@
 										<label class="col-sm-2 control-label">Initial Location</label>
 											<div class="col-sm-10" id="addLocationNameDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
-						                  			  path="storagelocationname" id="storagelocationname" />
+						                  			  path="storageLocationName" id="storagelocationname" />
 						                  		<form:input path="storagelocation" id="storagelocation" type="hidden"/>
 						                  		<form:errors path="storagelocation" class="text-danger" />
 						                	</div>
@@ -275,9 +275,9 @@
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Total Cost</label>
 										<div class="col-sm-10">
-											<form:input path="totalcost" type="number" class="form-control"
-						                                id="totalcost" placeholder="Enter total cost" />
-											<form:errors path="totalcost" class="text-danger" />
+											<form:input path="totalCost" type="number" class="form-control"
+						                                id="totalCost" placeholder="Enter total cost" />
+											<form:errors path="totalCost" class="text-danger" />
 										</div>
 								  	</div>
 								</div>		
