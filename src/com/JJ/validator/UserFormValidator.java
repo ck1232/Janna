@@ -21,11 +21,11 @@ public class UserFormValidator implements Validator {
 		UserVO userVO = (UserVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.userform.name");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailaddress", "error.notempty.userform.email");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userid", "error.notempty.userform.username");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailAddress", "error.notempty.userform.email");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "error.notempty.userform.username");
 		if(StringUtils.isNotEmpty(userVO.getEmailAddress())){
 			if(!isValidEmailAddress(userVO.getEmailAddress()))
-				errors.rejectValue("emailaddress", "error.notvalid.userform.email");
+				errors.rejectValue("emailAddress", "error.notvalid.userform.email");
 		}
 		
 	}

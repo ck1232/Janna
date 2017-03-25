@@ -16,14 +16,14 @@
 			<c:url var="post_url" value="/admin/updateUserToDb" />
 			<form:form id="updateUserToDbForm" method="post" modelAttribute="userForm" action="${post_url }">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<form:input path="id" type="hidden" id="id"/>
+				<form:input path="userId" type="hidden" id="userId"/>
 				<div class="row">
 					<div class="form-group ${status.error ? 'has-error' : ''}">
-						<label class="col-sm-2 control-label">User id</label>
+						<label class="col-sm-2 control-label">Username</label>
 						<div class="col-sm-10">
-							<form:input path="userid" type="text" class="form-control"
-		                    				id="userid" placeholder="Enter userid" />
-							<form:errors path="userid" class="text-danger" />
+							<form:input path="userName" type="text" class="form-control"
+		                    				id="userName" placeholder="Enter userid" />
+							<form:errors path="userName" class="text-danger" />
 						</div>
 		 			</div>
 	 			</div>
@@ -41,9 +41,9 @@
 					<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Email Address</label>
 						<div class="col-sm-10">
-							<form:input path="emailaddress" class="form-control"
-						                    id="emailaddress" placeholder="Enter email address" />
-							<form:errors path="emailaddress" class="text-danger" />
+							<form:input path="emailAddress" class="form-control"
+						                    id="emailAddress" placeholder="Enter email address" />
+							<form:errors path="emailAddress" class="text-danger" />
 						</div>	
 					</div>
 				</div>
@@ -60,8 +60,8 @@
 						<label class="col-sm-2 control-label">Enabled</label>
 						<div class="col-sm-10">
 							<div class="checkbox">
-						  		<label><form:checkbox path="enabled" id="enabled" /></label>
-		   						<form:errors path="enabled" class="text-danger" />
+						  		<label><form:checkbox path="enabledBoolean" id="enabledBoolean" /></label>
+		   						<form:errors path="enabledBoolean" class="text-danger" />
 							</div>
 						</div>
 		  			</div>
@@ -99,7 +99,7 @@
 					</div>
 					<div class="modal-body">
 						<form action="<c:url value="/admin/resetpassword" />" id="resetPasswordForm" name="resetPasswordForm" method="post">
-							<input type="hidden" value="${userForm.userid}" name="userid" />
+							<input type="hidden" value="${userForm.userName}" name="userid" />
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							<div class="row form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Password</label>

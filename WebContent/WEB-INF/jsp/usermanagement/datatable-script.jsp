@@ -7,7 +7,7 @@ $(function () {
       "pageLength": 10,
       "responsive" : true,
       "lengthChange": false,
-      "searching": false,
+      "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": false,
@@ -24,10 +24,10 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.id);
-          $(row).find('button[name="editBtn"]').prop('value', data.id);
-          $(row).find('button[name="viewBtn"]').prop('value', data.id);
-          $(row).find('button[name="assignRoleBtn"]').prop('value', data.id);
+          $(row).find('input[type="checkbox"]').prop('value', data.userId);
+          $(row).find('button[name="editBtn"]').prop('value', data.userId);
+          $(row).find('button[name="viewBtn"]').prop('value', data.userId);
+          $(row).find('button[name="assignRoleBtn"]').prop('value', data.userId);
        }
     });
 
