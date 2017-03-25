@@ -82,6 +82,102 @@ public class ProductService {
 		this.productSubOptionRsService = productSubOptionRsService;
 	}
 	
+	public List<ProductVO> getProductVOById(List<Integer> productIdList, List<AdditionalInfo> additionalInfoList){
+		ProductDbObjectExample productDbObjectExample = new ProductDbObjectExample();
+		ProductDbObjectExample.Criteria criteria = productDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		if(productIdList != null && productIdList.size() > 0){
+			criteria.andProductIdIn(productIdList);
+		}
+		List<ProductDbObject> productList = productDbObjectMapper.selectByExample(productDbObjectExample);
+		List<ProductVO> productVOList = convertToProductVOList(productList);
+		productVOList = getProductAdditionalInfo(productVOList, additionalInfoList);
+		return productVOList;
+	}
+	
+	public List<ProductVO> getProductVOByName(List<String> productNameList, List<AdditionalInfo> additionalInfoList){
+		ProductDbObjectExample productDbObjectExample = new ProductDbObjectExample();
+		ProductDbObjectExample.Criteria criteria = productDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		if(productNameList != null && productNameList.size() > 0){
+			criteria.andProductNameIn(productNameList);
+		}
+		List<ProductDbObject> productList = productDbObjectMapper.selectByExample(productDbObjectExample);
+		List<ProductVO> productVOList = convertToProductVOList(productList);
+		productVOList = getProductAdditionalInfo(productVOList, additionalInfoList);
+		return productVOList;
+	}
+	
+	private List<ProductVO> getProductAdditionalInfo(List<ProductVO> voList, List<AdditionalInfo> additionalInfoList){
+		if(voList != null && voList.size() > 0){
+			if(additionalInfoList != null && !additionalInfoList.contains(AdditionalInfo.NONE)){
+				if(additionalInfoList.contains(AdditionalInfo.ALL)){
+					voList = getProductSubCategory(voList);
+					voList = productSpecificationService.getProductSpecification(voList);
+				}else{
+					for(AdditionalInfo info : additionalInfoList){
+						switch(info){
+						case CATEGORY : voList = getProductSubCategory(voList); break;
+						case IMAGE : break;
+						case OPTION : break;
+						case SPECIFICATION : voList = productSpecificationService.getProductSpecification(voList); break;
+						case TAGS : break;
+						default :;
+						}
+					}
+				}
+			}
+			return voList;
+		}
+		return new ArrayList<ProductVO>();
+	}
+	
+	public static List<Integer> getProductIdList(List<ProductVO> voList){
+		List<Integer> productIdList = new ArrayList<Integer>();
+		if(voList != null && voList.size() > 0){
+			Set<Integer> productIdSet = new HashSet<Integer>();
+			for(ProductVO productVO : voList){
+				if(productVO.getProductId() != null && productVO.getProductId() > 0){
+					productIdSet.add(productVO.getProductId());
+				}
+			}
+			productIdList.addAll(productIdSet);
+		}
+		return productIdList;
+	}
+	
+	public static Map<Integer, ProductVO> getProductVOMap(List<ProductVO> voList){
+		Map<Integer, ProductVO> map = new HashMap<Integer, ProductVO>();
+		if(voList != null && voList.size() > 0){
+			for(ProductVO vo : voList){
+				if(vo.getProductId() != null && vo.getProductId() > 0){
+					map.put(vo.getProductId(), vo);
+				}
+			}
+		}
+		return map;
+	}
+	
+	private List<ProductVO> getProductSubCategory(List<ProductVO> voList){
+		Map<Integer, ProductSubCategoryVO> subcategoryMap =  productSubCategoryManagementService.getProductsubcategoryMap();
+		if(voList != null && voList.size() > 0){
+			for(ProductVO product : voList){
+				if(product.getSubCategoryId() != null && product.getSubCategoryId().intValue() > 0){
+					product.setSubCategory(subcategoryMap.get(product.getSubCategoryId()));
+				}
+			}
+		}
+		return voList;
+	}
+	
+	public enum AdditionalInfo{
+		NONE,
+		SPECIFICATION,
+		TAGS,
+		IMAGE,
+		OPTION,
+		CATEGORY,
+		ALL
+	}
+	
 	public List<ProductVO> getAllProducts() {
 		ProductDbObjectExample ProductDbObjectExample = new ProductDbObjectExample();
 		ProductDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);

@@ -2,6 +2,7 @@ package com.JJ.service.productmanagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,26 @@ public class ProductSpecificationService {
 			}
 		}
 		return new ProductSpecificationVO();
+	}
+	
+	public List<ProductVO> getProductSpecification(List<ProductVO> voList){
+		List<Integer> idList = ProductService.getProductIdList(voList);
+		if(idList != null && idList.size() > 0){
+			ProductSpecificationDbObjectExample example = new ProductSpecificationDbObjectExample();
+			example.createCriteria().andProductIdIn(idList).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+			List<ProductSpecificationDbObject> productSpecificationList = productSpecificationDbObjectMapper.selectByExampleWithBLOBs(example);
+			List<ProductSpecificationVO> specsVOList = convertToProductSpecification(productSpecificationList);
+			if(specsVOList != null && specsVOList.size() > 0){
+				Map<Integer, ProductVO> map = ProductService.getProductVOMap(voList);
+				for(ProductSpecificationVO specs : specsVOList){
+					ProductVO productVO = map.get(specs.getProductId());
+					if(productVO != null){
+						productVO.setProductInfo(specs.getContent());
+					}
+				}
+			}
+		}
+		return voList;
 	}
 	private List<ProductSpecificationVO> convertToProductSpecification(List<ProductSpecificationDbObject> objList) {
 		List<ProductSpecificationVO> voList = new ArrayList<ProductSpecificationVO>();
