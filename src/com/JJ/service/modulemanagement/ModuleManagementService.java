@@ -36,7 +36,7 @@ public class ModuleManagementService {
 	
 	private List<ModuleVO> convertToModuleVOList(List<ModuleDbObject> dbObjList) {
 		List<ModuleVO> voList = new ArrayList<ModuleVO>();
-		if(dbObjList != null && dbObjList.size() > 0){
+		if(dbObjList != null && !dbObjList.isEmpty()){
 			for(ModuleDbObject dbObj : dbObjList){
 				ModuleVO vo = new ModuleVO();
 				vo.setDeleteInd(dbObj.getDeleteInd());

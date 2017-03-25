@@ -44,10 +44,10 @@ public class RoleAssignmentService {
 			for(UserRoleDbObject obj : objList){
 				UserRoleVO vo = new UserRoleVO();
 				vo.setDeleteInd(obj.getDeleteInd());
-				vo.setRoleId(vo.getRoleId());
-				vo.setUserId(vo.getUserId());
-				vo.setUserRoleId(vo.getUserRoleId());
-				vo.setVersion(vo.getVersion());
+				vo.setRoleId(obj.getRoleId());
+				vo.setUserId(obj.getUserId());
+				vo.setUserRoleId(obj.getUserRoleId());
+				vo.setVersion(obj.getVersion());
 				voList.add(vo);
 			}
 		}

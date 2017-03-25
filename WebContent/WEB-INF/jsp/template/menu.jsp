@@ -68,7 +68,7 @@ function setNavigation() {
 					</c:when>
 					<c:otherwise>
 						<li class="treeview <c:forEach items="${module.subModuleList}" var="submodule"><c:if test="${menuSubmodule != null and fn:containsIgnoreCase(menuSubmodule.url,submodule.url)}">active</c:if></c:forEach>">
-	          				<a href="#"><i class="fa ${module.icon}"></i> <span>${module.name}</span>
+	          				<a href="#"><i class="fa ${module.icon}"></i> <span>${module.moduleName}</span>
 		            			<span class="pull-right-container">
 		              				<i class="fa fa-angle-left pull-right"></i>
 		            			</span>

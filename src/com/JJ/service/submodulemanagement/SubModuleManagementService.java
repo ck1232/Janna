@@ -34,10 +34,9 @@ public class SubModuleManagementService {
 		return new SubModuleVO();
 	}
 
-	private List<SubModuleVO> convertToSubModuleVOList(
-			List<SubModuleDbObject> dbObjList) {
+	private List<SubModuleVO> convertToSubModuleVOList(List<SubModuleDbObject> dbObjList) {
 		List<SubModuleVO> voList = new ArrayList<SubModuleVO>();
-		if(dbObjList != null && dbObjList.size() > 0){
+		if(dbObjList != null && !dbObjList.isEmpty()){
 			for(SubModuleDbObject dbObj : dbObjList){
 				SubModuleVO vo = new SubModuleVO();
 				vo.setDeleteInd(dbObj.getDeleteInd());
@@ -59,7 +58,7 @@ public class SubModuleManagementService {
 		return convertToSubModuleVOList(submoduleList);
 	}
 	public List<SubModuleVO> getSubmodulesById(List<Integer> subModuleList) {
-		if(subModuleList != null && subModuleList.size() == 0){
+		if(subModuleList != null && !subModuleList.isEmpty()){
 			SubModuleDbObjectExample submoduleExample = new SubModuleDbObjectExample();
 			submoduleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSubmoduleIdIn(subModuleList);
 			List<SubModuleDbObject> submoduleList = subModuleDbObjectMapper.selectByExample(submoduleExample);
