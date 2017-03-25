@@ -16,14 +16,14 @@
                     <form id="backToListButton" method="get" action="<c:url value="/admin/listUser" />"></form>
                     <form id="updateUserForm" method="post" action="<c:url value="/admin/updateUser" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${user.id}"/>
+                    	<input type="hidden" name="editBtn" value="${user.userId}"/>
                     </form>
                     <!--/.FORM-->
 		             	<div class="box-body">
 			              	<div class="row">
 			              		<div class="form-group">
 				              		<div class="col-sm-2 control-label">User id</div>
-									<div class="col-sm-10">${user.userid}</div>
+									<div class="col-sm-10">${user.userName}</div>
 								</div>
 			              	</div>
 							<div class="row">
@@ -35,7 +35,7 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Email Address</div>
-								    <div class="col-sm-10">${user.emailaddress}</div>
+								    <div class="col-sm-10">${user.emailAddress}</div>
 								</div>
 							</div>			
 							<div class="row">

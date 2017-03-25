@@ -20,11 +20,11 @@
 		             	<div class="box-body">
 		              		<div class="row">
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
-									<label class="col-sm-2 control-label">User id</label>
+									<label class="col-sm-2 control-label">User Name</label>
 									<div class="col-sm-10">
-										<form:input path="userid" type="text" class="form-control"
-						                                id="userid" placeholder="Enter userid" />
-										<form:errors path="userid" class="text-danger" />
+										<form:input path="userName" type="text" class="form-control"
+						                                id="userName" placeholder="Enter username" />
+										<form:errors path="userName" class="text-danger" />
 									</div>
 							  	</div>
 							</div>
@@ -52,9 +52,9 @@
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Email Address</label>
 									<div class="col-sm-10">
-										<form:input path="emailaddress" class="form-control"
-					                                id="emailaddress" placeholder="Enter email address" />
-										<form:errors path="emailaddress" class="text-danger" />
+										<form:input path="emailAddress" class="form-control"
+					                                id="emailAddress" placeholder="Enter email address" />
+										<form:errors path="emailAddress" class="text-danger" />
 									</div>	
 							  	</div>	
 							</div>

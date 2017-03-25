@@ -21,6 +21,8 @@ public class UserVO extends Base implements Serializable {
     private Date lastLogin;
 
     private String enabled;
+    
+    private Boolean enabledBoolean;
 
     private static final long serialVersionUID = 1L;
 
@@ -88,7 +90,15 @@ public class UserVO extends Base implements Serializable {
         this.enabled = enabled == null ? null : enabled.trim();
     }
 
-    @Override
+    public Boolean getEnabledBoolean() {
+		return enabledBoolean;
+	}
+
+	public void setEnabledBoolean(Boolean enabledBoolean) {
+		this.enabledBoolean = enabledBoolean;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());

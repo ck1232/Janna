@@ -34,26 +34,6 @@ public class UserManagementService {
 		return new UserVO();
 	}
 	
-	private List<UserVO> convertToUserVOList(List<UserDbObject> dbObjList) {
-		List<UserVO> list = new ArrayList<UserVO>();
-		if(dbObjList != null && dbObjList.size() > 0){
-			for(UserDbObject dbObj : dbObjList){
-				UserVO vo = new UserVO();
-				vo.setDeleteInd(dbObj.getDeleteInd());
-				vo.setEmailAddress(dbObj.getEmailAddress());
-				vo.setEnabled(dbObj.getEnabled());
-				vo.setLastLogin(dbObj.getLastLogin());
-				vo.setName(dbObj.getName());
-				vo.setPassword(dbObj.getPassword());
-				vo.setStatus(dbObj.getStatus());
-				vo.setUserId(dbObj.getUserId());
-				vo.setUserName(dbObj.getUserName());
-				list.add(vo);
-			}
-		}
-		return list;
-	}
-
 	public UserVO findByUserName(String userName) {
 		UserDbObjectExample example = new UserDbObjectExample();
 		example.createCriteria().andUserNameEqualTo(userName);
@@ -86,26 +66,6 @@ public class UserManagementService {
 		
 	}
 	
-	private List<UserDbObject> convertToUserDbObjectList(List<UserVO> voList) {
-		List<UserDbObject> list = new ArrayList<UserDbObject>();
-		if(voList != null && voList.size() > 0){
-			for(UserVO obj : voList){
-				UserDbObject dbObj = new UserDbObject();
-				dbObj.setDeleteInd(obj.getDeleteInd());
-				dbObj.setEmailAddress(obj.getEmailAddress());
-				dbObj.setEnabled(obj.getEnabled());
-				dbObj.setLastLogin(obj.getLastLogin());
-				dbObj.setName(obj.getName());
-				dbObj.setPassword(obj.getPassword());
-				dbObj.setStatus(obj.getStatus());
-				dbObj.setUserId(obj.getUserId());
-				dbObj.setUserName(obj.getUserName());
-				list.add(dbObj);
-			}
-		}
-		return list;
-	}
-
 	public void resetPassword(String userName, String password){
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
@@ -127,6 +87,47 @@ public class UserManagementService {
 			userMapper.updateByPrimaryKeySelective(dbObjList.get(0));
 		}
 		
+	}
+	
+	private List<UserVO> convertToUserVOList(List<UserDbObject> dbObjList) {
+		List<UserVO> list = new ArrayList<UserVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(UserDbObject dbObj : dbObjList){
+				UserVO vo = new UserVO();
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setEmailAddress(dbObj.getEmailAddress());
+				vo.setEnabled(dbObj.getEnabled());
+				vo.setEnabledBoolean(dbObj.getEnabled().equals("1")? Boolean.TRUE : Boolean.FALSE);
+				vo.setLastLogin(dbObj.getLastLogin());
+				vo.setName(dbObj.getName());
+				vo.setPassword(dbObj.getPassword());
+				vo.setStatus(dbObj.getStatus());
+				vo.setUserId(dbObj.getUserId());
+				vo.setUserName(dbObj.getUserName());
+				list.add(vo);
+			}
+		}
+		return list;
+	}
+	
+	private List<UserDbObject> convertToUserDbObjectList(List<UserVO> voList) {
+		List<UserDbObject> list = new ArrayList<UserDbObject>();
+		if(voList != null && voList.size() > 0){
+			for(UserVO obj : voList){
+				UserDbObject dbObj = new UserDbObject();
+				dbObj.setDeleteInd(obj.getDeleteInd());
+				dbObj.setEmailAddress(obj.getEmailAddress());
+				dbObj.setEnabled(obj.getEnabledBoolean() == Boolean.TRUE ? "1" : "0");
+				dbObj.setLastLogin(obj.getLastLogin());
+				dbObj.setName(obj.getName());
+				dbObj.setPassword(obj.getPassword());
+				dbObj.setStatus(obj.getStatus());
+				dbObj.setUserId(obj.getUserId());
+				dbObj.setUserName(obj.getUserName());
+				list.add(dbObj);
+			}
+		}
+		return list;
 	}
 	
 	/*public List<User> getAllUsersById(List<Integer> idList) {
