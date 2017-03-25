@@ -15,6 +15,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
@@ -22,7 +25,8 @@ import com.JJ.dao.ProductImageDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ProductImageDbObjectExample;
 import com.JJ.model.ProductImageDbObjectWithBLOBs;
-
+@Service
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ProductImageService {
 	
 	private ProductImageDbObjectMapper productImageDbObjectMapper;

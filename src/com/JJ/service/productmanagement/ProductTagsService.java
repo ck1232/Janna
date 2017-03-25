@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.dao.ProductTagsDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ProductTagsDbObject;
 import com.JJ.model.ProductTagsDbObjectExample;
-
+@Service
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ProductTagsService {
 	
 	private ProductTagsDbObjectMapper productTagsDbObjectMapper;

@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.inventorymanagement.vo.ViewItemCodeVO;
 import com.JJ.dao.ViewItemCodeDbObjectMapper;
 import com.JJ.model.ViewItemCodeDbObject;
 import com.JJ.model.ViewItemCodeDbObjectExample;
-
+@Service
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ItemCodeService {
 	
 	private ViewItemCodeDbObjectMapper viewItemCodeDbObjectMapper;

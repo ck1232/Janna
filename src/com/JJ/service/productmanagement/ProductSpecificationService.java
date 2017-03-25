@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.JJ.controller.productmanagement.vo.ProductSpecificationVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
@@ -11,7 +12,7 @@ import com.JJ.dao.ProductSpecificationDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ProductSpecificationDbObject;
 import com.JJ.model.ProductSpecificationDbObjectExample;
-
+@Service
 public class ProductSpecificationService {
 	
 	private ProductSpecificationDbObjectMapper productSpecificationDbObjectMapper;
