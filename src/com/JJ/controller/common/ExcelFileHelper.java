@@ -19,6 +19,7 @@ public class ExcelFileHelper {
 		
 	//if merged, return last cell column index
 	
+	@SuppressWarnings("deprecation")
 	public static HSSFWorkbook writeToFile(ResultSet resultSet){
 		try {
 			int rowNum = 0;

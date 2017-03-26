@@ -24,10 +24,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
-import com.JJ.controller.batchintakemanagement.vo.BatchProductVO;
+import com.JJ.controller.batchintakemanagement.vo.ProductInventoryVO;
 import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
 import com.JJ.controller.common.vo.JsonResponseVO;
-import com.JJ.controller.inventorymanagement.vo.InventoryVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryLocationVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductSubOptionInventoryVO;
@@ -49,7 +48,7 @@ public class InventoryManagementController {
 	private InventoryProductManagementService inventoryProductManagementService;
 	private ProductService productService;
 	private ProductSubOptionManagementService productSubOptionManagementService;
-	private InventoryVO inventoryVO;
+	private ProductInventoryVO inventoryVO;
 	private ProductVO productVo;
 	
 	private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -111,7 +110,7 @@ public class InventoryManagementController {
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.GET)
 	public String createInventoryProduct(Model model) {
 		logger.debug("loading createInventoryProduct");
-    	inventoryVO = new InventoryVO();
+    	inventoryVO = new ProductInventoryVO();
     	inventoryVO.setDate(new Date());
     	model.addAttribute("inventoryProductForm", inventoryVO);
         return "createInventoryProduct"; 
@@ -125,7 +124,7 @@ public class InventoryManagementController {
 			}
 			return GeneralUtils.convertListToJSONString(inventoryVO.getProductItems());
 		}
-		return GeneralUtils.convertListToJSONString(new ArrayList<BatchProductVO>());
+		return GeneralUtils.convertListToJSONString(new ArrayList<BatchIntakeProductVO>());
 	}
 	
 	@RequestMapping(value = "/getBatchProductVo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -244,7 +243,7 @@ public class InventoryManagementController {
 		return new JsonResponseVO("success");
 	}
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
-	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") InventoryVO inventoryVO, 
+	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") ProductInventoryVO inventoryVO, 
 			final RedirectAttributes redirectAttributes) {
 		inventoryVO.setProductItems(this.inventoryVO.getProductItems());
 		try{
@@ -257,14 +256,14 @@ public class InventoryManagementController {
 			}
 			Date date = df.parse(inventoryVO.getDateString());
 			inventoryVO.setDate(date);
-			StorageLocationVO locationTo = locationMap.get(inventoryVO.getLocationFrom());
-			StorageLocationVO locationFrom = locationMap.get(inventoryVO.getLocationTo());
+			StorageLocationVO locationTo = locationMap.get(inventoryVO.getTransferFromName());
+			StorageLocationVO locationFrom = locationMap.get(inventoryVO.getTransferToName());
 			if(locationTo != null){
-				inventoryVO.setLocationToId(locationTo.getLocationId());
+				inventoryVO.setTransferTo(locationTo.getLocationId());
 			}
 			
 			if(locationFrom != null){
-				inventoryVO.setLocationFromId(locationFrom.getLocationId());
+				inventoryVO.setTransferFrom(locationFrom.getLocationId());
 			}
 			
 			
