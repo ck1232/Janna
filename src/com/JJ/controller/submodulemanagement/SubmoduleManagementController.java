@@ -58,7 +58,7 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/getSubmoduleListOrderByModule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getSubmoduleListOrderByParentId() {
 		logger.debug("getting all submodules list order by module");
-		List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parentId, name");
+		List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parent_id, name");
 		Iterator<SubModuleVO> i = submoduleList.iterator();
 		List<ModuleVO> allModuleList = moduleManagementService.getAllModules();
 		Map<Integer, ModuleVO> moduleMap = new HashMap<Integer, ModuleVO>();

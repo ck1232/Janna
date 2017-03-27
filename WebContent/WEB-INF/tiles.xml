@@ -127,7 +127,7 @@
 		        				<put-attribute name="options" value="/WEB-INF/jsp/rolemanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
-		        					<definition template="/WEB-INF/jsp/template/datatable-script.jsp" >
+		        					<definition template="/WEB-INF/jsp/rolemanagement/datatable-script.jsp" >
 		        						<put-attribute name="data-list" value="/JJ/admin/getRoleList" />
 		        						<put-attribute name="datatable-data" value="" />
 		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/rolemanagement/column-mapping.jsp" />

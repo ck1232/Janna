@@ -67,6 +67,9 @@
 						</div>
 					  </div>
 				</div>
+				<br>
+				<br>
+				<br>
 			</div>
 			</form>
 			<div class="modal-footer">

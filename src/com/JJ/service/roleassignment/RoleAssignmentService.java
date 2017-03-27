@@ -61,13 +61,17 @@ public class RoleAssignmentService {
 		userRoleDbObjectMapper.insert(obj);
 	}
 	
-	public void deleteUserRole(int key) {
-		userRoleDbObjectMapper.deleteByPrimaryKey(key);
-	}
-	
 	public void deleteRoleListByUserId(Integer userId){
 		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
 		userRoleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andUserIdEqualTo(userId);
+		UserRoleDbObject dbObj = new UserRoleDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		userRoleDbObjectMapper.updateByExampleSelective(dbObj, userRoleExample);
+	}
+	
+	public void deleteUserRolebyRoleId(Integer roleId){
+		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
+		userRoleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andRoleIdEqualTo(roleId);
 		UserRoleDbObject dbObj = new UserRoleDbObject();
 		dbObj.setDeleteInd(GeneralUtils.DELETED);
 		userRoleDbObjectMapper.updateByExampleSelective(dbObj, userRoleExample);

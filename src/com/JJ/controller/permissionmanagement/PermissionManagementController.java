@@ -108,11 +108,10 @@ public class PermissionManagementController {
 		
 		if(submodulePermissionList != null && submodulePermissionList.size() > 0){
 			for(String submodulePermission: submodulePermissionList){
-
 				SubModulePermissionVO submodulepermission = new SubModulePermissionVO();
 				submodulepermission.setRoleId(new Integer(roleid));
 				submodulepermission.setSubmoduleId(new Integer(submoduleid));
-				submodulepermission.setPermissionId(Integer.valueOf(submodulePermission));
+				submodulepermission.setPermissionTypeId(Integer.valueOf(submodulePermission));
 				permissionManagementService.saveSubmodulepermission(submodulepermission);
 			}
 		}

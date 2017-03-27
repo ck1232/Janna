@@ -91,6 +91,15 @@ public class PermissionManagementService {
 		subModulePermissionDbObjectMapper.updateByExampleSelective(dbObj, subModulePermissionDbObjectExample);
 	}
 	
+	public void deleteSubmodulepermissionByRoleId(Integer roleid) {
+		SubModulePermissionDbObjectExample subModulePermissionDbObjectExample = new SubModulePermissionDbObjectExample();
+		subModulePermissionDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+										.andRoleIdEqualTo(roleid);
+		SubModulePermissionDbObject dbObj = new SubModulePermissionDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		subModulePermissionDbObjectMapper.updateByExampleSelective(dbObj, subModulePermissionDbObjectExample);
+	}
+	
 	private List<SubModulePermissionVO> convertToSubModulePermissionVOList(List<SubModulePermissionDbObject> dbObjList) {
 		List<SubModulePermissionVO> voList = new ArrayList<SubModulePermissionVO>();
 		if(dbObjList != null && dbObjList.size() > 0){
