@@ -16,7 +16,7 @@
                     <form id="backToListButton" method="get" action="<c:url value="/expense/listExpense" />"></form>
                     <form id="updateExpenseForm" method="post" action="<c:url value="/expense/updateExpense" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${expense.expenseid}"/>
+                    	<input type="hidden" name="editBtn" value="${expense.expenseId}"/>
                     </form>
                     <!--/.FORM-->
 		             	<div class="box-body">
@@ -35,7 +35,7 @@
 							<div class="row">
 						  		<div class="form-group">	  
 									<div class="col-sm-2">Invoice No</div>
-									<div class="col-sm-5">${expense.invoiceno}</div>
+									<div class="col-sm-5">${expense.invoiceNo}</div>
 								</div>
 							</div>	
 							<div class="row">
@@ -47,7 +47,7 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Expense Amount</div>
-								    <div class="col-sm-5">${expense.totalamount}</div>
+								    <div class="col-sm-5">${expense.totalAmt}</div>
 								</div>
 							</div>	
 							<div class="row">
@@ -59,7 +59,7 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Remarks</div>
-								    <div class="col-sm-5">${expense.remark}</div>
+								    <div class="col-sm-5">${expense.remarks}</div>
 								</div>
 							</div>	
 						</div>

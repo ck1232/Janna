@@ -32,11 +32,11 @@
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Type</label>
 										<div class="col-sm-5">
-						                    <form:select path="expensetypeid" class="form-control" id="expensetypeid">
+						                    <form:select path="expenseTypeId" class="form-control" id="expenseTypeId">
 												<form:option value="" label="--- Select ---"/>
 						   						<form:options items="${expenseTypeList}" />
 											</form:select>            
-											<form:errors path="expensetypeid" class="text-danger" />
+											<form:errors path="expenseTypeId" class="text-danger" />
 										</div>
 								  	</div>
 								</div>
@@ -44,9 +44,9 @@
 								  	<div id="invoicediv" class="form-group ${status.error ? 'has-error' : ''}" style="display:none">
 								  		<label class="col-sm-2 control-label">Invoice no</label>
 										<div class="col-sm-5">
-											<form:input path="invoiceno" type="text" class="form-control"
-						                                id="invoiceno" placeholder="Enter invoice no" />
-											<form:errors path="invoiceno" class="text-danger" />
+											<form:input path="invoiceNo" type="text" class="form-control"
+						                                id="invoiceNo" placeholder="Enter invoice no" />
+											<form:errors path="invoiceNo" class="text-danger" />
 										</div>
 								  	</div>
 								</div>
@@ -64,9 +64,9 @@
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Amount</label>
 										<div class="col-sm-5">
-											<form:input path="totalamount" type="number" class="form-control"
-						                                id="totalamount" placeholder="Enter amount" />
-											<form:errors path="totalamount" class="text-danger" />
+											<form:input path="totalAmt" type="number" class="form-control"
+						                                id="totalAmt" placeholder="Enter amount" />
+											<form:errors path="totalAmt" class="text-danger" />
 										</div>
 								  	</div>
 								</div>
@@ -84,9 +84,9 @@
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Remarks</label>
 										<div class="col-sm-5">
-											<form:input path="remark" type="text" class="form-control"
-						                                id="remark" placeholder="Enter remarks" />
-											<form:errors path="remark" class="text-danger" />
+											<form:input path="remarks" type="text" class="form-control"
+						                                id="remarks" placeholder="Enter remarks" />
+											<form:errors path="remarks" class="text-danger" />
 										</div>
 								  	</div>
 								</div>
@@ -119,7 +119,7 @@
 		    });
 
 
-		  $('#expensetypeid').change(function(event) {
+		  $('#expenseTypeId').change(function(event) {
 			  loadExpenseType();
 		    });	
 
@@ -128,7 +128,7 @@
 	 } );
 
   	 function loadExpenseType(){
-  		var expensetypeid = $("select#expensetypeid").val();
+  		var expensetypeid = $("select#expenseTypeId").val();
 		if(expensetypeid != "1") {
 	      	$("#invoicediv").css("display","none");
 		}else{

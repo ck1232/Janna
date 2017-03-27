@@ -39,7 +39,7 @@ public class ExpenseManagementService {
 	public List<ExpenseVO> getAllExpenseByIdList(List<Integer> idList) {
 		ExpenseDbObjectExample example = new ExpenseDbObjectExample();
 		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andExpenseIdIn(idList);
-		example.setOrderByClause("expenseDate desc");
+		example.setOrderByClause("expense_date desc");
 		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(example));
 		return expenseList;
 	}
@@ -92,7 +92,6 @@ public class ExpenseManagementService {
 		if(expenseDbObjectList != null && expenseDbObjectList.size() > 0) {
 			for(ExpenseDbObject dbObj : expenseDbObjectList) {
 				ExpenseVO vo = new ExpenseVO();
-				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDescription(dbObj.getDescription());
 				vo.setExpenseDate(dbObj.getExpenseDate());
 				vo.setExpensedateString(GeneralUtils.convertDateToString(dbObj.getExpenseDate(), "dd/MM/yyyy"));
@@ -104,7 +103,6 @@ public class ExpenseManagementService {
 				vo.setStatus(dbObj.getStatus());
 				vo.setSupplier(dbObj.getSupplier());
 				vo.setTotalAmt(dbObj.getTotalAmt());
-				vo.setVersion(dbObj.getVersion());
 				expenseVOList.add(vo);
 			}
 		}
@@ -117,7 +115,6 @@ public class ExpenseManagementService {
 			for(ExpenseVO vo : expenseVOList){
 				ExpenseDbObject dbObj = new ExpenseDbObject();
 				expenseDbObjectList.add(dbObj);
-				dbObj.setDeleteInd(vo.getDeleteInd());
 				dbObj.setDescription(vo.getDescription());
 				dbObj.setExpenseDate(vo.getExpenseDate());
 				dbObj.setExpenseId(vo.getExpenseId());
@@ -127,7 +124,6 @@ public class ExpenseManagementService {
 				dbObj.setStatus(vo.getStatus());
 				dbObj.setSupplier(vo.getSupplier());
 				dbObj.setTotalAmt(vo.getTotalAmt());
-				dbObj.setVersion(vo.getVersion());
 			}
 		}
 		return expenseDbObjectList;
