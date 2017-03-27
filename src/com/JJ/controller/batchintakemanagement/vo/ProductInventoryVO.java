@@ -3,6 +3,7 @@ package com.JJ.controller.batchintakemanagement.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.JJ.model.Base;
 
@@ -33,18 +34,6 @@ public class ProductInventoryVO extends Base implements Serializable {
 
     private String deleteRemarks;
 
-    private Integer version;
-
-    private String createdBy;
-
-    private Date createdOn;
-
-    private String updatedBy;
-
-    private Date updatedOn;
-
-    private String deleteInd;
-    
     private String product;
     
     private ProductSubOptionRsVO productSuboption;
@@ -56,6 +45,14 @@ public class ProductInventoryVO extends Base implements Serializable {
     private String location;
     
     private String itemCode;
+    
+	private String dateString;
+	
+	private String transferFromName;
+	
+	private String transferToName;
+	
+	private List<BatchIntakeProductVO> productItems;
 
     private static final long serialVersionUID = 1L;
     
@@ -187,54 +184,6 @@ public class ProductInventoryVO extends Base implements Serializable {
         this.deleteRemarks = deleteRemarks == null ? null : deleteRemarks.trim();
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy == null ? null : createdBy.trim();
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy == null ? null : updatedBy.trim();
-    }
-
-    public Date getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
-    public String getDeleteInd() {
-        return deleteInd;
-    }
-
-    public void setDeleteInd(String deleteInd) {
-        this.deleteInd = deleteInd == null ? null : deleteInd.trim();
-    }
-
     public String getProduct() {
 		return product;
 	}
@@ -283,6 +232,38 @@ public class ProductInventoryVO extends Base implements Serializable {
 		this.itemCode = itemCode;
 	}
 
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+
+	public List<BatchIntakeProductVO> getProductItems() {
+		return productItems;
+	}
+
+	public void setProductItems(List<BatchIntakeProductVO> productItems) {
+		this.productItems = productItems;
+	}
+
+	public String getTransferFromName() {
+		return transferFromName;
+	}
+
+	public void setTransferFromName(String transferFromName) {
+		this.transferFromName = transferFromName;
+	}
+
+	public String getTransferToName() {
+		return transferToName;
+	}
+
+	public void setTransferToName(String transferToName) {
+		this.transferToName = transferToName;
+	}
+
 	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -301,12 +282,6 @@ public class ProductInventoryVO extends Base implements Serializable {
         sb.append(", referenceId=").append(referenceId);
         sb.append(", date=").append(date);
         sb.append(", deleteRemarks=").append(deleteRemarks);
-        sb.append(", version=").append(version);
-        sb.append(", createdBy=").append(createdBy);
-        sb.append(", createdOn=").append(createdOn);
-        sb.append(", updatedBy=").append(updatedBy);
-        sb.append(", updatedOn=").append(updatedOn);
-        sb.append(", deleteInd=").append(deleteInd);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");

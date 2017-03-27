@@ -18,7 +18,6 @@ import com.JJ.controller.batchintakemanagement.vo.ProductInventoryVO;
 import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
 import com.JJ.controller.batchintakemanagement.vo.StorageLocationVO;
 import com.JJ.controller.inventorymanagement.InventoryHistorySearchCriteria;
-import com.JJ.controller.inventorymanagement.vo.InventoryVO;
 import com.JJ.controller.inventorymanagement.vo.ViewItemCodeVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryLocationVO;
 import com.JJ.controller.inventorymanagement.vo.ViewProductInventoryVO;
@@ -304,7 +303,7 @@ public class InventoryProductManagementService {
 	/* Product inventory table END */
 	
 	
-	public void saveInventoryRecord(InventoryVO inventoryVo){
+	public void saveInventoryRecord(ProductInventoryVO inventoryVo){
 		List<ProductInventoryVO> productInventoryList = convertToProductInventoryList(inventoryVo);
 		if(productInventoryList != null && productInventoryList.size() > 0){
 			List<ProductInventoryDbObject> dbList = convertToProductInventoryDbObject(productInventoryList);
@@ -314,7 +313,7 @@ public class InventoryProductManagementService {
 		}
 	}
 
-	private List<ProductInventoryVO> convertToProductInventoryList(InventoryVO inventoryVo) {
+	private List<ProductInventoryVO> convertToProductInventoryList(ProductInventoryVO inventoryVo) {
 		List<ProductInventoryVO> productInventoryList = new ArrayList<ProductInventoryVO>();
 		if(inventoryVo.getProductItems() != null && inventoryVo.getProductItems().size() > 0){
 			for(BatchIntakeProductVO batchProduct:inventoryVo.getProductItems()){
@@ -326,11 +325,11 @@ public class InventoryProductManagementService {
 				if(rs == null || rs.getProductSuboptionRsId() == null){
 					continue;
 				}
-				if(inventoryVo.getLocationFromId() != null && inventoryVo.getLocationToId() != null){
+				if(inventoryVo.getTransferFrom() != null && inventoryVo.getTransferTo() != null){
 					//if both location exists, mean is transfer, create two inventory record
 					ProductInventoryVO addInventory = new ProductInventoryVO();
 					addInventory.setDate(inventoryVo.getDate());
-					addInventory.setTransferFrom(inventoryVo.getLocationFromId());
+					addInventory.setTransferFrom(inventoryVo.getTransferFrom());
 					addInventory.setPlusOrMinus(true);
 					addInventory.setRemarks(inventoryVo.getRemarks());
 					addInventory.setProductSuboptionRsId(rs.getProductSuboptionRsId());
@@ -341,30 +340,30 @@ public class InventoryProductManagementService {
 					ProductInventoryVO deleteInventory = new ProductInventoryVO();
 					deleteInventory.setDate(inventoryVo.getDate());
 					deleteInventory.setDeleteRemarks(inventoryVo.getRemarks());
-					deleteInventory.setTransferFrom(inventoryVo.getLocationToId());
+					deleteInventory.setTransferFrom(inventoryVo.getTransferTo());
 					deleteInventory.setPlusOrMinus(false);
 					deleteInventory.setUnitAmt(batchProduct.getUnitcost());
 					deleteInventory.setRemarks(inventoryVo.getRemarks());
 					deleteInventory.setProductSuboptionRsId(rs.getProductSuboptionRsId());
 					deleteInventory.setQty(batchProduct.getQty());
 					productInventoryList.add(deleteInventory);
-				}else if (inventoryVo.getLocationFromId() != null){
+				}else if (inventoryVo.getTransferFrom() != null){
 					//if locationTo is empty, means is add
 					ProductInventoryVO addInventory = new ProductInventoryVO();
 					addInventory.setDate(inventoryVo.getDate());
-					addInventory.setTransferFrom(inventoryVo.getLocationFromId());
+					addInventory.setTransferFrom(inventoryVo.getTransferFrom());
 					addInventory.setPlusOrMinus(true);
 					addInventory.setUnitAmt(batchProduct.getUnitcost());
 					addInventory.setRemarks(inventoryVo.getRemarks());
 					addInventory.setProductSuboptionRsId(rs.getProductSuboptionRsId());
 					addInventory.setQty(batchProduct.getQty());
 					productInventoryList.add(addInventory);
-				}else if (inventoryVo.getLocationToId() != null){
+				}else if (inventoryVo.getTransferTo() != null){
 					//if locationFrom is empty, mean is delete
 					ProductInventoryVO deleteInventory = new ProductInventoryVO();
 					deleteInventory.setDate(inventoryVo.getDate());
 					deleteInventory.setDeleteRemarks(inventoryVo.getRemarks());
-					deleteInventory.setTransferFrom(inventoryVo.getLocationToId());
+					deleteInventory.setTransferFrom(inventoryVo.getTransferTo());
 					deleteInventory.setUnitAmt(batchProduct.getUnitcost());
 					deleteInventory.setPlusOrMinus(false);
 					deleteInventory.setRemarks(inventoryVo.getRemarks());

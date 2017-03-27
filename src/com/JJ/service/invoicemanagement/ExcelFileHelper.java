@@ -100,6 +100,7 @@ public class ExcelFileHelper {
 		return null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private static int[] findIndex(Sheet sheet, String cellContent) {
 		int[] index = new int[2];
 	    for (Row row : sheet) {
@@ -117,6 +118,7 @@ public class ExcelFileHelper {
 	    return index;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private static int[] findIndexWithPattern(Sheet sheet, String pattern) {
 		int[] index = new int[2];
 	    for (Row row : sheet) {
