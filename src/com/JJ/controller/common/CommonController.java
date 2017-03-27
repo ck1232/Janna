@@ -1,5 +1,9 @@
 package com.JJ.controller.common;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,11 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,12 +36,14 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.common.vo.FileVO;
 import com.JJ.controller.common.vo.MenuVO;
 import com.JJ.controller.common.vo.ModuleVO;
 import com.JJ.controller.common.vo.SubModulePermissionVO;
@@ -66,7 +74,6 @@ public class CommonController {
 	private UserManagementService userManagementService;
 	private PermissionManagementService permissionManagementService;
 	private CommonService commonService;
-	
 	@Value("${jdbc.driver}")
 	private String driver;
 	
@@ -188,10 +195,93 @@ public class CommonController {
     }
 	
 	@RequestMapping(value={"/query","/q"}, method = RequestMethod.GET)
-	public String querypage (Model model) {
+	public String queryPage (Model model) {
 		return "query";
 	}
 	
+	@RequestMapping(value={"/viewLogs"}, method = RequestMethod.POST)
+	public String viewLogsPage (HttpServletResponse response, @RequestParam(value="view", required=true) int hashCode, Model model) throws Exception{
+		String url = System.getProperty("wtp.deploy");
+		File folder = new File(url + "//logs");
+		List<File> fileList = Arrays.asList(folder.listFiles());
+		List<FileVO> filesList = convertToFileVO(fileList);
+		if(filesList != null && filesList.size() > 0){
+			for(FileVO vo :filesList){
+				if(vo.hashCode()==hashCode){
+					File file = vo.getFile();
+					String content = "";
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String line = null;
+					StringBuilder sb = new StringBuilder();
+					while ((line = br.readLine()) != null) {
+						sb.append(line);
+						sb.append("<br/>");
+					}
+					br.close();
+					content = sb.toString();
+					model.addAttribute("content", content);
+					return "viewLogs";
+				}
+			}
+		}
+		return "redirect:logs";
+	}
+	
+	@RequestMapping(value={"/downloadLogs"}, method = RequestMethod.POST)
+	public String downloadLogsPage (HttpServletResponse response, @RequestParam(value="download", required=true) int hashCode) throws Exception{
+		String url = System.getProperty("wtp.deploy");
+		File folder = new File(url + "//logs");
+		List<File> fileList = Arrays.asList(folder.listFiles());
+		List<FileVO> filesList = convertToFileVO(fileList);
+		if(filesList != null && filesList.size() > 0){
+			for(FileVO vo :filesList){
+				if(vo.hashCode()==hashCode){
+					response.setContentType("application/octet-stream");
+		         	response.addHeader("Content-Disposition", "attachment; filename="+vo.getFileName());
+		         	File file = vo.getFile();
+		         	FileInputStream fileIn = new FileInputStream(file);
+		            ServletOutputStream out = response.getOutputStream();
+		            byte[] outputByte = new byte[(int)file.length()];
+		            //copy binary contect to output stream
+		            while(fileIn.read(outputByte, 0, (int)file.length()) != -1)
+		            {
+		            	out.write(outputByte, 0, (int)file.length());
+		            }
+		            out.flush();
+		            fileIn.close();
+		            return null;
+				}
+			}
+		}
+		return "logs";
+	}
+	
+	@RequestMapping(value={"/logs","/l"}, method = RequestMethod.GET)
+	public String logsPage (Model model) throws Exception{
+		String url = System.getProperty("wtp.deploy");
+		File folder = new File(url + "//logs");
+		List<File> fileList = Arrays.asList(folder.listFiles());
+		List<FileVO> filesList = convertToFileVO(fileList);
+		model.addAttribute("files", filesList);
+		return "logs";
+	}
+	
+	private List<FileVO> convertToFileVO(List<File> fileList) {
+		List<FileVO> fileVOList = new ArrayList<FileVO>();
+		if(fileList != null && fileList.size() > 0){
+			for(File file : fileList){
+				if(file.isDirectory()) continue;
+				FileVO vo = new FileVO();
+				vo.setFileName(file.getName());
+				vo.setLastModified(file.lastModified());
+				vo.setHashCode(vo.hashCode());
+				vo.setFile(file);
+				fileVOList.add(vo);
+			}
+		}
+		return fileVOList;
+	}
+
 	@RequestMapping(value="/query", method = RequestMethod.POST)
 	public String runSqlpage (@RequestParam(value="sqlStatement", required=true) String sqlStatement, final RedirectAttributes redirectAttributes, Model model) {
 		Statement statement = null;
@@ -270,10 +360,10 @@ public class CommonController {
 			         statement.close();
 			         if(wb != null){
 			         	response.setContentType("application/vnd.ms-excel");
-			             response.addHeader("Content-Disposition", "attachment; filename=data.xls");
+			         	response.addHeader("Content-Disposition", "attachment; filename=data.xls");
 			             try{
 			             	wb.write(response.getOutputStream());
-			                 response.getOutputStream().flush();
+			                response.getOutputStream().flush();
 			             } 
 			             catch (IOException ex) {
 			                 ex.printStackTrace();
@@ -327,4 +417,10 @@ public class CommonController {
         }
         return userName;
     }
+	
+	@ExceptionHandler(Exception.class)
+	public String handleAllException(Exception ex) throws Exception{
+		logger.error(ex);
+		throw ex;
+	}
 }

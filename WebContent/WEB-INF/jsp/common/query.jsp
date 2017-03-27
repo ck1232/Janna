@@ -29,9 +29,7 @@ $(function(){
 <div class="row">
 	<p class="col-md-2"><b>SQL result:</b></p>
 	<div class="col-md-12" style="overflow-x:auto;">
-		<table class="table table-striped">
-		   ${message}
-		 </table>
+		<table class="table table-striped">${message}</table>
 	</div>
 </div>
  

@@ -36,7 +36,7 @@
     	<property name="locations">
     		<list>
     			<value>classpath:admin-dev-config.properties</value>
-    			<!-- <value>classpath:admin-prd-config.properties</value> -->
+    			<value>${wtp.deploy}/config/admin-prd-config.properties</value>
     		</list>
     	</property>
     	<property name="ignoreResourceNotFound">

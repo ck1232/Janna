@@ -39,6 +39,30 @@
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>       
+    </definition> 
+    
+    <definition name="logs" extends="main_template">  
+        <put-attribute name="title" value="Logs" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Logs" />
+        		<put-attribute name="heading-description" value="To see all logs" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/common/logs.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>       
+    </definition>  
+    
+    <definition name="viewLogs" extends="main_template">  
+        <put-attribute name="title" value="View Logs" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Logs" />
+        		<put-attribute name="heading-description" value="View logs" />
+        		<put-attribute name="content" value="/WEB-INF/jsp/common/viewLogs.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>       
     </definition>  
     
     <!-- Common Module END -->
