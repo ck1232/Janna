@@ -12,7 +12,7 @@ public class PaymentRsVO extends Base implements Serializable {
     private Integer referenceId;
 
     private Integer paymentDetailId;
-
+    
     private static final long serialVersionUID = 1L;
 
     public Integer getPaymentRsId() {

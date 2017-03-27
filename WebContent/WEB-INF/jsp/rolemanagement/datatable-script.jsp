@@ -1,10 +1,8 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 $(function () {
-	var rows_selected = [];
-	table = $('#datatable1').DataTable({
+    $('#datatable1').DataTable({
       "paging": true,
-      "pageLength": 10,
       "responsive" : true,
       "lengthChange": false,
       "searching": true,
@@ -24,12 +22,11 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.employeeId);
-          $(row).find('button[name="editBtn"]').prop('value', data.employeeId);
-          $(row).find('button[name="viewBtn"]').prop('value', data.employeeId);
+          $(row).find('input[type="checkbox"]').prop('value', data.roleId);
+          $(row).find('button[name="editBtn"]').prop('value', data.roleId);
        }
     });
 
-	initTableSearch();
+    initTableSearch();
 });
 </script>

@@ -57,6 +57,7 @@ public class SubModulePermissionTypeVO extends Base implements Serializable {
         this.url = url == null ? null : url.trim();
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

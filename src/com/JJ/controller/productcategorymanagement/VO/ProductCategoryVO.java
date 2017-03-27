@@ -70,7 +70,7 @@ public class ProductCategoryVO extends Base implements Serializable {
 	public void setDisplayIndString(String displayIndString) {
 		this.displayIndString = displayIndString;
 	}
-
+	
     public List<ProductSubCategoryVO> getSubcategoryList() {
 		return subcategoryList;
 	}

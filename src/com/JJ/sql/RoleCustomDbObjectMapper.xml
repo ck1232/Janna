@@ -8,11 +8,11 @@
   </resultMap>
   <select id="getRolesToAssign" parameterType="String" resultMap="rolesToAssignResultMap">
   
-  SELECT  r.id as "roleid",
+  SELECT  r.role_id as "roleid",
   	  r.name as "name", 
-  	  CASE WHEN ur.roleid is null THEN 'N' ELSE 'Y'
+  	  CASE WHEN ur.role_id is null THEN 'N' ELSE 'Y'
 	  END As checked FROM role r 
-	left join (select roleid from user_role where userid = #{userid}) ur on r.id = ur.roleid
+	left join (select role_id from user_role where user_id = #{userid}) ur on r.role_id = ur.role_id
 
 </select>
 </mapper>

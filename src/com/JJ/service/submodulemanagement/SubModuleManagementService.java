@@ -13,16 +13,20 @@ import com.JJ.dao.SubModuleDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.SubModuleDbObject;
 import com.JJ.model.SubModuleDbObjectExample;
+import com.JJ.service.permissionmanagement.PermissionManagementService;
 
 @Service
 @Transactional
 public class SubModuleManagementService {
 	
 	private SubModuleDbObjectMapper subModuleDbObjectMapper;
+	private PermissionManagementService permissionManagementService;
 	
 	@Autowired
-	public SubModuleManagementService(SubModuleDbObjectMapper subModuleDbObjectMapper) {
+	public SubModuleManagementService(SubModuleDbObjectMapper subModuleDbObjectMapper,
+			PermissionManagementService permissionManagementService) {
 		this.subModuleDbObjectMapper = subModuleDbObjectMapper;
+		this.permissionManagementService = permissionManagementService;
 	}
 	
 	public SubModuleVO findById(Integer id) {
@@ -32,23 +36,6 @@ public class SubModuleManagementService {
 			return voList.get(0);
 		}
 		return new SubModuleVO();
-	}
-
-	private List<SubModuleVO> convertToSubModuleVOList(List<SubModuleDbObject> dbObjList) {
-		List<SubModuleVO> voList = new ArrayList<SubModuleVO>();
-		if(dbObjList != null && !dbObjList.isEmpty()){
-			for(SubModuleDbObject dbObj : dbObjList){
-				SubModuleVO vo = new SubModuleVO();
-				vo.setDeleteInd(dbObj.getDeleteInd());
-				vo.setIcon(dbObj.getIcon());
-				vo.setName(dbObj.getName());
-				vo.setParentId(dbObj.getParentId());
-				vo.setSubmoduleId(dbObj.getSubmoduleId());
-				vo.setUrl(dbObj.getUrl());
-				voList.add(vo);
-			}
-		}
-		return voList;
 	}
 
 	public List<SubModuleVO> getAllSubmodules() {
@@ -82,34 +69,48 @@ public class SubModuleManagementService {
 		return convertToSubModuleVOList(submoduleList);
 	}
 	
-	public void saveSubmodule(SubModuleVO submodule) {
-		List<SubModuleDbObject> dbObjList = convertToSubModuleDbObjectList(Arrays.asList(submodule));
-		if(dbObjList != null && dbObjList.size() > 0){
-			subModuleDbObjectMapper.insert(dbObjList.get(0));
+	public void saveSubmodule(SubModuleVO submoduleVO) {
+		if(submoduleVO != null){
+			SubModuleDbObject dbObj = convertToSubModuleDbObjectList(Arrays.asList(submoduleVO)).get(0);
+			subModuleDbObjectMapper.insert(dbObj);
 		}
-		
 	}
 	
 	public void deleteSubmodule(Integer id) {
-		SubModuleVO submodule = findById(id);
-		if(submodule != null && submodule.getDeleteInd() != null){
-			if(submodule.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-				SubModuleDbObject dbObj = new SubModuleDbObject();
-				dbObj.setSubmoduleId(id);
-				dbObj.setDeleteInd(GeneralUtils.DELETED);
-				subModuleDbObjectMapper.updateByPrimaryKeySelective(dbObj);
-			}
-		}
-		
+		deleteSubmodule(Arrays.asList(id));
+		permissionManagementService.deleteSubmodulepermissionBySubmoduleId(id);
+		permissionManagementService.deleteSubmodulepermissiontypeBySubmoduleId(id);
+	}
+	
+	public void deleteSubmodule(List<Integer> idList) {
+		SubModuleDbObjectExample subModuleDbObjectExample = new SubModuleDbObjectExample();
+		subModuleDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSubmoduleIdIn(idList);
+		SubModuleDbObject dbObj = new SubModuleDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		subModuleDbObjectMapper.updateByExampleSelective(dbObj, subModuleDbObjectExample);
 	}
 	
 	public void updateSubmodule(SubModuleVO submodule) {
-		if(submodule != null && submodule.getDeleteInd() != null){
-			if(submodule.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-				List<SubModuleDbObject> dbObjList = convertToSubModuleDbObjectList(Arrays.asList(submodule));
-				subModuleDbObjectMapper.updateByPrimaryKeySelective(dbObjList.get(0));
+		if(submodule != null && submodule.getSubmoduleId() != null){
+			List<SubModuleDbObject> dbObjList = convertToSubModuleDbObjectList(Arrays.asList(submodule));
+			subModuleDbObjectMapper.updateByPrimaryKeySelective(dbObjList.get(0));
+		}
+	}
+	
+	private List<SubModuleVO> convertToSubModuleVOList(List<SubModuleDbObject> dbObjList) {
+		List<SubModuleVO> voList = new ArrayList<SubModuleVO>();
+		if(dbObjList != null && !dbObjList.isEmpty()){
+			for(SubModuleDbObject dbObj : dbObjList){
+				SubModuleVO vo = new SubModuleVO();
+				vo.setIcon(dbObj.getIcon());
+				vo.setName(dbObj.getName());
+				vo.setParentId(dbObj.getParentId());
+				vo.setSubmoduleId(dbObj.getSubmoduleId());
+				vo.setUrl(dbObj.getUrl());
+				voList.add(vo);
 			}
 		}
+		return voList;
 	}
 	 
 	private List<SubModuleDbObject> convertToSubModuleDbObjectList(List<SubModuleVO> voList) {
@@ -117,7 +118,6 @@ public class SubModuleManagementService {
 		if(voList != null && voList.size() > 0){
 			for(SubModuleVO obj : voList){
 				SubModuleDbObject dbObj = new SubModuleDbObject();
-				dbObj.setDeleteInd(obj.getDeleteInd());
 				dbObj.setIcon(obj.getIcon());
 				dbObj.setName(obj.getName());
 				dbObj.setParentId(obj.getParentId());

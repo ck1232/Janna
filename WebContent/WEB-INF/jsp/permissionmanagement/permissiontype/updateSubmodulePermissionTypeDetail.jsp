@@ -12,21 +12,21 @@
                     <!--FORM-->
                     
 		              <div class="box-body">
-		              <form id="backToListButton" method="get" action="<c:url value="/admin/updatePermissionType/${submodulepermissiontypeForm.submoduleid}" />"></form>
+		              <form id="backToListButton" method="get" action="<c:url value="/admin/updatePermissionType/${submodulepermissiontypeForm.submoduleId}" />"></form>
 		              <c:url var = "post_url" value="/admin/updatePermissionTypeDetailToDb" />
 		              <form:form id="updatePermissionTypeDetailToDbForm" method="post" modelAttribute="submodulepermissiontypeForm" action="${post_url }">
-		              		<form:input path="id" type="hidden" id="id"/>
-		              		<form:input path="submoduleid" type="hidden" id="submoduleid"/>
-		              		<form:input path="seqno" type="hidden" id="seqno"/>
+		              		<form:input path="typeId" type="hidden" id="typeId"/>
+		              		<form:input path="submoduleId" type="hidden" id="submoduleId"/>
+		              		<form:input path="seqNum" type="hidden" id="seqNum"/>
 		              		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              		
 		              		<div class="row">
 							 	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Permission Type</label>
 									<div class="col-sm-10">
-										<form:input path="permissiontype" type="text" class="form-control"
-					                                id="permissiontype" placeholder="Enter permission type" />
-										<form:errors path="permissiontype" class="text-danger" />
+										<form:input path="permissionType" type="text" class="form-control"
+					                                id="permissionType" placeholder="Enter permission type" />
+										<form:errors path="permissionType" class="text-danger" />
 									</div>
 							  	</div>
 							</div>

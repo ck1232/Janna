@@ -11,16 +11,15 @@
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="post" action="<c:url value="/admin/listSubmodule" />">
-                    	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
+                    	<input type="hidden" name="editBtn" value="${submodule.parentId}"/>
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <c:url var = "post_url" value="/admin/updateSubmoduleToDb" />
                     <form:form id="updateSubmoduleToDbForm" method="post" modelAttribute="submodule" action="${post_url }">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
-		              		<form:input path="id" type="hidden" id="id"/>
-		              		<form:input path="parentid" type="hidden" id="parentid"/>
-		              		<form:input path="deleteind" type="hidden" id="deleteind"/>
+		              		<form:input path="submoduleId" type="hidden" id="submoduleId"/>
+		              		<form:input path="parentId" type="hidden" id="parentId"/>
 		              		<div class="row">
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Submodule Name</label>

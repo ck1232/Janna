@@ -14,7 +14,7 @@
                     <c:url var="post_url" value="/employee/updateEmployeeToDb" />
                     <form:form id="updateEmployeeToDbForm" method="post" modelAttribute="employeeForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <form:input type="hidden" path="employeeid" id="employeeid"/>
+                    <form:input type="hidden" path="employeeId" id="employeeId"/>
 		              <div class="box-body">
 		              <div class="row">
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -30,11 +30,11 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Employment Type</label>
 							<div class="col-sm-5">
-								<form:select path="employmenttype" class="form-control" id="employmenttype">
+								<form:select path="employeeType" class="form-control" id="employeeType">
 								<form:option value="" label="--- Select ---"/>
 		   						<form:options items="${employmentTypeList}" />
 								</form:select>            
-								<form:errors path="employmenttype" class="text-danger" />
+								<form:errors path="employeeType" class="text-danger" />
 							</div>
 						</div>
 					</div>
@@ -62,9 +62,9 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Basic Salary</label>
 							<div class="col-sm-5">
-								<form:input path="basicsalary" type="text" class="form-control"
-				                                id="basicsalary" placeholder="Enter employee basic salary" />
-								<form:errors path="basicsalary" class="text-danger" />
+								<form:input path="basicSalary" type="text" class="form-control"
+				                                id="basicSalary" placeholder="Enter employee basic salary" />
+								<form:errors path="basicSalary" class="text-danger" />
 							</div>
 						</div>
 					</div>
@@ -72,9 +72,9 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Employee Start Date</label>
 							<div class="col-sm-5">
-								<form:input path="employstartdateString" type="text" class="form-control" 
-		                  			  		id="employstartdateString" placeholder="Press to select date"/>
-		                  		<form:errors path="employstartdateString" class="text-danger" />
+								<form:input path="employmentStartDateString" type="text" class="form-control" 
+		                  			  		id="employmentStartDateString" placeholder="Press to select date"/>
+		                  		<form:errors path="employmentStartDateString" class="text-danger" />
 							</div>
 						</div>
 					</div>
@@ -82,9 +82,9 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Employee End Date</label>
 							<div class="col-sm-5">
-								<form:input path="employenddateString" type="text" class="form-control" 
-		                  			  		id="employenddateString" placeholder="Press to select date"/>
-		                  		<form:errors path="employenddateString" class="text-danger" />
+								<form:input path="employmentEndDateString" type="text" class="form-control" 
+		                  			  		id="employmentEndDateString" placeholder="Press to select date"/>
+		                  		<form:errors path="employmentEndDateString" class="text-danger" />
 							</div>
 						</div>
 					</div>
@@ -93,8 +93,8 @@
 							<label class="col-sm-2 control-label">CDAC Indicator</label>
 							<div class="col-sm-5">
 								<div class="checkbox">
-							  		<label><form:checkbox path="cdacindBoolean" id="cdacindBoolean" /></label>
-							     	<form:errors path="cdacindBoolean" class="text-danger" />
+							  		<label><form:checkbox path="cdacIndBoolean" id="cdacIndBoolean" /></label>
+							     	<form:errors path="cdacIndBoolean" class="text-danger" />
 								</div>
 							</div>
 						</div>
@@ -124,12 +124,12 @@
 		      	autoclose: true
 		    });
 
-    	  $('#employstartdateString').datepicker({
+    	  $('#employmentStartDateString').datepicker({
 	    		format: 'dd/mm/yyyy',
 		      	autoclose: true
 		    });
 
-    	  $('#employenddateString').datepicker({
+    	  $('#employmentEndDateString').datepicker({
 	    		format: 'dd/mm/yyyy',
 		      	autoclose: true
 		    });

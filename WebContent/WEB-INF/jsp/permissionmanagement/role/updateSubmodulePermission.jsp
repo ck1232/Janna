@@ -16,7 +16,7 @@
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/admin/listModule"/>"></form>
 		              <div class="box-body">
-		              		<input type="hidden" id="id" value="${submodule.id}"/>
+		              		<input type="hidden" id="id" value="${submodule.submoduleId}"/>
 							<div class="col-sm-2">Name</div>
 							<div class="col-sm-10">${submodule.name}</div>
 							
@@ -43,7 +43,7 @@
 				<h3 class="modal-title">Edit Permission</h3>
 			</div>
 			<form id="updatePermissionToDbForm" method="post" action="<c:url value="/admin/saveSubmodulePermissionToDb"/>">
-			<input type="hidden" id="submoduleid" name="submoduleid" value="${submodule.id}"/>
+			<input type="hidden" id="submoduleid" name="submoduleid" value="${submodule.submoduleId}"/>
 			<input type="hidden" id="roleid" name="roleid"/>
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="modal-body">
@@ -59,14 +59,17 @@
 						<div class="col-sm-10">
 							<select class="selectpicker" multiple id='submodulePermission' name ='submodulePermission'>
 								<c:forEach items="${permissionList}" var="permission">
-							    	<option value = "${permission.id}">
-							    		${permission.permissiontype}
+							    	<option value = "${permission.typeId}">
+							    		${permission.permissionType}
 							    	</option>
 							    </c:forEach>
 							</select>
 						</div>
 					  </div>
 				</div>
+				<br>
+				<br>
+				<br>
 			</div>
 			</form>
 			<div class="modal-footer">

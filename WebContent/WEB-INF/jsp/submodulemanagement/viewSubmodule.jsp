@@ -14,13 +14,13 @@
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="post" action="<c:url value="/admin/listSubmodule" />">
-                    	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
+                    	<input type="hidden" name="editBtn" value="${submodule.parentId}"/>
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <c:url var = "post_url" value="/admin/updateSubmodule" />
                     <form:form id="updateSubmoduleForm" method="post" action="${post_url }">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${submodule.id}"/>
+                    	<input type="hidden" name="editBtn" value="${submodule.submoduleId}"/>
                     </form:form>
 		              <div class="box-body">
 		              	<div class="row">

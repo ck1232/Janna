@@ -15,13 +15,12 @@
                     <!--FORM-->
                     <form id="backToListButton" method="post" action="<c:url value="/admin/listSubmodule" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${submodule.parentid}"/>
+                    	<input type="hidden" name="editBtn" value="${submodule.parentId}"/>
                     </form>
                     <c:url var = "post_url" value="/admin/createSubmoduleToDb" />
                     <form:form id="createSubmoduleForm" method="post" modelAttribute="submodule" action="${post_url}">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<form:input path="parentid" type="hidden" id="parentid"/>
-						<form:input path="deleteind" type="hidden" id="deleteind"/>
+                    	<form:input path="parentId" type="hidden" id="parentId"/>
 		              <div class="box-body">
 		              	<div class="row">
 							  <div class="form-group ${status.error ? 'has-error' : ''}">

@@ -12,6 +12,7 @@ import com.JJ.controller.common.vo.UserRoleVO;
 import com.JJ.controller.roleassignment.vo.RolesToAssignVO;
 import com.JJ.dao.RoleCustomDbObjectMapper;
 import com.JJ.dao.UserRoleDbObjectMapper;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.UserRoleDbObject;
 import com.JJ.model.UserRoleDbObjectExample;
 
@@ -37,23 +38,6 @@ public class RoleAssignmentService {
 		return new UserRoleVO();
 	}
 
-	private List<UserRoleVO> convertToUserRoleVOList(
-			List<UserRoleDbObject> objList) {
-		List<UserRoleVO> voList = new ArrayList<UserRoleVO>();
-		if(objList != null && objList.size() > 0){
-			for(UserRoleDbObject obj : objList){
-				UserRoleVO vo = new UserRoleVO();
-				vo.setDeleteInd(obj.getDeleteInd());
-				vo.setRoleId(obj.getRoleId());
-				vo.setUserId(obj.getUserId());
-				vo.setUserRoleId(obj.getUserRoleId());
-				vo.setVersion(obj.getVersion());
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
-
 	public List<UserRoleVO> getAllRoles() {
 		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
 		userRoleExample.createCriteria();
@@ -77,6 +61,41 @@ public class RoleAssignmentService {
 		userRoleDbObjectMapper.insert(obj);
 	}
 	
+	public void deleteRoleListByUserId(Integer userId){
+		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
+		userRoleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andUserIdEqualTo(userId);
+		UserRoleDbObject dbObj = new UserRoleDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		userRoleDbObjectMapper.updateByExampleSelective(dbObj, userRoleExample);
+	}
+	
+	public void deleteUserRolebyRoleId(Integer roleId){
+		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
+		userRoleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andRoleIdEqualTo(roleId);
+		UserRoleDbObject dbObj = new UserRoleDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		userRoleDbObjectMapper.updateByExampleSelective(dbObj, userRoleExample);
+	}
+	
+	public void updateRole(UserRoleVO role) {
+		userRoleDbObjectMapper.updateByPrimaryKeySelective(convertToUserRoleDbObject(role));
+	}
+	 
+	private List<UserRoleVO> convertToUserRoleVOList(List<UserRoleDbObject> objList) {
+		List<UserRoleVO> voList = new ArrayList<UserRoleVO>();
+		if(objList != null && objList.size() > 0){
+			for(UserRoleDbObject obj : objList){
+				UserRoleVO vo = new UserRoleVO();
+				vo.setDeleteInd(obj.getDeleteInd());
+				vo.setRoleId(obj.getRoleId());
+				vo.setUserId(obj.getUserId());
+				vo.setUserRoleId(obj.getUserRoleId());
+				vo.setVersion(obj.getVersion());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
 	
 	private UserRoleDbObject convertToUserRoleDbObject(UserRoleVO vo) {
 		UserRoleDbObject obj = new UserRoleDbObject();
@@ -88,20 +107,4 @@ public class RoleAssignmentService {
 		return obj;
 	}
 
-	public void deleteUserRole(int key) {
-		userRoleDbObjectMapper.deleteByPrimaryKey(key);
-	}
-	
-	public void deleteRoleListByUserId(Integer userId){
-		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
-		userRoleExample.createCriteria().andUserIdEqualTo(userId);
-		userRoleDbObjectMapper.deleteByExample(userRoleExample);
-	}
-	
-	public void updateRole(UserRoleVO role) {
-		userRoleDbObjectMapper.updateByPrimaryKeySelective(convertToUserRoleDbObject(role));
-	}
-	 
-	
-	
 }

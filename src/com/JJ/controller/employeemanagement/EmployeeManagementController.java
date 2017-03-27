@@ -118,14 +118,6 @@ public class EmployeeManagementController {
 	    	model.addAttribute("employmentTypeList", employmentTypeList);
 			return "createEmployee";
 		} else {
-			try{
-				employeeVo.setDob(GeneralUtils.convertStringToDate(employeeVo.getDobString(), "dd/MM/yyyy"));
-				employeeVo.setEmploymentStartDate(GeneralUtils.convertStringToDate(employeeVo.getEmploymentStartDateString(), "dd/MM/yyyy"));
-				employeeVo.setEmploymentEndDate(GeneralUtils.convertStringToDate(employeeVo.getEmploymentEndDateString(), "dd/MM/yyyy"));
-				employeeVo.setCdacInd(employeeVo.getCdacIndBoolean() == Boolean.TRUE ? "Y" : "N");
-			}catch(Exception e) {
-				logger.info("Error parsing date string");
-			}
 			employeeManagementService.saveEmployee(employeeVo);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Employee added successfully!");

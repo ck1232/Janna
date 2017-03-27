@@ -6,10 +6,10 @@
     "data":           "",
     "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "expensedate"},
+{"data": "expenseDate"},
 {"data": "expensetype"},
 {"data": "description"},
-{"data": "totalamount"},
+{"data": "totalAmt"},
 {"data": "supplier"},
 {"data": "status"},
 {

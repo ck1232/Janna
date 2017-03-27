@@ -63,8 +63,8 @@
 									<label class="col-sm-2 control-label">Enabled</label>
 									<div class="col-sm-10">
 										<div class="checkbox">
-									  		<label><form:checkbox path="enabled" id="enabled" /></label>
-									     	<form:errors path="enabled" class="text-danger" />
+									  		<label><form:checkbox path="enabledBoolean" id="enabled" /></label>
+									     	<form:errors path="enabledBoolean" class="text-danger" />
 										</div>
 									</div>
 							  	</div>

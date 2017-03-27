@@ -12,6 +12,10 @@ public class SubModulePermissionVO extends Base implements Serializable {
     private Integer submoduleId;
 
     private Integer permissionTypeId;
+    
+    private String submodulename;
+    
+	private String permissiontype;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +50,23 @@ public class SubModulePermissionVO extends Base implements Serializable {
     public void setPermissionTypeId(Integer permissionTypeId) {
         this.permissionTypeId = permissionTypeId;
     }
-    
+
+    public String getSubmodulename() {
+		return submodulename;
+	}
+
+	public void setSubmodulename(String submodulename) {
+		this.submodulename = submodulename;
+	}
+
+	public String getPermissiontype() {
+		return permissiontype;
+	}
+
+	public void setPermissiontype(String permissiontype) {
+		this.permissiontype = permissiontype;
+	}
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

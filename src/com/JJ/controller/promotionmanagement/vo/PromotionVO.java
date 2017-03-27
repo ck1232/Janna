@@ -69,7 +69,7 @@ public class PromotionVO extends Base implements Serializable {
     public void setIsActive(String isActive) {
         this.isActive = isActive == null ? null : isActive.trim();
     }
-
+    
     public String getPromotionMessage() {
         return promotionMessage;
     }

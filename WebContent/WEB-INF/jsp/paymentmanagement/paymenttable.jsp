@@ -19,13 +19,13 @@
 					                	</tr>
 					                	<c:forEach items="${paymentList}" var="payment">
 											<tr>
-												<td>${payment.paymentdateString}</td>
-							          			<td>${payment.paymentmodeString}</td>
-							          			<td>${payment.paymentamount}</td>
-							          			<td>${payment.chequenum}</td>
+												<td>${payment.paymentDateString}</td>
+							          			<td>${payment.paymentModeString}</td>
+							          			<td>${payment.paymentAmt}</td>
+							          			<td>${payment.chequeNum}</td>
 							          			<td>
-							          				<c:if test="${payment.bouncechqind == 'N'}">No</c:if>
-							          				<c:if test="${payment.bouncechqind == 'Y'}">Yes</c:if>
+							          				<c:if test="${payment.bounceChequeInd == 'N'}">No</c:if>
+							          				<c:if test="${payment.bounceChequeInd == 'Y'}">Yes</c:if>
 							          			</td>
 						          			</tr>
 							        	</c:forEach>

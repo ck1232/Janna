@@ -4,8 +4,8 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "permissiontype"},
-{"data": "seqno"},
+{"data": "permissionType"},
+{"data": "seqNum"},
 {"data": "url"},
 
 {

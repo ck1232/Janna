@@ -19,7 +19,7 @@ public class ModuleFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		//ModuleVO moduleVO = (ModuleVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.moduleform.name");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "moduleName", "error.notempty.moduleform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "icon", "error.notempty.moduleform.icon");
 
 		

@@ -11,7 +11,7 @@
     "data":           null,
     "defaultContent": ''
 },
-{"data": "name"},
+{"data": "moduleName"},
 {
     "className":      '',
     "orderable":      false,

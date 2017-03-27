@@ -46,7 +46,7 @@ public class StorageLocationVO extends Base implements Serializable {
     public void setPostalCode(Integer postalCode) {
         this.postalCode = postalCode;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

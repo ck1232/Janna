@@ -1,1 +1,1 @@
-"submoduleid":${submodule.id}
+"submoduleid":${submodule.submoduleId}

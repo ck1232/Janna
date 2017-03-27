@@ -23,9 +23,8 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('button[name="editBtn"]').prop('value', data.id);
-          $(row).find('button[name="viewBtn"]').prop('value', data.id);
-          $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.id);
+          $(row).find('button[name="editBtn"]').prop('value', data.submoduleId);
+          $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.submoduleId);
        }
     });
 });

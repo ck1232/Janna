@@ -15,7 +15,7 @@
                     <form:form id="updateRoleToDbForm" method="post" modelAttribute="roleForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
-		              		<form:input path="id" type="hidden" id="id"/>
+		              		<form:input path="roleId" type="hidden" id="roleId"/>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Role Name</label>
 							<div class="col-sm-10">

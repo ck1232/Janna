@@ -1,1 +1,1 @@
-"editBtn":${submodule.id}
+"editBtn":${submodule.submoduleId}
