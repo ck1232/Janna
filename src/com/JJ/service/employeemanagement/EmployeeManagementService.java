@@ -68,8 +68,7 @@ public class EmployeeManagementService {
 	}	
 	
 	public void updateEmployee(EmployeeVO employeeVO) {
-		if(employeeVO != null && employeeVO.getDeleteInd() != null &&
-				employeeVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+		if(employeeVO != null && employeeVO.getEmployeeId() != null){
 			EmployeeDbObject dbObj = convertToEmployeeDbObjectList(Arrays.asList(employeeVO)).get(0);
 			employeeDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
@@ -105,14 +104,15 @@ public class EmployeeManagementService {
 		if(employeeVOList != null && !employeeVOList.isEmpty()) {
 			for(EmployeeVO vo : employeeVOList) {
 				EmployeeDbObject dbObj = new EmployeeDbObject();
-				dbObj.setName(vo.getName());
-				dbObj.setEmployeeType(vo.getEmployeeType());
-				dbObj.setDob(vo.getDob());
-				dbObj.setNationality(vo.getNationality());
 				dbObj.setBasicSalary(vo.getBasicSalary());
-				dbObj.setEmploymentStartDate(vo.getEmploymentStartDate());
-				dbObj.setEmploymentEndDate(vo.getEmploymentEndDate());
-				dbObj.setCdacInd(vo.getCdacInd());
+				dbObj.setCdacInd(vo.getCdacIndBoolean() == Boolean.TRUE ? "Y" : "N");
+				dbObj.setDob(GeneralUtils.convertStringToDate(vo.getDobString(), "dd/MM/yyyy"));
+				dbObj.setEmployeeId(vo.getEmployeeId());
+				dbObj.setEmployeeType(vo.getEmployeeType());
+				dbObj.setEmploymentEndDate(GeneralUtils.convertStringToDate(vo.getEmploymentEndDateString(), "dd/MM/yyyy"));
+				dbObj.setEmploymentStartDate(GeneralUtils.convertStringToDate(vo.getEmploymentStartDateString(), "dd/MM/yyyy"));
+				dbObj.setName(vo.getName());
+				dbObj.setNationality(vo.getNationality());
 				employeeDbObjectList.add(dbObj);
 			}
 		}

@@ -7,9 +7,9 @@
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
 {"data": "name"},
-{"data": "employmenttypeString"},
+{"data": "employeeTypeString"},
 {"data": "nationality"},
-{"data": "basicsalary"},
+{"data": "basicSalary"},
 {
     "className":      '',
     "orderable":      false,
