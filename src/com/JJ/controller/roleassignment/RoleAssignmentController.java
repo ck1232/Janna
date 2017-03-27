@@ -60,7 +60,10 @@ public class RoleAssignmentController {
 			}
 		}
 		input.put("list", rIdList);
-		List<SubModulePermissionVO> smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(input);
+		List<SubModulePermissionVO> smpList = null;
+		if(rIdList != null && !rIdList.isEmpty()) {
+			smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(input);
+		}
 		/*List<Submodulepermission> smpList = permissionManagementService.getSubmoduleByRole(rIdList);
 		List<Submodule> subModuleList = subModuleManagementService.getAllSubmodules();
 		Map<Integer, Submodule> submoduleMap = new HashMap<Integer, Submodule>();

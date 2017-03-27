@@ -102,7 +102,7 @@ public class PermissionManagementService {
 	}
 
 	public List<SubModulePermissionVO> getSubmodulePermissionByRoleIdList(Map<String, List<String>> roleList){
-		return convertToSubModulePermissionVOList(rolesToPermissionCustomDbObjectMapper.getSubmodulePermissionByRoleIdList(roleList));
+		return rolesToPermissionCustomDbObjectMapper.getSubmodulePermissionByRoleIdList(roleList);
 	}
 	
 	

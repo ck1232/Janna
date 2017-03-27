@@ -21,20 +21,24 @@
 	select distinct(roleId) from jj.submodulepermission where submoduleId = #{submoduleid}))
 	</select>
 	
-	<resultMap id="submodulePermissionResultMap" type="com.JJ.model.SubModulePermissionDbObject">
-	    <id column="submoduleId" jdbcType="INTEGER" property="submoduleid" />
+	<resultMap id="submodulePermissionResultMap" type="com.JJ.controller.common.vo.SubModulePermissionVO">
+	    <id column="submoduleId" jdbcType="INTEGER" property="submoduleId" />
 	    <id column="submodulename" jdbcType="VARCHAR" property="submodulename" />
-	    <id column="permission" jdbcType="VARCHAR" property="permission" />
+	    <id column="permissionTypeId" jdbcType="VARCHAR" property="permissionTypeId" />
 	    <id column="permissiontype" jdbcType="VARCHAR" property="permissiontype" />
 	</resultMap>
 	<select id="getSubmodulePermissionByRoleIdList" parameterType="map" resultMap="submodulePermissionResultMap">  
-	SELECT distinct(a.submoduleId) as "submoduleId", b.name as "submodulename", a.permission as "permission", c.permissiontype as "permissiontype"
-	FROM jj.submodulepermission a left join submodule b on a.submoduleId = b.id 
-	left join submodulepermissiontype c on a.permission = c.id 
-	where a.roleId in 
-	 <foreach item="item" index="index" collection="list"
-             open="(" separator="," close=")">
-        #{item}
-    </foreach> and a.deleteInd = 'N'
+	SELECT distinct(a.submodule_id) as "submoduleId", b.name as "submodulename", a.permission_type_id as "permissionTypeId", c.permission_type as "permissiontype"
+	FROM jj.submodule_permission a left join submodule b on a.submodule_id = b.submodule_id 
+	left join submodule_permission_type c on a.permission_type_id = c.type_id 
+	where 
+	<if test="list != null and list.size() > 0"> 
+		a.role_id in 
+		 <foreach item="item" index="index" collection="list"
+	             open="(" separator="," close=")">
+	        #{item}
+	    </foreach> and 
+    </if>
+    a.delete_ind = 'N'
 	</select>
 </mapper>

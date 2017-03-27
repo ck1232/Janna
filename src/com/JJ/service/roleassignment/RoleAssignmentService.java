@@ -12,6 +12,7 @@ import com.JJ.controller.common.vo.UserRoleVO;
 import com.JJ.controller.roleassignment.vo.RolesToAssignVO;
 import com.JJ.dao.RoleCustomDbObjectMapper;
 import com.JJ.dao.UserRoleDbObjectMapper;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.UserRoleDbObject;
 import com.JJ.model.UserRoleDbObjectExample;
 
@@ -94,8 +95,10 @@ public class RoleAssignmentService {
 	
 	public void deleteRoleListByUserId(Integer userId){
 		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
-		userRoleExample.createCriteria().andUserIdEqualTo(userId);
-		userRoleDbObjectMapper.deleteByExample(userRoleExample);
+		userRoleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andUserIdEqualTo(userId);
+		UserRoleDbObject dbObj = new UserRoleDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		userRoleDbObjectMapper.updateByExampleSelective(dbObj, userRoleExample);
 	}
 	
 	public void updateRole(UserRoleVO role) {
