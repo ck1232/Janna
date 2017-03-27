@@ -94,13 +94,12 @@ public class UserManagementService {
 		userDbObjectMapper.updateByExampleSelective(dbObj, userDbObjectExample);
 	}
 	
-	public void updateUser(UserVO user) {
-		user.setPassword(null);
-		List<UserDbObject> dbObjList = convertToUserDbObjectList(Arrays.asList(user));
-		if(dbObjList != null && dbObjList.size() > 0){
-			userDbObjectMapper.updateByPrimaryKeySelective(dbObjList.get(0));
+	public void updateUser(UserVO userVO) {
+		userVO.setPassword(null);
+		if(userVO != null && userVO.getUserId() != null){
+			UserDbObject dbObj = convertToUserDbObjectList(Arrays.asList(userVO)).get(0);
+			userDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
-		
 	}
 	
 	private List<UserVO> convertToUserVOList(List<UserDbObject> dbObjList) {
@@ -108,7 +107,6 @@ public class UserManagementService {
 		if(dbObjList != null && dbObjList.size() > 0){
 			for(UserDbObject dbObj : dbObjList){
 				UserVO vo = new UserVO();
-				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setEmailAddress(dbObj.getEmailAddress());
 				vo.setEnabled(dbObj.getEnabled());
 				vo.setEnabledBoolean(dbObj.getEnabled().equals("Y")? Boolean.TRUE : Boolean.FALSE);
@@ -129,7 +127,6 @@ public class UserManagementService {
 		if(voList != null && voList.size() > 0){
 			for(UserVO obj : voList){
 				UserDbObject dbObj = new UserDbObject();
-				dbObj.setDeleteInd(obj.getDeleteInd());
 				dbObj.setEmailAddress(obj.getEmailAddress());
 				dbObj.setEnabled(obj.getEnabledBoolean() == Boolean.TRUE ? "Y" : "N");
 				dbObj.setLastLogin(obj.getLastLogin());

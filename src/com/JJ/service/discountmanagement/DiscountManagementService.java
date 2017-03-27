@@ -77,8 +77,7 @@ public class DiscountManagementService {
 	}
 	
 	public void updateDiscount(DiscountVO discountVO) {
-		if(discountVO != null && discountVO.getDeleteInd() != null &&
-				discountVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+		if(discountVO != null && discountVO.getDiscountId() != null){
 			DiscountDbObject dbObj = convertToDiscountDbObjectList(Arrays.asList(discountVO)).get(0);
 			discountDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}

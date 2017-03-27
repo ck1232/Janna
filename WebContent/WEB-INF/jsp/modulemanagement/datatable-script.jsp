@@ -8,7 +8,7 @@ $(function () {
       "pageLength": 10,
       "responsive" : true,
       "lengthChange": false,
-      "searching": false,
+      "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": false,
@@ -23,14 +23,14 @@ $(function () {
 	            ],
       "order": [2, 'asc'],
       'rowCallback': function(row, data, dataIndex){
-          $(row).find('input[type="checkbox"]').prop('value', data.id);
+          $(row).find('input[type="checkbox"]').prop('value', data.moduleId);
           if(data.checked == "Y"){
           	$(row).find('input[type="checkbox"]').prop('checked', true);
           }else{
         	  $(row).find('input[type="checkbox"]').prop('checked', false);
           }
-          $(row).find('button[name="editBtn"]').prop('value', data.id);
-          $(row).find('button[name="viewBtn"]').prop('value', data.id);
+          $(row).find('button[name="editBtn"]').prop('value', data.moduleId);
+          $(row).find('button[name="viewBtn"]').prop('value', data.moduleId);
           $(row).find('div[name="iconDiv"]').html(data.icon+" <i class='fa "+data.icon+"'></i>");
           
        }
@@ -59,8 +59,8 @@ $(function () {
 
 function format ( data ) {
     // `d` is the original data object for the row
-    selectedModuleId = data.id;
-    selectedModuleName = data.name.replace(/[ \/&]/g,'');
+    selectedModuleId = data.moduleId;
+    selectedModuleName = data.moduleName.replace(/[ \/&]/g,'');
     return <tiles:insertAttribute name="subdatatable" />;
 }
 
@@ -84,15 +84,15 @@ function subdatatable(datatableid){
 		            ],
 	      "order": [1, 'asc'],
 	      'rowCallback': function(row, data, dataIndex){
-	          $(row).find('input[type="checkbox"]').prop('value', data.id);
+	          $(row).find('input[type="checkbox"]').prop('value', data.submoduleId);
 	          if(data.checked == "Y"){
 	          	$(row).find('input[type="checkbox"]').prop('checked', true);
 	          }else{
 	        	  $(row).find('input[type="checkbox"]').prop('checked', false);
 	          }
 	          $(row).find('div[name="iconSubDiv"]').html(data.icon+" <i class='fa "+data.icon+"'></i>");
-	          $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.id);
-	          $(row).find('button[name="editBtn"]').prop('value', data.id);
+	          $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.submoduleId);
+	          $(row).find('button[name="editBtn"]').prop('value', data.submoduleId);
 	       }
 	    });
 }

@@ -14,6 +14,7 @@ import com.JJ.controller.common.vo.SubModulePermissionVO;
 import com.JJ.dao.PermissionCustomDbObjectMapper;
 import com.JJ.dao.SubModulePermissionDbObjectMapper;
 import com.JJ.dao.SubModulePermissionTypeDbObjectMapper;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.RolesToPermissionCustomDbObject;
 import com.JJ.model.SubModulePermissionDbObject;
 import com.JJ.model.SubModulePermissionDbObjectExample;
@@ -45,22 +46,6 @@ public class PermissionManagementService {
 		return convertToSubModulePermissionVOList(submodulepermissionList);
 	}
 	
-	private List<SubModulePermissionVO> convertToSubModulePermissionVOList(List<SubModulePermissionDbObject> dbObjList) {
-		List<SubModulePermissionVO> voList = new ArrayList<SubModulePermissionVO>();
-		if(dbObjList != null && dbObjList.size() > 0){
-			for(SubModulePermissionDbObject dbObj : dbObjList){
-				SubModulePermissionVO vo = new SubModulePermissionVO();
-				vo.setDeleteInd(dbObj.getDeleteInd());
-				vo.setPermissionId(dbObj.getPermissionId());
-				vo.setPermissionTypeId(dbObj.getPermissionTypeId());
-				vo.setRoleId(dbObj.getRoleId());
-				vo.setSubmoduleId(dbObj.getSubmoduleId());
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
-
 	public List<RolesToPermissionCustomDbObject> getRolesToPermission(String submoduleid) {
 		return rolesToPermissionCustomDbObjectMapper.getRolesToPermission(submoduleid);
 	}
@@ -74,24 +59,6 @@ public class PermissionManagementService {
 		
 	}
 	
-	private List<SubModulePermissionDbObject> convertToSubModulePermissionDbObjectList(
-			List<SubModulePermissionVO> voList) {
-		List<SubModulePermissionDbObject> objList = new ArrayList<SubModulePermissionDbObject>();
-		if(voList != null && voList.size() > 0){
-			for(SubModulePermissionVO vo : voList){
-				SubModulePermissionDbObject obj = new SubModulePermissionDbObject();
-				obj.setDeleteInd(vo.getDeleteInd());
-				obj.setPermissionId(vo.getPermissionId());
-				obj.setPermissionTypeId(vo.getPermissionTypeId());
-				obj.setRoleId(vo.getRoleId());
-				obj.setSubmoduleId(vo.getSubmoduleId());
-				obj.setVersion(vo.getVersion());
-				objList.add(obj);
-			}
-		}
-		return null;
-	}
-
 	public List<SubModulePermissionVO> getSubmoduleByRole(List<Integer> roleIdList){
 		if(roleIdList == null || roleIdList.size() == 0){
 			return new ArrayList<SubModulePermissionVO>();
@@ -106,10 +73,52 @@ public class PermissionManagementService {
 	}
 	
 	
-	public void deleteSubmodulepermission(String roleid, String submoduleid) {
-		SubModulePermissionDbObjectExample submodulepermissionExample = new SubModulePermissionDbObjectExample();
-		submodulepermissionExample.createCriteria().andSubmoduleIdEqualTo(new Integer(submoduleid)).andRoleIdEqualTo(new Integer(roleid));
-		subModulePermissionDbObjectMapper.deleteByExample(submodulepermissionExample);
+	public void deleteSubmodulepermission(Integer roleid, Integer submoduleid) {
+		SubModulePermissionDbObjectExample subModulePermissionDbObjectExample = new SubModulePermissionDbObjectExample();
+		subModulePermissionDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+										.andRoleIdEqualTo(roleid).andSubmoduleIdEqualTo(submoduleid);
+		SubModulePermissionDbObject dbObj = new SubModulePermissionDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		subModulePermissionDbObjectMapper.updateByExampleSelective(dbObj, subModulePermissionDbObjectExample);
+	}
+	
+	public void deleteSubmodulepermissionBySubmoduleId(Integer submoduleid) {
+		SubModulePermissionDbObjectExample subModulePermissionDbObjectExample = new SubModulePermissionDbObjectExample();
+		subModulePermissionDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+										.andSubmoduleIdEqualTo(submoduleid);
+		SubModulePermissionDbObject dbObj = new SubModulePermissionDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		subModulePermissionDbObjectMapper.updateByExampleSelective(dbObj, subModulePermissionDbObjectExample);
+	}
+	
+	private List<SubModulePermissionVO> convertToSubModulePermissionVOList(List<SubModulePermissionDbObject> dbObjList) {
+		List<SubModulePermissionVO> voList = new ArrayList<SubModulePermissionVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(SubModulePermissionDbObject dbObj : dbObjList){
+				SubModulePermissionVO vo = new SubModulePermissionVO();
+				vo.setPermissionId(dbObj.getPermissionId());
+				vo.setPermissionTypeId(dbObj.getPermissionTypeId());
+				vo.setRoleId(dbObj.getRoleId());
+				vo.setSubmoduleId(dbObj.getSubmoduleId());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
+	private List<SubModulePermissionDbObject> convertToSubModulePermissionDbObjectList(List<SubModulePermissionVO> voList) {
+		List<SubModulePermissionDbObject> subModulePermissionDbObjectList = new ArrayList<SubModulePermissionDbObject>();
+		if(voList != null && voList.size() > 0){
+			for(SubModulePermissionVO vo : voList){
+				SubModulePermissionDbObject dbObj = new SubModulePermissionDbObject();
+				dbObj.setPermissionId(vo.getPermissionId());
+				dbObj.setPermissionTypeId(vo.getPermissionTypeId());
+				dbObj.setRoleId(vo.getRoleId());
+				dbObj.setSubmoduleId(vo.getSubmoduleId());
+				subModulePermissionDbObjectList.add(dbObj);
+			}
+		}
+		return subModulePermissionDbObjectList;
 	}
 	//Submodulepermission functions END
 	
@@ -119,29 +128,11 @@ public class PermissionManagementService {
 	public List<SubModulePermissionTypeVO> getSubmodulepermissiontype(Integer submoduleid) {
 		SubModulePermissionTypeDbObjectExample submodulepermissiontypeExample = new SubModulePermissionTypeDbObjectExample();
 		submodulepermissiontypeExample.createCriteria().andSubmoduleIdEqualTo(submoduleid);
-		submodulepermissiontypeExample.setOrderByClause("seqno");
+		submodulepermissiontypeExample.setOrderByClause("seq_num");
 		List<SubModulePermissionTypeDbObject> submodulepermissiontypeList = subModulePermissionTypeDbObjectMapper.selectByExample(submodulepermissiontypeExample);
 		return convertToSubModulePermissionTypeVOList(submodulepermissiontypeList);
 	}
 	
-	private List<SubModulePermissionTypeVO> convertToSubModulePermissionTypeVOList(
-			List<SubModulePermissionTypeDbObject> dbObjList) {
-		List<SubModulePermissionTypeVO> voList = new ArrayList<SubModulePermissionTypeVO>();
-		if(dbObjList != null && dbObjList.size() > 0){
-			for(SubModulePermissionTypeDbObject obj : dbObjList){
-				SubModulePermissionTypeVO vo = new SubModulePermissionTypeVO();
-				vo.setDeleteInd(obj.getDeleteInd());
-				vo.setPermissionType(obj.getPermissionType());
-				vo.setSeqNum(obj.getSeqNum());
-				vo.setSubmoduleId(obj.getSubmoduleId());
-				vo.setTypeId(obj.getTypeId());
-				vo.setUrl(obj.getUrl());
-				vo.setVersion(obj.getVersion());
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
 
 	public SubModulePermissionTypeVO getSubmodulepermissiontypeByUrl(String url){
 		SubModulePermissionTypeDbObjectExample example = new SubModulePermissionTypeDbObjectExample();
@@ -180,19 +171,62 @@ public class PermissionManagementService {
 		
 	}
 	
-	private List<SubModulePermissionTypeDbObject> convertToSubModulePermissionTypeDbObjectList(
-			List<SubModulePermissionTypeVO> asList) {
-		return null;
-		
-	}
-
 	public void deleteSubmodulepermissiontype(Integer id){
-		subModulePermissionTypeDbObjectMapper.deleteByPrimaryKey(id);
+		deleteSubmodulepermissiontype(Arrays.asList(id));
+	}
+	
+	public void deleteSubmodulepermissiontype(List<Integer> idList) {
+		SubModulePermissionTypeDbObjectExample subModulePermissionTypeDbObjectExample = new SubModulePermissionTypeDbObjectExample();
+		subModulePermissionTypeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andTypeIdIn(idList);
+		SubModulePermissionTypeDbObject dbObj = new SubModulePermissionTypeDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		subModulePermissionTypeDbObjectMapper.updateByExampleSelective(dbObj, subModulePermissionTypeDbObjectExample);
+	}
+	
+	public void deleteSubmodulepermissiontypeBySubmoduleId(Integer submoduleId) {
+		SubModulePermissionTypeDbObjectExample subModulePermissionTypeDbObjectExample = new SubModulePermissionTypeDbObjectExample();
+		subModulePermissionTypeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSubmoduleIdEqualTo(submoduleId);
+		SubModulePermissionTypeDbObject dbObj = new SubModulePermissionTypeDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		subModulePermissionTypeDbObjectMapper.updateByExampleSelective(dbObj, subModulePermissionTypeDbObjectExample);
 	}
 	
 	public void updateSubmodulepermissiontype(SubModulePermissionTypeVO submodulepermissiontype) {
 		SubModulePermissionTypeDbObject obj = convertToSubModulePermissionTypeDbObjectList(Arrays.asList(submodulepermissiontype)).get(0);
 		subModulePermissionTypeDbObjectMapper.updateByPrimaryKeySelective(obj);
+	}
+	
+	private List<SubModulePermissionTypeVO> convertToSubModulePermissionTypeVOList(List<SubModulePermissionTypeDbObject> dbObjList) {
+		List<SubModulePermissionTypeVO> voList = new ArrayList<SubModulePermissionTypeVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(SubModulePermissionTypeDbObject obj : dbObjList){
+				SubModulePermissionTypeVO vo = new SubModulePermissionTypeVO();
+				vo.setPermissionType(obj.getPermissionType());
+				vo.setSeqNum(obj.getSeqNum());
+				vo.setSubmoduleId(obj.getSubmoduleId());
+				vo.setTypeId(obj.getTypeId());
+				vo.setUrl(obj.getUrl());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
+	private List<SubModulePermissionTypeDbObject> convertToSubModulePermissionTypeDbObjectList(List<SubModulePermissionTypeVO> subModulePermissionTypeVOList) {
+		List<SubModulePermissionTypeDbObject> subModulePermissionTypeDbObjectList = new ArrayList<SubModulePermissionTypeDbObject>();
+		if(subModulePermissionTypeVOList != null && !subModulePermissionTypeVOList.isEmpty()) {
+			for(SubModulePermissionTypeVO vo : subModulePermissionTypeVOList) {
+				SubModulePermissionTypeDbObject dbObj = new SubModulePermissionTypeDbObject();
+				dbObj.setPermissionType(vo.getPermissionType());
+				dbObj.setSeqNum(vo.getSeqNum());
+				dbObj.setSubmoduleId(vo.getSubmoduleId());
+				dbObj.setTypeId(vo.getTypeId());
+				dbObj.setUrl(vo.getUrl());
+				subModulePermissionTypeDbObjectList.add(dbObj);
+			}
+		}
+		return subModulePermissionTypeDbObjectList;
+		
 	}
 
 	//Submodulepermissiontype functions END

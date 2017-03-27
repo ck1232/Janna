@@ -104,7 +104,7 @@ public class PermissionManagementController {
 	
 	@RequestMapping(value = "/saveSubmodulePermissionToDb", method = RequestMethod.POST)
 	public String savePermissionToDb(@RequestParam("submoduleid") String submoduleid, @RequestParam("roleid") String roleid, @RequestParam(value="submodulePermission", required=false) List<String> submodulePermissionList, final RedirectAttributes redirectAttributes) {
-		permissionManagementService.deleteSubmodulepermission(roleid, submoduleid);
+		permissionManagementService.deleteSubmodulepermission(Integer.valueOf(roleid), Integer.valueOf(submoduleid));
 		
 		if(submodulePermissionList != null && submodulePermissionList.size() > 0){
 			for(String submodulePermission: submodulePermissionList){

@@ -1,1 +1,1 @@
-<input type="hidden" value="${module.id}" name="moduleid"/>
+<input type="hidden" value="${module.moduleId}" name="moduleid"/>

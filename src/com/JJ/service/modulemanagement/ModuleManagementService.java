@@ -9,20 +9,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.ModuleVO;
+import com.JJ.controller.common.vo.SubModuleVO;
 import com.JJ.dao.ModuleDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ModuleDbObject;
 import com.JJ.model.ModuleDbObjectExample;
+import com.JJ.service.submodulemanagement.SubModuleManagementService;
 
 @Service
 @Transactional
 public class ModuleManagementService {
 	
 	private ModuleDbObjectMapper moduleDbObjectMapper;
+	private SubModuleManagementService subModuleManagementService;
 	
 	@Autowired
-	public ModuleManagementService(ModuleDbObjectMapper moduleDbObjectMapper) {
+	public ModuleManagementService(ModuleDbObjectMapper moduleDbObjectMapper,
+			SubModuleManagementService subModuleManagementService) {
 		this.moduleDbObjectMapper = moduleDbObjectMapper;
+		this.subModuleManagementService = subModuleManagementService;
 	}
 	
 	public ModuleVO findById(Integer id) {
@@ -34,21 +39,6 @@ public class ModuleManagementService {
 		return new ModuleVO();
 	}
 	
-	private List<ModuleVO> convertToModuleVOList(List<ModuleDbObject> dbObjList) {
-		List<ModuleVO> voList = new ArrayList<ModuleVO>();
-		if(dbObjList != null && !dbObjList.isEmpty()){
-			for(ModuleDbObject dbObj : dbObjList){
-				ModuleVO vo = new ModuleVO();
-				vo.setDeleteInd(dbObj.getDeleteInd());
-				vo.setIcon(dbObj.getIcon());
-				vo.setModuleId(dbObj.getModuleId());
-				vo.setModuleName(dbObj.getModuleName());
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
-
 	public List<ModuleVO> getAllModules() {
 		ModuleDbObjectExample moduleExample = new ModuleDbObjectExample();
 		moduleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
@@ -64,12 +54,48 @@ public class ModuleManagementService {
 		
 	}
 	
+	public void deleteModule(Integer id) {
+		deleteModule(Arrays.asList(id));
+		List<SubModuleVO> submoduleVoList = subModuleManagementService.getAllSubmodulesByModule(id);
+		for(SubModuleVO vo : submoduleVoList) {
+			subModuleManagementService.deleteSubmodule(vo.getSubmoduleId());
+		}
+	}
+	
+	public void deleteModule(List<Integer> idList) {
+		ModuleDbObjectExample moduleDbObjectExample = new ModuleDbObjectExample();
+		moduleDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andModuleIdIn(idList);
+		ModuleDbObject dbObj = new ModuleDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		moduleDbObjectMapper.updateByExampleSelective(dbObj, moduleDbObjectExample);
+	}
+	
+	public void updateModule(ModuleVO moduleVO) {
+		if(moduleVO != null && moduleVO.getModuleId() != null){
+			ModuleDbObject dbObj = convertToModuleDbObjectList(Arrays.asList(moduleVO)).get(0);
+			moduleDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
+	}
+	 
+	private List<ModuleVO> convertToModuleVOList(List<ModuleDbObject> dbObjList) {
+		List<ModuleVO> voList = new ArrayList<ModuleVO>();
+		if(dbObjList != null && !dbObjList.isEmpty()){
+			for(ModuleDbObject dbObj : dbObjList){
+				ModuleVO vo = new ModuleVO();
+				vo.setIcon(dbObj.getIcon());
+				vo.setModuleId(dbObj.getModuleId());
+				vo.setModuleName(dbObj.getModuleName());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
 	private List<ModuleDbObject> convertToModuleDbObjectList(List<ModuleVO> voList) {
 		List<ModuleDbObject> dbObjList = new ArrayList<ModuleDbObject>();
 		if(voList != null && voList.size() > 0){
 			for(ModuleVO vo : voList){
 				ModuleDbObject dbObj = new ModuleDbObject();
-				dbObj.setDeleteInd(dbObj.getDeleteInd());
 				dbObj.setIcon(vo.getIcon());
 				dbObj.setModuleId(vo.getModuleId());
 				dbObj.setModuleName(vo.getModuleName());
@@ -78,29 +104,5 @@ public class ModuleManagementService {
 		}
 		return dbObjList;
 	}
-
-	public void deleteModule(Integer id) {
-		ModuleVO module = findById(id);
-		if(module != null && module.getDeleteInd() != null){
-			if(module.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-				ModuleDbObject dbObj = new ModuleDbObject();
-				dbObj.setDeleteInd(GeneralUtils.DELETED);
-				dbObj.setModuleId(id);
-				moduleDbObjectMapper.updateByPrimaryKey(dbObj);
-			}
-		}
-		
-	}
-	
-	public void updateModule(ModuleVO module) {
-		if(module != null && module.getDeleteInd() != null){
-			if(module.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
-				List<ModuleDbObject> dbObjList = convertToModuleDbObjectList(Arrays.asList(module));
-				moduleDbObjectMapper.updateByPrimaryKeySelective(dbObjList.get(0));
-			}
-		}
-	}
-	 
-	
 	
 }

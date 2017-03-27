@@ -1,1 +1,1 @@
-<input type="hidden" value="${submodule.id}" name="submoduleid"/>
+<input type="hidden" value="${submodule.submoduleId}" name="submoduleid"/>

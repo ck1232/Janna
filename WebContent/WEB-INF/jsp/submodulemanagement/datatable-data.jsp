@@ -1,1 +1,1 @@
-"moduleid":${module.id}
+"moduleid":${module.moduleId}

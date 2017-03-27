@@ -16,7 +16,7 @@
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/admin/listModule" />"></form>
 		              <div class="box-body">
-		              		<input type="hidden" id="id" value="${submodule.id}"/>
+		              		<input type="hidden" id="id" value="${submodule.submoduleId}"/>
 							<div class="col-sm-2">Name</div>
 							<div class="col-sm-10">${submodule.name}</div>
 							

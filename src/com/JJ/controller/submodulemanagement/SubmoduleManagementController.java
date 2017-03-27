@@ -119,7 +119,6 @@ public class SubmoduleManagementController {
 			return "redirect:listSubmodule/"+id;
     	}
     	SubModuleVO submodule = new SubModuleVO();
-    	submodule.setDeleteInd(GeneralUtils.NOT_DELETED);
     	submodule.setParentId(new Integer(id));
     	model.addAttribute("submodule", submodule);
         return "createSubmodule";  

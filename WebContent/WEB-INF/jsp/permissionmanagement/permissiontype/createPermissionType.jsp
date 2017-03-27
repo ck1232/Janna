@@ -15,11 +15,11 @@
                     </div>
                     <!--FORM-->
                     
-                    <form id="backToListButton" method="get" action="<c:url value="/admin/updatePermissionType/${submodule.id}" />/"></form>
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/updatePermissionType/${submodule.submoduleId}" />/"></form>
                     <c:url var="post_url" value="/admin/savePermissionTypeToDb" />
                     <form:form id="createPermissionTypeForm" method="post" modelAttribute="submodulepermissiontypeForm" action="${post_url }">
 		              <div class="box-body">
-		              <form:input path="submoduleid" type="hidden" id="submoduleid"/>
+		              <form:input path="submoduleId" type="hidden" id="submoduleId"/>
 		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              	<div class="row">
 							<label class="col-sm-2">Submodule</label>
@@ -29,9 +29,9 @@
 						 <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Permission Type</label>
 							<div class="col-sm-10">
-								<form:input path="permissiontype" type="text" class="form-control"
-				                                id="permissiontype" placeholder="Enter permission type" />
-								<form:errors path="permissiontype" class="text-danger" />
+								<form:input path="permissionType" type="text" class="form-control"
+				                                id="permissionType" placeholder="Enter permission type" />
+								<form:errors path="permissionType" class="text-danger" />
 							</div>
 						  </div>
 						  </div>
@@ -49,9 +49,9 @@
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Sequence No</label>
 							<div class="col-sm-10">
-								<form:input path="seqno" type="text" class="form-control"
-				                                id="seqno" placeholder="Enter sequence no" />
-								<form:errors path="seqno" class="text-danger" />
+								<form:input path="seqNum" type="text" class="form-control"
+				                                id="seqNum" placeholder="Enter sequence no" />
+								<form:errors path="seqNum" class="text-danger" />
 							</div>
 						  </div>
 						  </div>

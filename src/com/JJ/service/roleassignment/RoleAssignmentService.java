@@ -38,23 +38,6 @@ public class RoleAssignmentService {
 		return new UserRoleVO();
 	}
 
-	private List<UserRoleVO> convertToUserRoleVOList(
-			List<UserRoleDbObject> objList) {
-		List<UserRoleVO> voList = new ArrayList<UserRoleVO>();
-		if(objList != null && objList.size() > 0){
-			for(UserRoleDbObject obj : objList){
-				UserRoleVO vo = new UserRoleVO();
-				vo.setDeleteInd(obj.getDeleteInd());
-				vo.setRoleId(obj.getRoleId());
-				vo.setUserId(obj.getUserId());
-				vo.setUserRoleId(obj.getUserRoleId());
-				vo.setVersion(obj.getVersion());
-				voList.add(vo);
-			}
-		}
-		return voList;
-	}
-
 	public List<UserRoleVO> getAllRoles() {
 		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
 		userRoleExample.createCriteria();
@@ -78,17 +61,6 @@ public class RoleAssignmentService {
 		userRoleDbObjectMapper.insert(obj);
 	}
 	
-	
-	private UserRoleDbObject convertToUserRoleDbObject(UserRoleVO vo) {
-		UserRoleDbObject obj = new UserRoleDbObject();
-		obj.setDeleteInd(vo.getDeleteInd());
-		obj.setRoleId(vo.getRoleId());
-		obj.setUserId(vo.getUserId());
-		obj.setUserRoleId(vo.getUserRoleId());
-		obj.setVersion(obj.getVersion());
-		return obj;
-	}
-
 	public void deleteUserRole(int key) {
 		userRoleDbObjectMapper.deleteByPrimaryKey(key);
 	}
@@ -105,6 +77,30 @@ public class RoleAssignmentService {
 		userRoleDbObjectMapper.updateByPrimaryKeySelective(convertToUserRoleDbObject(role));
 	}
 	 
+	private List<UserRoleVO> convertToUserRoleVOList(List<UserRoleDbObject> objList) {
+		List<UserRoleVO> voList = new ArrayList<UserRoleVO>();
+		if(objList != null && objList.size() > 0){
+			for(UserRoleDbObject obj : objList){
+				UserRoleVO vo = new UserRoleVO();
+				vo.setDeleteInd(obj.getDeleteInd());
+				vo.setRoleId(obj.getRoleId());
+				vo.setUserId(obj.getUserId());
+				vo.setUserRoleId(obj.getUserRoleId());
+				vo.setVersion(obj.getVersion());
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
 	
-	
+	private UserRoleDbObject convertToUserRoleDbObject(UserRoleVO vo) {
+		UserRoleDbObject obj = new UserRoleDbObject();
+		obj.setDeleteInd(vo.getDeleteInd());
+		obj.setRoleId(vo.getRoleId());
+		obj.setUserId(vo.getUserId());
+		obj.setUserRoleId(vo.getUserRoleId());
+		obj.setVersion(obj.getVersion());
+		return obj;
+	}
+
 }

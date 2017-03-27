@@ -18,15 +18,14 @@
                     <c:url var = "post_url" value="/admin/createModule" />
                     <form:form id="createModuleForm" method="post" modelAttribute="moduleForm" action="${post_url}">
 		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		              <form:input path="deleteind" type="hidden" id="deleteind"/>
 		              <div class="box-body">
 			              	<div class="row">
 							  <div class="form-group ${status.error ? 'has-error' : ''}">
 								<label class="col-sm-2 control-label">Module Name</label>
 								<div class="col-sm-10">
-									<form:input path="name" type="text" class="form-control"
-					                                id="name" placeholder="Enter Module Name" />
-									<form:errors path="name" class="text-danger" />
+									<form:input path="moduleName" type="text" class="form-control"
+					                                id="moduleName" placeholder="Enter Module Name" />
+									<form:errors path="moduleName" class="text-danger" />
 							  	</div>
 							  </div>
 						    </div>

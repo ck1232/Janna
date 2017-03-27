@@ -19,9 +19,9 @@
                     <form:form id="updateModuleToDbForm" method="post" modelAttribute="module" action="${post_url}">
 		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
-		              		<form:input path="id" type="hidden" id="id"/>
+		              		<form:input path="moduleId" type="hidden" id="moduleId"/>
 							<div class="col-sm-2">Name</div>
-							<div class="col-sm-10">${module.name}</div>
+							<div class="col-sm-10">${module.moduleName}</div>
 							
 						    <div class="col-sm-2">Icon</div>
 						    <div class="col-sm-10">${module.icon} <i class="fa ${module.icon}"></i></div>

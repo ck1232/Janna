@@ -19,9 +19,9 @@ public class PermissionTypeFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 //		SubModulePermissionTypeVO subModulePermissionTypeVO = (SubModulePermissionTypeVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "permissiontype", "error.notempty.permissiontypeform.permissiontype");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "permissionType", "error.notempty.permissiontypeform.permissiontype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "url", "error.notempty.permissiontypeform.url");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "seqno", "error.notempty.permissiontypeform.seqno");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "seqNum", "error.notempty.permissiontypeform.seqno");
 
 		
 	}
