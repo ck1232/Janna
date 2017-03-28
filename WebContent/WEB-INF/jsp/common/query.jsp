@@ -12,18 +12,18 @@ $(function(){
 
 
 <form action="<c:url value="/query" />" method="post">
-<div class="row">
+
 	
-	<div class="col-md-12">
-		<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	    <b>SQL statement:</b><br>
-	    <textarea id = "sqlStatement" style="overflow-y:auto; width:100%;" name="sqlStatement" rows=8></textarea>
-    </div>
-    <div class="col-md-12">
-    	<input type="submit" class="col-md-3" value="Execute" />
-    	<input type="submit" class="col-md-3" value="Export" formaction="<c:url value="/query/export" />" formmethod="POST"/>
-	</div>
+<div class="col-md-12">
+	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <b>SQL statement:</b><br>
+    <textarea id = "sqlStatement" style="overflow-y:auto; width:100%;" name="sqlStatement" rows=8></textarea>
+   </div>
+   <div class="col-md-12">
+   	<input type="submit" class="col-md-3" value="Execute" />
+   	<input type="submit" class="col-md-3" value="Export" formaction="<c:url value="/query/export" />" formmethod="POST"/>
 </div>
+
 </form>
 
 <div class="row">

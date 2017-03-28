@@ -24,9 +24,9 @@
 					<c:forEach var="invoice" items="${invoiceList}">
 						<div class="row">
 					  		<div class="form-group">
-							    <div class="col-sm-2">${invoice.invoiceid}</div>
+							    <div class="col-sm-2">${invoice.invoiceId}</div>
 							    <div class="col-sm-4">${invoice.messenger}</div>
-							    <div class="col-sm-2">${invoice.totalprice}</div>
+							    <div class="col-sm-2">${invoice.totalAmt}</div>
 							    <div class="col-sm-2">${invoice.invoicedateString}</div>
 							    <div class="col-sm-2">${invoice.status}</div>
 							</div>

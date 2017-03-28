@@ -81,7 +81,7 @@ public class SalaryBonusManagementService {
 	public List<SalaryBonusVO> getAllSalaryByIdList(List<Integer> idList) {
 		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
 		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdIn(idList);
-		employeeSalaryDbObjectExample.setOrderByClause("salaryDate desc");
+		employeeSalaryDbObjectExample.setOrderByClause("salary_date desc");
 		return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
 
 	}
@@ -89,21 +89,21 @@ public class SalaryBonusManagementService {
 	public List<SalaryBonusVO> getAllSalaryByEmpId(Integer employeeId) {
 		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
 		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andEmployeeIdEqualTo(employeeId);
-		employeeSalaryDbObjectExample.setOrderByClause("salaryDate desc");
+		employeeSalaryDbObjectExample.setOrderByClause("salary_date desc");
 		return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
 	}
 	
 	public List<SalaryBonusVO> getAllBonusByIdList(List<Integer> idList) {
 		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
 		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdIn(idList);
-		employeeBonusDbObjectExample.setOrderByClause("bonusDate desc");
+		employeeBonusDbObjectExample.setOrderByClause("bonus_date desc");
 		return convertBonusToSalaryBonusVOList(employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample));
 	}
 	
 	public List<SalaryBonusVO> getAllBonusByEmpId(Integer employeeId) {
 		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
 		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andEmployeeIdEqualTo(employeeId);
-		employeeBonusDbObjectExample.setOrderByClause("bonusDate desc");
+		employeeBonusDbObjectExample.setOrderByClause("bonus_date desc");
 		return convertBonusToSalaryBonusVOList(employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample));
 	}
 	

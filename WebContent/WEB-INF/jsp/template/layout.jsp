@@ -117,7 +117,7 @@
 			}
 		</script>
 </head>  
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" style="height: auto;">
 <div class="wrapper">
 	<tiles:insertAttribute name="header" /> 
 	<tiles:insertAttribute name="menu" /> 

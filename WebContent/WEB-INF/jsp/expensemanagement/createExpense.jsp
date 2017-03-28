@@ -64,7 +64,7 @@
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Amount</label>
 										<div class="col-sm-5">
-											<form:input path="totalAmt" type="number" class="form-control"
+											<form:input path="totalAmt" type="text" class="form-control"
 						                                id="totalAmt" placeholder="Enter amount" />
 											<form:errors path="totalAmt" class="text-danger" />
 										</div>

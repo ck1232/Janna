@@ -20,7 +20,7 @@ public class ExpenseFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ExpenseVO expense = (ExpenseVO) target;
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expensetypeid", "error.notempty.expenseform.expensetype");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expenseTypeId", "error.notempty.expenseform.expensetype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "supplier", "error.notempty.expenseform.supplier");
 		
 		if(expense.getExpensedateString() == null || expense.getExpensedateString().trim().isEmpty()){
@@ -34,9 +34,9 @@ public class ExpenseFormValidator implements Validator {
 		}
 		
 		if(expense.getTotalAmt()==null){
-			errors.rejectValue("totalamount", "error.notempty.expenseform.totalamount");
+			errors.rejectValue("totalAmt", "error.notempty.expenseform.totalamount");
 		}else if(expense.getTotalAmt().compareTo(BigDecimal.ZERO) <= 0){
-			errors.rejectValue("totalamount", "error.notvalid.expenseform.totalamount");
+			errors.rejectValue("totalAmt", "error.notvalid.expenseform.totalamount");
 		}		
 	}
 	

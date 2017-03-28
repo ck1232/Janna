@@ -209,7 +209,8 @@ public class PaymentManagementController {
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
 			
-			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque().compareTo(Boolean.TRUE) == 0 &&
+					!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
 			}
@@ -218,7 +219,7 @@ public class PaymentManagementController {
 				paymentVo.setReferenceType("invoice");
 				try{ 
 					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
-					if(paymentVo.getPaymentmodecash())
+					if(paymentVo.getPaymentmodecheque())
 						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");

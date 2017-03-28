@@ -22,7 +22,7 @@ public class SalaryBonusFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		SalaryBonusVO salaryBonusVo = (SalaryBonusVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employeeid", "error.notempty.salarybonusform.name");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employeeId", "error.notempty.salarybonusform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", "error.notempty.salarybonusform.type");
 		
 		if(salaryBonusVo.getDateString() == null || salaryBonusVo.getDateString().trim().isEmpty()){
@@ -38,19 +38,19 @@ public class SalaryBonusFormValidator implements Validator {
 		if(!salaryBonusVo.getType().isEmpty()) {
 			if(salaryBonusVo.getType().toLowerCase().equals("salary")) {
 				if(salaryBonusVo.getBasicSalaryAmt() == null) {
-					errors.rejectValue("basicsalary", "error.notempty.salarybonusform.basicsalary");
+					errors.rejectValue("basicSalaryAmt", "error.notempty.salarybonusform.basicsalary");
 				}else{
 					if(salaryBonusVo.getBasicSalaryAmt().compareTo(BigDecimal.ZERO) < 0) {
-						errors.rejectValue("basicsalary", "error.negative.salarybonusform.basicsalary");
+						errors.rejectValue("basicSalaryAmt", "error.negative.salarybonusform.basicsalary");
 					}
 				}
 				
 			}else if(salaryBonusVo.getType().toLowerCase().equals("bonus")){
 				if(salaryBonusVo.getBonusAmt() == null) {
-					errors.rejectValue("bonusamount", "error.notempty.salarybonusform.bonusamount");
+					errors.rejectValue("bonusAmt", "error.notempty.salarybonusform.bonusamount");
 				}else{
 					if(salaryBonusVo.getBonusAmt().compareTo(BigDecimal.ZERO) < 0) {
-						errors.rejectValue("bonusamount", "error.negative.salarybonusform.bonusamount");
+						errors.rejectValue("bonusAmt", "error.negative.salarybonusform.bonusamount");
 					}
 				}
 			}

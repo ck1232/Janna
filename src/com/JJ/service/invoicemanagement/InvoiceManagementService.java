@@ -42,7 +42,7 @@ public class InvoiceManagementService {
 	public List<InvoiceVO> getAllInvoiceByIdList(List<Integer> idList) {
 		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
 		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
-		invoiceDbObjectExample.setOrderByClause("invoiceDate desc");
+		invoiceDbObjectExample.setOrderByClause("invoice_date desc");
 		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
 	}
 	

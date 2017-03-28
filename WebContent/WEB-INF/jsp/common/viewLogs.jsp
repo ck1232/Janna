@@ -9,9 +9,9 @@
 
 <form action="<c:url value="/logs" />" method="post" id="logsForm">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	<div class="row">
-		<div class="col-md-12" style="overflow-x:auto;overflow-y:auto;">
-			${content}
-		</div>
+	
+	<div class="col-md-12" style="overflow-x:auto;overflow-y:auto;">
+		${content}
 	</div>
+	
  </form>

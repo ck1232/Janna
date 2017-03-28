@@ -19,7 +19,7 @@
                     <form id="backToListButton" method="get" action="<c:url value="/employee/listEmployee" />"></form>
                     <form id="updateEmployeeForm" method="post" action="<c:url value="/employee/updateEmployee" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${employee.employeeid}"/>
+                    	<input type="hidden" name="editBtn" value="${employee.employeeId}"/>
                     </form>
                     <!--/.FORM-->
 		             	<div class="box-body">
@@ -32,7 +32,7 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Employment Type</div>
-								    <div class="col-sm-5">${employee.employmenttypeString}</div>
+								    <div class="col-sm-5">${employee.employeeTypeString}</div>
 								</div>
 							</div>			
 							<div class="row">
@@ -50,25 +50,25 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Basic Salary</div>
-								    <div class="col-sm-5">${employee.basicsalary}</div>
+								    <div class="col-sm-5">${employee.basicSalary}</div>
 								</div>
 							</div>	
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Start Date</div>
-								    <div class="col-sm-5">${employee.employstartdateString}</div>
+								    <div class="col-sm-5">${employee.employmentStartDateString}</div>
 								</div>
 							</div>	
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">End Date</div>
-								    <div class="col-sm-5">${employee.employenddateString}</div>
+								    <div class="col-sm-5">${employee.employmentEndDateString}</div>
 								</div>
 							</div>	
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">CDAC Indicator</div>
-								    <div class="col-sm-5">${employee.cdacind}</div>
+								    <div class="col-sm-5">${employee.cdacInd}</div>
 								</div>
 							</div>	
 						</div>
@@ -91,7 +91,7 @@
 						<c:if test="${salaryList != null}">
 							<div class="row">
 								<div class="col-sm-3">${salary.dateString}</div>
-								<div class="col-sm-3">${salary.takehomeamount}</div>
+								<div class="col-sm-3">${salary.takehomeAmt}</div>
 								<div class="col-sm-3">${salary.status}</div>
 								<div class="col-sm-3"><c:if test="${salary.status != 'PAID'}"><button type="submit" name="payBtn" value="${salary.id},${salary.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if></div>
 							</div>
@@ -118,7 +118,7 @@
 						<c:if test="${bonusList != null}">
 							<div class="row">
 								<div class="col-sm-3">${bonus.dateString}</div>
-								<div class="col-sm-3">${bonus.bonusamount}</div>
+								<div class="col-sm-3">${bonus.bonusAmt}</div>
 								<div class="col-sm-3">${bonus.status}</div>
 								<div class="col-sm-3"><c:if test="${bonus.status != 'PAID'}"><button type="submit" name="payBtn" value="${bonus.id},${bonus.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if></div>
 							</div>

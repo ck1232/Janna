@@ -11,6 +11,8 @@ $(function () {
       "ordering": true,
       "info": true,
       "autoWidth": false,
+      "sScrollX": "100%",
+      "sScrollXInner": "110%",
       "ajax":{
           "url":'<tiles:getAsString name="data-list" />',
           "data":{
@@ -24,15 +26,15 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.invoiceid);
-          $(row).find('button[name="viewBtn"]').prop('value', data.invoiceid);
+          $(row).find('input[type="checkbox"]').prop('value', data.invoiceId);
+          $(row).find('button[name="viewBtn"]').prop('value', data.invoiceId);
           if(data.status == "PAID"){
         	  $(row).find('div[name="payBtnDiv"]').css("display","none");
         	  $(row).find('div[name="statusDiv"]').css("display","none");
           }else{
         	  $(row).find('div[name="payBtnDiv"]').css("display","");
         	 $(row).find('div[name="statusDiv"]').css("display","");
-        	 $(row).find('button[name="payBtn"]').prop('value', data.invoiceid);
+        	 $(row).find('button[name="payBtn"]').prop('value', data.invoiceId);
           }
        }
     });

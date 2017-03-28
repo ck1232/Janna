@@ -74,7 +74,7 @@
 					<div class="col-sm-4"></div>
 					<label class="col-sm-2 control-label">Cheque Amount</label>
 					<div class="col-sm-4">
-	                    <form:input path="chequeamount" type="number" class="form-control" 
+	                    <form:input path="chequeamount" type="text" class="form-control" 
                   			  id="chequeamount" placeholder=""/>
                   		<form:errors path="chequeamount" class="text-danger" />
 					</div>

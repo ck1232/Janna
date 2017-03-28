@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
@@ -30,7 +31,7 @@ import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 
 @Service
-@Transactional
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 public class PaymentManagementService {
 	
 	private PaymentDetailDbObjectMapper paymentDetailDbObjectMapper;
@@ -138,11 +139,13 @@ public class PaymentManagementService {
 		}
 	}
 	
-	public void savePaymentDetail(PaymentDetailVO paymentDetailVO) {
+	public PaymentDetailVO savePaymentDetail(PaymentDetailVO paymentDetailVO) {
 		if(paymentDetailVO != null){
 			PaymentDetailDbObject dbObj = convertToPaymentDetailDbObjectList(Arrays.asList(paymentDetailVO)).get(0);
 			paymentDetailDbObjectMapper.insert(dbObj);
+			return convertToPaymentDetailVOList(Arrays.asList(dbObj)).get(0);
 		}
+		return new PaymentDetailVO();
 	}
 	
 	
@@ -150,7 +153,7 @@ public class PaymentManagementService {
 		List<PaymentDetailVO> paymentDetailList = new ArrayList<PaymentDetailVO>();
 		if(paymentVo.getPaymentmodecash()){
 			PaymentDetailVO paymentDetailVO = convertCashPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
-			savePaymentDetail(paymentDetailVO);
+			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
 		
@@ -159,7 +162,7 @@ public class PaymentManagementService {
 			chequeDbObjectMapper.insert(chequeDbObj);
 			paymentVo.setChequeId(Integer.toString(chequeDbObj.getChequeId()));
 			PaymentDetailVO paymentDetailVO = convertChequePaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
-			savePaymentDetail(paymentDetailVO);
+			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
 		return paymentDetailList;
@@ -175,7 +178,7 @@ public class PaymentManagementService {
 			}
 			PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
 			example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andPaymentDetailIdIn(idList);
-			example.setOrderByClause("paymentDate desc, paymentMode asc, chequeNum asc");				
+			example.setOrderByClause("payment_date desc, payment_mode asc, cheque_id asc");				
 			paymentdetailList = convertToPaymentDetailVOList(paymentDetailDbObjectMapper.selectByExample(example));
 		}
 		return paymentdetailList;
@@ -232,10 +235,12 @@ public class PaymentManagementService {
 		if(paymentDetailDbObjectList != null && !paymentDetailDbObjectList.isEmpty()) {
 			for(PaymentDetailDbObject dbObj : paymentDetailDbObjectList) {
 				PaymentDetailVO vo = new PaymentDetailVO();
-				ChequeVO chequeVO = chequeManagementService.findById(Integer.valueOf(dbObj.getChequeId()));
-				vo.setBounceChequeInd(chequeVO.getBounceChequeInd());
-				vo.setChequeId(Integer.toString(chequeVO.getChequeId()));
-				vo.setChequeNum(chequeVO.getChequeNum());
+				if(dbObj.getChequeId() != null){
+					ChequeVO chequeVO = chequeManagementService.findById(Integer.valueOf(dbObj.getChequeId()));
+					vo.setBounceChequeInd(chequeVO.getBounceChequeInd());
+					vo.setChequeId(Integer.toString(chequeVO.getChequeId()));
+					vo.setChequeNum(chequeVO.getChequeNum());
+				}
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setPaymentAmt(dbObj.getPaymentAmt());
 				vo.setPaymentDate(dbObj.getPaymentDate());

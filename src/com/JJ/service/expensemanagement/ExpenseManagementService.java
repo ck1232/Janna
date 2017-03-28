@@ -80,6 +80,7 @@ public class ExpenseManagementService {
 	}
 	
 	public void updateExpense(ExpenseVO expenseVO) {
+		expenseVO.setDeleteInd(GeneralUtils.NOT_DELETED);
 		if(expenseVO != null && expenseVO.getDeleteInd() != null &&
 				expenseVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
 			ExpenseDbObject dbObj = convertToExpenseDbObjectList(Arrays.asList(expenseVO)).get(0);

@@ -85,6 +85,7 @@ function setNavigation() {
         	</c:if>
         </c:forEach>
       </ul>
+      <div style="height: 50px;"></div>
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

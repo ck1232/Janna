@@ -6,11 +6,11 @@
     "data":           "",
     "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "invoiceid"},
+{"data": "invoiceId"},
 {"data": "messenger"},
-{"data": "totalprice"},
+{"data": "totalAmt"},
 {"data": "status"},
-{"data": "invoicedate"},
+{"data": "invoiceDate"},
 {
     "className":      '',
     "orderable":      false,
