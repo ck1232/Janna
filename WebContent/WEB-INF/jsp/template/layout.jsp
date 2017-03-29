@@ -6,8 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf" content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title><tiles:insertAttribute name="title" ignore="true" /></title>  
 		
         <link type="text/css" href="<c:url context="/JJ" value="/development/font-awesome/css/font-awesome.min.css"/>" rel="stylesheet"/>        

@@ -3,7 +3,7 @@
 $(function () {
 	
     
-    table = $('#datatable1').DataTable({
+	datatable = $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
       "lengthChange": false,

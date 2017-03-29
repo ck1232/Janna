@@ -2,7 +2,7 @@
 <script>
 $(function () {
 	var rows_selected = [];
-    $('#datatable1').DataTable({
+	table = $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
       "lengthChange": false,
@@ -29,5 +29,7 @@ $(function () {
           $(row).find('button[name="loadEditPermissionTypeBtn"]').prop('value', data.submoduleId);
        }
     });
+
+	initTableSearch();
 });
 </script>

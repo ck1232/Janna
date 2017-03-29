@@ -2,8 +2,6 @@
 <script>
 var intakeTaable = null;
 $(function () {
-	
-    
     intakeTable = $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,

@@ -2,7 +2,7 @@
 <script>
 $(function () {
 	var rows_selected = [];
-	table = $('#datatable1').DataTable({
+	datatable = $('#datatable1').DataTable({
       "paging": true,
       "pageLength": 10,
       "responsive" : true,
