@@ -14,6 +14,8 @@ $(function () {
       "order": [1, 'asc'],
       "info": true,
       "autoWidth": false,
+      "sScrollX": "100%",
+      "sScrollXInner": "110%",
       "ajax":{
           "url":'<tiles:getAsString name="data-list" />',
           "data":{
