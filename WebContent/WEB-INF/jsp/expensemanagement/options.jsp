@@ -15,7 +15,7 @@
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/invoice/deleteExpense" />"> Delete</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/expense/deleteExpense" />"> Delete</button>
 		<button class="btn btn-primary pull-right" type="submit" form="createExpenseForm"><i class="fa fa-user-plus"></i> Add</button>
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/payment/createPayExpense" />"><i class="fa fa-user-plus"></i> Add Payment</button>
 	</div>
