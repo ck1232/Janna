@@ -14,7 +14,7 @@
                     	<h3 class="box-title">Submodule Information</h3>
                     </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="get" action="<c:url value="/admin/listModule" />"></form>
+                    <form id="backToListButton" method="get" action="<c:url value="/admin/listPermission" />"></form>
 		              <div class="box-body">
 		              		<input type="hidden" id="id" value="${submodule.submoduleId}"/>
 							<div class="col-sm-2">Name</div>

@@ -292,7 +292,7 @@ public class PaymentManagementController {
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
-			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MMM-yyyy"));
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MM-yyyy"));
 			totalamount = totalamount.add(salaryBonusVo.getTakehomeAmt());
 		}
 		
@@ -316,7 +316,7 @@ public class PaymentManagementController {
 		logger.debug("saveSalaryPayment() : " + paymentVo.toString());
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
-			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MMM-yyyy"));
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MM-yyyy"));
 		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
@@ -325,12 +325,12 @@ public class PaymentManagementController {
 				result.rejectValue("cashamount", "error.notequal.paymentform.salarytotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.salarytotalamount");
 			}
-			if(!validateInputDate(lastdate, "MMM-yyyy", paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, "MM-yyyy", paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.salarylastdate");
 			}
 			
-			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "MMM-yyyy", paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "MM-yyyy", paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.salarylastdate");
 			}

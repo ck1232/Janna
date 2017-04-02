@@ -25,7 +25,7 @@
 					  		<div class="form-group">
 							    <div class="col-sm-2">${salary.dateString}</div>
 							    <div class="col-sm-2">${salary.name}</div>
-							    <div class="col-sm-2">${salary.takehomeamount}</div>
+							    <div class="col-sm-2">${salary.takehomeAmt}</div>
 							    <div class="col-sm-2">${salary.status}</div>
 							</div>
 						</div>

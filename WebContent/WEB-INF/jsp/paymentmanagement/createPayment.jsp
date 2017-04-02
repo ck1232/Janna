@@ -43,7 +43,7 @@
 					</div>
 					<label id="cashAmountLabel" class="col-sm-2 control-label" style="display:none">Cash Amount</label>
 					<div id="cashAmountInput" class="col-sm-4" style="display:none">
-	                    <form:input path="cashamount" type="number" class="form-control" 
+	                    <form:input path="cashamount" type="text" class="form-control" 
                   			  id="cashamount" placeholder=""/>
                   		<form:errors path="cashamount" class="text-danger" />
 					</div>

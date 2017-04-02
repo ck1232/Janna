@@ -27,7 +27,31 @@
         		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
         	</definition>
         </put-attribute>       
-    </definition>  
+    </definition>
+    
+    <definition name="pageNotFound" extends="main_template">  
+        <put-attribute name="title" value="404" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="404" />
+        		<put-attribute name="heading-description" value="Page cannot be found." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/common/404.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>       
+    </definition> 
+    
+    <definition name="pageError" extends="main_template">  
+        <put-attribute name="title" value="500" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="500" />
+        		<put-attribute name="heading-description" value="An error has occur." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/common/500.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>       
+    </definition> 
     
     <definition name="query" extends="main_template">  
         <put-attribute name="title" value="SQL Query" /> 

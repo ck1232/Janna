@@ -2,9 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script>
 $(function () {
+	
 	var rows_selected = [];
 	var selectedRoleId = 0;
-    $('#datatable1').DataTable({
+    table = $('#datatable1').DataTable({
       "paging": true,
       "responsive" : true,
       "lengthChange": false,
@@ -32,7 +33,7 @@ $(function () {
           $(row).find('input[type="checkbox"]').prop('value', data.typeId);
        }
     });
-
+    initTableSearch();
     $('#saveTypeSeqBtn').on('click', function() {
        	$('#saveTypeSeqBtn').submit();
     });

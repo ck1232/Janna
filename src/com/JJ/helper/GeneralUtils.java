@@ -110,7 +110,7 @@ public class GeneralUtils {
 		try{
 			dateString = new SimpleDateFormat(formatString).format(date);
 		}catch(Exception e){
-			logger.info("Error converting date to string.");
+			logger.info("Error converting date to string. Format:"+ formatString + ", Date : " + ((date == null) ? "null" : date.toString()) );
 		}
 		return dateString;
 	}

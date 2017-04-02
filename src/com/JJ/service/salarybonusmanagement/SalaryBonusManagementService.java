@@ -228,7 +228,7 @@ public class SalaryBonusManagementService {
 				SalaryBonusVO vo = new SalaryBonusVO();
 				vo.setId(dbObj.getSalaryId());
 				vo.setDate(dbObj.getSalaryDate());
-				vo.setDateString(GeneralUtils.convertDateToString(dbObj.getSalaryDate(), "MMM-yyyy"));
+				vo.setDateString(GeneralUtils.convertDateToString(dbObj.getSalaryDate(), "MM-yyyy"));
 				EmployeeVO employee = employeeManagementService.findById(dbObj.getEmployeeId());
 				vo.setEmployeeId(employee.getEmployeeId());
 				vo.setName(employee.getName());
