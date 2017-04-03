@@ -124,8 +124,7 @@ public class SalaryBonusManagementService {
 	
 
 	public void updateSalaryBonus(SalaryBonusVO salaryBonusVO) {
-		if(salaryBonusVO != null && salaryBonusVO.getDeleteInd() != null &&
-				salaryBonusVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+		if(salaryBonusVO != null && salaryBonusVO.getId() != null){
 			if(salaryBonusVO.getType().equals("Salary")) {
 				EmployeeSalaryDbObject dbObj = convertToSalaryDbObjectList(Arrays.asList(salaryBonusVO)).get(0);
 				employeeSalaryDbObjectMapper.updateByPrimaryKeySelective(dbObj);
@@ -239,12 +238,19 @@ public class SalaryBonusManagementService {
 				vo.setEmploymentStartDate(employee.getEmploymentStartDate());
 				vo.setEmploymentEndDate(employee.getEmploymentEndDate());
 				vo.setCdacInd(employee.getCdacInd());
+				vo.setOverTimeAmt(dbObj.getOverTimeAmt());
+				vo.setOverTimeHours(dbObj.getOverTimeHours());
+				vo.setOverTimeRemarks(dbObj.getOverTimeRemarks());
+				vo.setAllowance(dbObj.getAllowance());
+				vo.setUnpaidLeaveAmt(dbObj.getUnpaidLeaveAmt());
+				vo.setUnpaidLeaveRemarks(dbObj.getUnpaidLeaveRemarks());
+				vo.setCdacAmt(dbObj.getCdacAmt());
+				vo.setSdlAmt(dbObj.getSdlAmt());
+				vo.setFwLevy(dbObj.getFwLevy());
 				vo.setGrossAmt(calculateGrossAmount(dbObj));
 				vo.setTakehomeAmt(calculateTakeHomeAmount(vo, dbObj));
 				vo.setType(GeneralUtils.TYPE_SALARY);
 				vo.setStatus(dbObj.getStatus());
-				vo.setDeleteInd(dbObj.getDeleteInd());
-				vo.setVersion(dbObj.getVersion());
 				voList.add(vo);
 			}
 		}
@@ -272,8 +278,6 @@ public class SalaryBonusManagementService {
 				dbObj.setSdlAmt(vo.getSdlAmt());
 				dbObj.setFwLevy(vo.getFwLevy());
 				dbObj.setStatus(vo.getStatus());
-				dbObj.setDeleteInd(vo.getDeleteInd());
-				dbObj.setVersion(vo.getVersion());
 				employeeSalaryDbObjectList.add(dbObj);
 			}
 		}
