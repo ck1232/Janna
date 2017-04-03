@@ -136,7 +136,7 @@ public class PermissionManagementService {
 	//Submodulepermissiontype functions START
 	public List<SubModulePermissionTypeVO> getSubmodulepermissiontype(Integer submoduleid) {
 		SubModulePermissionTypeDbObjectExample submodulepermissiontypeExample = new SubModulePermissionTypeDbObjectExample();
-		submodulepermissiontypeExample.createCriteria().andSubmoduleIdEqualTo(submoduleid);
+		submodulepermissiontypeExample.createCriteria().andSubmoduleIdEqualTo(submoduleid).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		submodulepermissiontypeExample.setOrderByClause("seq_num");
 		List<SubModulePermissionTypeDbObject> submodulepermissiontypeList = subModulePermissionTypeDbObjectMapper.selectByExample(submodulepermissiontypeExample);
 		return convertToSubModulePermissionTypeVOList(submodulepermissiontypeList);
