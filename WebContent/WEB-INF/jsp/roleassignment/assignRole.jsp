@@ -33,7 +33,7 @@
 	             		<c:if test="${roleList != null}">
 							<c:forEach items="${roleList}" var="role">
 								<div class="row">
-									<div class="col-sm-2"><input type="checkbox" name="userRole" value="${role.roleid}" <c:if test="${role.checked == 'Y'}">checked</c:if>></div>
+									<div class="col-sm-2"><input type="checkbox" name="userRole" value="${role.roleId}" <c:if test="${role.checked == 'Y'}">checked</c:if>></div>
 									<div class="col-sm-10">${role.name}</div>
 								</div>
 							</c:forEach>

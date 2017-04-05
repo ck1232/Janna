@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-{"data": "rolename"},
+{"data": "roleName"},
 {"data": "permission"},
 {
     "className":      '',

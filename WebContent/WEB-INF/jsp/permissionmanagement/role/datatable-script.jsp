@@ -27,7 +27,7 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('button[name="editBtn"]').prop('value', data.roleid);
+          $(row).find('button[name="editBtn"]').prop('value', data.roleId);
           $(row).find('button[name="editPermissionBtn"]').click(function(){editPermission(data)});
        }
     });
@@ -38,8 +38,8 @@ $(function () {
 });
 
 function editPermission(data) {
-	$('#roleid').prop('value', data.roleid);
-	$('#rolenameDiv').html(data.rolename);
+	$('#roleid').prop('value', data.roleId);
+	$('#rolenameDiv').html(data.roleName);
     $('#editModal').modal('show');
     var permissionArr = "";
     if(data.permissionId != null){
