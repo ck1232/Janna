@@ -2,24 +2,25 @@ package com.JJ.model;
 
 public class RolesToPermissionCustomDbObject {
 	
-	private String roleid;
-	private String rolename;
+	private Integer roleId;
+	private String roleName;
 	private String submoduleId;
 	private String submoduleName;
 	private String permission;
 	private String permissionId;
-
-	public String getRoleid() {
-		return roleid;
+	private Integer permissionTypeId;
+	
+	public Integer getRoleId() {
+		return roleId;
 	}
-	public void setRoleid(String roleid) {
-		this.roleid = roleid;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
-	public String getRolename() {
-		return rolename;
+	public String getRoleName() {
+		return roleName;
 	}
-	public void setRolename(String rolename) {
-		this.rolename = rolename;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 	public String getSubmoduleId() {
 		return submoduleId;
@@ -44,6 +45,12 @@ public class RolesToPermissionCustomDbObject {
 	}
 	public void setPermissionId(String permissionId) {
 		this.permissionId = permissionId;
+	}
+	public Integer getPermissionTypeId() {
+		return permissionTypeId;
+	}
+	public void setPermissionTypeId(Integer permissionTypeId) {
+		this.permissionTypeId = permissionTypeId;
 	}
 	
 }

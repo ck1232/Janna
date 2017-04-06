@@ -8,5 +8,5 @@ import com.JJ.model.RolesToPermissionCustomDbObject;
 
 public interface PermissionCustomDbObjectMapper {
 	List<RolesToPermissionCustomDbObject> getRolesToPermission(String moduleId);
-	List<SubModulePermissionVO> getSubmodulePermissionByRoleIdList (Map<String, List<String>> roleList);
+	List<SubModulePermissionVO> getSubmodulePermissionByRoleIdList (Map<String, List<Integer>> roleList);
 }

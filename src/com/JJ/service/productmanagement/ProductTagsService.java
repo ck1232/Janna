@@ -1,7 +1,9 @@
 package com.JJ.service.productmanagement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,5 +82,43 @@ public class ProductTagsService {
 			}
 		}
 		return tagsList;
+	}
+	
+	public Map<Integer, List<String>> getProductTags(List<Integer> productIdList) {
+		Map<Integer, List<String>> tagsMap= new HashMap<Integer, List<String>>();
+		ProductTagsDbObjectExample example = new ProductTagsDbObjectExample();
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andProductIdIn(productIdList);
+		List<ProductTagsDbObject> dbList = productTagsDbObjectMapper.selectByExample(example);
+		if(dbList != null && dbList.size() > 0){
+			for(ProductTagsDbObject tags : dbList){
+				if(!tagsMap.containsKey(tags.getProductId())){
+					tagsMap.put(tags.getProductId(), new ArrayList<String>());
+				}
+				tagsMap.get(tags.getProductId()).add(tags.getName());
+			}
+		}
+		return tagsMap;
+	}
+
+	public List<ProductVO> getProductVOTags(List<ProductVO> voList) {
+		if(voList != null && voList.size() > 0){
+			List<Integer> productIdList = new ArrayList<Integer>();
+			for(ProductVO vo : voList){
+				productIdList.add(vo.getProductId());
+			}
+			
+			if(productIdList.size() > 0){
+				Map<Integer, List<String>> map = getProductTags(productIdList);
+				if(map != null && map.size() > 0){
+					for(ProductVO vo : voList){
+						List<String> tagsList = map.get(vo.getProductId());
+						if(tagsList != null && tagsList.size() > 0){
+							vo.setTags(tagsList);
+						}
+					}
+				}
+			}
+		}
+		return voList;
 	}
 }

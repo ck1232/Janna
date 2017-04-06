@@ -1,7 +1,5 @@
 package com.JJ.controller.common;
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -2,7 +2,9 @@ package com.JJ.service.roleassignment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.UserRoleVO;
 import com.JJ.controller.roleassignment.vo.RolesToAssignVO;
-import com.JJ.dao.RoleCustomDbObjectMapper;
+import com.JJ.dao.RoleDbObjectMapper;
 import com.JJ.dao.UserRoleDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.model.RoleDbObject;
+import com.JJ.model.RoleDbObjectExample;
 import com.JJ.model.UserRoleDbObject;
 import com.JJ.model.UserRoleDbObjectExample;
 
@@ -21,12 +25,18 @@ import com.JJ.model.UserRoleDbObjectExample;
 public class RoleAssignmentService {
 	
 	private UserRoleDbObjectMapper userRoleDbObjectMapper;
-	private RoleCustomDbObjectMapper roleCustomDbObjectMapper;
+	private RoleDbObjectMapper roleDbObjectMapper;
 	@Autowired
 	public RoleAssignmentService(UserRoleDbObjectMapper userRoleDbObjectMapper,
-			RoleCustomDbObjectMapper roleCustomDbObjectMapper) {
+			RoleDbObjectMapper roleDbObjectMapper) {
 		this.userRoleDbObjectMapper = userRoleDbObjectMapper;
-		this.roleCustomDbObjectMapper = roleCustomDbObjectMapper;
+		this.roleDbObjectMapper = roleDbObjectMapper;
+	}
+	
+	public List<RoleDbObject> getAllRolesDbObject() {
+		RoleDbObjectExample roleDbObjectExample = new RoleDbObjectExample();
+		roleDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return roleDbObjectMapper.selectByExample(roleDbObjectExample);
 	}
 	
 	public UserRoleVO findById(int key) {
@@ -47,12 +57,33 @@ public class RoleAssignmentService {
 	
 	public List<UserRoleVO> getRoleListByUserId(Integer userId){
 		UserRoleDbObjectExample userRoleExample = new UserRoleDbObjectExample();
-		userRoleExample.createCriteria().andUserIdEqualTo(userId);
+		userRoleExample.createCriteria().andUserIdEqualTo(userId).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		return convertToUserRoleVOList(userRoleDbObjectMapper.selectByExample(userRoleExample));
 	}
 	
-	public List<RolesToAssignVO> getRolesToAssign(String userName) {
-		return roleCustomDbObjectMapper.getRolesToAssign(userName);
+	public List<RolesToAssignVO> getRolesToAssign(Integer userId) {
+		List<RolesToAssignVO> roleAssignList = new ArrayList<RolesToAssignVO>();
+		List<RoleDbObject> roleList = getAllRolesDbObject();
+		List<UserRoleVO> userRoleVOList = getRoleListByUserId(userId);
+		Map<Integer, UserRoleVO> map = new HashMap<Integer, UserRoleVO>();
+		if(userRoleVOList != null && userRoleVOList.size() > 0){
+			for(UserRoleVO vo : userRoleVOList){
+				map.put(vo.getRoleId(), vo);
+			}
+		}
+		if(roleList != null && roleList.size() > 0){
+			for(RoleDbObject role : roleList){
+				RolesToAssignVO vo = new RolesToAssignVO();
+				vo.setRoleId(role.getRoleId());
+				vo.setName(role.getName());
+				vo.setChecked(GeneralUtils.NO_IND);
+				if(map.get(role.getRoleId()) != null){
+					vo.setChecked(GeneralUtils.YES_IND);
+				}
+				roleAssignList.add(vo);
+			}
+		}
+		return roleAssignList;
 	}
 	
 	
