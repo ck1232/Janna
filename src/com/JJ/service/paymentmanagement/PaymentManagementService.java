@@ -237,9 +237,12 @@ public class PaymentManagementService {
 				PaymentDetailVO vo = new PaymentDetailVO();
 				if(dbObj.getChequeId() != null){
 					ChequeVO chequeVO = chequeManagementService.findById(Integer.valueOf(dbObj.getChequeId()));
-					vo.setBounceChequeInd(chequeVO.getBounceChequeInd());
-					vo.setChequeId(Integer.toString(chequeVO.getChequeId()));
-					vo.setChequeNum(chequeVO.getChequeNum());
+					if(chequeVO != null){
+						vo.setBounceChequeInd(chequeVO.getBounceChequeInd());
+						vo.setChequeId(Integer.toString(chequeVO.getChequeId()));
+						vo.setChequeNum(chequeVO.getChequeNum());
+					}
+					
 				}
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setPaymentAmt(dbObj.getPaymentAmt());

@@ -12,6 +12,7 @@ public class FileMetaVO {
     private Integer sequence;
     private byte[] bytes;
     private byte[] thumbnail;
+    private Integer productId;
 	public Integer getImageId() {
 		return imageId;
 	}
@@ -66,6 +67,14 @@ public class FileMetaVO {
 
 	public void setThumbnail(byte[] thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
     
 }

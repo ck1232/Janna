@@ -2,15 +2,15 @@ package com.JJ.controller.roleassignment.vo;
 
 public class RolesToAssignVO {
 	
-	private String roleid;
+	private Integer roleId;
 	private String name;
 	private String checked;
 	
-	public String getRoleid() {
-		return roleid;
+	public Integer getRoleId() {
+		return roleId;
 	}
-	public void setRoleid(String roleid) {
-		this.roleid = roleid;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 	
 	public String getName() {

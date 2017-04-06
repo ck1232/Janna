@@ -78,19 +78,28 @@ public class PermissionManagementController {
 	}
 	
 	@RequestMapping(value = "/getRoleToPermission", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getRoleListToPermission(@RequestParam("editBtn") String submoduleid) {
+	public @ResponseBody String getRoleListToPermission(@RequestParam("editBtn") Integer submoduleid) {
 		logger.debug("getting role list");
 		List<RolesToPermissionCustomDbObject> rolesToPermissionList = permissionManagementService.getRolesToPermission(submoduleid);
 
 		List<RolesToPermissionCustomDbObject> permissionList = new ArrayList<RolesToPermissionCustomDbObject>();
-		Map<String, RolesToPermissionCustomDbObject> permissionMap = new HashMap<String, RolesToPermissionCustomDbObject>();
+		Map<Integer, RolesToPermissionCustomDbObject> permissionMap = new HashMap<Integer, RolesToPermissionCustomDbObject>();
 		for(RolesToPermissionCustomDbObject obj : rolesToPermissionList){
-			RolesToPermissionCustomDbObject roleToPermission = permissionMap.get(obj.getRoleid());
+			RolesToPermissionCustomDbObject roleToPermission = permissionMap.get(obj.getRoleId());
 			if(roleToPermission == null){
-				permissionMap.put(obj.getRoleid(), obj);
+				permissionMap.put(obj.getRoleId(), obj);
 			}else{
-				roleToPermission.setPermission(roleToPermission.getPermission()+","+obj.getPermission());
-				roleToPermission.setPermissionId(roleToPermission.getPermissionId()+","+obj.getPermissionId());
+				if(roleToPermission.getPermission() != null && !roleToPermission.getPermission().isEmpty()){
+					roleToPermission.setPermission(roleToPermission.getPermission()+","+obj.getPermission());
+				}else{
+					roleToPermission.setPermission(obj.getPermission());
+				}
+				
+				if(roleToPermission.getPermissionId() != null && !roleToPermission.getPermissionId().isEmpty()){
+					roleToPermission.setPermissionId(roleToPermission.getPermissionId()+","+obj.getPermissionId());
+				}else{
+					roleToPermission.setPermissionId(obj.getPermissionId());
+				}
 			}
 		}
 		for(RolesToPermissionCustomDbObject obj : permissionMap.values()){

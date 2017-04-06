@@ -9,8 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -126,5 +128,54 @@ public class ProductImageService {
 		}else{
 			return null;
 		}
+	}
+
+	public List<ProductVO> getProductVOImage(List<ProductVO> voList) {
+		if(voList != null && voList.size() > 0){
+			List<Integer> productIdList = new ArrayList<Integer>();
+			for(ProductVO vo : voList){
+				productIdList.add(vo.getProductId());
+			}
+			
+			if(productIdList != null && productIdList.size() > 0){
+				List<ProductImageDbObjectWithBLOBs> imageList= getProductImage(productIdList);
+				List<FileMetaVO> fileMetaList = convertToFileMetaVO(imageList);
+				Map<Integer, LinkedList<FileMetaVO>> imageMap = new HashMap<Integer, LinkedList<FileMetaVO>>();
+				if(imageList != null && imageList.size() > 0){
+					for(FileMetaVO vo : fileMetaList){
+						if(!imageMap.containsKey(vo.getProductId())){
+							imageMap.put(vo.getProductId(), new LinkedList<FileMetaVO>());
+						}
+						imageMap.get(vo.getProductId()).add(vo);
+					}
+				}
+				
+				for(ProductVO vo : voList){
+					LinkedList<FileMetaVO> productImageList = imageMap.get(vo.getProductId());
+					if(productImageList != null && productImageList.size() > 0){
+						vo.setImages(productImageList);
+					}
+				}
+			}
+		}
+		return voList;
+	}
+
+	private List<FileMetaVO> convertToFileMetaVO(List<ProductImageDbObjectWithBLOBs> imageList) {
+		List<FileMetaVO> fileMetaList = new ArrayList<FileMetaVO>();
+		if(imageList != null && imageList.size() > 0){
+			for(ProductImageDbObjectWithBLOBs image : imageList){
+				FileMetaVO vo = new FileMetaVO();
+				vo.setBytes(image.getImage());
+				vo.setFileName(image.getImageName());
+				vo.setFileSize(image.getImage().length+"");
+				vo.setImageId(image.getProductImageId());
+				vo.setThumbnail(image.getThumbNailImage());
+				vo.setSequence(image.getSequence());
+				vo.setProductId(image.getProductId());
+				fileMetaList.add(vo);
+			}
+		}
+		return fileMetaList;
 	}
 }
