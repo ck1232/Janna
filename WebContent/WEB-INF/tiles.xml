@@ -1630,5 +1630,49 @@
         </put-attribute>
     </definition>
     <!-- Employee Module END -->
+    
+    <!-- Cheque Module START -->
+ 	<definition name="listCheque" extends="main_template">  
+        <put-attribute name="title" value="Cheque Listing" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Cheque Listing" />
+        		<put-attribute name="heading-description" value="To view all the cheque." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/chequemanagement/listCheque.jsp">
+        				<put-attribute name="datatable">
+		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
+		        				<put-attribute name="table-title" value="All Cheque" />
+		        				<put-attribute name="options" value="/WEB-INF/jsp/chequemanagement/options.jsp" />
+		        				<put-attribute name="datatable-options" value="" />
+		        				<put-attribute name="datatable-script">
+		        					<definition template="/WEB-INF/jsp/chequemanagement/datatable-script.jsp" >
+		        						<put-attribute name="data-list" value="/JJ/cheque/getChequeList" />
+		        						<put-attribute name="datatable-data" value="" />
+		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/chequemanagement/column-mapping.jsp" />
+		        					</definition>
+		        				</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/chequemanagement/column-header.jsp"></put-attribute>
+		        			</definition>
+        				</put-attribute>
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
+    <definition name="viewCheque" extends="main_template">  
+        <put-attribute name="title" value="View Cheque" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Cheque" />
+        		<put-attribute name="heading-description" value="To view cheque." />
+        		<put-attribute name="content" value="/WEB-INF/jsp/chequemanagement/viewCheque.jsp" />
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    <!-- Cheque Module END -->
   	
 </tiles-definitions>  

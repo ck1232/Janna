@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.chequemanagement.vo.ChequeVO;
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
-import com.JJ.controller.paymentmanagement.vo.ChequeVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentVO;
@@ -26,6 +26,7 @@ import com.JJ.lookup.PaymentModeLookup;
 import com.JJ.model.ChequeDbObject;
 import com.JJ.model.PaymentDetailDbObject;
 import com.JJ.model.PaymentDetailDbObjectExample;
+import com.JJ.service.chequemanagement.ChequeManagementService;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
@@ -182,6 +183,38 @@ public class PaymentManagementService {
 			paymentdetailList = convertToPaymentDetailVOList(paymentDetailDbObjectMapper.selectByExample(example));
 		}
 		return paymentdetailList;
+	}
+	
+	public String getPaymentReferenceTypeByChequeId(String chequeId) {
+		PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andChequeIdEqualTo(chequeId);
+		List<PaymentDetailDbObject> paymentDetailDbList = paymentDetailDbObjectMapper.selectByExample(example);
+		
+		if(paymentDetailDbList != null && !paymentDetailDbList.isEmpty()) {
+			for(PaymentDetailDbObject dbObj : paymentDetailDbList) {
+				List<PaymentRsVO> retrievedList = paymentRSManagementService.getAllPaymentByPaymentDetailId(dbObj.getPaymentDetailId());
+				if(retrievedList != null && !retrievedList.isEmpty()) {
+					return retrievedList.get(0).getReferenceType();
+				}
+			}
+		}		
+		return null;
+	}
+	
+	public List<PaymentRsVO> getAllPaymentByChequeId(String chequeId) {
+		PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andChequeIdEqualTo(chequeId);
+		List<PaymentDetailDbObject> paymentDetailDbList = paymentDetailDbObjectMapper.selectByExample(example);
+		List<PaymentRsVO> voList = new ArrayList<PaymentRsVO>();
+		if(paymentDetailDbList != null && !paymentDetailDbList.isEmpty()) {
+			for(PaymentDetailDbObject dbObj : paymentDetailDbList) {
+				List<PaymentRsVO> retrievedList = paymentRSManagementService.getAllPaymentByPaymentDetailId(dbObj.getPaymentDetailId());
+				if(retrievedList != null && !retrievedList.isEmpty()) {
+					voList.addAll(retrievedList);
+				}
+			}
+		}		
+		return voList;
 	}
 	
 	private List<ChequeDbObject> convertPaymentToChequeDbObjectList(List<PaymentVO> paymentVOList) {

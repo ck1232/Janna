@@ -1,4 +1,4 @@
-package com.JJ.service.paymentmanagement;
+package com.JJ.service.chequemanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.controller.paymentmanagement.vo.ChequeVO;
+import com.JJ.controller.chequemanagement.vo.ChequeVO;
 import com.JJ.dao.ChequeDbObjectMapper;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ChequeDbObject;
+import com.JJ.model.ChequeDbObjectExample;
 
 @Service
 @Transactional
@@ -32,11 +34,29 @@ public class ChequeManagementService {
 		}
 	}
 	
+	public List<ChequeVO> getAllCheque() {
+		ChequeDbObjectExample chequeDbObjectExample = new ChequeDbObjectExample();
+		chequeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToChequeVOList(chequeDbObjectMapper.selectByExample(chequeDbObjectExample));
+	}
+	
 	public void saveCheque(ChequeVO chequeVO) {
 		if(chequeVO != null){
 			ChequeDbObject dbObj = convertToChequeDbObjectList(Arrays.asList(chequeVO)).get(0);
 			chequeDbObjectMapper.insert(dbObj);
 		}
+	}
+	
+	public void deleteCheque(Integer id) {
+		deleteCheque(Arrays.asList(id));
+	}
+	
+	public void deleteCheque(List<Integer> idList) {
+		ChequeDbObjectExample chequeDbObjectExample = new ChequeDbObjectExample();
+		chequeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andChequeIdIn(idList);
+		ChequeDbObject dbObj = new ChequeDbObject();
+		dbObj.setDeleteInd(GeneralUtils.DELETED);
+		chequeDbObjectMapper.updateByExampleSelective(dbObj, chequeDbObjectExample);
 	}
 
 	private List<ChequeVO> convertToChequeVOList(List<ChequeDbObject> chequeDbObjectList) {
@@ -50,9 +70,7 @@ public class ChequeManagementService {
 				vo.setChequeId(dbObj.getChequeId());
 				vo.setChequeNum(dbObj.getChequeNum());
 				vo.setDebitDate(dbObj.getDebitDate());
-				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setRemarks(dbObj.getRemarks());
-				vo.setVersion(dbObj.getVersion());
 				chequeVOList.add(vo);
 			}
 		}
@@ -70,9 +88,7 @@ public class ChequeManagementService {
 				dbObj.setChequeId(vo.getChequeId());
 				dbObj.setChequeNum(vo.getChequeNum());
 				dbObj.setDebitDate(vo.getDebitDate());
-				dbObj.setDeleteInd(vo.getDeleteInd());
 				dbObj.setRemarks(vo.getRemarks());
-				dbObj.setVersion(vo.getVersion());
 				chequeDbObjectList.add(dbObj);
 			}
 		}

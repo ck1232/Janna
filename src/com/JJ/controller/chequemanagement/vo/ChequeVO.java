@@ -1,4 +1,4 @@
-package com.JJ.controller.paymentmanagement.vo;
+package com.JJ.controller.chequemanagement.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +20,8 @@ public class ChequeVO extends Base implements Serializable {
     private String remarks;
 
     private String bounceChequeInd;
+    
+    private String paidFor;
 
     private static final long serialVersionUID = 1L;
 
@@ -79,7 +81,15 @@ public class ChequeVO extends Base implements Serializable {
         this.bounceChequeInd = bounceChequeInd == null ? null : bounceChequeInd.trim();
     }
 
-    @Override
+    public String getPaidFor() {
+		return paidFor;
+	}
+
+	public void setPaidFor(String paidFor) {
+		this.paidFor = paidFor == null ? null : paidFor.trim();
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());

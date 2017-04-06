@@ -31,7 +31,13 @@ public class PaymentRSManagementService {
 								.andReferenceTypeEqualTo(refType)
 								.andReferenceIdEqualTo(refId);
 		return convertToPaymentRsVOList(paymentRsDbObjectMapper.selectByExample(paymentRsDbObjectExample));
-		
+	}
+	
+	public List<PaymentRsVO> getAllPaymentByPaymentDetailId(Integer paymentDetailId) {
+		PaymentRsDbObjectExample paymentRsDbObjectExample = new PaymentRsDbObjectExample();
+		paymentRsDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+								.andPaymentDetailIdEqualTo(paymentDetailId);
+		return convertToPaymentRsVOList(paymentRsDbObjectMapper.selectByExample(paymentRsDbObjectExample));
 	}
 	
 	public void savePaymentRs(PaymentRsVO paymentRsVO) {

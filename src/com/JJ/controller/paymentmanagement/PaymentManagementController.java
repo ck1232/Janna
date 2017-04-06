@@ -81,8 +81,6 @@ public class PaymentManagementController {
 		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
 		for(ExpenseVO expense : expenseList) {
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpenseDate()));
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
 			totalamount = totalamount.add(expense.getTotalAmt());
 		}
 		
