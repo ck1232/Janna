@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.productmanagement.vo.ProductOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
+import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.dao.ProductOptionDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ProductOptionDbObject;
@@ -160,6 +161,18 @@ public class ProductOptionManagementService {
 			
 		}
 		return new ArrayList<ProductOptionVO>();
+	}
+
+	public List<ProductVO> getProductOption(List<ProductVO> voList) {
+		if(voList != null && voList.size() > 0){
+			for(ProductVO vo : voList){
+				List<ProductOptionVO> optionList = getOptionVoList(vo.getProductId());
+				if(optionList != null && optionList.size() > 0){
+					vo.setOptionList(optionList);
+				}
+			}
+		}
+		return voList;
 	}
 	
 }

@@ -116,10 +116,10 @@ public class ProductService {
 					for(AdditionalInfo info : additionalInfoList){
 						switch(info){
 						case CATEGORY : voList = getProductSubCategory(voList); break;
-						case IMAGE : break;
-						case OPTION : break;
+						case IMAGE : voList = productImageService.getProductVOImage(voList);break;
+						case OPTION : voList = productOptionManagementService.getProductOption(voList);break;
 						case SPECIFICATION : voList = productSpecificationService.getProductSpecification(voList); break;
-						case TAGS : break;
+						case TAGS : voList = productTagsService.getProductVOTags(voList);break;
 						default :;
 						}
 					}
@@ -129,7 +129,7 @@ public class ProductService {
 		}
 		return new ArrayList<ProductVO>();
 	}
-	
+
 	public static List<Integer> getProductIdList(List<ProductVO> voList){
 		List<Integer> productIdList = new ArrayList<Integer>();
 		if(voList != null && voList.size() > 0){
