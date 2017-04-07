@@ -104,7 +104,7 @@ CREATE TABLE `cheque` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`cheque_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE `cheque` (
 
 LOCK TABLES `cheque` WRITE;
 /*!40000 ALTER TABLE `cheque` DISABLE KEYS */;
-INSERT INTO `cheque` VALUES (1,'100-100','2017-03-29',725.00,NULL,NULL,'N',1,'ck1232','2017-03-28 23:50:15','ck1232','2017-03-28 23:50:15','N'),(2,'400-400','2017-03-27',500.00,NULL,NULL,'N',1,'ck1232','2017-03-28 23:52:51','ck1232','2017-03-28 23:52:51','N'),(3,'200-200','2017-03-27',7.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(4,'300-300','2017-03-27',3310.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(5,'500-500','2017-03-27',13079.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(6,'600-600','2017-03-27',10.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(7,'700-700','2017-03-27',2500.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N');
+INSERT INTO `cheque` VALUES (1,'100-100','2017-03-29',725.00,NULL,NULL,'N',1,'ck1232','2017-03-28 23:50:15','ck1232','2017-03-28 23:50:15','N'),(2,'400-400','2017-03-27',500.00,NULL,NULL,'N',1,'ck1232','2017-03-28 23:52:51','ck1232','2017-03-28 23:52:51','N'),(3,'200-200','2017-03-27',7.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(4,'300-300','2017-03-27',3310.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(5,'500-500','2017-03-27',13079.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(6,'600-600','2017-03-27',10.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(7,'700-700','2017-03-27',2500.00,NULL,NULL,'N',1,'euphona','2017-03-28 23:52:51','euphona','2017-03-28 23:52:51','N'),(8,'111-111-1111-111','2017-04-19',100.00,NULL,NULL,'N',1,'euphona','2017-04-06 23:52:39','euphona','2017-04-06 23:52:39','N');
 /*!40000 ALTER TABLE `cheque` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,7 +314,7 @@ CREATE TABLE `employee_bonus` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`bonus_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,7 +323,7 @@ CREATE TABLE `employee_bonus` (
 
 LOCK TABLES `employee_bonus` WRITE;
 /*!40000 ALTER TABLE `employee_bonus` DISABLE KEYS */;
-INSERT INTO `employee_bonus` VALUES (1,'2017-03-08',1,1000.00,600.00,123.00,'UNPAID',1,'ck1232','2017-03-28 22:14:03','ck1232','2017-03-28 22:14:03','Y'),(2,'2017-03-23',1,100.00,10.00,20.00,'UNPAID',1,'ck1232','2017-03-28 22:20:49','ck1232','2017-03-28 22:20:49','N');
+INSERT INTO `employee_bonus` VALUES (1,'2017-03-08',1,1000.00,600.00,123.00,'UNPAID',1,'ck1232','2017-03-28 22:14:03','ck1232','2017-03-28 22:14:03','Y'),(2,'2017-03-23',1,100.00,10.00,20.00,'UNPAID',1,'ck1232','2017-03-28 22:20:49','ck1232','2017-03-28 22:20:49','N'),(3,'2017-04-26',1,100.00,20.00,20.00,'PAID',2,'euphona','2017-04-06 23:52:12','euphona','2017-04-06 23:52:49','N');
 /*!40000 ALTER TABLE `employee_bonus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -367,7 +367,7 @@ CREATE TABLE `employee_salary` (
 
 LOCK TABLES `employee_salary` WRITE;
 /*!40000 ALTER TABLE `employee_salary` DISABLE KEYS */;
-INSERT INTO `employee_salary` VALUES (1,'2017-03-13',1,2500.00,NULL,NULL,'',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 13:23:49','euphona','2017-03-13 13:23:49','N'),(2,'2017-02-08',1,2500.00,NULL,NULL,'',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 15:58:37','euphona','2017-03-13 17:57:21','N'),(3,'2017-03-08',1,1000.00,NULL,NULL,'',NULL,NULL,'',20.50,NULL,NULL,NULL,NULL,'UNPAID',1,'ck1232','2017-03-28 22:16:41','ck1232','2017-03-28 22:16:41','Y'),(4,'2017-03-08',1,100.20,NULL,NULL,'',NULL,NULL,'',NULL,50.00,NULL,NULL,NULL,'UNPAID',1,'ck1232','2017-03-28 22:20:06','ck1232','2017-03-28 22:20:06','N');
+INSERT INTO `employee_salary` VALUES (1,'2017-03-13',1,2500.00,NULL,NULL,'',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 13:23:49','euphona','2017-03-13 13:23:49','N'),(2,'2017-02-08',1,2500.00,NULL,NULL,'',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 15:58:37','euphona','2017-03-13 17:57:21','N'),(3,'2017-03-08',1,1000.00,NULL,NULL,'',NULL,NULL,'',20.50,NULL,NULL,NULL,NULL,'UNPAID',1,'ck1232','2017-03-28 22:16:41','ck1232','2017-03-28 22:16:41','Y'),(4,'2017-03-08',1,2500.00,1.00,1.00,'1',1.00,1.00,'1',NULL,50.00,1.00,1.00,1.00,'UNPAID',1,'ck1232','2017-03-28 22:20:06','euphona','2017-04-03 21:47:53','N');
 /*!40000 ALTER TABLE `employee_salary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -541,7 +541,7 @@ CREATE TABLE `module` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`module_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -550,7 +550,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'Admin Management','fa-users',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(5,'Product management','fa-users',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(6,'Promotion Management','fa-users',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(7,'Customer Management','fa-users',1,'euphona','2016-11-15 21:23:46','euphona','2016-11-15 21:23:46','N'),(8,'Batch Management','fa-users',1,'euphona','2016-11-26 20:11:59','euphona','2016-11-26 20:11:59','N'),(9,'Inventory Management','fa-users',1,'euphona','2017-01-05 21:16:30','euphona','2017-01-05 21:16:30','N'),(10,'Demo Management','fa-users',1,'euphona','2017-02-25 16:39:47','euphona','2017-02-25 16:39:47','N'),(11,'Invoice Management','fa-users',1,'euphona','2017-02-27 10:31:46','euphona','2017-02-27 10:31:53','N'),(12,'Expense Management','fa-users',1,'euphona','2017-03-05 15:47:20','euphona','2017-03-05 15:47:20','N'),(13,'Salary & Bonus Management','fa-users',1,'euphona','2017-03-11 10:52:41','euphona','2017-03-11 22:42:22','N'),(14,'Employee Management','fa-users',1,'euphona','2017-03-12 17:44:25','euphona','2017-03-12 17:44:25','N');
+INSERT INTO `module` VALUES (1,'Admin Management','fa-users',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(5,'Product management','fa-users',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(6,'Promotion Management','fa-users',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(7,'Customer Management','fa-users',1,'euphona','2016-11-15 21:23:46','euphona','2016-11-15 21:23:46','N'),(8,'Batch Management','fa-users',1,'euphona','2016-11-26 20:11:59','euphona','2016-11-26 20:11:59','N'),(9,'Inventory Management','fa-users',1,'euphona','2017-01-05 21:16:30','euphona','2017-01-05 21:16:30','N'),(10,'Demo Management','fa-users',1,'euphona','2017-02-25 16:39:47','euphona','2017-02-25 16:39:47','N'),(11,'Invoice Management','fa-users',1,'euphona','2017-02-27 10:31:46','euphona','2017-02-27 10:31:53','N'),(12,'Expense Management','fa-users',1,'euphona','2017-03-05 15:47:20','euphona','2017-03-05 15:47:20','N'),(13,'Salary & Bonus Management','fa-users',1,'euphona','2017-03-11 10:52:41','euphona','2017-03-11 22:42:22','N'),(14,'Employee Management','fa-users',1,'euphona','2017-03-12 17:44:25','euphona','2017-03-12 17:44:25','N'),(15,'Cheque Management','fa-users',1,'euphona','2017-04-05 21:45:02','euphona','2017-04-05 21:45:02','N');
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -574,7 +574,7 @@ CREATE TABLE `payment_detail` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`payment_detail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -583,7 +583,7 @@ CREATE TABLE `payment_detail` (
 
 LOCK TABLES `payment_detail` WRITE;
 /*!40000 ALTER TABLE `payment_detail` DISABLE KEYS */;
-INSERT INTO `payment_detail` VALUES (3,'2017-03-05',1,8.00,NULL,0,'euphona','2017-03-06 20:53:10','euphona','2017-03-06 20:53:10','N'),(4,'2017-03-06',2,7.00,'3',0,'euphona','2017-03-06 20:53:27','euphona','2017-03-06 20:53:27','N'),(5,'2017-03-08',1,10.00,NULL,0,'euphona','2017-03-06 22:24:18','euphona','2017-03-06 22:24:18','N'),(6,'2017-03-07',1,956.00,NULL,0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(7,'2017-03-07',2,3310.00,'4',0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(8,'2017-03-07',1,946.00,NULL,0,'euphona','2017-03-07 20:51:30','euphona','2017-03-07 20:51:30','N'),(9,'2017-03-13',1,800.00,NULL,0,'euphona','2017-03-07 22:51:00','euphona','2017-03-07 22:51:00','N'),(10,'2017-03-13',2,13079.00,'5',0,'euphona','2017-03-07 22:51:00','euphona','2017-03-07 22:51:00','N'),(11,'2017-03-14',1,10.00,NULL,0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(12,'2017-03-14',2,10.00,'6',0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(13,'2017-03-09',1,100.00,NULL,0,'euphona','2017-03-09 22:50:00','euphona','2017-03-09 22:50:00','N'),(15,'2017-03-28',1,100.00,NULL,0,'euphona','2017-03-09 23:22:49','euphona','2017-03-09 23:22:49','N'),(16,'2017-03-01',2,2500.00,'7',0,'euphona','2017-03-13 16:45:33','euphona','2017-03-13 16:45:33','N'),(17,'2017-03-01',1,3000.00,NULL,0,'euphona','2017-03-13 17:56:43','euphona','2017-03-13 17:56:43','N'),(18,'2017-03-01',1,2500.00,NULL,0,'euphona','2017-03-13 17:57:18','euphona','2017-03-13 17:57:18','N'),(24,'2017-03-15',1,540.00,NULL,1,'ck1232','2017-03-28 23:36:07','ck1232','2017-03-28 23:36:07','N'),(25,'2017-03-22',2,725.00,'1',1,'ck1232','2017-03-28 23:50:15','ck1232','2017-03-28 23:50:15','N'),(26,'2017-03-15',2,500.00,'2',1,'ck1232','2017-03-28 23:52:51','ck1232','2017-03-28 23:52:51','N');
+INSERT INTO `payment_detail` VALUES (3,'2017-03-05',1,8.00,NULL,0,'euphona','2017-03-06 20:53:10','euphona','2017-03-06 20:53:10','N'),(4,'2017-03-06',2,7.00,'3',0,'euphona','2017-03-06 20:53:27','euphona','2017-03-06 20:53:27','N'),(5,'2017-03-08',1,10.00,NULL,0,'euphona','2017-03-06 22:24:18','euphona','2017-03-06 22:24:18','N'),(6,'2017-03-07',1,956.00,NULL,0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(7,'2017-03-07',2,3310.00,'4',0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(8,'2017-03-07',1,946.00,NULL,0,'euphona','2017-03-07 20:51:30','euphona','2017-03-07 20:51:30','N'),(9,'2017-03-13',1,800.00,NULL,0,'euphona','2017-03-07 22:51:00','euphona','2017-03-07 22:51:00','N'),(10,'2017-03-13',2,13079.00,'5',0,'euphona','2017-03-07 22:51:00','euphona','2017-03-07 22:51:00','N'),(11,'2017-03-14',1,10.00,NULL,0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(12,'2017-03-14',2,10.00,'6',0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(13,'2017-03-09',1,100.00,NULL,0,'euphona','2017-03-09 22:50:00','euphona','2017-03-09 22:50:00','N'),(15,'2017-03-28',1,100.00,NULL,0,'euphona','2017-03-09 23:22:49','euphona','2017-03-09 23:22:49','N'),(16,'2017-03-01',2,2500.00,'7',0,'euphona','2017-03-13 16:45:33','euphona','2017-03-13 16:45:33','N'),(17,'2017-03-01',1,3000.00,NULL,0,'euphona','2017-03-13 17:56:43','euphona','2017-03-13 17:56:43','N'),(18,'2017-03-01',1,2500.00,NULL,0,'euphona','2017-03-13 17:57:18','euphona','2017-03-13 17:57:18','N'),(24,'2017-03-15',1,540.00,NULL,1,'ck1232','2017-03-28 23:36:07','ck1232','2017-03-28 23:36:07','N'),(25,'2017-03-22',2,725.00,'1',1,'ck1232','2017-03-28 23:50:15','ck1232','2017-03-28 23:50:15','N'),(26,'2017-03-15',2,500.00,'2',1,'ck1232','2017-03-28 23:52:51','ck1232','2017-03-28 23:52:51','N'),(27,'2017-04-26',2,100.00,'8',1,'euphona','2017-04-06 23:52:39','euphona','2017-04-06 23:52:39','N');
 /*!40000 ALTER TABLE `payment_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -631,7 +631,7 @@ CREATE TABLE `payment_rs` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`payment_rs_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -640,7 +640,7 @@ CREATE TABLE `payment_rs` (
 
 LOCK TABLES `payment_rs` WRITE;
 /*!40000 ALTER TABLE `payment_rs` DISABLE KEYS */;
-INSERT INTO `payment_rs` VALUES (1,'expense',2,3,0,'euphona','2017-03-06 20:53:29','euphona','2017-03-06 20:53:29','N'),(2,'expense',3,3,0,'euphona','2017-03-06 20:53:29','euphona','2017-03-06 20:53:29','N'),(3,'expense',2,4,0,'euphona','2017-03-06 20:53:30','euphona','2017-03-06 20:53:30','N'),(4,'expense',3,4,0,'euphona','2017-03-06 20:53:30','euphona','2017-03-06 20:53:30','N'),(5,'expense',1,5,0,'euphona','2017-03-06 22:24:18','euphona','2017-03-06 22:24:18','N'),(6,'invoice',5354,6,0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(7,'invoice',6246,6,0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(8,'invoice',6247,6,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(9,'invoice',5354,7,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(10,'invoice',6246,7,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(11,'invoice',6247,7,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(12,'invoice',6248,8,0,'euphona','2017-03-07 20:51:30','euphona','2017-03-07 20:51:30','N'),(13,'invoice',6250,9,0,'euphona','2017-03-07 22:51:00','euphona','2017-03-07 22:51:00','N'),(14,'invoice',6249,9,0,'euphona','2017-03-07 22:51:01','euphona','2017-03-07 22:51:01','N'),(15,'invoice',6250,10,0,'euphona','2017-03-07 22:51:01','euphona','2017-03-07 22:51:01','N'),(16,'invoice',6249,10,0,'euphona','2017-03-07 22:51:01','euphona','2017-03-07 22:51:01','N'),(17,'expense',5,11,0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(18,'expense',5,12,0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(19,'expense',11,13,0,'euphona','2017-03-09 22:50:00','euphona','2017-03-09 22:50:00','N'),(21,'expense',13,15,0,'euphona','2017-03-09 23:22:49','euphona','2017-03-09 23:22:49','N'),(22,'salary',1,16,0,'euphona','2017-03-13 16:45:33','euphona','2017-03-13 16:45:33','N'),(25,'bonus',1,19,0,'euphona','2017-03-13 17:40:47','euphona','2017-03-13 17:40:47','N'),(26,'bonus',1,17,0,'euphona','2017-03-13 17:56:43','euphona','2017-03-13 17:56:43','N'),(27,'salary',2,18,0,'euphona','2017-03-13 17:57:18','euphona','2017-03-13 17:57:18','N'),(28,'invoice',6251,24,1,'ck1232','2017-03-28 23:36:09','ck1232','2017-03-28 23:36:09','N'),(29,'invoice',6252,25,1,'ck1232','2017-03-28 23:50:15','ck1232','2017-03-28 23:50:15','N'),(30,'expense',14,26,1,'ck1232','2017-03-28 23:52:51','ck1232','2017-03-28 23:52:51','N');
+INSERT INTO `payment_rs` VALUES (1,'expense',2,3,0,'euphona','2017-03-06 20:53:29','euphona','2017-03-06 20:53:29','N'),(2,'expense',3,3,0,'euphona','2017-03-06 20:53:29','euphona','2017-03-06 20:53:29','N'),(3,'expense',2,4,0,'euphona','2017-03-06 20:53:30','euphona','2017-03-06 20:53:30','N'),(4,'expense',3,4,0,'euphona','2017-03-06 20:53:30','euphona','2017-03-06 20:53:30','N'),(5,'expense',1,5,0,'euphona','2017-03-06 22:24:18','euphona','2017-03-06 22:24:18','N'),(6,'invoice',5354,6,0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(7,'invoice',6246,6,0,'euphona','2017-03-07 20:41:47','euphona','2017-03-07 20:41:47','N'),(8,'invoice',6247,6,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(9,'invoice',5354,7,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(10,'invoice',6246,7,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(11,'invoice',6247,7,0,'euphona','2017-03-07 20:41:48','euphona','2017-03-07 20:41:48','N'),(12,'invoice',6248,8,0,'euphona','2017-03-07 20:51:30','euphona','2017-03-07 20:51:30','N'),(13,'invoice',6250,9,0,'euphona','2017-03-07 22:51:00','euphona','2017-03-07 22:51:00','N'),(14,'invoice',6249,9,0,'euphona','2017-03-07 22:51:01','euphona','2017-03-07 22:51:01','N'),(15,'invoice',6250,10,0,'euphona','2017-03-07 22:51:01','euphona','2017-03-07 22:51:01','N'),(16,'invoice',6249,10,0,'euphona','2017-03-07 22:51:01','euphona','2017-03-07 22:51:01','N'),(17,'expense',5,11,0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(18,'expense',5,12,0,'euphona','2017-03-07 22:54:27','euphona','2017-03-07 22:54:27','N'),(19,'expense',11,13,0,'euphona','2017-03-09 22:50:00','euphona','2017-03-09 22:50:00','N'),(21,'expense',13,15,0,'euphona','2017-03-09 23:22:49','euphona','2017-03-09 23:22:49','N'),(22,'salary',1,16,0,'euphona','2017-03-13 16:45:33','euphona','2017-03-13 16:45:33','N'),(25,'bonus',1,19,0,'euphona','2017-03-13 17:40:47','euphona','2017-03-13 17:40:47','N'),(26,'bonus',1,17,0,'euphona','2017-03-13 17:56:43','euphona','2017-03-13 17:56:43','N'),(27,'salary',2,18,0,'euphona','2017-03-13 17:57:18','euphona','2017-03-13 17:57:18','N'),(28,'invoice',6251,24,1,'ck1232','2017-03-28 23:36:09','ck1232','2017-03-28 23:36:09','N'),(29,'invoice',6252,25,1,'ck1232','2017-03-28 23:50:15','ck1232','2017-03-28 23:50:15','N'),(30,'expense',14,26,1,'ck1232','2017-03-28 23:52:51','ck1232','2017-03-28 23:52:51','N'),(31,'bonus',3,27,1,'euphona','2017-04-06 23:52:39','euphona','2017-04-06 23:52:39','N');
 /*!40000 ALTER TABLE `payment_rs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1157,7 +1157,7 @@ CREATE TABLE `submodule` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`submodule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1166,7 +1166,7 @@ CREATE TABLE `submodule` (
 
 LOCK TABLES `submodule` WRITE;
 /*!40000 ALTER TABLE `submodule` DISABLE KEYS */;
-INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(2,1,'Module Management','fa-users','admin/listModule',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(21,1,'Role Management','fa-users','admin/listRole',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(22,1,'Permission Management','fa-users','admin/listPermission',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(24,5,'Category Management','fa-users','product/category/listProductCategory',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(26,5,'Product Management','fa-users','product/product/listProduct',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(29,6,'Discount Management','fa-users','product/discount/listDiscount',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(30,5,'Product Option Management','fa-users','product/option/listProductOption',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(31,7,'Customer Management','fa-users','customer/listCustomer',1,'euphona','2016-11-15 21:24:32','euphona','2016-11-15 21:24:32','N'),(32,8,'Batch Management','fa-users','/batchintake/listBatchIntake',1,'euphona','2016-11-26 20:12:21','euphona','2016-11-26 20:12:21','N'),(33,9,'Inventory Management','fa-users','/inventory/listInventoryProduct',1,'euphona','2017-01-05 21:17:37','euphona','2017-01-05 21:17:56','N'),(34,9,'Inventory History Management','fa-users','inventoryhistory/listInventoryHistory',1,'euphona','2017-01-20 22:17:50','euphona','2017-01-21 08:30:20','N'),(35,10,'Demo Management','fa-users','/demo/listProduct',1,'euphona','2017-02-25 16:40:36','euphona','2017-02-25 16:40:36','N'),(36,11,'Invoice Management','fa-users','invoice/listInvoice',1,'euphona','2017-02-27 10:32:34','euphona','2017-02-27 10:32:34','N'),(37,12,'Expense Management','fa-users','expense/listExpense',1,'euphona','2017-03-05 15:48:12','euphona','2017-03-05 15:48:12','N'),(38,13,'Salary & Bonus Management','fa-users','salarybonus/listSalaryBonus',1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 22:42:52','N'),(39,14,'Employee Management','fa-users','employee/listEmployee',1,'euphona','2017-03-12 17:45:08','euphona','2017-03-12 17:45:08','N');
+INSERT INTO `submodule` VALUES (1,1,'User Management','fa-users','admin/listUser',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(2,1,'Module Management','fa-users','admin/listModule',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(21,1,'Role Management','fa-users','admin/listRole',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(22,1,'Permission Management','fa-users','admin/listPermission',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(24,5,'Category Management','fa-users','product/category/listProductCategory',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(26,5,'Product Management','fa-users','product/product/listProduct',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(28,6,'Promotion Management','fa-users','product/promotion/listPromotion',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(29,6,'Discount Management','fa-users','product/discount/listDiscount',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(30,5,'Product Option Management','fa-users','product/option/listProductOption',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(31,7,'Customer Management','fa-users','customer/listCustomer',1,'euphona','2016-11-15 21:24:32','euphona','2016-11-15 21:24:32','N'),(32,8,'Batch Management','fa-users','/batchintake/listBatchIntake',1,'euphona','2016-11-26 20:12:21','euphona','2016-11-26 20:12:21','N'),(33,9,'Inventory Management','fa-users','/inventory/listInventoryProduct',1,'euphona','2017-01-05 21:17:37','euphona','2017-01-05 21:17:56','N'),(34,9,'Inventory History Management','fa-users','inventoryhistory/listInventoryHistory',1,'euphona','2017-01-20 22:17:50','euphona','2017-01-21 08:30:20','N'),(35,10,'Demo Management','fa-users','/demo/listProduct',1,'euphona','2017-02-25 16:40:36','euphona','2017-02-25 16:40:36','N'),(36,11,'Invoice Management','fa-users','invoice/listInvoice',1,'euphona','2017-02-27 10:32:34','euphona','2017-02-27 10:32:34','N'),(37,12,'Expense Management','fa-users','expense/listExpense',1,'euphona','2017-03-05 15:48:12','euphona','2017-03-05 15:48:12','N'),(38,13,'Salary & Bonus Management','fa-users','salarybonus/listSalaryBonus',1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 22:42:52','N'),(39,14,'Employee Management','fa-users','employee/listEmployee',1,'euphona','2017-03-12 17:45:08','euphona','2017-03-12 17:45:08','N'),(40,15,'Cheque Management','fa-users','cheque/listCheque',1,'euphona','2017-04-05 21:46:51','euphona','2017-04-05 21:46:51','N');
 /*!40000 ALTER TABLE `submodule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1189,7 +1189,7 @@ CREATE TABLE `submodule_permission` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`permission_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1198,7 +1198,7 @@ CREATE TABLE `submodule_permission` (
 
 LOCK TABLES `submodule_permission` WRITE;
 /*!40000 ALTER TABLE `submodule_permission` DISABLE KEYS */;
-INSERT INTO `submodule_permission` VALUES (1,1,1,14,1,'euphona','2016-11-12 21:47:51','euphona','2016-11-12 21:47:51','N'),(2,1,2,11,1,'euphona','2016-11-12 21:49:07','euphona','2016-11-12 21:49:07','N'),(3,1,21,13,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(4,1,22,12,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(5,1,24,16,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(6,1,26,20,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(7,1,28,23,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(8,1,29,24,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(9,1,30,25,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(10,1,31,26,1,'euphona','2016-11-15 21:25:31','euphona','2016-11-15 21:25:31','N'),(11,1,32,27,1,'euphona','2016-11-26 20:13:09','euphona','2016-11-26 20:13:09','N'),(12,1,33,28,1,'euphona','2017-01-05 21:51:50','euphona','2017-01-05 21:51:50','N'),(13,1,34,29,1,'euphona','2017-01-20 22:18:29','euphona','2017-01-20 22:18:29','N'),(14,1,35,30,1,'euphona','2017-02-25 16:41:21','euphona','2017-02-25 16:41:21','N'),(15,1,36,31,1,'euphona','2017-02-27 10:33:01','euphona','2017-02-27 10:33:01','N'),(16,1,37,32,1,'euphona','2017-03-05 15:48:45','euphona','2017-03-05 15:48:45','N'),(17,1,38,33,1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23','N'),(18,1,39,34,1,'euphona','2017-03-12 17:45:40','euphona','2017-03-12 17:45:40','N'),(19,5,1,14,1,'euphona','2016-11-12 22:55:59','euphona','2016-11-12 22:55:59','N'),(20,5,32,27,1,'euphona','2016-11-26 20:13:15','euphona','2016-11-26 20:13:15','N'),(21,6,1,14,1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23','N');
+INSERT INTO `submodule_permission` VALUES (1,1,1,14,1,'euphona','2016-11-12 21:47:51','euphona','2016-11-12 21:47:51','N'),(2,1,2,11,1,'euphona','2016-11-12 21:49:07','euphona','2016-11-12 21:49:07','N'),(3,1,21,13,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(4,1,22,12,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(5,1,24,16,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(6,1,26,20,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(7,1,28,23,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(8,1,29,24,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(9,1,30,25,1,'euphona','2016-11-12 21:49:19','euphona','2016-11-12 21:49:19','N'),(10,1,31,26,1,'euphona','2016-11-15 21:25:31','euphona','2016-11-15 21:25:31','N'),(11,1,32,27,1,'euphona','2016-11-26 20:13:09','euphona','2016-11-26 20:13:09','N'),(12,1,33,28,1,'euphona','2017-01-05 21:51:50','euphona','2017-01-05 21:51:50','N'),(13,1,34,29,1,'euphona','2017-01-20 22:18:29','euphona','2017-01-20 22:18:29','N'),(14,1,35,30,1,'euphona','2017-02-25 16:41:21','euphona','2017-02-25 16:41:21','N'),(15,1,36,31,1,'euphona','2017-02-27 10:33:01','euphona','2017-02-27 10:33:01','N'),(16,1,37,32,1,'euphona','2017-03-05 15:48:45','euphona','2017-03-05 15:48:45','N'),(17,1,38,33,1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23','N'),(18,1,39,34,1,'euphona','2017-03-12 17:45:40','euphona','2017-03-12 17:45:40','N'),(19,5,1,14,1,'euphona','2016-11-12 22:55:59','euphona','2016-11-12 22:55:59','N'),(20,5,32,27,1,'euphona','2016-11-26 20:13:15','euphona','2016-11-26 20:13:15','N'),(21,6,1,14,1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23','N'),(22,1,40,36,1,'euphona','2017-04-05 21:47:40','euphona','2017-04-05 21:47:40','N');
 /*!40000 ALTER TABLE `submodule_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1222,7 +1222,7 @@ CREATE TABLE `submodule_permission_type` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1231,7 +1231,7 @@ CREATE TABLE `submodule_permission_type` (
 
 LOCK TABLES `submodule_permission_type` WRITE;
 /*!40000 ALTER TABLE `submodule_permission_type` DISABLE KEYS */;
-INSERT INTO `submodule_permission_type` VALUES (11,2,'View',1,'/admin/listModule',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(12,22,'View',1,'/admin/listPermission',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(13,21,'View',1,'/admin/listRole',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(14,1,'View',1,'/admin/listUser',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(16,24,'View',1,'/product/category/listProductCategory',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(20,26,'View',1,'product/product/listProduct',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(23,28,'View',1,'/product/promotion/listPromotion',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(24,29,'View',1,'/product/discount/listDiscount',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(25,30,'View',1,'/product/option/listProductOption',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(26,31,'View',1,'/customer/listCustomer',1,'euphona','2016-11-15 21:25:16','euphona','2016-11-15 21:25:16','N'),(27,32,'View',1,'/batchintake/listBatchIntake',1,'euphona','2016-11-26 20:12:48','euphona','2016-11-26 20:12:48','N'),(28,33,'View',1,'/inventory/listInventoryProduct',1,'euphona','2017-01-05 21:25:26','euphona','2017-01-05 21:25:26','N'),(29,34,'View',1,'inventory/listInventoryHistory',1,'euphona','2017-01-20 22:18:15','euphona','2017-01-20 22:18:15','N'),(30,35,'View',1,'/demo/listProduct',1,'euphona','2017-02-25 16:41:06','euphona','2017-02-25 16:41:06','N'),(31,36,'View',1,'invoice/listInvoice',1,'euphona','2017-02-27 10:32:49','euphona','2017-02-27 10:32:49','N'),(32,37,'View',1,'expense/listExpense',1,'euphona','2017-03-05 15:48:29','euphona','2017-03-05 15:48:29','N'),(33,38,'View',1,'salarybonus/listSalaryBonus',1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23','N'),(34,39,'View',1,'employee/listEmployee',1,'euphona','2017-03-12 17:45:27','euphona','2017-03-12 17:45:27','N');
+INSERT INTO `submodule_permission_type` VALUES (11,2,'View',1,'/admin/listModule',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(12,22,'View',1,'/admin/listPermission',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(13,21,'View',1,'/admin/listRole',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(14,1,'View',1,'/admin/listUser',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(16,24,'View',1,'/product/category/listProductCategory',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(20,26,'View',1,'product/product/listProduct',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(23,28,'View',1,'/product/promotion/listPromotion',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(24,29,'View',1,'/product/discount/listDiscount',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(25,30,'View',1,'/product/option/listProductOption',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(26,31,'View',1,'/customer/listCustomer',1,'euphona','2016-11-15 21:25:16','euphona','2016-11-15 21:25:16','N'),(27,32,'View',1,'/batchintake/listBatchIntake',1,'euphona','2016-11-26 20:12:48','euphona','2016-11-26 20:12:48','N'),(28,33,'View',1,'/inventory/listInventoryProduct',1,'euphona','2017-01-05 21:25:26','euphona','2017-01-05 21:25:26','N'),(29,34,'View',1,'inventory/listInventoryHistory',1,'euphona','2017-01-20 22:18:15','euphona','2017-01-20 22:18:15','N'),(30,35,'View',1,'/demo/listProduct',1,'euphona','2017-02-25 16:41:06','euphona','2017-02-25 16:41:06','N'),(31,36,'View',1,'invoice/listInvoice',1,'euphona','2017-02-27 10:32:49','euphona','2017-02-27 10:32:49','N'),(32,37,'View',1,'expense/listExpense',1,'euphona','2017-03-05 15:48:29','euphona','2017-03-05 15:48:29','N'),(33,38,'View',1,'salarybonus/listSalaryBonus',1,'euphona','2017-03-11 10:53:23','euphona','2017-03-11 10:53:23','N'),(34,39,'View',1,'employee/listEmployee',1,'euphona','2017-03-12 17:45:27','euphona','2017-03-12 17:45:27','N'),(35,32,'test',1,'test',1,'euphona','2017-04-03 21:59:14','euphona','2017-04-03 21:59:14','Y'),(36,40,'View',1,'cheque/listCheque',1,'euphona','2017-04-05 21:47:18','euphona','2017-04-05 21:47:18','N');
 /*!40000 ALTER TABLE `submodule_permission_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1627,7 +1627,7 @@ CREATE TABLE `user_role` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`user_role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1909,4 +1909,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-29 22:11:52
+-- Dump completed on 2017-04-07 20:46:26
