@@ -29,6 +29,7 @@ import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
+import com.JJ.service.grantmanagement.GrantManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
@@ -44,6 +45,7 @@ public class PaymentManagementController {
 	private PaymentManagementService paymentManagementService;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
+	private GrantManagementService grantManagementService;
 	private SalaryBonusManagementService salaryBonusManagementService;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentFormValidator paymentFormValidator;
@@ -52,12 +54,14 @@ public class PaymentManagementController {
 	public PaymentManagementController(PaymentManagementService paymentManagementService,
 			ExpenseManagementService expenseManagementService,
 			InvoiceManagementService invoiceManagementService,
+			GrantManagementService grantManagementService,
 			SalaryBonusManagementService salaryBonusManagementService,
 			ExpenseTypeLookup expenseTypeLookup,
 			PaymentFormValidator paymentFormValidator) {
 		this.paymentManagementService = paymentManagementService;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
+		this.grantManagementService = grantManagementService;
 		this.salaryBonusManagementService = salaryBonusManagementService;
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.paymentFormValidator = paymentFormValidator;
@@ -167,13 +171,30 @@ public class PaymentManagementController {
 		}
 		
 		List<Integer> idList = new ArrayList<Integer>();
+		String type = null;
 		for(String id : ids){
-			idList.add(Integer.valueOf(id));
+			String[] splitId = id.split("-");
+			if(splitId[0] != null && splitId[1] != null){
+				type = type == null ? splitId[1] : type;
+				if(!type.equalsIgnoreCase(splitId[1])) {
+					redirectAttributes.addFlashAttribute("css", "danger");
+					redirectAttributes.addFlashAttribute("msg", "Invoice and grant cannot be in one payment!");
+					return "redirect:/invoice/listInvoice";
+				}
+				idList.add(Integer.valueOf(splitId[0]));
+			}
 		}
-		List<InvoiceVO> invoiceList = invoiceManagementService.getAllInvoiceByIdList(idList);
+		List<InvoiceVO> invoiceList = new ArrayList<InvoiceVO>();
 		BigDecimal totalamount = BigDecimal.ZERO;
+		String posturl = "";
+		if(type.equalsIgnoreCase("invoice")){
+			invoiceList = invoiceManagementService.getAllInvoiceByIdList(idList);
+			posturl = "/JJ/payment/createInvoicePayment";
+		}else if(type.equalsIgnoreCase("grant")){
+			invoiceList = grantManagementService.getAllGrantByIdList(idList);
+			posturl = "/JJ/payment/createGrantPayment";
+		}
 		for(InvoiceVO invoice : invoiceList) {
-			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoiceDate()));
 			totalamount = totalamount.add(invoice.getTotalAmt());
 		}
 		
@@ -183,13 +204,15 @@ public class PaymentManagementController {
 		model.addAttribute("totalamount", totalamount);
 		model.addAttribute("lastdate", invoiceList.get(invoiceList.size()-1).getInvoicedateString());
 		model.addAttribute("idList", idList);
-		model.addAttribute("posturl", "/JJ/payment/createInvoicePayment");
+		model.addAttribute("ids", ids);
+		model.addAttribute("posturl", posturl);
 		return "createPayInvoice";
 	}
 	
 	@RequestMapping(value = "/createInvoicePayment", method = RequestMethod.POST)
     public String saveInvoicePayment(
     		@RequestParam(value = "referenceIds", required=false) List<Integer> invoiceIdList,
+    		@RequestParam(value = "idsDash", required=false) List<String> idList,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
@@ -234,10 +257,66 @@ public class PaymentManagementController {
 		}
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("invoiceList", invoiceList);
-		model.addAttribute("idList", invoiceIdList);
+		model.addAttribute("idList", idList);
 		model.addAttribute("totalamount", totalamount);
 		model.addAttribute("lastdate", invoiceList.get(invoiceList.size()-1).getInvoicedateString());
 		model.addAttribute("posturl", "/JJ/payment/createInvoicePayment");
+		return "createPayInvoice";
+		
+    }  
+	
+	@RequestMapping(value = "/createGrantPayment", method = RequestMethod.POST)
+    public String saveGrantPayment(
+    		@RequestParam(value = "referenceIds", required=false) List<String> grantIdList,
+    		@RequestParam(value = "idsDash", required=false) List<String> idList,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		logger.debug("saveInvoicePayment() : " + paymentVo.toString());
+		if (!result.hasErrors()) {
+			boolean hasErrors = false;
+			if(!validateInputAmount(totalamount, paymentVo)){
+				hasErrors = true;
+				result.rejectValue("cashamount", "error.notequal.paymentform.invoicetotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
+			}
+			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
+				hasErrors = true;
+				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
+			}
+			
+			if(paymentVo.getPaymentmodecheque().compareTo(Boolean.TRUE) == 0 &&
+					!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
+				hasErrors = true;
+				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
+			}
+			
+			if(!hasErrors){
+				paymentVo.setReferenceType("invoice");
+				try{ 
+					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					if(paymentVo.getPaymentmodecheque())
+						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+				}catch(Exception e) {
+					logger.info("Error parsing date string");
+				}
+				paymentManagementService.saveInvoicePayment(paymentVo, grantIdList);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
+		        return "redirect:/invoice/listInvoice"; 
+			}
+		}
+		List<InvoiceVO> grantList = grantManagementService.getAllGrantByIdList(grantIdList);
+		/*for(InvoiceVO grant : grantList) {
+			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoiceDate()));
+		}*/
+		model.addAttribute("paymentForm", paymentVo);
+		model.addAttribute("invoiceList", grantList);
+		model.addAttribute("idList", idList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", grantList.get(grantList.size()-1).getInvoicedateString());
+		model.addAttribute("posturl", "/JJ/payment/createGrantPayment");
 		return "createPayInvoice";
 		
     }  

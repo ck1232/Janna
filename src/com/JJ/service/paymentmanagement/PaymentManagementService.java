@@ -28,6 +28,7 @@ import com.JJ.model.PaymentDetailDbObject;
 import com.JJ.model.PaymentDetailDbObjectExample;
 import com.JJ.service.chequemanagement.ChequeManagementService;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
+import com.JJ.service.grantmanagement.GrantManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 
@@ -40,6 +41,7 @@ public class PaymentManagementService {
 	private ExpenseTypeLookup expenseTypeLookup;
 	private ExpenseManagementService expenseManagementService;
 	private InvoiceManagementService invoiceManagementService;
+	private GrantManagementService grantManagementService;
 	private SalaryBonusManagementService salaryBonusManagementService;
 	private ChequeManagementService chequeManagementService;
 	private PaymentRSManagementService paymentRSManagementService;
@@ -51,6 +53,7 @@ public class PaymentManagementService {
 			ExpenseTypeLookup expenseTypeLookup,  
 			ExpenseManagementService expenseManagementService, 
 			InvoiceManagementService invoiceManagementService,
+			GrantManagementService grantManagementService,
 			SalaryBonusManagementService salaryBonusManagementService,
 			ChequeManagementService chequeManagementService,
 			PaymentRSManagementService paymentRSManagementService,
@@ -60,6 +63,7 @@ public class PaymentManagementService {
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.expenseManagementService = expenseManagementService;
 		this.invoiceManagementService = invoiceManagementService;
+		this.grantManagementService = grantManagementService;
 		this.salaryBonusManagementService = salaryBonusManagementService;
 		this.chequeManagementService = chequeManagementService;
 		this.paymentRSManagementService = paymentRSManagementService;
@@ -100,6 +104,24 @@ public class PaymentManagementService {
 				
 				invoice.setStatus(InvoiceStatusEnum.PAID.toString());
 				invoiceManagementService.updateInvoice(invoice);
+			}
+		}
+	}
+	
+	public void saveGrantPayment(PaymentVO paymentVo, List<Integer> grantidList) {
+		List<InvoiceVO> grantList = grantManagementService.getAllGrantByIdList(grantidList);
+		List<PaymentDetailVO> paymentDetailVOList = genPaymentDetail(paymentVo);
+		
+		for(PaymentDetailVO paymentdetail : paymentDetailVOList) {
+			for(InvoiceVO grant : grantList) {
+				PaymentRsVO paymentRsVO = new PaymentRsVO();
+				paymentRsVO.setReferenceType("grant");
+				paymentRsVO.setReferenceId(grant.getGrantId());
+				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
+				paymentRSManagementService.savePaymentRs(paymentRsVO);
+				
+				grant.setStatus(InvoiceStatusEnum.PAID.toString());
+				grantManagementService.updateGrant(grant);
 			}
 		}
 	}

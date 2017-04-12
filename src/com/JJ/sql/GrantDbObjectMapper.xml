@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.GrantDbObjectMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.GrantDbObject">
+    <id column="grant_id" jdbcType="INTEGER" property="grantId" />
+    <result column="organisation" jdbcType="VARCHAR" property="organisation" />
+    <result column="grant_date" jdbcType="DATE" property="grantDate" />
+    <result column="total_amt" jdbcType="DECIMAL" property="totalAmt" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_on" jdbcType="TIMESTAMP" property="createdOn" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_on" jdbcType="TIMESTAMP" property="updatedOn" />
+    <result column="delete_ind" jdbcType="CHAR" property="deleteInd" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    grant_id, organisation, grant_date, total_amt, status, created_by, created_on, updated_by, 
+    updated_on, delete_ind, version
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.GrantDbObjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from invoice_grant
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from invoice_grant
+    where grant_id = #{grantId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from invoice_grant
+    where grant_id = #{grantId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.GrantDbObjectExample">
+    delete from invoice_grant
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.GrantDbObject">
+    <selectKey keyProperty="grantId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invoice_grant (organisation, grant_date, total_amt, 
+      status, created_by, created_on, 
+      updated_by, updated_on, delete_ind, 
+      version)
+    values (#{organisation,jdbcType=VARCHAR}, #{grantDate,jdbcType=DATE}, #{totalAmt,jdbcType=DECIMAL}, 
+      #{status,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.GrantDbObject">
+    <selectKey keyProperty="grantId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invoice_grant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="organisation != null">
+        organisation,
+      </if>
+      <if test="grantDate != null">
+        grant_date,
+      </if>
+      <if test="totalAmt != null">
+        total_amt,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdOn != null">
+        created_on,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="updatedOn != null">
+        updated_on,
+      </if>
+      <if test="deleteInd != null">
+        delete_ind,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="organisation != null">
+        #{organisation,jdbcType=VARCHAR},
+      </if>
+      <if test="grantDate != null">
+        #{grantDate,jdbcType=DATE},
+      </if>
+      <if test="totalAmt != null">
+        #{totalAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        #{deleteInd,jdbcType=CHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.GrantDbObjectExample" resultType="java.lang.Integer">
+    select count(*) from invoice_grant
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update invoice_grant
+    <set>
+      <if test="record.grantId != null">
+        grant_id = #{record.grantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.organisation != null">
+        organisation = #{record.organisation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.grantDate != null">
+        grant_date = #{record.grantDate,jdbcType=DATE},
+      </if>
+      <if test="record.totalAmt != null">
+        total_amt = #{record.totalAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdOn != null">
+        created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null">
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedOn != null">
+        updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteInd != null">
+        delete_ind = #{record.deleteInd,jdbcType=CHAR},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update invoice_grant
+    set grant_id = #{record.grantId,jdbcType=INTEGER},
+      organisation = #{record.organisation,jdbcType=VARCHAR},
+      grant_date = #{record.grantDate,jdbcType=DATE},
+      total_amt = #{record.totalAmt,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=VARCHAR},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{record.deleteInd,jdbcType=CHAR},
+      version = #{record.version,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.GrantDbObject">
+    update invoice_grant
+    <set>
+      <if test="organisation != null">
+        organisation = #{organisation,jdbcType=VARCHAR},
+      </if>
+      <if test="grantDate != null">
+        grant_date = #{grantDate,jdbcType=DATE},
+      </if>
+      <if test="totalAmt != null">
+        total_amt = #{totalAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        created_on = #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        delete_ind = #{deleteInd,jdbcType=CHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where grant_id = #{grantId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.GrantDbObject">
+    update invoice_grant
+    set organisation = #{organisation,jdbcType=VARCHAR},
+      grant_date = #{grantDate,jdbcType=DATE},
+      total_amt = #{totalAmt,jdbcType=DECIMAL},
+      status = #{status,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{deleteInd,jdbcType=CHAR},
+      version = #{version,jdbcType=INTEGER}
+    where grant_id = #{grantId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -19,6 +19,9 @@
 			<c:forEach var="referenceId" items="${idList}">
 				<input type = "hidden" name = "referenceIds" value="${referenceId}" />
 			</c:forEach>
+			<c:forEach var="id" items="${ids}">
+				<input type = "hidden" name = "ids" value="${id}" />
+			</c:forEach>
 			<input type ="hidden" name = "totalamount" value="${totalamount}" />
 			<input type ="hidden" name = "lastdate" value="${lastdate}" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

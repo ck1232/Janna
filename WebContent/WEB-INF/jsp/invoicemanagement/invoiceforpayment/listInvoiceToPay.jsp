@@ -9,12 +9,13 @@
               <div class="box">
               	<!--BOX HEADER-->
                   <div class="box-header with-border">
-                  	<h3 class="box-title">Selected Invoice(s)</h3>
+               		<c:if test="${invoiceList[0].type == 'invoice'}"><h3 class="box-title">Selected Invoice(s)</h3></c:if>
+               		<c:if test="${invoiceList[0].type == 'grant'}"><h3 class="box-title">Selected Grant(s)</h3></c:if>
                   </div>
              	<div class="box-body">
 					<div class="row">
 				  		<div class="form-group">
-							<div class="col-sm-2">Invoice Id</div>
+							<c:if test="${invoice.type == 'invoice'}"><div class="col-sm-2">Invoice Id</div></c:if>
 							<div class="col-sm-4">Messenger</div>
 							<div class="col-sm-2">Invoice Amount</div>
 							<div class="col-sm-2">Invoice Date</div>
@@ -24,7 +25,7 @@
 					<c:forEach var="invoice" items="${invoiceList}">
 						<div class="row">
 					  		<div class="form-group">
-							    <div class="col-sm-2">${invoice.invoiceId}</div>
+							    <c:if test="${invoice.type == 'invoice'}"><div class="col-sm-2">${invoice.invoiceId}</div></c:if>
 							    <div class="col-sm-4">${invoice.messenger}</div>
 							    <div class="col-sm-2">${invoice.totalAmt}</div>
 							    <div class="col-sm-2">${invoice.invoicedateString}</div>
