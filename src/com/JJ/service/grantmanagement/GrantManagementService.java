@@ -31,10 +31,13 @@ public class GrantManagementService {
 	}
 	
 	public List<InvoiceVO> getAllGrantByIdList(List<Integer> idList) {
-		GrantDbObjectExample grantDbObjectExample = new GrantDbObjectExample();
-		grantDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andGrantIdIn(idList);
-		grantDbObjectExample.setOrderByClause("grant_date desc");
-		return convertToInvoiceVOList(grantDbObjectMapper.selectByExample(grantDbObjectExample));
+		if(idList != null && idList.size() > 0){
+			GrantDbObjectExample grantDbObjectExample = new GrantDbObjectExample();
+			grantDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andGrantIdIn(idList);
+			grantDbObjectExample.setOrderByClause("grant_date desc");
+			return convertToInvoiceVOList(grantDbObjectMapper.selectByExample(grantDbObjectExample));
+		}
+		return new ArrayList<InvoiceVO>();
 	}
 	
 	public InvoiceVO getGrantById(Integer id) {

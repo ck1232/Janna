@@ -267,8 +267,8 @@ public class PaymentManagementController {
 	
 	@RequestMapping(value = "/createGrantPayment", method = RequestMethod.POST)
     public String saveGrantPayment(
-    		@RequestParam(value = "referenceIds", required=false) List<String> grantIdList,
-    		@RequestParam(value = "idsDash", required=false) List<String> idList,
+    		@RequestParam(value = "referenceIds", required=false) List<Integer> grantIdList,
+    		@RequestParam(value = "ids", required=false) List<String> ids,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
@@ -313,9 +313,12 @@ public class PaymentManagementController {
 		}*/
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("invoiceList", grantList);
-		model.addAttribute("idList", idList);
+		model.addAttribute("idList", grantIdList);
+		model.addAttribute("ids", ids);
 		model.addAttribute("totalamount", totalamount);
-		model.addAttribute("lastdate", grantList.get(grantList.size()-1).getInvoicedateString());
+		if(grantList.size() > 0){
+			model.addAttribute("lastdate", grantList.get(grantList.size()-1).getInvoicedateString());
+		}
 		model.addAttribute("posturl", "/JJ/payment/createGrantPayment");
 		return "createPayInvoice";
 		
