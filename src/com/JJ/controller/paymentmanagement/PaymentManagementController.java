@@ -212,7 +212,7 @@ public class PaymentManagementController {
 	@RequestMapping(value = "/createInvoicePayment", method = RequestMethod.POST)
     public String saveInvoicePayment(
     		@RequestParam(value = "referenceIds", required=false) List<Integer> invoiceIdList,
-    		@RequestParam(value = "idsDash", required=false) List<String> idList,
+    		@RequestParam(value = "ids", required=false) List<String> idList,
     		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
     		@RequestParam(value = "lastdate", required=false) String lastdate,
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
@@ -257,7 +257,8 @@ public class PaymentManagementController {
 		}
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("invoiceList", invoiceList);
-		model.addAttribute("idList", idList);
+		model.addAttribute("idList", invoiceIdList);
+		model.addAttribute("ids", idList);
 		model.addAttribute("totalamount", totalamount);
 		model.addAttribute("lastdate", invoiceList.get(invoiceList.size()-1).getInvoicedateString());
 		model.addAttribute("posturl", "/JJ/payment/createInvoicePayment");
@@ -273,7 +274,7 @@ public class PaymentManagementController {
     		@RequestParam(value = "lastdate", required=false) String lastdate,
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		logger.debug("saveInvoicePayment() : " + paymentVo.toString());
+		logger.debug("saveGrantPayment() : " + paymentVo.toString());
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
 			if(!validateInputAmount(totalamount, paymentVo)){
@@ -293,7 +294,7 @@ public class PaymentManagementController {
 			}
 			
 			if(!hasErrors){
-				paymentVo.setReferenceType("invoice");
+				paymentVo.setReferenceType("grant");
 				try{ 
 					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
@@ -301,7 +302,7 @@ public class PaymentManagementController {
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
-				paymentManagementService.saveInvoicePayment(paymentVo, grantIdList);
+				paymentManagementService.saveGrantPayment(paymentVo, grantIdList);
 				redirectAttributes.addFlashAttribute("css", "success");
 				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
 		        return "redirect:/invoice/listInvoice"; 

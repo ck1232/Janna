@@ -58,8 +58,7 @@ public class GrantManagementService {
 	}
 	
 	public void updateGrant(InvoiceVO invoiceVO) {
-		if(invoiceVO != null && invoiceVO.getDeleteInd() != null &&
-				invoiceVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+		if(invoiceVO != null && invoiceVO.getGrantId() != null){
 			GrantDbObject dbObj = convertToGrantDbObjectList(Arrays.asList(invoiceVO)).get(0);
 			dbObj.setOrganisation(invoiceVO.getMessenger());
 			dbObj.setGrantDate(invoiceVO.getInvoiceDate());

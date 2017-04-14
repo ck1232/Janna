@@ -15,7 +15,7 @@
              	<div class="box-body">
 					<div class="row">
 				  		<div class="form-group">
-							<c:if test="${invoice.type == 'invoice'}"><div class="col-sm-2">Invoice Id</div></c:if>
+							<c:if test="${invoiceList[0].type == 'invoice'}"><div class="col-sm-2">Invoice Id</div></c:if>
 							<div class="col-sm-4">Messenger</div>
 							<div class="col-sm-2">Invoice Amount</div>
 							<div class="col-sm-2">Invoice Date</div>
