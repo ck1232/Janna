@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Digits;
+
 import com.JJ.model.Base;
 
 public class ExpenseVO extends Base implements Serializable {
@@ -19,6 +21,7 @@ public class ExpenseVO extends Base implements Serializable {
 
     private String supplier;
 
+    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
     private BigDecimal totalAmt;
 
     private String remarks;
@@ -79,7 +82,7 @@ public class ExpenseVO extends Base implements Serializable {
     public void setSupplier(String supplier) {
         this.supplier = supplier == null ? null : supplier.trim();
     }
-
+    
     public BigDecimal getTotalAmt() {
         return totalAmt;
     }

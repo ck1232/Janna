@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -108,6 +109,7 @@ public class ExpenseManagementController {
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("saveExpense() : " + expenseVO.toString());
+		GeneralUtils.validate(expenseVO, "expenseForm" ,result);
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
 	    	model.addAttribute("expenseTypeList", expenseTypeList);

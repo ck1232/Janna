@@ -11,9 +11,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -127,6 +135,22 @@ public class GeneralUtils {
 			logger.info("Error converting string to date.");
 		}
 		return date;
+	}
+	
+	public static BindingResult validate(Object obj, String form, BindingResult result){
+		ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+		Validator validator = validatorFactory.getValidator();
+		Set<ConstraintViolation<Object>> violations = validator.validate(obj);
+		
+		for (ConstraintViolation<Object> violation : violations) 
+        {
+            String propertyPath = violation.getPropertyPath().toString();
+            String[] codes = new String[]{violation.getMessage()};
+            Object[] argument = new Object[]{};
+            Object rejectedValue = violation.getInvalidValue();
+            result.addError(new FieldError(form,propertyPath,rejectedValue,false, codes, argument,new String()));
+        }
+		return result;
 	}
 	
 	public static Date getCurrentDate(){
