@@ -54,6 +54,7 @@ public class GrantManagementService {
 		if(invoiceVO != null){
 			GrantDbObject dbObj = convertToGrantDbObjectList(Arrays.asList(invoiceVO)).get(0);
 			grantDbObjectMapper.insert(dbObj);
+			invoiceVO.setGrantId(dbObj.getGrantId());
 		}
 	}
 	
@@ -110,7 +111,7 @@ public class GrantManagementService {
 			for(InvoiceVO vo : invoiceVOList){
 				GrantDbObject dbObj = new GrantDbObject();
 				dbObj.setDeleteInd(vo.getDeleteInd());
-				dbObj.setGrantDate(vo.getInvoiceDate());
+				dbObj.setGrantDate(GeneralUtils.convertStringToDate(vo.getInvoicedateString(),"dd/MM/yyyy"));
 				dbObj.setGrantId(vo.getGrantId());
 				dbObj.setOrganisation(vo.getMessenger());
 				dbObj.setStatus(vo.getStatus());

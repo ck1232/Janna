@@ -40,6 +40,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.common.vo.JsonResponseVO;
+import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceUploadVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
@@ -48,6 +49,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.service.grantmanagement.GrantManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
+import com.JJ.validator.GrantFormValidator;
 import com.JJ.validator.InvoiceSearchValidator;
 
 
@@ -62,6 +64,7 @@ public class InvoiceManagementController {
 	private GrantManagementService grantManagementService;
 	private PaymentManagementService paymentManagementService;
 	private InvoiceSearchValidator invoiceSearchValidator;
+	private GrantFormValidator grantFormValidator;
 	List<InvoiceVO> invoiceList;
 	InvoiceUploadVO invoiceUploadVo;
 	InvoiceSearchCriteria searchCriteria;
@@ -132,6 +135,50 @@ public class InvoiceManagementController {
 		return "viewInvoice";
 
 	}
+	
+	@RequestMapping(value = "/createGrant", method = RequestMethod.GET)
+    public String showAddGrantForm(Model model) {  
+    	logger.debug("loading showAddGrantForm");
+    	InvoiceVO invoiceVO = new InvoiceVO();
+    	model.addAttribute("grantForm", invoiceVO);
+        return "createGrant";  
+    }  
+	
+	@InitBinder("grantForm")
+	protected void initBinderForGrant(WebDataBinder binder) {
+		binder.setValidator(grantFormValidator);
+	}
+	
+	@RequestMapping(value = "/createGrant", method = RequestMethod.POST)
+    public String saveGrant(@ModelAttribute("grantForm") @Validated InvoiceVO invoiceVO, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		logger.debug("saveGrant() : " + invoiceVO.toString());
+		if (result.hasErrors()) {
+			return "createGrant";
+		} else {
+			invoiceVO.setStatus(GeneralUtils.STATUS_PENDING);
+			grantManagementService.saveGrant(invoiceVO);
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Grant added successfully!");
+		}
+        return "redirect:listInvoice";  
+    }  
+	
+	@RequestMapping(value = "/createGrantAndPay", method = RequestMethod.POST)
+    public String saveGrantAndPay(@ModelAttribute("grantForm") @Validated InvoiceVO invoiceVO, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		List<String> idList = new ArrayList<String>();
+		logger.debug("saveGrantAndPay() : " + invoiceVO.toString());
+		if (result.hasErrors()) {
+			return "createGrant";
+		} else {
+			invoiceVO.setStatus(GeneralUtils.STATUS_PENDING);
+			grantManagementService.saveGrant(invoiceVO);			
+			idList.add(invoiceVO.getGrantId().toString()+"-grant");
+		}
+		return paymentManagementController.createPayInvoice(idList, redirectAttributes, model);
+    }  
 	
 	private boolean checkFileFormat(String filename) {
 		String[] split = filename.split(Pattern.quote("."));
