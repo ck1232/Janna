@@ -167,6 +167,7 @@ public class InvoiceManagementService {
 				vo.setMessenger(dbObj.getMessenger());
 				vo.setStatus(dbObj.getStatus());
 				vo.setTotalAmt(dbObj.getTotalAmt());
+				vo.setType("invoice");
 				vo.setVersion(dbObj.getVersion());
 				invoiceVOList.add(vo);
 			}

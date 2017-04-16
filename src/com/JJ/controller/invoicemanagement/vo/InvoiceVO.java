@@ -7,6 +7,9 @@ import java.util.Date;
 import com.JJ.model.Base;
 
 public class InvoiceVO extends Base implements Serializable {
+	
+	private Integer grantId;
+	
     private Integer invoiceId;
 
     private String messenger;
@@ -21,9 +24,19 @@ public class InvoiceVO extends Base implements Serializable {
     
   	private String invoicedateString;
   	
+  	private String type;
+  	
     private static final long serialVersionUID = 1L;
 
-    public Integer getInvoiceId() {
+    public Integer getGrantId() {
+		return grantId;
+	}
+
+	public void setGrantId(Integer grantId) {
+		this.grantId = grantId;
+	}
+
+	public Integer getInvoiceId() {
         return invoiceId;
     }
 
@@ -71,7 +84,15 @@ public class InvoiceVO extends Base implements Serializable {
   		this.invoicedateString = invoicedateString;
   	}
 
-    @Override
+    public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type == null ? null : type.trim();
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
@@ -83,6 +104,7 @@ public class InvoiceVO extends Base implements Serializable {
         sb.append(", totalAmt=").append(totalAmt);
         sb.append(", status=").append(status);
         sb.append(", invoicedateString=").append(invoicedateString);
+        sb.append(", type=").append(type);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");

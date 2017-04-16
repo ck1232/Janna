@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -150,6 +151,16 @@ public class GeneralUtils {
             result.addError(new FieldError(form,propertyPath,rejectedValue,false, codes, argument,new String()));
         }
 		return result;
+	}
+	
+	public static Date getCurrentDate(){
+		return new Date();
+	}
+	
+	public static Date getNewDate(Integer noOfYears){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, noOfYears); // to get previous year add -1
+		return cal.getTime();
 	}
 	
 }

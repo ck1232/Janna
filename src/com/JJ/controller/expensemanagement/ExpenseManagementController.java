@@ -133,7 +133,7 @@ public class ExpenseManagementController {
     public String saveExpenseAndPay(@ModelAttribute("expenseForm") @Validated ExpenseVO expenseVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		List<String> idList = new ArrayList<String>();
-		logger.debug("saveExpense() : " + expenseVO.toString());
+		logger.debug("saveExpenseAndPay() : " + expenseVO.toString());
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
 	    	model.addAttribute("expenseTypeList", expenseTypeList);

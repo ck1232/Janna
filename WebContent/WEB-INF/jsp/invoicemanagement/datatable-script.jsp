@@ -26,15 +26,21 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.invoiceId);
-          $(row).find('button[name="viewBtn"]').prop('value', data.invoiceId);
+          var dataId = "";
+          if(data.type == "invoice"){
+        	  dataId = data.invoiceId+"-"+data.type;
+          }else if(data.type = "grant"){
+              dataId = data.grantId+"-"+data.type;
+          }
+          $(row).find('input[type="checkbox"]').prop('value', dataId);
+          $(row).find('button[name="viewBtn"]').prop('value', dataId);
           if(data.status == "PAID"){
         	  $(row).find('div[name="payBtnDiv"]').css("display","none");
         	  $(row).find('div[name="statusDiv"]').css("display","none");
           }else{
         	  $(row).find('div[name="payBtnDiv"]').css("display","");
         	 $(row).find('div[name="statusDiv"]').css("display","");
-        	 $(row).find('button[name="payBtn"]').prop('value', data.invoiceId);
+        	 $(row).find('button[name="payBtn"]').prop('value', dataId);
           }
        }
     });
