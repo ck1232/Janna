@@ -144,8 +144,10 @@ public class ExpenseManagementController {
 			}catch(Exception e) {
 				logger.info("Error parsing expense date string");
 			}
-			expenseManagementService.saveExpense(expenseVO);			
-			idList.add(expenseVO.getExpenseId().toString());
+			expenseManagementService.saveExpense(expenseVO);	
+			if(expenseVO.getExpenseId() != null) {
+				idList.add(expenseVO.getExpenseId().toString());
+			}
 		}
 		return paymentManagementController.createPayExpense(idList, redirectAttributes, model);
     }  

@@ -62,6 +62,7 @@ public class ExpenseManagementService {
 			dbObj.setStatus(ExpenseStatusEnum.UNPAID.toString());
 			dbObj.setDeleteInd(GeneralUtils.NOT_DELETED);
 			expenseDbObjectMapper.insert(dbObj);
+			expenseVO.setExpenseId(dbObj.getExpenseId());
 		}
 	}
 	

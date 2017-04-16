@@ -33,7 +33,15 @@
 							    <div class="col-sm-2">${expense.status}</div>
 							</div>
 						</div>
-					</c:forEach>		
+					</c:forEach>	
+					<br/>
+					<hr>
+					<div class="row">
+				  		<div class="form-group">
+							<div class="col-sm-6">Total Amount to be Paid:</div>
+							<div class="col-sm-6">${totalamount}</div>
+						</div>
+					</div>	
 				</div>
 				<!-- /.box-body -->
       		</div>
