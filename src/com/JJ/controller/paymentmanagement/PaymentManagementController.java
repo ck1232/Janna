@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,7 @@ import com.JJ.validator.PaymentFormValidator;
 
 @Controller  
 @EnableWebMvc
+@Scope("request")
 @RequestMapping(value = "/payment")
 public class PaymentManagementController {
 	private static final Logger logger = Logger.getLogger(PaymentManagementController.class);

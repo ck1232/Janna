@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ import com.JJ.validator.ExpenseFormValidator;
 
 @Controller  
 @EnableWebMvc
+@Scope("request")
 @RequestMapping(value = "/expense")
 public class ExpenseManagementController {
 	private static final Logger logger = Logger.getLogger(ExpenseManagementController.class);

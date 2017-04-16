@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.SubModuleVO;
@@ -16,7 +18,8 @@ import com.JJ.model.SubModuleDbObjectExample;
 import com.JJ.service.permissionmanagement.PermissionManagementService;
 
 @Service
-@Transactional
+@Scope("prototype")
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class SubModuleManagementService {
 	
 	private SubModuleDbObjectMapper subModuleDbObjectMapper;

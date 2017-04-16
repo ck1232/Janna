@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.customeraddressmanagement.VO.CustomerAddressVO;
@@ -15,7 +17,8 @@ import com.JJ.model.CustomerAddressDbObject;
 import com.JJ.model.CustomerAddressDbObjectExample;
 
 @Service
-@Transactional
+@Scope("prototype")
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class CustomerAddressManagementService {
 	
 	private CustomerAddressDbObjectMapper customerAddressDbObjectMapper;

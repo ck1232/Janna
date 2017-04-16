@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
@@ -22,7 +24,8 @@ import com.JJ.service.productmanagement.ProductSubOptionRsService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Scope("prototype")
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class BatchProductRSManagementService {
 	
 	private BatchProductRsDbObjectMapper batchProductRsDbObjectMapper;

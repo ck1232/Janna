@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,7 @@ import com.JJ.validator.InvoiceSearchValidator;
 
 @Controller  
 @EnableWebMvc
+@Scope("request")
 @RequestMapping(value = "/invoice")
 public class InvoiceManagementController {
 	private static final Logger logger = Logger.getLogger(InvoiceManagementController.class);

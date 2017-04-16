@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,8 +65,9 @@ import com.JJ.service.usermanagement.UserManagementService;
 @SessionAttributes
 @PropertySources({
 	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
-	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
+	@PropertySource(value = "file:C:\\Inetpub\\vhosts\\ziumlight.com\\Configuration\\application-${spring.profiles.active}.properties", ignoreResourceNotFound=true)
 })
+@Scope("session")
 @RequestMapping(value = "/")
 public class CommonController {
 	private static final Logger logger = Logger.getLogger(CommonController.class);
@@ -74,6 +77,10 @@ public class CommonController {
 	private UserManagementService userManagementService;
 	private PermissionManagementService permissionManagementService;
 	private CommonService commonService;
+	
+	@Value("${log.path}")
+	private String logUrl;
+	
 	@Value("${jdbc.driver}")
 	private String driver;
 	
@@ -211,8 +218,10 @@ public class CommonController {
 	
 	@RequestMapping(value={"/viewLogs"}, method = RequestMethod.POST)
 	public String viewLogsPage (HttpServletResponse response, @RequestParam(value="view", required=true) int hashCode, Model model) throws Exception{
-		String url = System.getProperty("wtp.deploy");
-		File folder = new File(url + "//logs");
+//		String url = System.getProperty("wtp.deploy");
+//		String url = "C:\\Inetpub\\vhosts\\ziumlight.com";
+//		File folder = new File(url + "\\logs");
+		File folder = new File(logUrl);
 		List<File> fileList = Arrays.asList(folder.listFiles());
 		List<FileVO> filesList = convertToFileVO(fileList);
 		if(filesList != null && filesList.size() > 0){
@@ -239,8 +248,9 @@ public class CommonController {
 	
 	@RequestMapping(value={"/downloadLogs"}, method = RequestMethod.POST)
 	public String downloadLogsPage (HttpServletResponse response, @RequestParam(value="download", required=true) int hashCode) throws Exception{
-		String url = System.getProperty("wtp.deploy");
-		File folder = new File(url + "//logs");
+//		String url = System.getProperty("wtp.deploy");
+//		File folder = new File(url + "//logs");
+		File folder = new File(logUrl);
 		List<File> fileList = Arrays.asList(folder.listFiles());
 		List<FileVO> filesList = convertToFileVO(fileList);
 		if(filesList != null && filesList.size() > 0){
@@ -268,11 +278,17 @@ public class CommonController {
 	
 	@RequestMapping(value={"/logs","/l"}, method = RequestMethod.GET)
 	public String logsPage (Model model) throws Exception{
-		String url = System.getProperty("wtp.deploy");
-		File folder = new File(url + "//logs");
+//		String url = System.getProperty("wtp.deploy");
+//		File folder = new File(url + "//logs");
+		File folder = new File(logUrl);
 		List<File> fileList = Arrays.asList(folder.listFiles());
 		List<FileVO> filesList = convertToFileVO(fileList);
 		model.addAttribute("files", filesList);
+		Properties props = System.getProperties();
+		for(Object propsString : props.keySet()){
+			logger.debug(propsString.toString()+"="+props.getProperty(propsString.toString()));
+		}
+		
 		return "logs";
 	}
 	

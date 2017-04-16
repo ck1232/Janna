@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.FileMetaVO;
@@ -23,7 +25,8 @@ import com.JJ.model.InvoiceDbObject;
 import com.JJ.model.InvoiceDbObjectExample;
 
 @Service
-@Transactional
+@Scope("prototype")
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class InvoiceManagementService {
 	
 	private InvoiceDbObjectMapper invoiceDbObjectMapper;

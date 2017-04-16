@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.dao.RoleDbObjectMapper;
 import com.JJ.dao.SubModulePermissionDbObjectMapper;
 import com.JJ.dao.SubModulePermissionTypeDbObjectMapper;
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.RoleDbObject;
 import com.JJ.model.RoleDbObjectExample;
 import com.JJ.model.SubModulePermissionDbObject;
@@ -18,7 +21,8 @@ import com.JJ.model.SubModulePermissionTypeDbObject;
 import com.JJ.model.SubModulePermissionTypeDbObjectExample;
 
 @Service
-@Transactional
+@Scope("prototype")
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class CommonService {
 	private RoleDbObjectMapper roleDbObjectMapper;
 	private SubModulePermissionTypeDbObjectMapper subModulePermissionTypeDbObjectMapper;
@@ -59,13 +63,13 @@ public class CommonService {
 	
 	private List<Integer> getPermissionByRoleId(List<Integer> roleIdList){
 		SubModulePermissionDbObjectExample example = new SubModulePermissionDbObjectExample();
-		example.createCriteria().andRoleIdIn(roleIdList);
+		example.createCriteria().andRoleIdIn(roleIdList).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<SubModulePermissionDbObject> result= subModulePermissionDbObjectMapper.selectByExample(example);
 		List<Integer> permissionIdList = new ArrayList<Integer>();
 		if(result != null && result.size() > 0){
 			for(SubModulePermissionDbObject submodulepermission : result){
 				try{
-					permissionIdList.add(submodulepermission.getPermissionId());
+					permissionIdList.add(submodulepermission.getPermissionTypeId());
 				}catch(Exception ex){
 					
 				}
@@ -76,7 +80,7 @@ public class CommonService {
 	
 	private List<String> getAllowedUrlByPermission(List<Integer> permissionId){
 		SubModulePermissionTypeDbObjectExample example = new SubModulePermissionTypeDbObjectExample();
-		example.createCriteria().andTypeIdIn(permissionId);
+		example.createCriteria().andTypeIdIn(permissionId).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<SubModulePermissionTypeDbObject> result = subModulePermissionTypeDbObjectMapper.selectByExample(example);
 		List<String> urlList = new ArrayList<String>();
 		if(result != null && result.size() > 0){

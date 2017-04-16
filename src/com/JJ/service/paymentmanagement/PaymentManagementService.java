@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,8 @@ import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 
 @Service
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+@Scope("prototype")
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class PaymentManagementService {
 	
 	private PaymentDetailDbObjectMapper paymentDetailDbObjectMapper;
