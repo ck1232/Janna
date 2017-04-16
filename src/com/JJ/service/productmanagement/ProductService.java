@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,7 @@ import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementS
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
 
 @Service
+@Scope("prototype")
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ProductService {
 	private ProductDbObjectMapper productDbObjectMapper;

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ import com.JJ.validator.ProductCategoryFormValidator;
 
 @Controller  
 @EnableWebMvc
+@Scope("request")
 @RequestMapping(value = "/product/category")
 public class ProductCategoryManagementController {
 	private static final Logger logger = Logger.getLogger(ProductCategoryManagementController.class);

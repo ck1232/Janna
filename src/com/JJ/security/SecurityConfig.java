@@ -27,7 +27,7 @@ import org.springframework.security.web.access.expression.WebExpressionVoter;
 @EnableWebSecurity
 @PropertySources({
 	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
-	@PropertySource(value = "${wtp.deploy}/config/admin-prd-config.properties", ignoreResourceNotFound=true)
+	@PropertySource(value = "file:C:\\Inetpub\\vhosts\\ziumlight.com\\Configuration\\application-${spring.profiles.active}.properties", ignoreResourceNotFound=true)
 })
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
@@ -53,9 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.usersByUsernameQuery(
 			"select user_name,password, enabled from user where user_name=?")
 		.authoritiesByUsernameQuery(
-			"select u.user_name, r.name from jj.user_role ur join jj.user u on u.user_id = ur.user_id join jj.role r on ur.role_id= r.role_id where u.user_name=?");
+			"select u.user_name, r.name from user_role ur join user u on u.user_id = ur.user_id join role r on ur.role_id= r.role_id where u.user_name=?");
 //        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
-//        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
 //        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");//dba have two roles.
     }
 	
@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
 		.antMatchers("/query", "/q").hasAnyRole("ROLE_ADMIN","ADMIN")
 		.antMatchers("/product/**", "/batchintake/**", "/inventory**/**", "/promotion/**").hasAnyRole("PRODUCT_MGR", "ADMIN")
-		.antMatchers("/invoice/**", "/expense/**", "/salarybonus/**", "/employee/**").hasAnyRole("DATA_ENTRY_USER", "ADMIN")
+		.antMatchers("/invoice/**", "/expense/**", "/salarybonus/**", "/employee/**", "/cheque/**").hasAnyRole("DATA_ENTRY_USER", "ADMIN")
 		
 //		.antMatchers("/**").authenticated()
 //		.antMatchers("/**").denyAll()
@@ -103,7 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    List<AccessDecisionVoter<? extends Object>> decisionVoters 
 	      = Arrays.asList(
 	        new WebExpressionVoter(),
-	        new RoleVoter(),
+	    	new RoleVoter(),
 	        new AuthenticatedVoter(),
 	        new UrlVoter());
 	    return new UnanimousBased(decisionVoters);

@@ -52,7 +52,7 @@ import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementS
 
 @Controller  
 @EnableWebMvc
-@Scope("session")
+@Scope("request")
 @RequestMapping(value = "/product/product")
 public class ProductManagementController {
 	private static final Logger logger = Logger.getLogger(ProductManagementController.class);
@@ -525,6 +525,5 @@ public class ProductManagementController {
 			}
 			return 0;
 		}
-		
 	}
 }

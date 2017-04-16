@@ -1,13 +1,14 @@
 package com.JJ.controller.common;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-
+@Scope("request")
 @ControllerAdvice
 public class GlobalExceptionHandlerController {
 	private static final Logger logger = Logger.getLogger(GlobalExceptionHandlerController.class);
