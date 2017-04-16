@@ -4,13 +4,19 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.JJ.model.Base;
+import com.JJ.validator.annotation.InDateRange;
 
 public class ExpenseVO extends Base implements Serializable {
     private Integer expenseId;
-
+    
+    @NotNull(message="error.notempty.expenseform.expensetype")
+    @Min(value=1L, message="error.notempty.expenseform.expensetype")
     private Integer expenseTypeId;
 
     private String invoiceNo;
@@ -18,10 +24,15 @@ public class ExpenseVO extends Base implements Serializable {
     private String description;
 
     private Date expenseDate;
-
+    
+    @NotNull(message="error.notempty.expenseform.supplier")
+    @NotEmpty(message="error.notempty.expenseform.supplier")
     private String supplier;
-
-    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    
+//    @NotNull(message="error.notempty.expenseform.totalamount")
+//    @NotEmpty(message="error.notempty.expenseform.totalamount")
+//    @DecimalMin(value="1", message="error.notvalid.expenseform.totalamount")
+//    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
     private BigDecimal totalAmt;
 
     private String remarks;
@@ -31,6 +42,9 @@ public class ExpenseVO extends Base implements Serializable {
     //non db fields
     private String expensetype;
     
+    @NotNull(message="error.notempty.expenseform.expensedate")
+    @NotEmpty(message="error.notempty.expenseform.expensedate")
+    @InDateRange(dateFormat="dd/MM/yyyy", message="error.notvalid.expenseform.expensedate")
     private String expensedateString;
     
 	private static final long serialVersionUID = 1L;
