@@ -4,6 +4,7 @@ $(function () {
 	var rows_selected = [];
 	table = $('#datatable1').DataTable({
       "paging": true,
+      "pageLength": 30,
       "responsive" : true,
       "lengthChange": false,
       "searching": true,

@@ -1496,7 +1496,7 @@
         			<definition template="/WEB-INF/jsp/salarybonusmanagement/listSalaryBonus.jsp">
         				<put-attribute name="datatable">
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
-		        				<put-attribute name="table-title" value="All Expense" />
+		        				<put-attribute name="table-title" value="All Salary and Bonus" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/salarybonusmanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">

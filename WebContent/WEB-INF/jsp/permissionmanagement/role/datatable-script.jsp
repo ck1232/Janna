@@ -6,6 +6,7 @@ $(function () {
 	var selectedRoleId = 0;
     $('#datatable1').DataTable({
       "paging": true,
+      "pageLength": 30,
       "responsive" : true,
       "lengthChange": false,
       "searching": false,
