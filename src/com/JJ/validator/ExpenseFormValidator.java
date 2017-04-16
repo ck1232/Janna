@@ -1,7 +1,5 @@
 package com.JJ.validator;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -38,6 +36,9 @@ public class ExpenseFormValidator implements Validator {
 		}else if(expense.getTotalAmt().compareTo(BigDecimal.ZERO) <= 0){
 			errors.rejectValue("totalAmt", "error.notvalid.expenseform.totalamount");
 		}		*/
+		
+		if(expense.getExpenseTypeId() != null && expense.getExpenseTypeId()!= 15)
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "supplier", "error.notempty.expenseform.supplier");
 	}
 	
 }

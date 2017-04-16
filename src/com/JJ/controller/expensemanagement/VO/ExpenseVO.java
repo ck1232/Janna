@@ -25,8 +25,6 @@ public class ExpenseVO extends Base implements Serializable {
 
     private Date expenseDate;
     
-    @NotNull(message="error.notempty.expenseform.supplier")
-    @NotEmpty(message="error.notempty.expenseform.supplier")
     private String supplier;
     
 //    @NotNull(message="error.notempty.expenseform.totalamount")

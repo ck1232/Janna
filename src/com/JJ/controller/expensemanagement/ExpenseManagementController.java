@@ -2,6 +2,7 @@ package com.JJ.controller.expensemanagement;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -112,21 +113,19 @@ public class ExpenseManagementController {
 		
 		logger.debug("saveExpense() : " + expenseVO.toString());
 		GeneralUtils.validate(expenseVO, "expenseForm" ,result);
-		if (result.hasErrors()) {
-			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
-	    	model.addAttribute("expenseTypeList", expenseTypeList);
-			return "createExpense";
-		} else {
-			try{
-				expenseVO.setExpenseDate(new SimpleDateFormat("dd/MM/yyyy").parse(expenseVO.getExpensedateString()));
-			}catch(Exception e) {
-				logger.info("Error parsing expense date string");
-			}
+		Date expenseDate = GeneralUtils.convertStringToDate(expenseVO.getExpensedateString(), "dd/MM/yyyy");
+		if(expenseDate != null && expenseDate.after(new Date())) {
+			result.rejectValue("expensedateString","error.expenseform.expensedate.cannot.after.sysdate");
+		}
+		if (!result.hasErrors()) {
 			expenseManagementService.saveExpense(expenseVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Expense added successfully!");
+			return "redirect:listExpense";  
 		}
-        return "redirect:listExpense";  
+		Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
+    	model.addAttribute("expenseTypeList", expenseTypeList);
+		return "createExpense";
     }  
 	
 	@RequestMapping(value = "/createExpenseAndPay", method = RequestMethod.POST)
