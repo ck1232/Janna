@@ -38,6 +38,8 @@ public class SalaryBonusVO extends Base implements Serializable {
     private String overTimeRemarks;
 
     private BigDecimal allowance;
+    
+    private BigDecimal medical;
 
     private BigDecimal unpaidLeaveAmt;
 
@@ -193,7 +195,15 @@ public class SalaryBonusVO extends Base implements Serializable {
         this.allowance = allowance;
     }
 
-    public BigDecimal getUnpaidLeaveAmt() {
+    public BigDecimal getMedical() {
+		return medical;
+	}
+
+	public void setMedical(BigDecimal medical) {
+		this.medical = medical;
+	}
+
+	public BigDecimal getUnpaidLeaveAmt() {
         return unpaidLeaveAmt;
     }
 

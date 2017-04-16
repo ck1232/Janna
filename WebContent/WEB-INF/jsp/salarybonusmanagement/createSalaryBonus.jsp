@@ -95,11 +95,21 @@
 						            </div>
 						            <div class="row">
 							            <div class="form-group ${status.error ? 'has-error' : ''}">
-											<label class="col-sm-2 control-label">Allowance / Medical</label>
+											<label class="col-sm-2 control-label">Allowance</label>
 												<div class="col-sm-5">
 							                  		<form:input path="allowance" type="text" class="form-control" 
 							                  			  id="allowance" placeholder="Enter allowance"/>
 							                  		<form:errors path="allowance" class="text-danger" />
+							                	</div>
+							              </div>
+						            </div>
+						            <div class="row">
+							            <div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Medical</label>
+												<div class="col-sm-5">
+							                  		<form:input path="medical" type="text" class="form-control" 
+							                  			  id="medical" placeholder="Enter medical"/>
+							                  		<form:errors path="medical" class="text-danger" />
 							                	</div>
 							              </div>
 						            </div>

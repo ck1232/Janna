@@ -171,7 +171,7 @@ public class SalaryBonusManagementService {
 	}	
 
 	//calculate gross amount from EmployeeSalary
-	//gross amount = basic salary amount + overtime amount + allowance
+	//gross amount = basic salary amount + overtime amount + allowance + medical
 	private BigDecimal calculateGrossAmount(EmployeeSalaryDbObject salary) {
 		BigDecimal grossamount = BigDecimal.ZERO;
 		if(salary.getBasicSalaryAmt() != null)
@@ -180,6 +180,8 @@ public class SalaryBonusManagementService {
 			grossamount = grossamount.add(salary.getOverTimeAmt());
 		if(salary.getAllowance() != null)
 			grossamount = grossamount.add(salary.getAllowance());
+		if(salary.getMedical() != null)
+			grossamount = grossamount.add(salary.getMedical());
 		return grossamount;
 	}
 	
@@ -245,6 +247,7 @@ public class SalaryBonusManagementService {
 				vo.setOverTimeHours(dbObj.getOverTimeHours());
 				vo.setOverTimeRemarks(dbObj.getOverTimeRemarks());
 				vo.setAllowance(dbObj.getAllowance());
+				vo.setMedical(dbObj.getMedical());
 				vo.setUnpaidLeaveAmt(dbObj.getUnpaidLeaveAmt());
 				vo.setUnpaidLeaveRemarks(dbObj.getUnpaidLeaveRemarks());
 				vo.setCdacAmt(dbObj.getCdacAmt());
@@ -273,6 +276,7 @@ public class SalaryBonusManagementService {
 				dbObj.setOverTimeHours(vo.getOverTimeHours());
 				dbObj.setOverTimeRemarks(vo.getOverTimeRemarks());
 				dbObj.setAllowance(vo.getAllowance());
+				dbObj.setMedical(vo.getMedical());
 				dbObj.setUnpaidLeaveAmt(vo.getUnpaidLeaveAmt());
 				dbObj.setUnpaidLeaveRemarks(vo.getUnpaidLeaveRemarks());
 				dbObj.setEmployeeCpf(vo.getEmployeeCpf());
