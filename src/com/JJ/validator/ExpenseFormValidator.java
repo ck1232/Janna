@@ -39,6 +39,9 @@ public class ExpenseFormValidator implements Validator {
 		
 		if(expense.getExpenseTypeId() != null && expense.getExpenseTypeId()!= 15)
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "supplier", "error.notempty.expenseform.supplier");
+		
+		if(expense.getExpenseTypeId() != null && expense.getExpenseTypeId()== 1)
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "invoiceNo", "error.notempty.expenseform.invoiceno");
 	}
 	
 }
