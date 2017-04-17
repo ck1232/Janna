@@ -97,7 +97,7 @@
 	    		$('#datatable1 thead th').each( function () {
 	    	        var title = $(this).text();
 	    	        if(title != "" && title != "Action"){
-	    	        	$(this).append( '<br><input type="text" placeholder="Search '+title+'" />' );
+	    	        	$(this).append( '<br><input type="text" placeholder="" />' );
 	    	        }
 	    	    } );
 		    });
