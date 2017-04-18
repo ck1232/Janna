@@ -344,6 +344,8 @@ CREATE TABLE `employee_salary` (
   `over_time_remarks` varchar(512) DEFAULT NULL,
   `allowance` decimal(6,2) DEFAULT NULL,
   `medical` decimal(6,2) DEFAULT NULL,
+  `leave_balance` decimal(5,2) DEFAULT NULL,
+  `leave_taken` decimal(5,2) DEFAULT NULL,
   `unpaid_leave_amt` decimal(6,2) DEFAULT NULL,
   `unpaid_leave_remarks` varchar(512) DEFAULT NULL,
   `employee_cpf` decimal(8,2) DEFAULT NULL,
@@ -368,7 +370,7 @@ CREATE TABLE `employee_salary` (
 
 LOCK TABLES `employee_salary` WRITE;
 /*!40000 ALTER TABLE `employee_salary` DISABLE KEYS */;
-INSERT INTO `employee_salary` VALUES (0,'2017-03-08',1,2500.00,1.00,1.00,'1',1.00,5.00,1.00,'1',NULL,50.00,1.00,1.00,1.00,'UNPAID',1,'ck1232','2017-03-28 22:20:06','euphona','2017-04-03 21:47:53','N'),(1,'2017-03-13',1,2500.00,NULL,NULL,'',NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 13:23:49','euphona','2017-03-13 13:23:49','N'),(2,'2017-02-08',1,2500.00,NULL,NULL,'',NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 15:58:37','euphona','2017-03-13 17:57:21','N'),(3,'2017-03-08',1,1000.00,NULL,NULL,'',NULL,NULL,NULL,'',20.50,NULL,NULL,NULL,NULL,'UNPAID',1,'ck1232','2017-03-28 22:16:41','ck1232','2017-03-28 22:16:41','Y');
+INSERT INTO `employee_salary` VALUES (0,'2017-03-08',1,2500.00,1.00,1.00,'1',1.00,5.00,14.00,1.00,1.00,'1',NULL,50.00,1.00,1.00,1.00,'UNPAID',1,'ck1232','2017-03-28 22:20:06','euphona','2017-04-03 21:47:53','N'),(1,'2017-03-13',1,2500.00,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 13:23:49','euphona','2017-03-13 13:23:49','N'),(2,'2017-02-08',1,2500.00,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'PAID',0,'euphona','2017-03-13 15:58:37','euphona','2017-03-13 17:57:21','N'),(3,'2017-03-08',1,1000.00,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'',20.50,NULL,NULL,NULL,NULL,'UNPAID',1,'ck1232','2017-03-28 22:16:41','ck1232','2017-03-28 22:16:41','Y');
 /*!40000 ALTER TABLE `employee_salary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1943,4 +1945,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-16 23:06:51
+-- Dump completed on 2017-04-18 23:40:53
