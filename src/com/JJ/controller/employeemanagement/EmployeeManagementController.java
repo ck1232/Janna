@@ -103,6 +103,7 @@ public class EmployeeManagementController {
     	employmentTypeList.put(EmploymentTypeEnum.FULL_FW.toString(), EmploymentTypeEnum.FULL_FW.getType());
     	employmentTypeList.put(EmploymentTypeEnum.PART_LOCAL.toString(), EmploymentTypeEnum.PART_LOCAL.getType());
     	employmentTypeList.put(EmploymentTypeEnum.PART_FW.toString(), EmploymentTypeEnum.PART_FW.getType());
+    	employmentTypeList.put(EmploymentTypeEnum.DIRECTOR.toString(), EmploymentTypeEnum.DIRECTOR.getType());
 	}
 	
 	@InitBinder("employeeForm")

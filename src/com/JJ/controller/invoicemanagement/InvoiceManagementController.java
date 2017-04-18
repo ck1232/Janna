@@ -113,6 +113,19 @@ public class InvoiceManagementController {
 		return GeneralUtils.convertListToJSONString(invoiceList);
 	}
 	
+	@RequestMapping(value = "/getMessengerList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<InvoiceVO> getMessengerList() {
+		logger.debug("getting messenger list");
+		List<String> messengerList = invoiceManagementService.getAllMessenger();		
+		List<InvoiceVO> invoiceList = new ArrayList<InvoiceVO>();
+		for(String s: messengerList) {
+			InvoiceVO invoice = new InvoiceVO();
+			invoice.setMessenger(s);
+			invoiceList.add(invoice);
+		}
+		return invoiceList;
+	}
+	
 	@RequestMapping(value = "/viewInvoice", method = RequestMethod.POST)
 	public String viewInvoice(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);

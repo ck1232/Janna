@@ -1,6 +1,23 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script>
+	var messengerList = new Bloodhound({
+		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('messenger'),
+		  queryTokenizer: Bloodhound.tokenizers.whitespace,
+		  prefetch: '<c:url context="/JJ" value="/invoice/getMessengerList" />'
+		}); 
+
+	 $( function() {
+		$('#messengerDiv .typeahead').typeahead(null, {
+			 name: 'messengerList',
+			  display: 'messenger',
+			source: messengerList
+		});
+	 } );
+	
+</script>
+
 
 <div class="box box-default">
 	<div class="box-header with-border">
@@ -16,9 +33,9 @@
 		<div class="box-body">
 		    <div class="row">
 		      <div class="col-md-4">
-		      	 <div class="form-group">
+		      	 <div class="form-group" id="messengerDiv">
 	                <label>Messenger</label>
-	                <form:input path="messenger" type="text" class="form-control"
+	                <form:input path="messenger" type="text" class="form-control typeahead"
 						      id="messenger" placeholder="" />
 					<form:errors path="messenger" class="text-danger" />
 	              </div>
