@@ -9,15 +9,13 @@
 		  prefetch: '<c:url context="/JJ" value="/expense/getSupplierList" />'
 		}); 
 
-	$('#addSupplierDiv .typeahead').typeahead(null, {
-		 name: 'supplierList',
-		  display: 'supplier',
-		source: supplierList
-	});
-
-	$('#addSupplierDiv .typeahead').on('typeahead:selected', function(evt, item) {
-    	$("#supplier").val(item.supplier);
-	});
+	 $( function() {
+		$('#addSupplierDiv .typeahead').typeahead(null, {
+			 name: 'supplierList',
+			  display: 'supplier',
+			source: supplierList
+		});
+	 } );
 	
 </script>
 
@@ -94,7 +92,7 @@
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Supplier</label>
 										<div class="col-sm-5" id="addSupplierDiv">
-											<form:input path="supplier" type="text" class="form-control"
+											<form:input path="supplier" type="text" class="form-control typeahead"
 						                                id="supplier" placeholder="Enter supplier" />
 											<form:errors path="supplier" class="text-danger" />
 										</div>
