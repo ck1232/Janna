@@ -2,6 +2,24 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script>
+	var supplierList = new Bloodhound({
+		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('supplier'),
+		  queryTokenizer: Bloodhound.tokenizers.whitespace,
+		  prefetch: '<c:url context="/JJ" value="/expense/getSupplierList" />'
+		}); 
+
+	 $( function() {
+		$('#addSupplierDiv .typeahead').typeahead(null, {
+			 name: 'supplierList',
+			  display: 'supplier',
+			source: supplierList
+		});
+	 } );
+	
+</script>
+
+
 <!-- Content Wrapper. Contains page content -->
     <section class="content">
     	<div class="row">
@@ -73,8 +91,8 @@
 								<div class="row">		  
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
 										<label class="col-sm-2 control-label">Supplier</label>
-										<div class="col-sm-5">
-											<form:input path="supplier" type="text" class="form-control"
+										<div class="col-sm-5" id="addSupplierDiv">
+											<form:input path="supplier" type="text" class="form-control typeahead"
 						                                id="supplier" placeholder="Enter supplier" />
 											<form:errors path="supplier" class="text-danger" />
 										</div>

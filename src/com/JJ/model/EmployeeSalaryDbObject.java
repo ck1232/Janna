@@ -23,6 +23,10 @@ public class EmployeeSalaryDbObject extends Base implements Serializable {
 
     private BigDecimal medical;
 
+    private BigDecimal leaveBalance;
+
+    private BigDecimal leaveTaken;
+
     private BigDecimal unpaidLeaveAmt;
 
     private String unpaidLeaveRemarks;
@@ -113,6 +117,22 @@ public class EmployeeSalaryDbObject extends Base implements Serializable {
         this.medical = medical;
     }
 
+    public BigDecimal getLeaveBalance() {
+        return leaveBalance;
+    }
+
+    public void setLeaveBalance(BigDecimal leaveBalance) {
+        this.leaveBalance = leaveBalance;
+    }
+
+    public BigDecimal getLeaveTaken() {
+        return leaveTaken;
+    }
+
+    public void setLeaveTaken(BigDecimal leaveTaken) {
+        this.leaveTaken = leaveTaken;
+    }
+
     public BigDecimal getUnpaidLeaveAmt() {
         return unpaidLeaveAmt;
     }
@@ -192,6 +212,8 @@ public class EmployeeSalaryDbObject extends Base implements Serializable {
         sb.append(", overTimeRemarks=").append(overTimeRemarks);
         sb.append(", allowance=").append(allowance);
         sb.append(", medical=").append(medical);
+        sb.append(", leaveBalance=").append(leaveBalance);
+        sb.append(", leaveTaken=").append(leaveTaken);
         sb.append(", unpaidLeaveAmt=").append(unpaidLeaveAmt);
         sb.append(", unpaidLeaveRemarks=").append(unpaidLeaveRemarks);
         sb.append(", employeeCpf=").append(employeeCpf);

@@ -115,6 +115,26 @@
 						            </div>
 						            <div class="row">
 							            <div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Leave Balance</label>
+												<div class="col-sm-5">
+							                  		<form:input path="leaveBalance" type="text" class="form-control" 
+							                  			  id="leaveBalance" placeholder="Enter leave balance"/>
+							                  		<form:errors path="leaveBalance" class="text-danger" />
+							                	</div>
+							              </div>
+						            </div>
+						            <div class="row">
+							            <div class="form-group ${status.error ? 'has-error' : ''}">
+											<label class="col-sm-2 control-label">Leave Taken</label>
+												<div class="col-sm-5">
+							                  		<form:input path="leaveTaken" type="text" class="form-control" 
+							                  			  id="leaveTaken" placeholder="Enter leave taken"/>
+							                  		<form:errors path="leaveTaken" class="text-danger" />
+							                	</div>
+							              </div>
+						            </div>
+						            <div class="row">
+							            <div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Unpaid Leave Amount</label>
 												<div class="col-sm-5">
 							                  		<form:input path="unpaidLeaveAmt" type="text" class="form-control" 

@@ -5,7 +5,8 @@ public enum EmploymentTypeEnum {
 	PART_LOCAL("Part Time Local"),
 	FULL_LOCAL("Full Time Local"),
 	PART_FW("Part Time Foreigner"),
-	FULL_FW("Full Time Foreigner");
+	FULL_FW("Full Time Foreigner"),
+	DIRECTOR("Director");
 	
 	private String type;
 	

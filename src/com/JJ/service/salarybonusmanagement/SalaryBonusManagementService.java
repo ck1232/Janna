@@ -248,6 +248,8 @@ public class SalaryBonusManagementService {
 				vo.setOverTimeRemarks(dbObj.getOverTimeRemarks());
 				vo.setAllowance(dbObj.getAllowance());
 				vo.setMedical(dbObj.getMedical());
+				vo.setLeaveBalance(dbObj.getLeaveBalance());
+				vo.setLeaveTaken(dbObj.getLeaveTaken());
 				vo.setUnpaidLeaveAmt(dbObj.getUnpaidLeaveAmt());
 				vo.setUnpaidLeaveRemarks(dbObj.getUnpaidLeaveRemarks());
 				vo.setCdacAmt(dbObj.getCdacAmt());
@@ -277,6 +279,8 @@ public class SalaryBonusManagementService {
 				dbObj.setOverTimeRemarks(vo.getOverTimeRemarks());
 				dbObj.setAllowance(vo.getAllowance());
 				dbObj.setMedical(vo.getMedical());
+				dbObj.setLeaveBalance(vo.getLeaveBalance());
+				dbObj.setLeaveTaken(vo.getLeaveTaken());
 				dbObj.setUnpaidLeaveAmt(vo.getUnpaidLeaveAmt());
 				dbObj.setUnpaidLeaveRemarks(vo.getUnpaidLeaveRemarks());
 				dbObj.setEmployeeCpf(vo.getEmployeeCpf());

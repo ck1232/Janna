@@ -45,7 +45,7 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Basic Salary</label>
 							<div class="col-sm-5">
-								<form:input path="basicSalaryAmt" type="number" class="form-control" 
+								<form:input path="basicSalaryAmt" type="text" class="form-control" 
 			                  				id="basicSalaryAmt" placeholder="Enter basic salary"/>
 			                  	<form:errors path="basicSalaryAmt" class="text-danger" />
 							</div>
@@ -55,7 +55,7 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Overtime Amount</label>
 							<div class="col-sm-5">
-								<form:input path="overTimeAmt" type="number" class="form-control" 
+								<form:input path="overTimeAmt" type="text" class="form-control" 
 			                  				id="overTimeAmt" placeholder="Enter overtime amount"/>
 			                  	<form:errors path="overTimeAmt" class="text-danger" />
 							</div>
@@ -65,7 +65,7 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Overtime Hours</label>
 							<div class="col-sm-5">
-								<form:input path="overTimeHours" type="number" class="form-control" 
+								<form:input path="overTimeHours" type="text" class="form-control" 
 			                  				id="overTimeHours" placeholder="Enter overtime hours"/>
 			                  	<form:errors path="overTimeHours" class="text-danger" />
 							</div>
@@ -83,9 +83,9 @@
 					</div>
 					<div class="row">
 						<div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Allowance / Medical</label>
+							<label class="col-sm-2 control-label">Allowance</label>
 							<div class="col-sm-5">
-								<form:input path="allowance" type="number" class="form-control"
+								<form:input path="allowance" type="text" class="form-control"
 				                            id="allowance" placeholder="Enter allowance" />
 								<form:errors path="allowance" class="text-danger" />
 							</div>
@@ -93,9 +93,39 @@
 					</div>
 					<div class="row">
 						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Medical</label>
+							<div class="col-sm-5">
+								<form:input path="medical" type="text" class="form-control"
+				                            id="medical" placeholder="Enter allowance" />
+								<form:errors path="medical" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Leave Balance</label>
+							<div class="col-sm-5">
+								<form:input path="leaveBalance" type="text" class="form-control"
+				                            id="leaveBalance" placeholder="Enter leave balance" />
+								<form:errors path="leaveBalance" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
+							<label class="col-sm-2 control-label">Leave Taken</label>
+							<div class="col-sm-5">
+								<form:input path="leaveTaken" type="text" class="form-control"
+				                            id="leaveTaken" placeholder="Enter leave taken" />
+								<form:errors path="leaveTaken" class="text-danger" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Unpaid Leave Amount</label>
 							<div class="col-sm-5">
-								<form:input path="unpaidLeaveAmt" type="number" class="form-control"
+								<form:input path="unpaidLeaveAmt" type="text" class="form-control"
 				                                id="unpaidLeaveAmt" placeholder="Enter unpaid leave amount" />
 								<form:errors path="unpaidLeaveAmt" class="text-danger" />
 							</div>
@@ -115,7 +145,7 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">CDAC Amount</label>
 							<div class="col-sm-5">
-								<form:input path="cdacAmt" type="number" class="form-control" 
+								<form:input path="cdacAmt" type="text" class="form-control" 
 		                  			  		id="cdacAmt" placeholder="Enter cdac amount"/>
 		                  		<form:errors path="cdacAmt" class="text-danger" />
 							</div>
@@ -125,7 +155,7 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">SDL Amount</label>
 							<div class="col-sm-5">
-								<form:input path="sdlAmt" type="number" class="form-control" 
+								<form:input path="sdlAmt" type="text" class="form-control" 
 		                  			  		id="sdlAmt" placeholder="Enter sdl amount"/>
 		                  		<form:errors path="sdlAmt" class="text-danger" />
 							</div>
@@ -135,7 +165,7 @@
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Foreign Worker Levy</label>
 							<div class="col-sm-5">
-								<form:input path="fwLevy" type="number" class="form-control" 
+								<form:input path="fwLevy" type="text" class="form-control" 
 		                  			  		id="fwLevy" placeholder="Enter sdl amount"/>
 		                  		<form:errors path="fwLevy" class="text-danger" />
 							</div>

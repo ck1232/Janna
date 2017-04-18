@@ -6,7 +6,19 @@
     "data":           "",
     "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "expenseDate"},
+{	"data": "expenseDate",
+	"render": function (data) {
+                 var date = new Date(data);
+        		var month = date.getMonth();
+        		var monthNames = [
+							    "January", "February", "March",
+							    "April", "May", "June", "July",
+							    "August", "September", "October",
+							    "November", "December"
+							  ];
+        		return date.getDate() + " " + monthNames[month] + " " + date.getFullYear();
+             }
+},
 {"data": "expensetype"},
 {"data": "description"},
 {"data": "totalAmt"},

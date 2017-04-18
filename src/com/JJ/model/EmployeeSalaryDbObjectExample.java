@@ -683,6 +683,126 @@ public class EmployeeSalaryDbObjectExample {
             return (Criteria) this;
         }
 
+        public Criteria andLeaveBalanceIsNull() {
+            addCriterion("leave_balance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceIsNotNull() {
+            addCriterion("leave_balance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceEqualTo(BigDecimal value) {
+            addCriterion("leave_balance =", value, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceNotEqualTo(BigDecimal value) {
+            addCriterion("leave_balance <>", value, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceGreaterThan(BigDecimal value) {
+            addCriterion("leave_balance >", value, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("leave_balance >=", value, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceLessThan(BigDecimal value) {
+            addCriterion("leave_balance <", value, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("leave_balance <=", value, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceIn(List<BigDecimal> values) {
+            addCriterion("leave_balance in", values, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceNotIn(List<BigDecimal> values) {
+            addCriterion("leave_balance not in", values, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("leave_balance between", value1, value2, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("leave_balance not between", value1, value2, "leaveBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenIsNull() {
+            addCriterion("leave_taken is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenIsNotNull() {
+            addCriterion("leave_taken is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenEqualTo(BigDecimal value) {
+            addCriterion("leave_taken =", value, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenNotEqualTo(BigDecimal value) {
+            addCriterion("leave_taken <>", value, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenGreaterThan(BigDecimal value) {
+            addCriterion("leave_taken >", value, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("leave_taken >=", value, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenLessThan(BigDecimal value) {
+            addCriterion("leave_taken <", value, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("leave_taken <=", value, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenIn(List<BigDecimal> values) {
+            addCriterion("leave_taken in", values, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenNotIn(List<BigDecimal> values) {
+            addCriterion("leave_taken not in", values, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("leave_taken between", value1, value2, "leaveTaken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaveTakenNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("leave_taken not between", value1, value2, "leaveTaken");
+            return (Criteria) this;
+        }
+
         public Criteria andUnpaidLeaveAmtIsNull() {
             addCriterion("unpaid_leave_amt is null");
             return (Criteria) this;

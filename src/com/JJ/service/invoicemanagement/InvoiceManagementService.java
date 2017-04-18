@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,18 @@ public class InvoiceManagementService {
 		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
 		invoiceDbObjectExample.setOrderByClause("invoice_date desc");
 		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
+	}
+	
+	public List<String> getAllMessenger() {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<InvoiceDbObject> invoiceList = invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample);
+		Set<String> s = new HashSet<String>();
+		for(InvoiceDbObject dbObj : invoiceList) {
+			if(dbObj.getMessenger() != null && !dbObj.getMessenger().isEmpty())
+				s.add(dbObj.getMessenger());
+		}
+		return new ArrayList<String>(s);
 	}
 	
 	public InvoiceVO getInvoiceById(Integer id) {

@@ -2,7 +2,9 @@ package com.JJ.service.expensemanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -45,6 +47,18 @@ public class ExpenseManagementService {
 		example.setOrderByClause("expense_date desc");
 		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(example));
 		return expenseList;
+	}
+	
+	public List<String> getAllSupplier() {
+		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
+		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<ExpenseDbObject> expenseList = expenseDbObjectMapper.selectByExample(expenseDbObjectExample);
+		Set<String> s = new HashSet<String>();
+		for(ExpenseDbObject dbObj : expenseList) {
+			if(dbObj.getSupplier() != null && !dbObj.getSupplier().isEmpty())
+				s.add(dbObj.getSupplier());
+		}
+		return new ArrayList<String>(s);
 	}
 	
 	public ExpenseVO findById(Integer id) {
@@ -133,4 +147,5 @@ public class ExpenseManagementService {
 		}
 		return expenseDbObjectList;
 	}
+
 }

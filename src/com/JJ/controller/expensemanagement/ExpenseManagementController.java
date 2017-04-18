@@ -74,6 +74,18 @@ public class ExpenseManagementController {
 		return GeneralUtils.convertListToJSONString(expenseVoList);
 	}
 	
+	@RequestMapping(value = "/getSupplierList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<ExpenseVO> getSupplierList() {
+		logger.debug("getting supplier list");
+		List<String> supplierList = expenseManagementService.getAllSupplier();		
+		List<ExpenseVO> expenseList = new ArrayList<ExpenseVO>();
+		for(String s: supplierList) {
+			ExpenseVO expense = new ExpenseVO();
+			expense.setSupplier(s);
+			expenseList.add(expense);
+		}
+		return expenseList;
+	}
 	
 	@RequestMapping(value = "/deleteExpense", method = RequestMethod.POST)
 	public String deleteExpense(@RequestParam(value = "checkboxId", required=false) List<String> ids,

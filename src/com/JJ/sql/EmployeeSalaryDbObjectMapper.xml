@@ -11,6 +11,8 @@
     <result column="over_time_remarks" jdbcType="VARCHAR" property="overTimeRemarks" />
     <result column="allowance" jdbcType="DECIMAL" property="allowance" />
     <result column="medical" jdbcType="DECIMAL" property="medical" />
+    <result column="leave_balance" jdbcType="DECIMAL" property="leaveBalance" />
+    <result column="leave_taken" jdbcType="DECIMAL" property="leaveTaken" />
     <result column="unpaid_leave_amt" jdbcType="DECIMAL" property="unpaidLeaveAmt" />
     <result column="unpaid_leave_remarks" jdbcType="VARCHAR" property="unpaidLeaveRemarks" />
     <result column="employee_cpf" jdbcType="DECIMAL" property="employeeCpf" />
@@ -86,9 +88,9 @@
   </sql>
   <sql id="Base_Column_List">
     salary_id, salary_date, employee_id, basic_salary_amt, over_time_amt, over_time_hours, 
-    over_time_remarks, allowance, medical, unpaid_leave_amt, unpaid_leave_remarks, employee_cpf, 
-    employer_cpf, cdac_amt, sdl_amt, fw_levy, status, version, created_by, created_on, 
-    updated_by, updated_on, delete_ind
+    over_time_remarks, allowance, medical, leave_balance, leave_taken, unpaid_leave_amt, 
+    unpaid_leave_remarks, employee_cpf, employer_cpf, cdac_amt, sdl_amt, fw_levy, status, 
+    version, created_by, created_on, updated_by, updated_on, delete_ind
   </sql>
   <select id="selectByExample" parameterType="com.JJ.model.EmployeeSalaryDbObjectExample" resultMap="BaseResultMap">
     select
@@ -126,20 +128,22 @@
     </selectKey>
     insert into employee_salary (salary_date, employee_id, basic_salary_amt, 
       over_time_amt, over_time_hours, over_time_remarks, 
-      allowance, medical, unpaid_leave_amt, 
-      unpaid_leave_remarks, employee_cpf, employer_cpf, 
-      cdac_amt, sdl_amt, fw_levy, 
-      status, version, created_by, 
-      created_on, updated_by, updated_on, 
-      delete_ind)
+      allowance, medical, leave_balance, 
+      leave_taken, unpaid_leave_amt, unpaid_leave_remarks, 
+      employee_cpf, employer_cpf, cdac_amt, 
+      sdl_amt, fw_levy, status, 
+      version, created_by, created_on, 
+      updated_by, updated_on, delete_ind
+      )
     values (#{salaryDate,jdbcType=DATE}, #{employeeId,jdbcType=INTEGER}, #{basicSalaryAmt,jdbcType=DECIMAL}, 
       #{overTimeAmt,jdbcType=DECIMAL}, #{overTimeHours,jdbcType=DECIMAL}, #{overTimeRemarks,jdbcType=VARCHAR}, 
-      #{allowance,jdbcType=DECIMAL}, #{medical,jdbcType=DECIMAL}, #{unpaidLeaveAmt,jdbcType=DECIMAL}, 
-      #{unpaidLeaveRemarks,jdbcType=VARCHAR}, #{employeeCpf,jdbcType=DECIMAL}, #{employerCpf,jdbcType=DECIMAL}, 
-      #{cdacAmt,jdbcType=DECIMAL}, #{sdlAmt,jdbcType=DECIMAL}, #{fwLevy,jdbcType=DECIMAL}, 
-      #{status,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
-      #{createdOn,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, 
-      #{deleteInd,jdbcType=CHAR})
+      #{allowance,jdbcType=DECIMAL}, #{medical,jdbcType=DECIMAL}, #{leaveBalance,jdbcType=DECIMAL}, 
+      #{leaveTaken,jdbcType=DECIMAL}, #{unpaidLeaveAmt,jdbcType=DECIMAL}, #{unpaidLeaveRemarks,jdbcType=VARCHAR}, 
+      #{employeeCpf,jdbcType=DECIMAL}, #{employerCpf,jdbcType=DECIMAL}, #{cdacAmt,jdbcType=DECIMAL}, 
+      #{sdlAmt,jdbcType=DECIMAL}, #{fwLevy,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.JJ.model.EmployeeSalaryDbObject">
     <selectKey keyProperty="salaryId" order="AFTER" resultType="java.lang.Integer">
@@ -170,6 +174,12 @@
       </if>
       <if test="medical != null">
         medical,
+      </if>
+      <if test="leaveBalance != null">
+        leave_balance,
+      </if>
+      <if test="leaveTaken != null">
+        leave_taken,
       </if>
       <if test="unpaidLeaveAmt != null">
         unpaid_leave_amt,
@@ -238,6 +248,12 @@
       </if>
       <if test="medical != null">
         #{medical,jdbcType=DECIMAL},
+      </if>
+      <if test="leaveBalance != null">
+        #{leaveBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="leaveTaken != null">
+        #{leaveTaken,jdbcType=DECIMAL},
       </if>
       <if test="unpaidLeaveAmt != null">
         #{unpaidLeaveAmt,jdbcType=DECIMAL},
@@ -319,6 +335,12 @@
       <if test="record.medical != null">
         medical = #{record.medical,jdbcType=DECIMAL},
       </if>
+      <if test="record.leaveBalance != null">
+        leave_balance = #{record.leaveBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leaveTaken != null">
+        leave_taken = #{record.leaveTaken,jdbcType=DECIMAL},
+      </if>
       <if test="record.unpaidLeaveAmt != null">
         unpaid_leave_amt = #{record.unpaidLeaveAmt,jdbcType=DECIMAL},
       </if>
@@ -377,6 +399,8 @@
       over_time_remarks = #{record.overTimeRemarks,jdbcType=VARCHAR},
       allowance = #{record.allowance,jdbcType=DECIMAL},
       medical = #{record.medical,jdbcType=DECIMAL},
+      leave_balance = #{record.leaveBalance,jdbcType=DECIMAL},
+      leave_taken = #{record.leaveTaken,jdbcType=DECIMAL},
       unpaid_leave_amt = #{record.unpaidLeaveAmt,jdbcType=DECIMAL},
       unpaid_leave_remarks = #{record.unpaidLeaveRemarks,jdbcType=VARCHAR},
       employee_cpf = #{record.employeeCpf,jdbcType=DECIMAL},
@@ -421,6 +445,12 @@
       </if>
       <if test="medical != null">
         medical = #{medical,jdbcType=DECIMAL},
+      </if>
+      <if test="leaveBalance != null">
+        leave_balance = #{leaveBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="leaveTaken != null">
+        leave_taken = #{leaveTaken,jdbcType=DECIMAL},
       </if>
       <if test="unpaidLeaveAmt != null">
         unpaid_leave_amt = #{unpaidLeaveAmt,jdbcType=DECIMAL},
@@ -477,6 +507,8 @@
       over_time_remarks = #{overTimeRemarks,jdbcType=VARCHAR},
       allowance = #{allowance,jdbcType=DECIMAL},
       medical = #{medical,jdbcType=DECIMAL},
+      leave_balance = #{leaveBalance,jdbcType=DECIMAL},
+      leave_taken = #{leaveTaken,jdbcType=DECIMAL},
       unpaid_leave_amt = #{unpaidLeaveAmt,jdbcType=DECIMAL},
       unpaid_leave_remarks = #{unpaidLeaveRemarks,jdbcType=VARCHAR},
       employee_cpf = #{employeeCpf,jdbcType=DECIMAL},

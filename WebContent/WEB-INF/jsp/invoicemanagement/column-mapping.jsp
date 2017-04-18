@@ -10,7 +10,19 @@
 {"data": "messenger"},
 {"data": "totalAmt"},
 {"data": "status"},
-{"data": "invoiceDate"},
+{	"data": "invoiceDate",
+	"render": function (data) {
+                 var date = new Date(data);
+        		var month = date.getMonth();
+        		var monthNames = [
+							    "January", "February", "March",
+							    "April", "May", "June", "July",
+							    "August", "September", "October",
+							    "November", "December"
+							  ];
+        		return date.getDate() + " " + monthNames[month] + " " + date.getFullYear();
+             }
+},
 {
     "className":      '',
     "orderable":      false,
