@@ -109,7 +109,7 @@ $(function(){
       </div>
 	</div>
 	<c:url var="post_url" value="/invoice/uploadInvoice" />
-	<form:form id = "uploadInvoiceForm" method = "post" modelAttribute = "invoiceForm" action="${post_url}">
+	<form:form id = "uploadInvoiceForm" method = "post" action="${post_url}">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="box-body">
 		    <div class="row">

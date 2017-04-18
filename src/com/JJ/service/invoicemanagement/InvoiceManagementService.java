@@ -54,7 +54,7 @@ public class InvoiceManagementService {
 		if(invoiceDbObject != null && invoiceDbObject.getInvoiceId() != null){
 			return convertToInvoiceVOList(Arrays.asList(invoiceDbObject)).get(0);
 		}else{
-			return new InvoiceVO();
+			return null;
 		}
 	}
 	

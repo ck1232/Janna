@@ -12,7 +12,7 @@
 	
 	<context-param>
 	    <param-name>spring.profiles.active</param-name>
-	    <param-value>admin-prd</param-value>
+	    <param-value>admin-uat</param-value>
 	</context-param>
 	
 	<servlet>  
