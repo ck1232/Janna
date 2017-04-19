@@ -130,6 +130,7 @@ public class ExpenseManagementController {
 			result.rejectValue("expensedateString","error.expenseform.expensedate.cannot.after.sysdate");
 		}
 		if (!result.hasErrors()) {
+			expenseVO.setExpenseDate(expenseDate);
 			expenseManagementService.saveExpense(expenseVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Expense added successfully!");
