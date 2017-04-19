@@ -91,6 +91,7 @@ public class PaymentManagementController {
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
+		paymentvo.setType("expense");
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("expenseList", expenseList);
 		model.addAttribute("idList", idList);
@@ -124,6 +125,7 @@ public class PaymentManagementController {
 				hasErrors = true;
 				result.rejectValue("cashamount", "error.notequal.paymentform.expensetotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");
+				result.rejectValue("directoramount", "error.notequal.paymentform.expensetotalamount");
 			}
 			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
 				hasErrors = true;
@@ -201,6 +203,7 @@ public class PaymentManagementController {
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
+		paymentvo.setType("invoice");
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("invoiceList", invoiceList);
 		model.addAttribute("totalamount", totalamount);
@@ -226,6 +229,7 @@ public class PaymentManagementController {
 				hasErrors = true;
 				result.rejectValue("cashamount", "error.notequal.paymentform.invoicetotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
+				result.rejectValue("giroamount", "error.notequal.paymentform.invoicetotalamount");
 			}
 			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
 				hasErrors = true;
@@ -281,8 +285,9 @@ public class PaymentManagementController {
 			boolean hasErrors = false;
 			if(!validateInputAmount(totalamount, paymentVo)){
 				hasErrors = true;
-				result.rejectValue("cashamount", "error.notequal.paymentform.invoicetotalamount");
-				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
+				result.rejectValue("cashamount", "error.notequal.paymentform.granttotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.granttotalamount");
+				result.rejectValue("giroamount", "error.notequal.paymentform.granttotalamount");
 			}
 			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
 				hasErrors = true;
@@ -334,6 +339,12 @@ public class PaymentManagementController {
 		}
 		if(paymentVo.getPaymentmodecheque()) {
 			inputAmount = inputAmount.add(paymentVo.getChequeamount());
+		}
+		if("expense".equals(paymentVo.getType()) && paymentVo.getPaymentmodedirector()) {
+			inputAmount = inputAmount.add(paymentVo.getDirectoramount());
+		}
+		if("invoice".equals(paymentVo.getType()) && paymentVo.getPaymentmodegiro()) {
+			inputAmount = inputAmount.add(paymentVo.getGiroamount());
 		}
 		if(totalamount.compareTo(inputAmount) == 0){
 			return true;

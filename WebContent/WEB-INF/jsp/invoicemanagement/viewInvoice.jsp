@@ -10,19 +10,22 @@
                 <div class="box">
                 	<!--BOX HEADER-->
                     <div class="box-header with-border">
-                    	<h3 class="box-title">Invoice Information</h3>
+                    	<c:if test="${invoice.type == 'invoice'}"><h3 class="box-title">Invoice Information</h3></c:if>
+                    	<c:if test="${invoice.type == 'grant'}"><h3 class="box-title">Grant Information</h3></c:if>
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/invoice/listInvoice" />"></form>
   
                     <!--/.FORM-->
 		             	<div class="box-body">
-							<div class="row">
-						  		<div class="form-group">
-									<div class="col-sm-2">Invoice id</div>
-									<div class="col-sm-5">${invoice.invoiceId}</div>
+		             		<c:if test="${invoice.type == 'invoice'}">
+								<div class="row">
+							  		<div class="form-group">
+										<div class="col-sm-2">Invoice id</div>
+										<div class="col-sm-5">${invoice.invoiceId}</div>
+									</div>
 								</div>
-							</div>
+							</c:if>
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Messenger</div>
@@ -37,7 +40,8 @@
 							</div>	
 							<div class="row">
 						  		<div class="form-group">
-								    <div class="col-sm-2">Invoice Date</div>
+								    <c:if test="${invoice.type == 'invoice'}"><div class="col-sm-2">Invoice Date</div></c:if>
+								    <c:if test="${invoice.type == 'grant'}"><div class="col-sm-2">Grant Date</div></c:if>
 								    <div class="col-sm-5">${invoice.invoicedateString}</div>
 								</div>
 							</div>	

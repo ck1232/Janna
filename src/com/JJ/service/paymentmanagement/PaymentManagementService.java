@@ -190,6 +190,16 @@ public class PaymentManagementService {
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
+		if("expense".equals(paymentVo.getType()) && paymentVo.getPaymentmodedirector()){
+			PaymentDetailVO paymentDetailVO = convertDirectorPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
+			paymentDetailVO = savePaymentDetail(paymentDetailVO);
+			paymentDetailList.add(paymentDetailVO);
+		}
+		if("invoice".equals(paymentVo.getType()) && paymentVo.getPaymentmodegiro()){
+			PaymentDetailVO paymentDetailVO = convertGiroPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
+			paymentDetailVO = savePaymentDetail(paymentDetailVO);
+			paymentDetailList.add(paymentDetailVO);
+		}
 		return paymentDetailList;
 	}
 	
@@ -281,6 +291,36 @@ public class PaymentManagementService {
 				paymentDetailVO.setPaymentAmt(vo.getChequeamount());
 				paymentDetailVO.setPaymentDate(vo.getPaymentDate());
 				paymentDetailVO.setPaymentMode(2);
+				paymentDetailDbObjectList.add(paymentDetailVO);
+			}
+		}
+		return paymentDetailDbObjectList;
+	}
+	
+	private List<PaymentDetailVO> convertDirectorPaymentToPaymentDetailVOList(List<PaymentVO> paymentVOList) {
+		List<PaymentDetailVO> paymentDetailDbObjectList = new ArrayList<PaymentDetailVO>();
+		if(paymentVOList != null && paymentVOList.size() > 0){
+			for(PaymentVO vo : paymentVOList){
+				PaymentDetailVO paymentDetailVO = new PaymentDetailVO();
+				paymentDetailVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+				paymentDetailVO.setPaymentAmt(vo.getDirectoramount());
+				paymentDetailVO.setPaymentDate(vo.getPaymentDate());
+				paymentDetailVO.setPaymentMode(3);
+				paymentDetailDbObjectList.add(paymentDetailVO);
+			}
+		}
+		return paymentDetailDbObjectList;
+	}
+	
+	private List<PaymentDetailVO> convertGiroPaymentToPaymentDetailVOList(List<PaymentVO> paymentVOList) {
+		List<PaymentDetailVO> paymentDetailDbObjectList = new ArrayList<PaymentDetailVO>();
+		if(paymentVOList != null && paymentVOList.size() > 0){
+			for(PaymentVO vo : paymentVOList){
+				PaymentDetailVO paymentDetailVO = new PaymentDetailVO();
+				paymentDetailVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+				paymentDetailVO.setPaymentAmt(vo.getGiroamount());
+				paymentDetailVO.setPaymentDate(vo.getPaymentDate());
+				paymentDetailVO.setPaymentMode(5);
 				paymentDetailDbObjectList.add(paymentDetailVO);
 			}
 		}

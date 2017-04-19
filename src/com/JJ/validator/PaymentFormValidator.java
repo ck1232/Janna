@@ -31,10 +31,30 @@ public class PaymentFormValidator implements Validator {
 				errors.rejectValue("paymentdateString", "error.notvalid.paymentform.paymentdate");
 			}
 		}
+
+		boolean hasPayment = true;
+		switch(paymentVo.getType()) {
+			case "expense":
+				if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque() && !paymentVo.getPaymentmodedirector()) {
+					errors.rejectValue("paymentmodedirector", "error.notempty.paymentform.paymentmode");
+					hasPayment = false;
+				}
+				break;
+			case "invoice":
+				if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque() && !paymentVo.getPaymentmodegiro()) {
+					errors.rejectValue("paymentmodegiro", "error.notempty.paymentform.paymentmode");
+					hasPayment = false;
+				}
+				break;
+			default:
+				if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque()) {
+					errors.rejectValue("paymentmodecheque", "error.notempty.paymentform.paymentmode");
+					hasPayment = false;
+				}
 		
-		if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque()) {
-			errors.rejectValue("paymentmodecheque", "error.notempty.paymentform.paymentmode");
-		}else{ 
+		}
+
+		if(hasPayment){ 
 			if(paymentVo.getPaymentmodecash()){
 				if(paymentVo.getCashamount() == null){
 					errors.rejectValue("cashamount", "error.notempty.paymentform.cashamount");
@@ -59,6 +79,22 @@ public class PaymentFormValidator implements Validator {
 					}catch(Exception e) {
 						errors.rejectValue("chequedateString", "error.notvalid.paymentform.chequedate");
 					}
+				}
+			}
+			
+			if("expense".equals(paymentVo.getType()) && paymentVo.getPaymentmodedirector()){
+				if(paymentVo.getDirectoramount() == null){
+					errors.rejectValue("directoramount", "error.notempty.paymentform.directoramount");
+				}else if(paymentVo.getDirectoramount().compareTo(BigDecimal.ZERO) <= 0){
+					errors.rejectValue("directoramount", "error.notvalid.paymentform.directoramount");
+				}
+			}
+			
+			if("invoice".equals(paymentVo.getType()) && paymentVo.getPaymentmodegiro()){
+				if(paymentVo.getGiroamount() == null){
+					errors.rejectValue("giroamount", "error.notempty.paymentform.giroamount");
+				}else if(paymentVo.getGiroamount().compareTo(BigDecimal.ZERO) <= 0){
+					errors.rejectValue("giroamount", "error.notvalid.paymentform.giroamount");
 				}
 			}
 		}	

@@ -23,6 +23,7 @@
 				<input type = "hidden" name = "ids" value="${id}" />
 			</c:forEach>
 			<input type ="hidden" name = "totalamount" value="${totalamount}" />
+			<form:input path="type" type="hidden" id="type"/>
 			<input type ="hidden" name = "lastdate" value="${lastdate}" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="row">
@@ -95,6 +96,44 @@
 					</div>
 			  	</div>
 			</div>
+			<c:if test="${paymentForm.type ==  'expense'}">
+				<div class="row">
+				  	<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-4">
+							<div class="checkbox">
+						  		<label><form:checkbox path="paymentmodedirector" value="director" id="paymentmodedirector"/> Pay by Director</label>
+						     	<form:errors path="paymentmodedirector" class="text-danger" />
+							</div>
+						</div>
+						<label id="directorAmountLabel" class="col-sm-2 control-label" style="display:none">Amount</label>
+						<div id="directorAmountInput" class="col-sm-4" style="display:none">
+		                    <form:input path="directoramount" type="text" class="form-control" 
+	                  			  id="directoramount" placeholder=""/>
+	                  		<form:errors path="directoramount" class="text-danger" />
+						</div>
+				  	</div>
+				</div>
+			</c:if>
+			<c:if test="${paymentForm.type ==  'invoice'}">
+				<div class="row">
+				  	<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-4">
+							<div class="checkbox">
+						  		<label><form:checkbox path="paymentmodegiro" value="giro" id="paymentmodegiro"/> Giro</label>
+						     	<form:errors path="paymentmodegiro" class="text-danger" />
+							</div>
+						</div>
+						<label id="giroAmountLabel" class="col-sm-2 control-label" style="display:none">Amount</label>
+						<div id="giroAmountInput" class="col-sm-4" style="display:none">
+		                    <form:input path="giroamount" type="text" class="form-control" 
+	                  			  id="giroamount" placeholder=""/>
+	                  		<form:errors path="giroamount" class="text-danger" />
+						</div>
+				  	</div>
+				</div>
+			</c:if>
   		</form:form>
 		<!--/.FORM-->
 		</div>
@@ -130,9 +169,20 @@
 		  $('#paymentmodecheque').change(function(event) {
 			  loadPaymentCheque();
 		    });	
+
+		  $('#paymentmodedirector').change(function(event) {
+			  loadPaymentDirector();
+		    });	
+
+		  $('#paymentmodegiro').change(function(event) {
+			  loadPaymentGiro();
+		    });	
 		  loadPaymentCash();
 		  loadPaymentCheque();
+		  loadPaymentDirector();
+		  loadPaymentGiro();
 	 } );
+ 	 
 
   	 function loadPaymentCash(){
 		if($("#paymentmodecash").prop('checked') != true) {
@@ -160,6 +210,27 @@
 		}
   	 }
 
+  	function loadPaymentDirector(){
+		if($("#paymentmodedirector").prop('checked') != true) {
+	      	$("#directorAmountLabel").css("display","none");
+	      	$("#directorAmountInput").css("display","none");
+	      	$("#directoramount").val("");
+		}else{
+		   	$("#directorAmountLabel").css("display","");
+		   	$("#directorAmountInput").css("display","");
+		}
+  	 }
+
+  	function loadPaymentGiro(){
+		if($("#paymentmodegiro").prop('checked') != true) {
+	      	$("#giroAmountLabel").css("display","none");
+	      	$("#giroAmountInput").css("display","none");
+	      	$("#giroamount").val("");
+		}else{
+		   	$("#giroAmountLabel").css("display","");
+		   	$("#giroAmountInput").css("display","");
+		}
+  	 }
       
 
     </script>
