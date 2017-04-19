@@ -58,6 +58,12 @@
 							</div>	
 							<div class="row">
 						  		<div class="form-group">
+								    <div class="col-sm-2">Expense Payment Status</div>
+								    <div class="col-sm-5">${expense.status}</div>
+								</div>
+							</div>	
+							<div class="row">
+						  		<div class="form-group">
 								    <div class="col-sm-2">Remarks</div>
 								    <div class="col-sm-5">${expense.remarks}</div>
 								</div>

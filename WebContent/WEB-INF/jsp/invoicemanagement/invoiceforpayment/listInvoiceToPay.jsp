@@ -17,8 +17,10 @@
 				  		<div class="form-group">
 							<c:if test="${invoiceList[0].type == 'invoice'}"><div class="col-sm-2">Invoice Id</div></c:if>
 							<div class="col-sm-4">Messenger</div>
-							<div class="col-sm-2">Invoice Amount</div>
-							<div class="col-sm-2">Invoice Date</div>
+							<c:if test="${invoiceList[0].type == 'invoice'}"><div class="col-sm-2">Invoice Amount</div></c:if>
+							<c:if test="${invoiceList[0].type == 'grant'}"><div class="col-sm-2">Grant Amount</div></c:if>
+							<c:if test="${invoiceList[0].type == 'invoice'}"><div class="col-sm-2">Invoice Date</div></c:if>
+							<c:if test="${invoiceList[0].type == 'grant'}"><div class="col-sm-2">Grant Date</div></c:if>
 							<div class="col-sm-2">Status</div>
 						</div>
 					</div>
@@ -37,7 +39,8 @@
 					<hr>
 					<div class="row">
 				  		<div class="form-group">
-							<div class="col-sm-4">Total Amount to be Paid:</div>
+							<c:if test="${invoiceList[0].type == 'invoice'}"><div class="col-sm-6">Total Amount to be Paid:</div></c:if>
+							<c:if test="${invoiceList[0].type == 'grant'}"><div class="col-sm-4">Total Amount to be Paid:</div></c:if>
 							<div class="col-sm-6">${totalamount}</div>
 						</div>
 					</div>		

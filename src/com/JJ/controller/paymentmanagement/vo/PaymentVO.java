@@ -18,6 +18,11 @@ public class PaymentVO implements Serializable {
 	private BigDecimal chequeamount;
 	private Date chequedate;
 	private String chequedateString;
+	private Boolean paymentmodedirector;
+	private BigDecimal directoramount;
+	private Boolean paymentmodegiro;
+	private BigDecimal giroamount;
+	private String type;
 	
 	public String getReferenceType() {
 		return referenceType;
@@ -101,12 +106,54 @@ public class PaymentVO implements Serializable {
 		this.chequedateString = chequedateString;
 	}
 	
+	public Boolean getPaymentmodedirector() {
+		return paymentmodedirector;
+	}
+
+	public void setPaymentmodedirector(Boolean paymentmodedirector) {
+		this.paymentmodedirector = paymentmodedirector;
+	}
+
+	public BigDecimal getDirectoramount() {
+		return directoramount;
+	}
+
+	public void setDirectoramount(BigDecimal directoramount) {
+		this.directoramount = directoramount;
+	}
+
+	public Boolean getPaymentmodegiro() {
+		return paymentmodegiro;
+	}
+
+	public void setPaymentmodegiro(Boolean paymentmodegiro) {
+		this.paymentmodegiro = paymentmodegiro;
+	}
+
+	public BigDecimal getGiroamount() {
+		return giroamount;
+	}
+
+	public void setGiroamount(BigDecimal giroamount) {
+		this.giroamount = giroamount;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
-		return "PaymentVo [referenceType=" + referenceType + ", paymentDate=" + paymentDate + ", paymentdateString="
+		return "PaymentVO [referenceType=" + referenceType + ", paymentDate=" + paymentDate + ", paymentdateString="
 				+ paymentdateString + ", paymentmodecash=" + paymentmodecash + ", cashamount=" + cashamount
-				+ ", paymentmodecheque=" + paymentmodecheque + ", chequeno=" + chequeno + ", chequeamount="
-				+ chequeamount + ", chequedate=" + chequedate + ", chequedateString=" + chequedateString + "]";
+				+ ", paymentmodecheque=" + paymentmodecheque + ", chequeId=" + chequeId + ", chequeno=" + chequeno
+				+ ", chequeamount=" + chequeamount + ", chequedate=" + chequedate + ", chequedateString="
+				+ chequedateString + ", paymentmodedirector=" + paymentmodedirector + ", directoramount="
+				+ directoramount + ", paymentmodegiro=" + paymentmodegiro + ", giroamount=" + giroamount + "]";
 	}
-	
+
 }
