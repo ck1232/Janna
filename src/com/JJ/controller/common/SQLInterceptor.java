@@ -42,15 +42,17 @@ public class SQLInterceptor implements Interceptor {
 						base.setDeleteInd(GeneralUtils.NOT_DELETED);
 					}
 					Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+					if(base.getVersion() == null){
+						base.setVersion(1);
+					}else{
+						base.setVersion(base.getVersion()+1);
+					}
+					base.setUpdatedOn(new Date());
 					if(principal instanceof UserDetails){
 						UserDetails user = (UserDetails)principal;
-						base.setUpdatedOn(new Date());
 						base.setUpdatedBy(user.getUsername());
-						if(base.getVersion() == null){
-							base.setVersion(1);
-						}else{
-							base.setVersion(base.getVersion()+1);
-						}
+					}else{
+						base.setUpdatedBy("SYSTEM");
 					}
 				}
 			}else if(mappedStatement.getSqlCommandType().equals(SqlCommandType.INSERT)){
@@ -60,13 +62,16 @@ public class SQLInterceptor implements Interceptor {
 						base.setDeleteInd(GeneralUtils.NOT_DELETED);
 					}
 					Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+					base.setVersion(1);
+					base.setCreatedOn(new Date());
+					base.setUpdatedOn(new Date());
 					if(principal instanceof UserDetails){
 						UserDetails user = (UserDetails)principal;
-						base.setUpdatedOn(new Date());
 						base.setUpdatedBy(user.getUsername());
 						base.setCreatedBy(user.getUsername());
-						base.setCreatedOn(new Date());
-						base.setVersion(1);
+					}else{
+						base.setUpdatedBy("SYSTEM");
+						base.setCreatedBy("SYSTEM");
 					}
 				}
 			}
