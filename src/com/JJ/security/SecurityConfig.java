@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authoritiesByUsernameQuery(
 			"select u.user_name, r.name from user_role ur join user u on u.user_id = ur.user_id join role r on ur.role_id= r.role_id where u.user_name=?");
 //        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
-        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
 //        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");//dba have two roles.
     }
 	

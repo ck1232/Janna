@@ -107,24 +107,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.JJ.model.InvoiceDbObject">
-    <selectKey keyProperty="invoiceId" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into invoice (messenger, invoice_date, total_amt, 
-      status, version, created_by, 
-      created_on, updated_by, updated_on, 
-      delete_ind)
-    values (#{messenger,jdbcType=VARCHAR}, #{invoiceDate,jdbcType=DATE}, #{totalAmt,jdbcType=DECIMAL}, 
-      #{status,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
-      #{createdOn,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, 
-      #{deleteInd,jdbcType=CHAR})
+    insert into invoice (invoice_id, messenger, invoice_date, 
+      total_amt, status, version, 
+      created_by, created_on, updated_by, 
+      updated_on, delete_ind)
+    values (#{invoiceId,jdbcType=INTEGER}, #{messenger,jdbcType=VARCHAR}, #{invoiceDate,jdbcType=DATE}, 
+      #{totalAmt,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.JJ.model.InvoiceDbObject">
-    <selectKey keyProperty="invoiceId" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into invoice
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="invoiceId != null">
+        invoice_id,
+      </if>
       <if test="messenger != null">
         messenger,
       </if>
@@ -157,6 +154,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="invoiceId != null">
+        #{invoiceId,jdbcType=INTEGER},
+      </if>
       <if test="messenger != null">
         #{messenger,jdbcType=VARCHAR},
       </if>
