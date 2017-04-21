@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +31,7 @@ import com.JJ.model.InvoiceDbObjectExample;
 @Scope("prototype")
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class InvoiceManagementService {
-	
+	private static final Logger logger = Logger.getLogger(InvoiceManagementService.class);
 	private InvoiceDbObjectMapper invoiceDbObjectMapper;
 	private ExcelFileHelper excelFileHelper;
 	@Autowired
@@ -147,7 +148,10 @@ public class InvoiceManagementService {
 		InvoiceVO invoicedata;
 		int fileUploadCount = 0;
 		for(FileMetaVO file : invoice.getInvoiceList()) {
+			logger.debug("extract start");
 			invoicedata = excelFileHelper.readFromFile(file.getBytes());
+			logger.debug("extract end");
+			logger.debug("save start");
 			if(invoicedata != null){
 				invoicedata.setStatus(GeneralUtils.STATUS_PENDING);
 				InvoiceVO savedInvoice = getInvoiceById(invoicedata.getInvoiceId());
@@ -160,6 +164,7 @@ public class InvoiceManagementService {
 				}
 			}
 		}
+		logger.debug("save end");
 		return fileUploadCount;
 	}
 	
