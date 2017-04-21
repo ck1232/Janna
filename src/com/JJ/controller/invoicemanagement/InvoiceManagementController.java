@@ -302,11 +302,20 @@ public class InvoiceManagementController {
 			return "redirect:listInvoice";
 		}
 		for (String id : ids) {
-			invoiceManagementService.deleteInvoice(new Integer(id));
-			logger.debug("deleted "+ id);
+			String[] splitId = id.split("-");
+			if(splitId[0] != null && splitId[1] != null){
+				if(splitId[1].toLowerCase().equals("invoice")) {
+					invoiceManagementService.deleteInvoice(new Integer(splitId[0]));
+					logger.debug("deleted invoice: "+ id);
+				}else if(splitId[1].toLowerCase().equals("grant")) {
+					grantManagementService.deleteGrant(new Integer(splitId[0]));
+					logger.debug("deleted grant: "+ id);
+				}
+			}
+			
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
-		redirectAttributes.addFlashAttribute("msg", "Invoice(s) deleted successfully!");
+		redirectAttributes.addFlashAttribute("msg", "Invoice/Grant(s) deleted successfully!");
 		return "redirect:listInvoice";
 	}
 	
