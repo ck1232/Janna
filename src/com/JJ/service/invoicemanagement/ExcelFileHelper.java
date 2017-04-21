@@ -31,12 +31,15 @@ public class ExcelFileHelper {
 		
 		try {
             is = new ByteArrayInputStream(file);
+//            logger.debug("input stream done");
             Workbook workbook = WorkbookFactory.create(is);
+//            logger.debug("open workbook");
             Sheet sheet = workbook.getSheet("Sheet1");
-
+//            logger.debug("open sheet");
             
             /* Getting Messenger */
             int[] messengerIndex = findIndex(sheet, "Messrs");
+//            logger.debug("find");
             int messengerContent = getLastCell(sheet, messengerIndex);
             Cell messenger = sheet.getRow(messengerIndex[0]).getCell(messengerContent+1);
             String cellvalue = messenger.getRichStringCellValue().getString();
@@ -53,7 +56,7 @@ public class ExcelFileHelper {
             cellvalue = invoiceId.getRichStringCellValue().getString();
             int i = 0;
             while (i < cellvalue.length() && !Character.isDigit(cellvalue.charAt(i))) i++;
-            logger.info("index: " + i);
+//            logger.info("index: " + i);
             if(i < cellvalue.length()) {
             	logger.info(cellvalue.substring(i, cellvalue.length()));
             	invoice.setInvoiceId(Integer.valueOf(cellvalue.substring(i, cellvalue.length())));
@@ -89,6 +92,7 @@ public class ExcelFileHelper {
             invoice.setTotalAmt(BigDecimal.valueOf(cellnumvalue));
             return invoice;
         } catch (Exception e) {
+        	logger.debug("error :", e);
             e.printStackTrace();
         } finally {
             try{
@@ -100,11 +104,12 @@ public class ExcelFileHelper {
 		return null;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private static int[] findIndex(Sheet sheet, String cellContent) {
+//		logger.debug("into find index");
 		int[] index = new int[2];
 	    for (Row row : sheet) {
 	        for (Cell cell : row) {
+//	        	logger.debug("loop "+ cell);
 	            if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 	            	String cellvalue = cell.getRichStringCellValue().getString();
 	                if (cellvalue.trim().equals(cellContent)) {
@@ -118,7 +123,6 @@ public class ExcelFileHelper {
 	    return index;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private static int[] findIndexWithPattern(Sheet sheet, String pattern) {
 		int[] index = new int[2];
 	    for (Row row : sheet) {

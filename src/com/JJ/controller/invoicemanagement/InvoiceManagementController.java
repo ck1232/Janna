@@ -2,6 +2,7 @@ package com.JJ.controller.invoicemanagement;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +70,7 @@ public class InvoiceManagementController {
 	private InvoiceSearchValidator invoiceSearchValidator;
 	private GrantFormValidator grantFormValidator;
 
-	
+	private static final String uploadPassword = "uploadExcelFile1232";
 	@Autowired
 	public InvoiceManagementController(PaymentManagementController paymentManagementController,
 			InvoiceManagementService invoiceManagementService,
@@ -282,15 +283,24 @@ public class InvoiceManagementController {
 	
 	@RequestMapping(value = "/uploadInvoice", method = RequestMethod.POST)
 	public String saveInvoice(final RedirectAttributes redirectAttributes,
-			@ModelAttribute("invoiceUploadVo") InvoiceUploadVO invoiceUploadVo) {
+			@ModelAttribute("invoiceUploadVo") InvoiceUploadVO invoiceUploadVo, Model model) {
 		if(invoiceUploadVo == null || invoiceUploadVo.getInvoiceList() == null || invoiceUploadVo.getInvoiceList().isEmpty()) {
 			redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Please upload at least one excel file!");
 		}else{
+			try{
+				int fileUploadCount = invoiceManagementService.saveInvoiceFromUploadFile(invoiceUploadVo);
+				logger.debug("upload done");
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", fileUploadCount + " invoice(s) added successfully!");
+			}catch(Exception ex){
+				logger.debug("error:",ex);
+				redirectAttributes.addFlashAttribute("css", "danger");
+				redirectAttributes.addFlashAttribute("msg", "Upload failed");
+			}
 			
-			int fileUploadCount = invoiceManagementService.saveInvoiceFromUploadFile(invoiceUploadVo);
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", fileUploadCount + " invoice(s) added successfully!");
+			model.addAttribute("invoiceUploadVo", new InvoiceUploadVO());
+			
 		}
 		return "redirect:listInvoice";
 	}
@@ -400,7 +410,41 @@ public class InvoiceManagementController {
         }
     }
 	
-	
+	@RequestMapping(value = "/saveExcelInvoice", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponseVO saveExcelInvoice(@RequestParam(value = "invoiceId") Integer invoiceId,
+			@RequestParam(value = "messenger") String messenger,
+			@RequestParam(value = "dateString") String invoiceDateString,
+			@RequestParam(value = "amt") BigDecimal totalAmt,
+			@RequestParam(value = "password", required = false) String password){
+		if(password.compareTo(uploadPassword) != 0){
+			return new JsonResponseVO("error uploading");
+		}
+		try{
+			Date invoiceDate = GeneralUtils.convertStringToDate(invoiceDateString, "dd/MM/yyyy");
+			InvoiceVO invoiceVO = new InvoiceVO();
+			invoiceVO.setInvoiceId(invoiceId);
+			invoiceVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+			invoiceVO.setInvoiceDate(invoiceDate);
+			invoiceVO.setMessenger(messenger);
+			invoiceVO.setTotalAmt(totalAmt);
+			
+			InvoiceVO savedInvoice = invoiceManagementService.getInvoiceById(invoiceVO.getInvoiceId());
+			if(invoiceVO.getInvoiceId() != null && savedInvoice == null) {
+				invoiceVO.setStatus(GeneralUtils.STATUS_PENDING);
+				invoiceManagementService.saveInvoice(invoiceVO);
+			}else if(invoiceVO.getInvoiceId() != null && savedInvoice != null){
+				if(savedInvoice.getStatus() != null &&
+						savedInvoice.getStatus().compareTo(InvoiceStatusEnum.PAID.getStatus()) == 0){
+					invoiceVO.setTotalAmt(savedInvoice.getTotalAmt());
+				}
+				invoiceVO.setStatus(savedInvoice.getStatus());
+				invoiceManagementService.updateInvoice(invoiceVO);
+			}
+		}catch(Exception ex){
+			return new JsonResponseVO("uploading failed");
+		}
+		return new JsonResponseVO("uploading success");
+	}
 	
 	
 	class FileCompare implements Comparator<FileMetaVO>{
