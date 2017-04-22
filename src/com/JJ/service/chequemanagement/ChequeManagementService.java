@@ -61,6 +61,13 @@ public class ChequeManagementService {
 		dbObj.setDeleteInd(GeneralUtils.DELETED);
 		chequeDbObjectMapper.updateByExampleSelective(dbObj, chequeDbObjectExample);
 	}
+	
+	public void updateCheque(ChequeVO chequeVO) {
+		if(chequeVO != null && chequeVO.getChequeId() != null){
+			ChequeDbObject dbObj = convertToChequeDbObjectList(Arrays.asList(chequeVO)).get(0);
+			chequeDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+		}
+	}
 
 	private List<ChequeVO> convertToChequeVOList(List<ChequeDbObject> chequeDbObjectList) {
 		List<ChequeVO> chequeVOList = new ArrayList<ChequeVO>();
@@ -70,9 +77,11 @@ public class ChequeManagementService {
 				vo.setBounceChequeInd(dbObj.getBounceChequeInd());
 				vo.setChequeAmt(dbObj.getChequeAmt());
 				vo.setChequeDate(dbObj.getChequeDate());
+				vo.setChequeDateString(GeneralUtils.convertDateToString(dbObj.getChequeDate(), "dd/MM/yyyy"));
 				vo.setChequeId(dbObj.getChequeId());
 				vo.setChequeNum(dbObj.getChequeNum());
 				vo.setDebitDate(dbObj.getDebitDate());
+				vo.setDebitDateString(GeneralUtils.convertDateToString(dbObj.getDebitDate(), "dd/MM/yyyy"));
 				vo.setRemarks(dbObj.getRemarks());
 				chequeVOList.add(vo);
 			}
@@ -87,7 +96,7 @@ public class ChequeManagementService {
 				ChequeDbObject dbObj = new ChequeDbObject();
 				dbObj.setBounceChequeInd(vo.getBounceChequeInd());
 				dbObj.setChequeAmt(vo.getChequeAmt());
-				dbObj.setChequeDate(vo.getChequeDate());
+				dbObj.setChequeDate(GeneralUtils.convertStringToDate(vo.getChequeDateString(), "dd/MM/yyyy"));
 				dbObj.setChequeId(vo.getChequeId());
 				dbObj.setChequeNum(vo.getChequeNum());
 				dbObj.setDebitDate(vo.getDebitDate());

@@ -5,6 +5,9 @@
 <form id="viewChequeForm" method="post" action="<c:url value="/cheque/viewCheque" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+<form id="updateChequeForm" method="post" action="<c:url value="/cheque/updateCheque" />">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 
 <div class="margin">
 	<div class="btn-grp">

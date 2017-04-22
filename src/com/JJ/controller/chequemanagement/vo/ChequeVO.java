@@ -12,10 +12,14 @@ public class ChequeVO extends Base implements Serializable {
     private String chequeNum;
 
     private Date chequeDate;
+    
+    private String chequeDateString;
 
     private BigDecimal chequeAmt;
 
     private Date debitDate;
+    
+    private String debitDateString;
 
     private String remarks;
 
@@ -49,7 +53,15 @@ public class ChequeVO extends Base implements Serializable {
         this.chequeDate = chequeDate;
     }
 
-    public BigDecimal getChequeAmt() {
+    public String getChequeDateString() {
+		return chequeDateString;
+	}
+
+	public void setChequeDateString(String chequeDateString) {
+		this.chequeDateString = chequeDateString;
+	}
+
+	public BigDecimal getChequeAmt() {
         return chequeAmt;
     }
 
@@ -65,7 +77,15 @@ public class ChequeVO extends Base implements Serializable {
         this.debitDate = debitDate;
     }
 
-    public String getRemarks() {
+    public String getDebitDateString() {
+		return debitDateString;
+	}
+
+	public void setDebitDateString(String debitDateString) {
+		this.debitDateString = debitDateString;
+	}
+
+	public String getRemarks() {
         return remarks;
     }
 

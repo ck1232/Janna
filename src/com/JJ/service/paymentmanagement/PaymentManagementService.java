@@ -219,7 +219,7 @@ public class PaymentManagementService {
 		return paymentdetailList;
 	}
 	
-	public String getPaymentReferenceTypeByChequeId(String chequeId) {
+	public List<PaymentRsVO> getPaymentReferenceTypeByChequeId(String chequeId) {
 		PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
 		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andChequeIdEqualTo(chequeId);
 		List<PaymentDetailDbObject> paymentDetailDbList = paymentDetailDbObjectMapper.selectByExample(example);
@@ -228,12 +228,13 @@ public class PaymentManagementService {
 			for(PaymentDetailDbObject dbObj : paymentDetailDbList) {
 				List<PaymentRsVO> retrievedList = paymentRSManagementService.getAllPaymentByPaymentDetailId(dbObj.getPaymentDetailId());
 				if(retrievedList != null && !retrievedList.isEmpty()) {
-					return retrievedList.get(0).getReferenceType();
+					return retrievedList;
 				}
 			}
 		}		
 		return null;
 	}
+	
 	
 	public List<PaymentRsVO> getAllPaymentByChequeId(String chequeId) {
 		PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();

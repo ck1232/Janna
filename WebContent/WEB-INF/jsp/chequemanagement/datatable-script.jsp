@@ -28,6 +28,7 @@ $(function () {
           var rowId = data[0];
           $(row).find('input[type="checkbox"]').prop('value', data.chequeId);
           $(row).find('button[name="viewBtn"]').prop('value', data.chequeId);
+          $(row).find('button[name="editBtn"]').prop('value', data.chequeId);
        }
     });
 

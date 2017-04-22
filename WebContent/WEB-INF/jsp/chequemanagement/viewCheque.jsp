@@ -25,13 +25,13 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Cheque Amount</div>
-								    <div class="col-sm-5">${cheque.chequeAmt}</div>
+								    <div class="col-sm-5">$${cheque.chequeAmt}</div>
 								</div>
 							</div>			
 							<div class="row">
 						  		<div class="form-group">	  
 									<div class="col-sm-2">Cheque Date</div>
-									<div class="col-sm-5">${cheque.chequeDate}</div>
+									<div class="col-sm-5">${cheque.chequeDateString}</div>
 								</div>
 							</div>	
 							<div class="row">
@@ -61,98 +61,106 @@
     	<c:if test="${expenseList != null}">
 	    	<div class="box">
 				<div class="box-header with-border">
-	                  	<h3 class="box-title">All Paid Expense</h3>
-	                  </div>
-	            	<div class="box-body">
-	            		<div class="row">
-							<div class="col-sm-2">Expense Date</div>
-							<div class="col-sm-2">Expense Type</div>
-							<div class="col-sm-2">Description</div>
-							<div class="col-sm-2">Expense Amount</div>
-							<div class="col-sm-2">Supplier</div>
-							<div class="col-sm-2">Status</div>
-						</div>
-						<c:forEach items="${expenseList}" var="expense">
-							<div class="row">
-								<div class="col-sm-2">${expense.expensedateString}</div>
-							    <div class="col-sm-2">${expense.expensetype}</div>
-							    <div class="col-sm-2">${expense.description}</div>
-							    <div class="col-sm-2">${expense.totalAmt}</div>
-							    <div class="col-sm-2">${expense.supplier}</div>
-							    <div class="col-sm-2">${expense.status}</div>
-							</div>
+                  	<h3 class="box-title">All Paid Expense</h3>
+                  </div>
+            	<div class="box-body no-padding">
+            		<table class="table table-striped">
+            			<tr>
+	                		<th style="width: 16%">Expense Date</th>
+	                		<th style="width: 16%">Expense Type</th>
+	                  		<th style="width: 16%">Description</th>
+	                  		<th style="width: 16%">Expense Amount</th>
+	                  		<th style="width: 16%">Supplier</th>
+	                  		<th style="width: 16%">Status</th>
+	                	</tr>
+	                	<c:forEach items="${expenseList}" var="expense">
+							<tr>
+								<td>${expense.expensedateString}</td>
+							    <td>${expense.expensetype}</td>
+							    <td>${expense.description}</td>
+							    <td>${expense.totalAmt}</td>
+							    <td>${expense.supplier}</td>
+							    <td>${expense.status}</td>
+							</tr>
 						</c:forEach>
+            		</table>
 				</div>
 			</div>
 		</c:if>
 		<c:if test="${salaryList != null}">
 	    	<div class="box">
 				<div class="box-header with-border">
-	                  	<h3 class="box-title">All Paid Salary</h3>
-	                  </div>
-	            	<div class="box-body">
-	            		<div class="row">
-							<div class="col-sm-2">Salary Month</div>
-							<div class="col-sm-2">Employee Name</div>
-							<div class="col-sm-2">Salary Amount</div>
-							<div class="col-sm-2">Status</div>
-						</div>
-						<c:forEach items="${salaryList}" var="salary">
-							<div class="row">
-								<div class="col-sm-2">${salary.dateString}</div>
-							    <div class="col-sm-2">${salary.name}</div>
-							    <div class="col-sm-2">${salary.takehomeAmt}</div>
-							    <div class="col-sm-2">${salary.status}</div>
-							</div>
+                  	<h3 class="box-title">All Paid Salary</h3>
+                </div>
+                <div class="box-body no-padding">
+	           		<table class="table table-striped">
+	           			<tr>
+	                		<th style="width: 16%">Salary Month</th>
+	                		<th style="width: 16%">Employee Name</th>
+	                  		<th style="width: 16%">Salary Amount</th>
+	                  		<th style="width: 16%">Status</th>
+	                	</tr>
+	                	<c:forEach items="${salaryList}" var="salary">
+							<tr>
+								<td>${salary.dateString}</td>
+							    <td>${salary.name}</td>
+							    <td>${salary.takehomeAmt}</td>
+							    <td>${salary.status}</td>
+							</tr>
 						</c:forEach>
+	           		</table>
 				</div>
 			</div>
 		</c:if>
 		<c:if test="${bonusList != null}">
 	    	<div class="box">
 				<div class="box-header with-border">
-	                  	<h3 class="box-title">All Paid Bonus</h3>
-	                  </div>
-	            	<div class="box-body">
-	            		<div class="row">
-							<div class="col-sm-2">Bonus Year</div>
-							<div class="col-sm-2">Employee Name</div>
-							<div class="col-sm-2">Bonus Amount</div>
-							<div class="col-sm-2">Status</div>
-						</div>
-						<c:forEach items="${bonusList}" var="bonus">
-							<div class="row">
-								<div class="col-sm-2">${bonus.dateString}</div>
-							    <div class="col-sm-2">${bonus.name}</div>
-							    <div class="col-sm-2">${bonus.bonusAmt}</div>
-							    <div class="col-sm-2">${bonus.status}</div>
-							</div>
+                  	<h3 class="box-title">All Paid Bonus</h3>
+                </div>
+                <div class="box-body no-padding">
+	           		<table class="table table-striped">
+	           			<tr>
+	                		<th style="width: 16%">Bonus Month</th>
+	                		<th style="width: 16%">Employee Name</th>
+	                  		<th style="width: 16%">Bonus Amount</th>
+	                  		<th style="width: 16%">Status</th>
+	                	</tr>
+	                	<c:forEach items="${bonusList}" var="bonus">
+							<tr>
+								<td>${bonus.dateString}</td>
+							    <td>${bonus.name}</td>
+							    <td>${bonus.bonusAmt}</td>
+							    <td>${bonus.status}</td>
+							</tr>
 						</c:forEach>
-				</div>
+	           		</table>
+				</div> 
 			</div>
 		</c:if>
 		<c:if test="${invoiceList != null}">
 	    	<div class="box">
 				<div class="box-header with-border">
-	                  	<h3 class="box-title">All Paid invoice</h3>
-	                  </div>
-	            	<div class="box-body">
-	            		<div class="row">
-							<div class="col-sm-2">Invoice Id</div>
-							<div class="col-sm-4">Messenger</div>
-							<div class="col-sm-2">Total Price</div>
-							<div class="col-sm-2">Invoice Date</div>
-							<div class="col-sm-2">Status</div>
-						</div>
-						<c:forEach items="${invoiceList}" var="invoice">
-							<div class="row">
-								<div class="col-sm-2">${invoice.invoiceId}</div>
-							    <div class="col-sm-4">${invoice.messenger}</div>
-							    <div class="col-sm-2">${invoice.totalAmt}</div>
-							    <div class="col-sm-2">${invoice.invoiceDate}</div>
-							    <div class="col-sm-2">${invoice.status}</div>
-							</div>
+                  	<h3 class="box-title">All Paid invoice</h3>
+                </div>
+                <div class="box-body no-padding">
+	           		<table class="table table-striped">
+	           			<tr>
+	                		<th style="width: 16%">Invoice Id</th>
+	                		<th style="width: 33%">Messenger</th>
+	                  		<th style="width: 16%">Total Price</th>
+	                  		<th style="width: 16%">Invoice Date</th>
+	                  		<th style="width: 16%">Status</th>
+	                	</tr>
+	                	<c:forEach items="${invoiceList}" var="invoice">
+							<tr>
+								<td>${invoice.invoiceId}</td>
+							    <td>${invoice.messenger}</td>
+							    <td>${invoice.totalAmt}</td>
+							    <td>${invoice.invoicedateString}</td>
+							    <td>${salary.status}</td>
+							</tr>
 						</c:forEach>
+	           		</table>
 				</div>
 			</div>
 		</c:if>
