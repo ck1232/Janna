@@ -71,11 +71,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-	  http.csrf()//.ignoringAntMatchers("/product/product/saveNewProduct")
+	  http.csrf().ignoringAntMatchers("/invoice/saveExcelInvoice")
 	  	.and()
 	  	.authorizeRequests()
 	  	.accessDecisionManager(accessDecisionManager())
-//	  	.antMatchers("/login").anonymous()
+	  	.antMatchers("/invoice/saveExcelInvoice").anonymous()
 	  	.antMatchers("/").authenticated()
 	  	.antMatchers("/dashboard").fullyAuthenticated()
 		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
