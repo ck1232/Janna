@@ -4,6 +4,7 @@ var selectedModuleId = 0;
 var selectedModuleName = "";
 $(function () {
     table = $('#datatable1').DataTable({
+      "dom": '<"top"<f><ip>>rt<"bottom"ip><"clear">',
       "paging": true,
       "pageLength": 30,
       "responsive" : true,

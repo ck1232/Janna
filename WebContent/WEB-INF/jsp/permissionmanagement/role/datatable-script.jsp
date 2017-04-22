@@ -5,6 +5,7 @@ $(function () {
 	var rows_selected = [];
 	var selectedRoleId = 0;
     $('#datatable1').DataTable({
+      "dom": '<"top"<f><ip>>rt<"bottom"ip><"clear">',
       "paging": true,
       "pageLength": 30,
       "responsive" : true,
