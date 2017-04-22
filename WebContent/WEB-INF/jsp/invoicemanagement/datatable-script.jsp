@@ -10,7 +10,7 @@ $(function () {
       "searching": true,
       "ordering": true,
       "info": true,
-      "autoWidth": false,
+      "autoWidth": true,
       "sScrollX": "100%",
       "sScrollXInner": "110%",
       "ajax":{

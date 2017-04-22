@@ -54,3 +54,13 @@ tr.shown td.details-control {
 .selectionCheckbox{
 	position: absolute; top: 0px; left: 0px;
 }
+
+.outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    display: inline-block;
+}
