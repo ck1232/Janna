@@ -84,7 +84,9 @@ public class ChequeManagementController {
 		for(ChequeVO vo : chequeList) {
 			if(null != vo.getChequeId()) {
 				List<PaymentRsVO> paymentRsList = paymentManagementService.getPaymentReferenceTypeByChequeId(String.valueOf(vo.getChequeId()));
-				vo.setPaidFor(paymentRsList.get(0).getReferenceType());
+				if(paymentRsList != null && paymentRsList.size() > 0){
+					vo.setPaidFor(paymentRsList.get(0).getReferenceType());
+				}
 			}
 		}
 		return GeneralUtils.convertListToJSONString(chequeList);
