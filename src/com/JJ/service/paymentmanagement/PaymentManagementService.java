@@ -164,6 +164,8 @@ public class PaymentManagementService {
 		}
 	}
 	
+	
+	
 	public PaymentDetailVO savePaymentDetail(PaymentDetailVO paymentDetailVO) {
 		if(paymentDetailVO != null){
 			PaymentDetailDbObject dbObj = convertToPaymentDetailDbObjectList(Arrays.asList(paymentDetailVO)).get(0);
@@ -171,6 +173,35 @@ public class PaymentManagementService {
 			return convertToPaymentDetailVOList(Arrays.asList(dbObj)).get(0);
 		}
 		return new PaymentDetailVO();
+	}
+	
+	public void saveBounceCheque(PaymentVO paymentVo, List<Integer> bouncechequeidList, List<PaymentRsVO> paymentRsList){
+		chequeManagementService.bounceCheque(bouncechequeidList, paymentVo.getBounceDate());
+		
+		if(paymentRsList != null && !paymentRsList.isEmpty()) {
+			List<Integer> idList = new ArrayList<Integer>();
+			for(PaymentRsVO vo : paymentRsList) {
+				if(vo.getReferenceId() != null)
+					idList.add(vo.getReferenceId());
+			}
+			switch(paymentVo.getReferenceType()) {
+				case "expense":
+					saveExpensePayment(paymentVo, idList);
+					break;
+				case "grant":
+					saveGrantPayment(paymentVo, idList);
+					break;
+				case "invoice":
+					saveInvoicePayment(paymentVo, idList);
+					break;
+				case "salary":
+					saveSalaryPayment(paymentVo, idList);
+					break;
+				case "bonus":
+					saveBonusPayment(paymentVo, idList);
+					break;
+			}
+		}
 	}
 	
 	
@@ -337,6 +368,8 @@ public class PaymentManagementService {
 					ChequeVO chequeVO = chequeManagementService.findById(Integer.valueOf(dbObj.getChequeId()));
 					if(chequeVO != null){
 						vo.setBounceChequeInd(chequeVO.getBounceChequeInd());
+						vo.setBounceDate(chequeVO.getBounceDate());
+						vo.setBounceDateString(chequeVO.getBounceDateString());
 						vo.setChequeId(Integer.toString(chequeVO.getChequeId()));
 						vo.setChequeNum(chequeVO.getChequeNum());
 					}

@@ -23,12 +23,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.JJ.controller.chequemanagement.vo.ChequeVO;
 import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
+import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
+import com.JJ.service.chequemanagement.ChequeManagementService;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.grantmanagement.GrantManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
@@ -49,6 +52,7 @@ public class PaymentManagementController {
 	private InvoiceManagementService invoiceManagementService;
 	private GrantManagementService grantManagementService;
 	private SalaryBonusManagementService salaryBonusManagementService;
+	private ChequeManagementService chequeManagementService;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentFormValidator paymentFormValidator;
 	
@@ -58,6 +62,7 @@ public class PaymentManagementController {
 			InvoiceManagementService invoiceManagementService,
 			GrantManagementService grantManagementService,
 			SalaryBonusManagementService salaryBonusManagementService,
+			ChequeManagementService chequeManagementService,
 			ExpenseTypeLookup expenseTypeLookup,
 			PaymentFormValidator paymentFormValidator) {
 		this.paymentManagementService = paymentManagementService;
@@ -65,6 +70,7 @@ public class PaymentManagementController {
 		this.invoiceManagementService = invoiceManagementService;
 		this.grantManagementService = grantManagementService;
 		this.salaryBonusManagementService = salaryBonusManagementService;
+		this.chequeManagementService = chequeManagementService;
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.paymentFormValidator = paymentFormValidator;
 	}
@@ -542,4 +548,113 @@ public class PaymentManagementController {
 	
 	/* Salary Payment End */
 
+	/* Bounce Cheque Payment Start */
+/*	@RequestMapping(value = "/bounceCheque", method = RequestMethod.POST)
+	public String getChequeToBounce(@RequestParam("bounceBtn") String id, Model model,
+			final RedirectAttributes redirectAttributes) {
+		ChequeVO chequeVo = chequeManagementService.findById(new Integer(id));
+		logger.debug("Loading bounce cheque page for " + chequeVo.toString());
+		return paymentManagementController.createPayBounceCheque(Integer.parseInt(id), redirectAttributes, model);
+	}*/
+	
+	@RequestMapping(value = "/createPayBounceCheque", method = RequestMethod.POST)
+	public String createPayBounceCheque(@RequestParam(value = "bounceBtn", required=false) String id, 
+			RedirectAttributes redirectAttributes, Model model) {
+		ChequeVO chequeVo = chequeManagementService.findById(Integer.parseInt(id));
+		BigDecimal totalamount = chequeVo.getChequeAmt();
+		List<Integer> idList = new ArrayList<Integer>();
+		idList.add(Integer.parseInt(id));
+		PaymentVO paymentvo = new PaymentVO();
+		paymentvo.setType(paymentManagementService.getPaymentReferenceTypeByChequeId(String.valueOf(chequeVo.getChequeId())).get(0).getReferenceType());
+		model.addAttribute("paymentForm", paymentvo);
+		model.addAttribute("bounced", "true");
+		model.addAttribute("cheque", chequeVo);
+		model.addAttribute("idList", idList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", chequeVo.getChequeDateString());
+		model.addAttribute("posturl", "/JJ/payment/createBounceChequePayment");
+		return "createPayBounceCheque";
+	}  
+	
+	
+	@RequestMapping(value = "/createBounceChequePayment", method = RequestMethod.POST)
+    public String saveBounceChequePayment(
+    		@RequestParam(value = "referenceIds", required=false) List<Integer> chequeIdList,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		logger.debug("saveBounceChequePayment() : " + paymentVo.toString());
+		List<ChequeVO> chequeVoList = chequeManagementService.getAllChequeByIdList(chequeIdList);
+		if(chequeVoList == null || chequeVoList.isEmpty()) {
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Invalid bounce cheque selected!");
+			return "redirect:/cheque/listCheque";
+		}
+		
+		if (!result.hasErrors()) {
+			if(!validateInputAmount(totalamount, paymentVo)){
+				result.rejectValue("cashamount", "error.notequal.paymentform.chequetotalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.chequetotalamount");
+				if(paymentVo.getType().equals("invoice"))
+					result.rejectValue("giroamount", "error.notequal.paymentform.chequetotalamount");
+				else if(paymentVo.getType().equals("expense"))
+					result.rejectValue("directoramount", "error.notequal.paymentform.chequetotalamount");
+			}
+			
+			try{
+				if(paymentVo.getBouncedateString() != null && !paymentVo.getBouncedateString().isEmpty() 
+						&& paymentVo.getBouncedateString().length() <= 10){
+					Date bounceChequeDate = new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getBouncedateString());
+					paymentVo.setBounceDate(bounceChequeDate);
+					if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getBouncedateString())){
+						result.rejectValue("bouncedateString", "error.paymentform.bouncedate.before.chequedate");
+					}
+				}else{
+					result.rejectValue("bouncedateString", "error.notvalid.paymentform.bouncedate");
+				}
+				
+			}catch(Exception ex){
+				result.rejectValue("bouncedateString", "error.notvalid.paymentform.bouncedate");
+			}
+			
+			if(paymentVo.getBounceDate() != null && !validateInputDate(paymentVo.getBouncedateString(), "dd/MM/yyyy", paymentVo.getPaymentdateString())){
+				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.chequebounceddate");
+			}
+			
+			if(paymentVo.getBounceDate() != null && 
+					paymentVo.getPaymentmodecheque() && !validateInputDate(paymentVo.getBouncedateString(), "dd/MM/yyyy", paymentVo.getChequedateString())){
+				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.chequebounceddate");
+			}
+			
+			if(!result.hasErrors()){
+				paymentVo.setReferenceType(paymentVo.getType());
+				try{ 
+					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					if(paymentVo.getPaymentmodecheque())
+						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+				}catch(Exception e) {
+					logger.info("Error parsing date string");
+				}
+				List<PaymentRsVO> paymentRsList = paymentManagementService.getPaymentReferenceTypeByChequeId(String.valueOf(chequeIdList.get(0)));
+				paymentManagementService.saveBounceCheque(paymentVo, chequeIdList, paymentRsList);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Cheque bounced successfully!");
+		        return "redirect:/cheque/listCheque";  
+			}
+		}
+		ChequeVO vo = chequeVoList.get(0);
+//		PaymentVO paymentvo = new PaymentVO();
+//		paymentvo.setType(paymentManagementService.getPaymentReferenceTypeByChequeId(String.valueOf(vo.getChequeId())).get(0).getReferenceType());
+		model.addAttribute("paymentForm", paymentVo);
+//		model.addAttribute("bounceBtn", vo.getChequeId());
+		model.addAttribute("bounced", "true");
+		model.addAttribute("cheque", vo);
+		model.addAttribute("idList", chequeIdList);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", vo.getChequeDateString());
+		model.addAttribute("posturl", "/JJ/payment/createBounceChequePayment");
+		return "createPayBounceCheque";
+    }
+	/* Bounce Cheque Payment End */
 }

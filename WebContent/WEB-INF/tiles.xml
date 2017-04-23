@@ -1697,6 +1697,23 @@
         	</definition>
         </put-attribute>
     </definition>
+    
+     <definition name="createPayBounceCheque" extends="main_template">  
+        <put-attribute name="title" value="Bounce Cheque Payment" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="Bounce Cheque Payment" />
+        		<put-attribute name="heading-description" value="To pay bounce cheque." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/paymentmanagement/createPayment.jsp">
+        				<put-attribute name="billtable" value="/WEB-INF/jsp/chequemanagement/chequeforpayment/listChequeToPay.jsp" />
+        				<put-attribute name="paymentoption" value="/WEB-INF/jsp/chequemanagement/chequeforpayment/paymentoption.jsp" />
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
     <!-- Cheque Module END -->
     
     <!-- Report Module END -->

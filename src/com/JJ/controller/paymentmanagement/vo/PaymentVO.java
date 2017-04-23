@@ -8,6 +8,8 @@ public class PaymentVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String referenceType;
+	private Date bounceDate;
+	private String bouncedateString;
 	private Date paymentDate;
 	private String paymentdateString;
 	private Boolean paymentmodecash;
@@ -30,6 +32,22 @@ public class PaymentVO implements Serializable {
 
 	public void setReferenceType(String referenceType) {
 		this.referenceType = referenceType;
+	}
+
+	public Date getBounceDate() {
+		return bounceDate;
+	}
+
+	public void setBounceDate(Date bounceDate) {
+		this.bounceDate = bounceDate;
+	}
+
+	public String getBouncedateString() {
+		return bouncedateString;
+	}
+
+	public void setBouncedateString(String bouncedateString) {
+		this.bouncedateString = bouncedateString;
 	}
 
 	public Date getPaymentDate() {

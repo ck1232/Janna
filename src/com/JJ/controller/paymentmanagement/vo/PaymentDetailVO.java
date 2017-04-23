@@ -26,6 +26,10 @@ public class PaymentDetailVO extends Base implements Serializable {
     
     private String bounceChequeInd;
     
+    private Date bounceDate;
+    
+    private String bounceDateString;
+    
     private static final long serialVersionUID = 1L;
 
     public Integer getPaymentDetailId() {
@@ -100,7 +104,23 @@ public class PaymentDetailVO extends Base implements Serializable {
 		this.bounceChequeInd = bounceChequeInd == null ? null : bounceChequeInd.trim();
 	}
 
-    @Override
+    public Date getBounceDate() {
+		return bounceDate;
+	}
+
+	public void setBounceDate(Date bounceDate) {
+		this.bounceDate = bounceDate;
+	}
+
+	public String getBounceDateString() {
+		return bounceDateString;
+	}
+
+	public void setBounceDateString(String bounceDateString) {
+		this.bounceDateString = bounceDateString;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());

@@ -9,6 +9,7 @@
     <result column="debit_date" jdbcType="DATE" property="debitDate" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="bounce_cheque_ind" jdbcType="CHAR" property="bounceChequeInd" />
+    <result column="bounce_date" jdbcType="DATE" property="bounceDate" />
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
     <result column="created_on" jdbcType="TIMESTAMP" property="createdOn" />
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List">
     cheque_id, cheque_num, cheque_date, cheque_amt, debit_date, remarks, bounce_cheque_ind, 
-    version, created_by, created_on, updated_by, updated_on, delete_ind
+    bounce_date, version, created_by, created_on, updated_by, updated_on, delete_ind
   </sql>
   <select id="selectByExample" parameterType="com.JJ.model.ChequeDbObjectExample" resultMap="BaseResultMap">
     select
@@ -114,14 +115,14 @@
     </selectKey>
     insert into cheque (cheque_num, cheque_date, cheque_amt, 
       debit_date, remarks, bounce_cheque_ind, 
-      version, created_by, created_on, 
-      updated_by, updated_on, delete_ind
-      )
+      bounce_date, version, created_by, 
+      created_on, updated_by, updated_on, 
+      delete_ind)
     values (#{chequeNum,jdbcType=VARCHAR}, #{chequeDate,jdbcType=DATE}, #{chequeAmt,jdbcType=DECIMAL}, 
       #{debitDate,jdbcType=DATE}, #{remarks,jdbcType=VARCHAR}, #{bounceChequeInd,jdbcType=CHAR}, 
-      #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, 
-      #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR}
-      )
+      #{bounceDate,jdbcType=DATE}, #{version,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdOn,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedOn,jdbcType=TIMESTAMP}, 
+      #{deleteInd,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.JJ.model.ChequeDbObject">
     <selectKey keyProperty="chequeId" order="AFTER" resultType="java.lang.Integer">
@@ -146,6 +147,9 @@
       </if>
       <if test="bounceChequeInd != null">
         bounce_cheque_ind,
+      </if>
+      <if test="bounceDate != null">
+        bounce_date,
       </if>
       <if test="version != null">
         version,
@@ -184,6 +188,9 @@
       </if>
       <if test="bounceChequeInd != null">
         #{bounceChequeInd,jdbcType=CHAR},
+      </if>
+      <if test="bounceDate != null">
+        #{bounceDate,jdbcType=DATE},
       </if>
       <if test="version != null">
         #{version,jdbcType=INTEGER},
@@ -235,6 +242,9 @@
       <if test="record.bounceChequeInd != null">
         bounce_cheque_ind = #{record.bounceChequeInd,jdbcType=CHAR},
       </if>
+      <if test="record.bounceDate != null">
+        bounce_date = #{record.bounceDate,jdbcType=DATE},
+      </if>
       <if test="record.version != null">
         version = #{record.version,jdbcType=INTEGER},
       </if>
@@ -267,6 +277,7 @@
       debit_date = #{record.debitDate,jdbcType=DATE},
       remarks = #{record.remarks,jdbcType=VARCHAR},
       bounce_cheque_ind = #{record.bounceChequeInd,jdbcType=CHAR},
+      bounce_date = #{record.bounceDate,jdbcType=DATE},
       version = #{record.version,jdbcType=INTEGER},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
       created_on = #{record.createdOn,jdbcType=TIMESTAMP},
@@ -298,6 +309,9 @@
       <if test="bounceChequeInd != null">
         bounce_cheque_ind = #{bounceChequeInd,jdbcType=CHAR},
       </if>
+      <if test="bounceDate != null">
+        bounce_date = #{bounceDate,jdbcType=DATE},
+      </if>
       <if test="version != null">
         version = #{version,jdbcType=INTEGER},
       </if>
@@ -327,6 +341,7 @@
       debit_date = #{debitDate,jdbcType=DATE},
       remarks = #{remarks,jdbcType=VARCHAR},
       bounce_cheque_ind = #{bounceChequeInd,jdbcType=CHAR},
+      bounce_date = #{bounceDate,jdbcType=DATE},
       version = #{version,jdbcType=INTEGER},
       created_by = #{createdBy,jdbcType=VARCHAR},
       created_on = #{createdOn,jdbcType=TIMESTAMP},

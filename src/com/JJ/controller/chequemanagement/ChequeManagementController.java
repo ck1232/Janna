@@ -159,7 +159,7 @@ public class ChequeManagementController {
 	}
 	
 	@RequestMapping(value = "/updateCheque", method = RequestMethod.POST)
-	public String getCheqeToUpdate(@RequestParam("editBtn") String id, Model model) {
+	public String getChequeToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
 		ChequeVO chequeVo = chequeManagementService.findById(new Integer(id));
 		logger.debug("Loading update cheque page for " + chequeVo.toString());
@@ -233,5 +233,5 @@ public class ChequeManagementController {
 		}
 		return firstdate;
 	}
-
+	
 }

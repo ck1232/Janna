@@ -2,6 +2,7 @@ package com.JJ.service.chequemanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +44,27 @@ public class ChequeManagementService {
 		return convertToChequeVOList(chequeDbObjectMapper.selectByExample(chequeDbObjectExample));
 	}
 	
+	public List<ChequeVO> getAllChequeByIdList(List<Integer> idList) {
+		ChequeDbObjectExample chequeDbObjectExample = new ChequeDbObjectExample();
+		chequeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andChequeIdIn(idList);
+		chequeDbObjectExample.setOrderByClause("cheque_date desc");
+		return convertToChequeVOList(chequeDbObjectMapper.selectByExample(chequeDbObjectExample));
+	}
+	
 	public void saveCheque(ChequeVO chequeVO) {
 		if(chequeVO != null){
 			ChequeDbObject dbObj = convertToChequeDbObjectList(Arrays.asList(chequeVO)).get(0);
 			chequeDbObjectMapper.insert(dbObj);
 		}
+	}
+	
+	public void bounceCheque(List<Integer> idList, Date bounceDate) {
+		ChequeDbObjectExample chequeDbObjectExample = new ChequeDbObjectExample();
+		chequeDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andChequeIdIn(idList);
+		ChequeDbObject dbObj = new ChequeDbObject();
+		dbObj.setBounceChequeInd(GeneralUtils.YES_IND);
+		dbObj.setBounceDate(bounceDate);
+		chequeDbObjectMapper.updateByExampleSelective(dbObj, chequeDbObjectExample);
 	}
 	
 	public void deleteCheque(Integer id) {
@@ -75,6 +92,8 @@ public class ChequeManagementService {
 			for(ChequeDbObject dbObj : chequeDbObjectList) {
 				ChequeVO vo = new ChequeVO();
 				vo.setBounceChequeInd(dbObj.getBounceChequeInd());
+				vo.setBounceDate(dbObj.getBounceDate());
+				vo.setBounceDateString(GeneralUtils.convertDateToString(dbObj.getBounceDate(), "dd/MM/yyyy"));
 				vo.setChequeAmt(dbObj.getChequeAmt());
 				vo.setChequeDate(dbObj.getChequeDate());
 				vo.setChequeDateString(GeneralUtils.convertDateToString(dbObj.getChequeDate(), "dd/MM/yyyy"));

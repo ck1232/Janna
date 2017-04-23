@@ -583,6 +583,66 @@ public class ChequeDbObjectExample {
             return (Criteria) this;
         }
 
+        public Criteria andBounceDateIsNull() {
+            addCriterion("bounce_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateIsNotNull() {
+            addCriterion("bounce_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateEqualTo(Date value) {
+            addCriterionForJDBCDate("bounce_date =", value, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateNotEqualTo(Date value) {
+            addCriterionForJDBCDate("bounce_date <>", value, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateGreaterThan(Date value) {
+            addCriterionForJDBCDate("bounce_date >", value, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("bounce_date >=", value, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateLessThan(Date value) {
+            addCriterionForJDBCDate("bounce_date <", value, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("bounce_date <=", value, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateIn(List<Date> values) {
+            addCriterionForJDBCDate("bounce_date in", values, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateNotIn(List<Date> values) {
+            addCriterionForJDBCDate("bounce_date not in", values, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("bounce_date between", value1, value2, "bounceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andBounceDateNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("bounce_date not between", value1, value2, "bounceDate");
+            return (Criteria) this;
+        }
+
         public Criteria andVersionIsNull() {
             addCriterion("version is null");
             return (Criteria) this;
