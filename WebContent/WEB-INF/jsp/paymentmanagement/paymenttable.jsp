@@ -11,22 +11,26 @@
 				              	<table class="table table-striped">
 				              		<c:if test="${paymentList.size() > 0}">
 					                	<tr>
-					                		<th style="width: 20%">Date Paid</th>
-					                		<th style="width: 20%">Payment Mode</th>
-					                  		<th style="width: 20%">Amount</th>
-					                  		<th style="width: 20%">Cheque No</th>
-					                  		<th style="width: 20%">Bounced</th>
+					                		<th style="width: 16%">Date Paid</th>
+					                		<th style="width: 16%">Payment Mode</th>
+					                  		<th style="width: 16%">Amount</th>
+					                  		<th style="width: 16%">Cheque No</th>
+					                  		<th style="width: 16%">Bounced</th>
+							          		<th style="width: 16%">Bounce Date</th>
 					                	</tr>
 					                	<c:forEach items="${paymentList}" var="payment">
 											<tr>
-												<td>${payment.paymentDateString}</td>
-							          			<td>${payment.paymentModeString}</td>
-							          			<td>${payment.paymentAmt}</td>
-							          			<td>${payment.chequeNum}</td>
-							          			<td>
+												<td style="width: 16%">${payment.paymentDateString}</td>
+							          			<td style="width: 16%">${payment.paymentModeString}</td>
+							          			<td style="width: 16%">${payment.paymentAmt}</td>
+							          			<td style="width: 16%">${payment.chequeNum}</td>
+							          			<td style="width: 16%">
 							          				<c:if test="${payment.bounceChequeInd == 'N'}">No</c:if>
 							          				<c:if test="${payment.bounceChequeInd == 'Y'}">Yes</c:if>
 							          			</td>
+							          			<c:if test="${payment.bounceChequeInd == 'Y'}">
+							          				<td style="width: 16%">${payment.bounceDateString}</td>
+												</c:if>
 						          			</tr>
 							        	</c:forEach>
 						        	</c:if>

@@ -25,6 +25,10 @@ public class ChequeVO extends Base implements Serializable {
 
     private String bounceChequeInd;
     
+    private Date bounceDate;
+    
+    private String bounceDateString;
+    
     private String paidFor;
 
     private static final long serialVersionUID = 1L;
@@ -101,7 +105,23 @@ public class ChequeVO extends Base implements Serializable {
         this.bounceChequeInd = bounceChequeInd == null ? null : bounceChequeInd.trim();
     }
 
-    public String getPaidFor() {
+    public Date getBounceDate() {
+		return bounceDate;
+	}
+
+	public void setBounceDate(Date bounceDate) {
+		this.bounceDate = bounceDate;
+	}
+
+	public String getBounceDateString() {
+		return bounceDateString;
+	}
+
+	public void setBounceDateString(String bounceDateString) {
+		this.bounceDateString = bounceDateString;
+	}
+
+	public String getPaidFor() {
 		return paidFor;
 	}
 
@@ -122,6 +142,7 @@ public class ChequeVO extends Base implements Serializable {
         sb.append(", debitDate=").append(debitDate);
         sb.append(", remarks=").append(remarks);
         sb.append(", bounceChequeInd=").append(bounceChequeInd);
+        sb.append(", bounceDate=").append(bounceDate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");

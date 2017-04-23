@@ -26,6 +26,18 @@
 			<form:input path="type" type="hidden" id="type"/>
 			<input type ="hidden" name = "lastdate" value="${lastdate}" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			<c:if test="${bounced != null}">
+				<div class="row">
+					<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Bounced Cheque Date</label>
+						<div class="col-sm-4">
+	                  		<form:input path="bouncedateString" type="text" class="form-control" 
+	                  			  id="bouncedateString" placeholder="Press to select date"/>
+	                  		<form:errors path="bouncedateString" class="text-danger" />
+	                	</div>
+		 			</div>
+	 			</div>
+ 			</c:if>
 			<div class="row">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
 					<label class="col-sm-2 control-label">Payment Date</label>
@@ -152,6 +164,10 @@
 	
 	 <script>
       $( function() {
+    	  $('#bouncedateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
     	  $('#paymentdateString').datepicker({
 	    		format: 'dd/mm/yyyy',
 		      	autoclose: true

@@ -8,7 +8,9 @@
 <form id="updateChequeForm" method="post" action="<c:url value="/cheque/updateCheque" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
-
+<form id="bounceChequeForm" method="post" action="<c:url value="/payment/createPayBounceCheque" />">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 <div class="margin">
 	<div class="btn-grp">
 		<!--  <button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/cheque/deleteCheque" />"><i class="fa fa-user-times"></i> Delete</button>-->
