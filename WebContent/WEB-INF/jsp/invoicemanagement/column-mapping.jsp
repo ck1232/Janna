@@ -27,6 +27,7 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<div class ="outer"><div name="payBtnDiv" class="inner"><button name="payBtn" class="btn btn-primary" type="submit" form="payInvoiceForm">Pay</button></div>'+
-    '<div class="inner"><button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button></div></div>'
+    "width":		  "100px",
+    "defaultContent": '<div class ="outer"><div class="inner"><button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button></div>'+
+    '<div name="payBtnDiv" class="inner"><button name="payBtn" class="btn btn-primary" type="submit" form="payInvoiceForm">Pay</button></div></div>'
 },
