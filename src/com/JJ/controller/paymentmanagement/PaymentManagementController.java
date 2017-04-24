@@ -4,8 +4,12 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,7 @@ import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentVO;
+import com.JJ.controller.salarybonusmanagement.TypeEnum;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
@@ -375,6 +380,181 @@ public class PaymentManagementController {
 	/* Invoice Payment End */
 	
 	/* Salary Payment Start */
+	@RequestMapping(value = "/createPaySalaryBonus", method = RequestMethod.POST)
+	public String createMultiplePaySalary(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes, Model model) {
+		List<Integer> salaryIdList = new ArrayList<Integer>();
+		List<Integer> bonusIdList = new ArrayList<Integer>();
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}else{
+			for(String id : ids){
+				String[] idArray = id.split("-");
+				if(idArray.length != 2 || !GeneralUtils.isInteger(idArray[0])){
+					redirectAttributes.addFlashAttribute("css", "danger");
+					redirectAttributes.addFlashAttribute("msg", "Invalid Selection, Please try again.");
+					return "redirect:/salarybonus/listSalaryBonus";
+				}else{
+					Integer salaryBonusId = Integer.parseInt(idArray[0]);
+					if(idArray[1].equals(TypeEnum.SALARY.getType())) {
+						salaryIdList.add(salaryBonusId);
+					}else if(idArray[1].equals(TypeEnum.BONUS.getType())) {
+						bonusIdList.add(salaryBonusId);
+					}
+				}
+			}
+		}
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
+		if(!salaryIdList.isEmpty()){
+			salaryBonusVoList.addAll(salaryBonusManagementService.getAllSalaryByIdList(salaryIdList));
+		}
+		
+		if(!bonusIdList.isEmpty()){
+			salaryBonusVoList.addAll(salaryBonusManagementService.getAllBonusByIdList(bonusIdList));
+		}
+		
+		if(salaryBonusVoList.isEmpty()){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Invalid Selection, Please try again.");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}
+		
+		//check if all the record is for the same employee
+		Set<Integer> employeeIdSet = new HashSet<Integer>();
+		for(SalaryBonusVO vo : salaryBonusVoList){
+			employeeIdSet.add(vo.getEmployeeId());
+		}
+		if(employeeIdSet.size() > 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select records for one employee only!");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}
+		
+		BigDecimal totalamount = BigDecimal.ZERO;
+		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
+			if(salaryBonusVo.getBonusAmt() != null && salaryBonusVo.getBonusAmt().compareTo(BigDecimal.ZERO) > 0){
+				totalamount = totalamount.add(salaryBonusVo.getBonusAmt());
+			}else{
+				totalamount = totalamount.add(salaryBonusVo.getTakehomeAmt());
+			}
+		}
+		
+		Collections.sort(salaryBonusVoList, new SalaryBonusComparator());
+		
+		PaymentVO paymentvo = new PaymentVO();
+		model.addAttribute("paymentForm", paymentvo);
+		model.addAttribute("salaryList", salaryBonusVoList);
+		model.addAttribute("idList", ids);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", salaryBonusVoList.get(0).getDateString());
+		model.addAttribute("posturl", "/JJ/payment/createSalaryBonusPayment");
+		return "createPaySalaryBonus";
+	}
+	
+	@RequestMapping(value = "/createSalaryBonusPayment", method = RequestMethod.POST)
+    public String saveSalaryBonusPayment(
+    		@RequestParam(value = "referenceIds", required=false) List<String> ids,
+    		@RequestParam(value = "totalamount", required=false) BigDecimal totalamount,
+    		@RequestParam(value = "lastdate", required=false) String lastdate,
+    		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
+    		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		logger.debug("saveSalaryBonusPayment() : " + paymentVo.toString());
+		
+		List<Integer> salaryIdList = new ArrayList<Integer>();
+		List<Integer> bonusIdList = new ArrayList<Integer>();
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}else{
+			for(String id : ids){
+				String[] idArray = id.split("-");
+				if(idArray.length != 2 || !GeneralUtils.isInteger(idArray[0])){
+					redirectAttributes.addFlashAttribute("css", "danger");
+					redirectAttributes.addFlashAttribute("msg", "Invalid Selection, Please try again.");
+					return "redirect:/salarybonus/listSalaryBonus";
+				}else{
+					Integer salaryBonusId = Integer.parseInt(idArray[0]);
+					if(idArray[1].equals(TypeEnum.SALARY.getType())) {
+						salaryIdList.add(salaryBonusId);
+					}else if(idArray[1].equals(TypeEnum.BONUS.getType())) {
+						bonusIdList.add(salaryBonusId);
+					}
+				}
+			}
+		}
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
+		if(!salaryIdList.isEmpty()){
+			salaryBonusVoList.addAll(salaryBonusManagementService.getAllSalaryByIdList(salaryIdList));
+		}
+		
+		if(!bonusIdList.isEmpty()){
+			salaryBonusVoList.addAll(salaryBonusManagementService.getAllBonusByIdList(bonusIdList));
+		}
+		
+		if(salaryBonusVoList.isEmpty()){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Invalid Selection, Please try again.");
+			return "redirect:/salarybonus/listSalaryBonus";
+		}
+		
+		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
+			if(salaryBonusVo.getType().equals(GeneralUtils.TYPE_BONUS)){
+				salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
+			}else if(salaryBonusVo.getType().equals(GeneralUtils.TYPE_SALARY)){
+				salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MM-yyyy"));
+			}
+		}
+		if (!result.hasErrors()) {
+			boolean hasErrors = false;
+			if(!validateInputAmount(totalamount, paymentVo)){
+				hasErrors = true;
+				result.rejectValue("cashamount", "error.notequal.paymentform.totalamount");
+				result.rejectValue("chequeamount", "error.notequal.paymentform.totalamount");
+			}
+			
+			if(!hasErrors){
+				paymentVo.setPaymentDate(GeneralUtils.convertStringToDate(paymentVo.getPaymentdateString(), "dd/MM/yyyy"));
+				if(paymentVo.getPaymentmodecheque()){
+					paymentVo.setChequedate(GeneralUtils.convertStringToDate(paymentVo.getChequedateString(), "dd/MM/yyyy"));
+				}
+				if(!salaryIdList.isEmpty()){
+					paymentManagementService.saveSalaryPayment(paymentVo, salaryIdList);
+				}
+				if(!bonusIdList.isEmpty()){
+					paymentManagementService.saveBonusPayment(paymentVo, bonusIdList);
+				}
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
+		        return "redirect:/salarybonus/listSalaryBonus";  
+			}
+		}
+		Collections.sort(salaryBonusVoList, new SalaryBonusComparator());
+		
+		model.addAttribute("paymentForm", paymentVo);
+		model.addAttribute("salaryList", salaryBonusVoList);
+		model.addAttribute("idList", ids);
+		model.addAttribute("totalamount", totalamount);
+		model.addAttribute("lastdate", salaryBonusVoList.get(0).getDateString());
+		model.addAttribute("posturl", "/JJ/payment/createSalaryBonusPayment");
+		return "createPaySalaryBonus";
+    }  
+	
+	class SalaryBonusComparator implements Comparator<SalaryBonusVO> {
+		@Override
+		public int compare(SalaryBonusVO o1, SalaryBonusVO o2) {
+			if(o1.getDate() == null && o2.getDate() == null){
+				return 0;
+			}else if(o1.getDate() == null && o2.getDate() != null){
+				return -1;
+			}else if(o1.getDate() != null && o2.getDate() == null){
+				return 1;
+			}
+			return o1.getDate().compareTo(o2.getDate()) * -1;
+		}
+	}
 	
 	@RequestMapping(value = "/createPaySalary", method = RequestMethod.POST)
 	public String createPaySalary(@RequestParam(value = "checkboxId", required=false) List<String> ids,
@@ -457,7 +637,7 @@ public class PaymentManagementController {
 		model.addAttribute("lastdate", salaryBonusVoList.get(salaryBonusVoList.size()-1).getDateString());
 		model.addAttribute("posturl", "/JJ/payment/createSalaryPayment");
 		return "createPaySalary";
-    }  
+    }
 	
 	/* Salary Payment End */
 	

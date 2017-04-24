@@ -163,4 +163,13 @@ public class GeneralUtils {
 		return cal.getTime();
 	}
 	
+	public static boolean isInteger(String id){
+		try{
+			Integer.valueOf(id);
+			return true;
+		}catch(Exception ex){
+			
+		}
+		return false;
+	}
 }

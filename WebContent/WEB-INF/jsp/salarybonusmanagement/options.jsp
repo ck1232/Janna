@@ -15,5 +15,6 @@
 	<div class="btn-grp">
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/salarybonus/deleteSalaryBonus" />"><i class="fa fa-user-times"></i> Delete</button>
 		<button class="btn btn-primary pull-right" type="submit" form="createSalaryBonusForm"><i class="fa fa-user-plus"></i> Add</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/payment/createPaySalaryBonus" />"><i class="fa fa-user-plus"></i> Add Payment</button>
 	</div>
 </div>

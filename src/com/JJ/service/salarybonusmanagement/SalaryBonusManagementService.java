@@ -86,7 +86,6 @@ public class SalaryBonusManagementService {
 		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdIn(idList);
 		employeeSalaryDbObjectExample.setOrderByClause("salary_date desc");
 		return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
-
 	}
 	
 	public List<SalaryBonusVO> getAllSalaryByEmpId(Integer employeeId) {
