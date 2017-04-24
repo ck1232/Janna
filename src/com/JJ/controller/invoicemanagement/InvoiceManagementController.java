@@ -47,10 +47,12 @@ import com.JJ.controller.invoicemanagement.vo.InvoiceUploadVO;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
+import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.grantmanagement.GrantManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
+import com.JJ.service.paymentmanagement.PaymentRSManagementService;
 import com.JJ.validator.GrantFormValidator;
 import com.JJ.validator.InvoiceSearchValidator;
 
@@ -64,6 +66,7 @@ public class InvoiceManagementController {
 	private static final Logger logger = Logger.getLogger(InvoiceManagementController.class);
 	
 	private PaymentManagementController paymentManagementController;
+	private PaymentRSManagementService paymentRSManagementService;
 	private InvoiceManagementService invoiceManagementService;
 	private GrantManagementService grantManagementService;
 	private PaymentManagementService paymentManagementService;
@@ -73,11 +76,13 @@ public class InvoiceManagementController {
 	private static final String uploadPassword = "uploadExcelFile1232";
 	@Autowired
 	public InvoiceManagementController(PaymentManagementController paymentManagementController,
+			PaymentRSManagementService paymentRSManagementService,
 			InvoiceManagementService invoiceManagementService,
 			GrantManagementService grantManagementService,
 			PaymentManagementService paymentManagementService,
 			InvoiceSearchValidator invoiceSearchValidator) {
 		this.paymentManagementController = paymentManagementController;
+		this.paymentRSManagementService = paymentRSManagementService;
 		this.invoiceManagementService = invoiceManagementService;
 		this.grantManagementService = grantManagementService;
 		this.paymentManagementService = paymentManagementService;
@@ -126,7 +131,7 @@ public class InvoiceManagementController {
 	}
 	
 	@RequestMapping(value = "/viewInvoice", method = RequestMethod.POST)
-	public String viewInvoice(@RequestParam("viewBtn") String id, Model model) {
+	public String viewInvoice(@RequestParam("viewBtn") String id, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("id = " + id);
 		InvoiceVO invoiceVO = null;
 		String[] splitId = id.split("-");
@@ -138,13 +143,25 @@ public class InvoiceManagementController {
 			}
 		}
 		if (invoiceVO == null) {
-			model.addAttribute("css", "danger");
-			model.addAttribute("msg", "Invoice not found");
-		}else{
-			model.addAttribute("invoice", invoiceVO);
-			List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId(invoiceVO.getType(), Integer.valueOf(splitId[0]));
-			model.addAttribute("paymentList", paymentList);
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Invoice not found!");
+			return "redirect:listInvoice";
 		}
+		model.addAttribute("invoice", invoiceVO);
+		List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId(invoiceVO.getType(), Integer.valueOf(splitId[0]));
+		model.addAttribute("paymentList", paymentList);
+		List<PaymentRsVO> rsList = paymentRSManagementService.getAllPaymentByPaymentDetailId(paymentList.get(0).getPaymentDetailId());
+		List<InvoiceVO> otherList = new ArrayList<InvoiceVO>();
+		List<Integer> idList = new ArrayList<Integer>();
+		if(rsList != null && !rsList.isEmpty()) {
+			for(PaymentRsVO vo : rsList) {
+				if(vo.getReferenceId() != null && !splitId[0].equals(String.valueOf(vo.getReferenceId()))) {
+					idList.add(vo.getReferenceId());
+				}
+			}
+			otherList = invoiceManagementService.getAllInvoiceByIdList(idList);
+		}
+		model.addAttribute("otherList", otherList);
 		return "viewInvoice";
 
 	}

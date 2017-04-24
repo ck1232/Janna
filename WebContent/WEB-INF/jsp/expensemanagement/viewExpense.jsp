@@ -72,7 +72,41 @@
 						<!-- /.box-body -->
 		      		</div>
 		      		<!-- /.BOX -->
-		      		
+		      		<div class="box">
+						<div class="box-header with-border">
+	                  		<h3 class="box-title">Other Related Paid Expenses</h3>
+	                  	</div>
+			      		<div class="box-body no-padding">
+			              	<table class="table table-striped">
+			              		<c:if test="${otherList.size() > 0}">
+				                	<tr>
+				                		<th style="width: 16%">Expense Date</th>
+				                		<th style="width: 16%">Expense Type</th>
+				                  		<th style="width: 16%">Description</th>
+				                  		<th style="width: 16%">Expense Amount</th>
+				                  		<th style="width: 16%">Supplier</th>
+						          		<th style="width: 16%">Status</th>
+				                	</tr>
+				                	<c:forEach items="${otherList}" var="other">
+										<tr>
+											<td style="width: 16%">${other.expensedateString}</td>
+						          			<td style="width: 16%">${other.expensetype}</td>
+						          			<td style="width: 16%">${other.description}</td>
+						          			<td style="width: 16%">${other.totalAmt}</td>
+						          			<td style="width: 16%">${other.supplier}</td>
+						          			<td style="width: 16%">${other.status}</td>
+					          			</tr>
+						        	</c:forEach>
+					        	</c:if>
+					        	<c:if test="${otherList.size() == 0}">
+				        			<tr>
+				        				<td colspan="6">No records found.</td>
+				        			</tr>
+			        			</c:if>
+						        
+			              	</table>
+					    </div>
+					</div>
 		      		<tiles:insertAttribute name="paymentdetail"/>
 		      		
 		      		<div class="row">

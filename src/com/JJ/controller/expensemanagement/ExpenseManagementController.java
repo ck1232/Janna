@@ -27,10 +27,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
+import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
+import com.JJ.service.paymentmanagement.PaymentRSManagementService;
 import com.JJ.validator.ExpenseFormValidator;
 
 
@@ -43,17 +45,20 @@ public class ExpenseManagementController {
 	
 	private ExpenseManagementService expenseManagementService;
 	private PaymentManagementService paymentManagementService;
+	private PaymentRSManagementService paymentRSManagementService;
 	private PaymentManagementController paymentManagementController;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private ExpenseFormValidator expenseFormValidator;
 	@Autowired
 	public ExpenseManagementController(ExpenseManagementService expenseManagementService, 
 			PaymentManagementService paymentManagementService,
+			PaymentRSManagementService paymentRSManagementService,
 			PaymentManagementController paymentManagementController,
 			ExpenseTypeLookup expenseTypeLookup,
 			ExpenseFormValidator expenseFormValidator) {
 		this.expenseManagementService = expenseManagementService;
 		this.paymentManagementService = paymentManagementService;
+		this.paymentRSManagementService = paymentRSManagementService;
 		this.expenseTypeLookup = expenseTypeLookup;
 		this.expenseFormValidator = expenseFormValidator;
 		this.paymentManagementController = paymentManagementController;
@@ -165,19 +170,30 @@ public class ExpenseManagementController {
     }  
 	
 	@RequestMapping(value = "/viewExpense", method = RequestMethod.POST)
-	public String viewExpense(@RequestParam("viewBtn") String id, Model model) {
+	public String viewExpense(@RequestParam("viewBtn") String id, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("id = " + id);
 		ExpenseVO expenseVO = expenseManagementService.findById(new Integer(id));
 		if (expenseVO == null) {
-			model.addAttribute("css", "danger");
-			model.addAttribute("msg", "Expense not found");
-		}else{
-			model.addAttribute("expense", expenseVO);
-			List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expenseVO.getExpenseId());
-			model.addAttribute("paymentList", paymentList);
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Expense not found!");
+			return "redirect:listInvoice";
 		}
+		model.addAttribute("expense", expenseVO);
+		List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expenseVO.getExpenseId());
+		model.addAttribute("paymentList", paymentList);
+		List<PaymentRsVO> rsList = paymentRSManagementService.getAllPaymentByPaymentDetailId(paymentList.get(0).getPaymentDetailId());
+		List<ExpenseVO> otherList = new ArrayList<ExpenseVO>();
+		List<Integer> idList = new ArrayList<Integer>();
+		if(rsList != null && !rsList.isEmpty()) {
+			for(PaymentRsVO vo : rsList) {
+				if(vo.getReferenceId() != null && !id.equals(String.valueOf(vo.getReferenceId()))) {
+					idList.add(vo.getReferenceId());
+				}
+			}
+			otherList = expenseManagementService.getAllExpenseByIdList(idList);
+		}
+		model.addAttribute("otherList", otherList);
 		return "viewExpense";
-
 	}
 	
 	@RequestMapping(value = "/updateExpense", method = RequestMethod.POST)

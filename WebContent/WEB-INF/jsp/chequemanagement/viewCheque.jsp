@@ -59,8 +59,8 @@
 							<c:if test="${cheque.bounceChequeInd == 'Y'}">
 								<div class="row">
 							  		<div class="form-group">
-									    <div class="col-sm-2">Bounced</div>
-									    <div class="col-sm-5">${cheque.bounceChequeInd}</div>
+									    <div class="col-sm-2">Bounce Date</div>
+									    <div class="col-sm-5">${cheque.bounceDateString}</div>
 									</div>
 								</div>
 							</c:if>
