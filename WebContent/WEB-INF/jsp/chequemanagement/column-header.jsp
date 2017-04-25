@@ -4,5 +4,5 @@
   <th>Cheque Amount</th>
   <th>Bounced</th>
   <th>Paid for</th>
-  <th>Actions</th>
+  <th>Action</th>
 </tr>

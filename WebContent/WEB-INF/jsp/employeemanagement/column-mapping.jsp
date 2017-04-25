@@ -14,7 +14,9 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "defaultContent": '<button name="viewBtn" class="btn btn-primary" type="submit" form="viewEmployeeForm">View</button>' + 
-    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateEmployeeForm"><i class="fa fa-pencil"></i> Edit</button>'
-    
+    "width":		  "120px",
+    "defaultContent": '<div class="outer">'+
+    '<div class="inner"><button name="viewBtn" class="btn btn-primary" type="submit" form="viewEmployeeForm">View</button></div>' + 
+    '<div class="inner"><button name="editBtn" class="btn btn-primary" type="submit" form="updateEmployeeForm"><i class="fa fa-pencil"></i> Edit</button></div>'+
+    '</div>'
 },

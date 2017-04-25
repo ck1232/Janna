@@ -7,5 +7,5 @@
   <th>Take Home Amount</th>
   <th>Bonus Amount</th>
   <th>Status</th>
-  <th>Actions</th>
+  <th>Action</th>
 </tr>
