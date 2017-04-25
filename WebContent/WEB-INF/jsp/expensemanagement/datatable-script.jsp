@@ -28,7 +28,6 @@ $(function () {
           // Get row ID
           var rowId = data[0];
           $(row).find('input[type="checkbox"]').prop('value', data.expenseId);
-          $(row).find('button[name="editBtn"]').prop('value', data.expenseId);
           $(row).find('button[name="viewBtn"]').prop('value', data.expenseId);
           if(data.status == "PAID"){
         	  $(row).find('div[name="statusDiv"]').css("display","none");
@@ -36,6 +35,7 @@ $(function () {
           }else{
         	 $(row).find('div[name="statusDiv"]').css("display","");
         	 $(row).find('div[name="payBtnDiv"]').css("display","");
+        	 $(row).find('button[name="editBtn"]').prop('value', data.expenseId);
         	 $(row).find('button[name="payBtn"]').prop('value', data.expenseId);
           }
        }

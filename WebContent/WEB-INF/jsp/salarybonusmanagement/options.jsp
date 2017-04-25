@@ -3,13 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <form id="createSalaryBonusForm" method="get" action="<c:url value="/salarybonus/createSalaryBonus" />"></form>
+<form id="viewSalaryBonusForm" method="post" action="<c:url value="/salarybonus/viewSalaryBonus" />">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 <form id="updateSalaryBonusForm" method="post" action="<c:url value="/salarybonus/updateSalaryBonus" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 <form id="paySalaryBonusForm" method="post" action="<c:url value="/salarybonus/paySalaryBonus" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
-
 
 <div class="margin">
 	<div class="btn-grp">
