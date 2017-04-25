@@ -1,6 +1,8 @@
 package com.JJ.controller.salarybonusmanagement;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +27,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.paymentmanagement.PaymentManagementController;
+import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
+import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.employeemanagement.EmployeeManagementService;
+import com.JJ.service.paymentmanagement.PaymentManagementService;
+import com.JJ.service.paymentmanagement.PaymentRSManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 import com.JJ.validator.SalaryBonusFormValidator;
 
@@ -40,6 +46,8 @@ public class SalaryBonusManagementController {
 	private static final Logger logger = Logger.getLogger(SalaryBonusManagementController.class);
 	
 	private PaymentManagementController paymentManagementController;
+	private PaymentManagementService paymentManagementService;
+	private PaymentRSManagementService paymentRSManagementService;
 	private SalaryBonusManagementService salaryBonusManagementService;
 	private EmployeeManagementService employeeManagementService;
 	private SalaryBonusFormValidator salaryBonusFormValidator;
@@ -50,10 +58,14 @@ public class SalaryBonusManagementController {
 	@Autowired
 	public SalaryBonusManagementController(PaymentManagementController paymentManagementController,
 			SalaryBonusManagementService salaryBonusManagementService,
+			PaymentManagementService paymentManagementService,
+			PaymentRSManagementService paymentRSManagementService,
 			EmployeeManagementService employeeManagementService,
 			SalaryBonusFormValidator salaryBonusFormValidator) {
 		this.paymentManagementController = paymentManagementController;
 		this.salaryBonusManagementService = salaryBonusManagementService;
+		this.paymentManagementService = paymentManagementService;
+		this.paymentRSManagementService = paymentRSManagementService;
 		this.employeeManagementService = employeeManagementService;
 		this.salaryBonusFormValidator = salaryBonusFormValidator;
 	}
@@ -200,6 +212,62 @@ public class SalaryBonusManagementController {
 		return "redirect:listSalaryBonus";
 	}
 	
+	@RequestMapping(value = "/viewSalaryBonus", method = RequestMethod.POST)
+	public String viewSalaryBonus(@RequestParam("viewBtn") String id, Model model, final RedirectAttributes redirectAttributes) {
+		logger.debug("id = " + id);
+		SalaryBonusVO salaryBonusVO = null;
+		String[] splitId = id.split("-");
+		if(splitId.length != 2 || !GeneralUtils.isInteger(splitId[0])){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Salary / Bonus not found!");
+			return "redirect:listSalaryBonus";
+		}else{
+			if(splitId[1].toLowerCase().equals("salary")) {
+				salaryBonusVO = salaryBonusManagementService.findSalaryById(Integer.valueOf(splitId[0]));
+			}else if(splitId[1].toLowerCase().equals("bonus")) {
+				salaryBonusVO = salaryBonusManagementService.findBonusById(Integer.valueOf(splitId[0]));
+			}
+		}
+		if (salaryBonusVO == null) {
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Salary / Bonus not found!");
+			return "redirect:listSalaryBonus";
+		}
+		model.addAttribute("salarybonus", salaryBonusVO);
+		List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId(splitId[1], salaryBonusVO.getId());
+		model.addAttribute("paymentList", paymentList);
+		List<PaymentRsVO> rsList = new ArrayList<PaymentRsVO>();
+		if(paymentList != null && paymentList.size() > 0){
+			rsList = paymentRSManagementService.getAllPaymentByPaymentDetailId(paymentList.get(0).getPaymentDetailId());
+		}
+		List<SalaryBonusVO> otherList = new ArrayList<SalaryBonusVO>();
+		List<Integer> salaryIdList = new ArrayList<Integer>();
+		List<Integer> bonusIdList = new ArrayList<Integer>();
+		if(rsList != null && !rsList.isEmpty()) {
+			for(PaymentRsVO vo : rsList) {
+				String dbId = vo.getReferenceId()== null ? "":vo.getReferenceId() +"-"+ vo.getReferenceType();
+				if(vo.getReferenceId() != null && dbId.compareToIgnoreCase(id) != 0) {
+					if(vo.getReferenceType().equals("salary")){
+						salaryIdList.add(vo.getReferenceId());
+					}else if(vo.getReferenceType().equals("bonus")){
+						bonusIdList.add(vo.getReferenceId());
+					}
+					
+				}
+			}
+			if(!salaryIdList.isEmpty()) {
+				otherList.addAll(salaryBonusManagementService.getAllSalaryByIdList(salaryIdList));
+			}
+			if(!bonusIdList.isEmpty()) {
+				otherList.addAll(salaryBonusManagementService.getAllBonusByIdList(bonusIdList));
+			}
+			
+			Collections.sort(otherList, new SalaryBonusComparator());
+		}
+		model.addAttribute("otherList", otherList);
+		return "viewSalaryBonus";
+	}
+	
 	@RequestMapping(value = "/paySalaryBonus", method = RequestMethod.POST)
     public String paySalaryBonus(@RequestParam("payBtn") String id, Model model,
     		final RedirectAttributes redirectAttributes) {
@@ -214,5 +282,17 @@ public class SalaryBonusManagementController {
 		return "redirect:listSalaryBonus";
     } 
 
-	
+	class SalaryBonusComparator implements Comparator<SalaryBonusVO> {
+		@Override
+		public int compare(SalaryBonusVO o1, SalaryBonusVO o2) {
+			if(o1.getDate() == null && o2.getDate() == null){
+				return 0;
+			}else if(o1.getDate() == null && o2.getDate() != null){
+				return -1;
+			}else if(o1.getDate() != null && o2.getDate() == null){
+				return 1;
+			}
+			return o1.getDate().compareTo(o2.getDate()) * -1;
+		}
+	}
 }

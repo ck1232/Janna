@@ -28,10 +28,10 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "width":		  "150px",
-    "defaultContent": '<div class ="outer">'+
+    "width":		  "200px",
+    "defaultContent": '<div class="outer">'+
     '<div class="inner"><button name="viewBtn" class="btn btn-primary" type="submit" form="viewExpenseForm">View</button></div>'+
-    '<div class="inner"><button name="editBtn" class="btn btn-primary" type="submit" form="updateExpenseForm"><i class="fa fa-pencil"></i> Edit</button></div>'+
-    '<div name="payBtnDiv" class="inner"><button name="payBtn" class="btn btn-primary" type="submit" form="payExpenseForm">Pay</button></div>'+
+    '<div name="payBtnDiv"><button name="editBtn" class="btn btn-primary" type="submit" form="updateExpenseForm"><i class="fa fa-pencil"></i> Edit</button>' +
+    '<button name="payBtn" class="btn btn-primary" type="submit" form="payExpenseForm">Pay</button></div>'+
     '</div>'
 },

@@ -27,7 +27,6 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           $(row).find('input[type="checkbox"]').prop('value', data.id+'-'+data.type);
-          $(row).find('button[name="editBtn"]').prop('value', data.id+'-'+data.type);
           $(row).find('button[name="viewBtn"]').prop('value', data.id+'-'+data.type);
           if(data.status == "PAID"){
         	  $(row).find('div[name="payBtnDiv"]').css("display","none");
@@ -35,6 +34,7 @@ $(function () {
           }else{
         	 $(row).find('div[name="payBtnDiv"]').css("display","");
         	 $(row).find('div[name="statusDiv"]').css("display","");
+        	 $(row).find('button[name="editBtn"]').prop('value', data.id+'-'+data.type);
         	 $(row).find('button[name="payBtn"]').prop('value', data.id+','+data.type);
           }
        }

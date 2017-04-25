@@ -17,9 +17,11 @@
     "className":      '',
     "orderable":      false,
     "data":           null,
-    "width":		  "200px",
+    "width":		  "180px",
     "defaultContent": '<div class="outer">'+
-    '<div class="inner"><button name="editBtn" class="btn btn-primary" type="submit" form="updateSalaryBonusForm"><i class="fa fa-pencil"></i> Edit</button></div>'+
-    '<div name="payBtnDiv" class="inner"><button name="payBtn" class="btn btn-primary" type="submit" form="paySalaryBonusForm">Pay</button></div>'+
+    '<div class="inner"><button name="viewBtn" class="btn btn-primary" type="submit" form="viewSalaryBonusForm">View</button></div>'+
+    '<div name="payBtnDiv" class="inner">'+
+    '<button name="editBtn" class="btn btn-primary" type="submit" form="updateSalaryBonusForm"><i class="fa fa-pencil"></i> Edit</button>' + 
+    '<button name="payBtn" class="btn btn-primary" type="submit" form="paySalaryBonusForm">Pay</button></div>'+
     '</div>'
 },

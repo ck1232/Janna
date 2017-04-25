@@ -82,10 +82,13 @@ public class SalaryBonusManagementService {
 	}
 	
 	public List<SalaryBonusVO> getAllSalaryByIdList(List<Integer> idList) {
-		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
-		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdIn(idList);
-		employeeSalaryDbObjectExample.setOrderByClause("salary_date desc");
-		return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
+		if(idList != null && idList.size() > 0){
+			EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
+			employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSalaryIdIn(idList);
+			employeeSalaryDbObjectExample.setOrderByClause("salary_date desc");
+			return convertSalaryToSalaryBonusVOList(employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample));
+		}
+		return new ArrayList<SalaryBonusVO>();
 	}
 	
 	public List<SalaryBonusVO> getAllSalaryByEmpId(Integer employeeId) {
@@ -96,10 +99,13 @@ public class SalaryBonusManagementService {
 	}
 	
 	public List<SalaryBonusVO> getAllBonusByIdList(List<Integer> idList) {
-		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
-		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdIn(idList);
-		employeeBonusDbObjectExample.setOrderByClause("bonus_date desc");
-		return convertBonusToSalaryBonusVOList(employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample));
+		if(idList != null && idList.size() > 0){
+			EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
+			employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andBonusIdIn(idList);
+			employeeBonusDbObjectExample.setOrderByClause("bonus_date desc");
+			return convertBonusToSalaryBonusVOList(employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample));
+		}
+		return new ArrayList<SalaryBonusVO>();
 	}
 	
 	public List<SalaryBonusVO> getAllBonusByEmpId(Integer employeeId) {
@@ -238,7 +244,7 @@ public class SalaryBonusManagementService {
 				vo.setEmployeeType(employee.getEmployeeType());
 				vo.setDob(employee.getDob());
 				vo.setNationality(employee.getNationality());
-				vo.setBasicSalaryAmt(employee.getBasicSalary());
+				vo.setBasicSalaryAmt(dbObj.getBasicSalaryAmt());
 				vo.setEmploymentStartDate(employee.getEmploymentStartDate());
 				vo.setEmploymentEndDate(employee.getEmploymentEndDate());
 				vo.setCdacInd(employee.getCdacInd());

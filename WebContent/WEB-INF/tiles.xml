@@ -1516,6 +1516,22 @@
         </put-attribute>
     </definition>
     
+    <definition name="viewSalaryBonus" extends="main_template">  
+        <put-attribute name="title" value="View Salary / Bonus" /> 
+        <put-attribute name="body">
+        	<definition template="/WEB-INF/jsp/template/body.jsp">
+        		<put-attribute name="heading" value="View Salary / Bonus" />
+        		<put-attribute name="heading-description" value="To view salary / bonus." />
+        		<put-attribute name="content">
+        			<definition template="/WEB-INF/jsp/salarybonusmanagement/viewSalaryBonus.jsp">
+        				<put-attribute name="paymentdetail" value="/WEB-INF/jsp/paymentmanagement/paymenttable.jsp" />
+        			</definition>
+        		</put-attribute>
+        		<put-attribute name="message" value="/WEB-INF/jsp/template/message.jsp" />
+        	</definition>
+        </put-attribute>
+    </definition>
+    
     <definition name="createSalaryBonus" extends="main_template">
     	<put-attribute name="title" value="Add Salary / Bonus" />
     	<put-attribute name="body">
