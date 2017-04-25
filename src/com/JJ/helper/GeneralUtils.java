@@ -46,11 +46,18 @@ public class GeneralUtils {
 	public static final String YES_IND = "Y";
 	public static final String NO_IND = "N";
 	public static final String NONE = "NONE";
+	public static final String KEYWORD_STOCK_CHINA = "china";
 	
+	public static final String MODULE_SALARY_BONUS = "salarybonus";
 	public static final String MODULE_SALARY = "salary";
 	public static final String MODULE_BONUS = "bonus";
 	public static final String MODULE_EXPENSE = "expense";
 	public static final String MODULE_INVOICE = "invoice";
+	public static final String MODULE_GRANT = "grant";
+	
+	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
+	public static final String BONUS_DATE_FORMAT = "yyyy";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){

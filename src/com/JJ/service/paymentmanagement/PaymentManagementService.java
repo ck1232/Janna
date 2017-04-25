@@ -15,6 +15,7 @@ import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
+import com.JJ.controller.paymentmanagement.PaymentManagementController;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentRsVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentVO;
@@ -79,11 +80,11 @@ public class PaymentManagementService {
 			for(ExpenseVO expense : expenseList) {
 				expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
 				PaymentRsVO paymentRsVO = new PaymentRsVO();
-				paymentRsVO.setReferenceType("expense");
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_EXPENSE);
 				paymentRsVO.setReferenceId(expense.getExpenseId());
 				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
 				paymentRSManagementService.savePaymentRs(paymentRsVO);
-				if(expense.getexpensetype().toLowerCase().contains("china"))
+				if(expense.getexpensetype().toLowerCase().contains(GeneralUtils.KEYWORD_STOCK_CHINA))
 					expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
 				else
 					expense.setStatus(ExpenseStatusEnum.PAID.toString());
@@ -99,7 +100,7 @@ public class PaymentManagementService {
 		for(PaymentDetailVO paymentdetail : paymentDetailVOList) {
 			for(InvoiceVO invoice : invoiceList) {
 				PaymentRsVO paymentRsVO = new PaymentRsVO();
-				paymentRsVO.setReferenceType("invoice");
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_INVOICE);
 				paymentRsVO.setReferenceId(invoice.getInvoiceId());
 				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
 				paymentRSManagementService.savePaymentRs(paymentRsVO);
@@ -117,13 +118,43 @@ public class PaymentManagementService {
 		for(PaymentDetailVO paymentdetail : paymentDetailVOList) {
 			for(InvoiceVO grant : grantList) {
 				PaymentRsVO paymentRsVO = new PaymentRsVO();
-				paymentRsVO.setReferenceType("grant");
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_GRANT);
 				paymentRsVO.setReferenceId(grant.getGrantId());
 				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
 				paymentRSManagementService.savePaymentRs(paymentRsVO);
 				
 				grant.setStatus(InvoiceStatusEnum.PAID.toString());
 				grantManagementService.updateGrant(grant);
+			}
+		}
+	}
+	
+	public void saveSalaryBonusPayment(PaymentVO paymentVo, List<Integer> salaryidList, List<Integer> bonusidList) {
+		List<SalaryBonusVO> salaryVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryidList);
+		List<SalaryBonusVO> bonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusidList);
+		List<PaymentDetailVO> paymentDetailVOList = genPaymentDetail(paymentVo);
+		
+		for(PaymentDetailVO paymentdetail : paymentDetailVOList) {
+			for(SalaryBonusVO salary : salaryVoList) {
+				PaymentRsVO paymentRsVO = new PaymentRsVO();
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_SALARY);
+				paymentRsVO.setReferenceId(salary.getId());
+				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
+				paymentRSManagementService.savePaymentRs(paymentRsVO);
+				
+				salary.setStatus(ExpenseStatusEnum.PAID.toString());
+				salaryBonusManagementService.updateSalaryBonus(salary);
+			}
+			
+			for(SalaryBonusVO bonus : bonusVoList) {
+				PaymentRsVO paymentRsVO = new PaymentRsVO();
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_BONUS);
+				paymentRsVO.setReferenceId(bonus.getId());
+				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
+				paymentRSManagementService.savePaymentRs(paymentRsVO);
+				
+				bonus.setStatus(ExpenseStatusEnum.PAID.toString());
+				salaryBonusManagementService.updateSalaryBonus(bonus);
 			}
 		}
 	}
@@ -135,7 +166,7 @@ public class PaymentManagementService {
 		for(PaymentDetailVO paymentdetail : paymentDetailVOList) {
 			for(SalaryBonusVO salary : salaryBonusVoList) {
 				PaymentRsVO paymentRsVO = new PaymentRsVO();
-				paymentRsVO.setReferenceType("salary");
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_SALARY);
 				paymentRsVO.setReferenceId(salary.getId());
 				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
 				paymentRSManagementService.savePaymentRs(paymentRsVO);
@@ -153,7 +184,7 @@ public class PaymentManagementService {
 		for(PaymentDetailVO paymentDetailVO : paymentDetailVOList) {
 			for(SalaryBonusVO bonus : salaryBonusVoList) {
 				PaymentRsVO paymentRsVO = new PaymentRsVO();
-				paymentRsVO.setReferenceType("bonus");
+				paymentRsVO.setReferenceType(GeneralUtils.MODULE_BONUS);
 				paymentRsVO.setReferenceId(bonus.getId());
 				paymentRsVO.setPaymentDetailId(paymentDetailVO.getPaymentDetailId());
 				paymentRSManagementService.savePaymentRs(paymentRsVO);
@@ -185,19 +216,19 @@ public class PaymentManagementService {
 					idList.add(vo.getReferenceId());
 			}
 			switch(paymentVo.getReferenceType()) {
-				case "expense":
+				case GeneralUtils.MODULE_EXPENSE:
 					saveExpensePayment(paymentVo, idList);
 					break;
-				case "grant":
+				case GeneralUtils.MODULE_GRANT:
 					saveGrantPayment(paymentVo, idList);
 					break;
-				case "invoice":
+				case GeneralUtils.MODULE_INVOICE:
 					saveInvoicePayment(paymentVo, idList);
 					break;
-				case "salary":
+				case GeneralUtils.MODULE_SALARY:
 					saveSalaryPayment(paymentVo, idList);
 					break;
-				case "bonus":
+				case GeneralUtils.MODULE_BONUS:
 					saveBonusPayment(paymentVo, idList);
 					break;
 			}
@@ -221,12 +252,12 @@ public class PaymentManagementService {
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
-		if(("expense".equals(paymentVo.getType()) || "salary".equals(paymentVo.getType()) || "bonus".equals(paymentVo.getType()) || "salarybonus".equals(paymentVo.getType())) && paymentVo.getPaymentmodedirector()){
+		if(PaymentManagementController.payByDirectorModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodedirector()){
 			PaymentDetailVO paymentDetailVO = convertDirectorPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
-		if("invoice".equals(paymentVo.getType()) && paymentVo.getPaymentmodegiro()){
+		if(PaymentManagementController.giroModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodegiro()){
 			PaymentDetailVO paymentDetailVO = convertGiroPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
@@ -378,7 +409,7 @@ public class PaymentManagementService {
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setPaymentAmt(dbObj.getPaymentAmt());
 				vo.setPaymentDate(dbObj.getPaymentDate());
-				vo.setPaymentDateString(GeneralUtils.convertDateToString(dbObj.getPaymentDate(), "dd/MM/yyyy"));
+				vo.setPaymentDateString(GeneralUtils.convertDateToString(dbObj.getPaymentDate(), GeneralUtils.STANDARD_DATE_FORMAT));
 				vo.setPaymentDetailId(dbObj.getPaymentDetailId());
 				vo.setPaymentMode(dbObj.getPaymentMode());
 				vo.setPaymentModeString(paymentModeLookup.getPaymentModeById(dbObj.getPaymentMode()));

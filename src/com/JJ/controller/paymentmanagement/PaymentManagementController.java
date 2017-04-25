@@ -62,9 +62,9 @@ public class PaymentManagementController {
 	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentFormValidator paymentFormValidator;
 	
-	private List<String> payByDirectorModuleList = Arrays.asList(GeneralUtils.MODULE_BONUS, GeneralUtils.MODULE_EXPENSE,
-			GeneralUtils.MODULE_SALARY);
-	private List<String> giroModuleList = Arrays.asList(GeneralUtils.MODULE_INVOICE);
+	public static final List<String> payByDirectorModuleList = Arrays.asList(GeneralUtils.MODULE_BONUS, GeneralUtils.MODULE_EXPENSE,
+			GeneralUtils.MODULE_SALARY, GeneralUtils.MODULE_SALARY_BONUS);
+	public static final List<String> giroModuleList = Arrays.asList(GeneralUtils.MODULE_INVOICE);
 	
 	@Autowired
 	public PaymentManagementController(PaymentManagementService paymentManagementService,
@@ -107,7 +107,7 @@ public class PaymentManagementController {
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
-		paymentvo.setType("expense");
+		paymentvo.setType(GeneralUtils.MODULE_EXPENSE);
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("expenseList", expenseList);
 		model.addAttribute("idList", idList);
@@ -132,7 +132,7 @@ public class PaymentManagementController {
 		logger.debug("saveExpensePayment() : " + paymentVo.toString());
 		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
 		for(ExpenseVO expense : expenseList) {
-			expense.setExpensedateString(new SimpleDateFormat("dd/MM/yyyy").format(expense.getExpenseDate()));
+			expense.setExpensedateString(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).format(expense.getExpenseDate()));
 			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
 		}
 		if (!result.hasErrors()) {
@@ -143,22 +143,22 @@ public class PaymentManagementController {
 				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");
 				result.rejectValue("directoramount", "error.notequal.paymentform.expensetotalamount");
 			}
-			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.expenselastdate");
 			}
 			
-			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.expenselastdate");
 			}
 			
 			if(!hasErrors){
-				paymentVo.setReferenceType("expense");
+				paymentVo.setReferenceType(GeneralUtils.MODULE_EXPENSE);
 				try{ 
-					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					paymentVo.setPaymentDate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
-						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+						paymentVo.setChequedate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
@@ -207,7 +207,7 @@ public class PaymentManagementController {
 		List<InvoiceVO> invoiceList = new ArrayList<InvoiceVO>();
 		BigDecimal totalamount = BigDecimal.ZERO;
 		String posturl = "";
-		if(type.equalsIgnoreCase("invoice")){
+		if(type.equalsIgnoreCase(GeneralUtils.MODULE_INVOICE)){
 			invoiceList = invoiceManagementService.getAllInvoiceByIdList(idList);
 			posturl = "/JJ/payment/createInvoicePayment";
 		}else if(type.equalsIgnoreCase("grant")){
@@ -247,23 +247,23 @@ public class PaymentManagementController {
 				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
 				result.rejectValue("giroamount", "error.notequal.paymentform.invoicetotalamount");
 			}
-			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
 			
 			if(paymentVo.getPaymentmodecheque().compareTo(Boolean.TRUE) == 0 &&
-					!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
+					!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
 			}
 			
 			if(!hasErrors){
-				paymentVo.setReferenceType("invoice");
+				paymentVo.setReferenceType(GeneralUtils.MODULE_INVOICE);
 				try{ 
-					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					paymentVo.setPaymentDate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
-						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+						paymentVo.setChequedate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
@@ -275,7 +275,7 @@ public class PaymentManagementController {
 		}
 		List<InvoiceVO> invoiceList = invoiceManagementService.getAllInvoiceByIdList(invoiceIdList);
 		for(InvoiceVO invoice : invoiceList) {
-			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoiceDate()));
+			invoice.setInvoicedateString(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).format(invoice.getInvoiceDate()));
 		}
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("invoiceList", invoiceList);
@@ -305,23 +305,23 @@ public class PaymentManagementController {
 				result.rejectValue("chequeamount", "error.notequal.paymentform.granttotalamount");
 				result.rejectValue("giroamount", "error.notequal.paymentform.granttotalamount");
 			}
-			if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
 			
 			if(paymentVo.getPaymentmodecheque().compareTo(Boolean.TRUE) == 0 &&
-					!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getChequedateString())){
+					!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
 			}
 			
 			if(!hasErrors){
-				paymentVo.setReferenceType("grant");
+				paymentVo.setReferenceType(GeneralUtils.MODULE_GRANT);
 				try{ 
-					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					paymentVo.setPaymentDate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
-						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+						paymentVo.setChequedate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
@@ -333,7 +333,7 @@ public class PaymentManagementController {
 		}
 		List<InvoiceVO> grantList = grantManagementService.getAllGrantByIdList(grantIdList);
 		/*for(InvoiceVO grant : grantList) {
-			invoice.setInvoicedateString(new SimpleDateFormat("dd/MM/yyyy").format(invoice.getInvoiceDate()));
+			invoice.setInvoicedateString(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).format(invoice.getInvoiceDate()));
 		}*/
 		model.addAttribute("paymentForm", paymentVo);
 		model.addAttribute("invoiceList", grantList);
@@ -356,10 +356,10 @@ public class PaymentManagementController {
 		if(paymentVo.getPaymentmodecheque()) {
 			inputAmount = inputAmount.add(paymentVo.getChequeamount());
 		}
-		if(("expense".equals(paymentVo.getType()) || "salary".equals(paymentVo.getType()) || "bonus".equals(paymentVo.getType()) || "salarybonus".equals(paymentVo.getType())) && paymentVo.getPaymentmodedirector()) {
+		if(payByDirectorModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodedirector()) {
 			inputAmount = inputAmount.add(paymentVo.getDirectoramount());
 		}
-		if("invoice".equals(paymentVo.getType()) && paymentVo.getPaymentmodegiro()) {
+		if(giroModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodegiro()) {
 			inputAmount = inputAmount.add(paymentVo.getGiroamount());
 		}
 		if(totalamount.compareTo(inputAmount) == 0){
@@ -371,7 +371,7 @@ public class PaymentManagementController {
 	private boolean validateInputDate(String lastdateString, String lastdateformat, String dateString) {
 		try {
 			Date lastdate = new SimpleDateFormat(lastdateformat).parse(lastdateString);
-			Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+			Date date = new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(dateString);
 			
 			if(date.compareTo(lastdate) >= 0) {
 				return true;
@@ -449,7 +449,7 @@ public class PaymentManagementController {
 		Collections.sort(salaryBonusVoList, new SalaryBonusComparator());
 		
 		PaymentVO paymentvo = new PaymentVO();
-		paymentvo.setType("salarybonus");
+		paymentvo.setType(GeneralUtils.MODULE_SALARY_BONUS);
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("salaryList", salaryBonusVoList);
 		model.addAttribute("idList", ids);
@@ -508,9 +508,9 @@ public class PaymentManagementController {
 		
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			if(salaryBonusVo.getType().equals(GeneralUtils.TYPE_BONUS)){
-				salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
+				salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.BONUS_DATE_FORMAT));
 			}else if(salaryBonusVo.getType().equals(GeneralUtils.TYPE_SALARY)){
-				salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MM-yyyy"));
+				salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.SALARY_DATE_FORMAT));
 			}
 		}
 		if (!result.hasErrors()) {
@@ -523,16 +523,14 @@ public class PaymentManagementController {
 			}
 			
 			if(!hasErrors){
-				paymentVo.setPaymentDate(GeneralUtils.convertStringToDate(paymentVo.getPaymentdateString(), "dd/MM/yyyy"));
+				paymentVo.setPaymentDate(GeneralUtils.convertStringToDate(paymentVo.getPaymentdateString(), GeneralUtils.STANDARD_DATE_FORMAT));
 				if(paymentVo.getPaymentmodecheque()){
-					paymentVo.setChequedate(GeneralUtils.convertStringToDate(paymentVo.getChequedateString(), "dd/MM/yyyy"));
+					paymentVo.setChequedate(GeneralUtils.convertStringToDate(paymentVo.getChequedateString(), GeneralUtils.STANDARD_DATE_FORMAT));
 				}
-				if(!salaryIdList.isEmpty()){
-					paymentManagementService.saveSalaryPayment(paymentVo, salaryIdList);
-				}
-				if(!bonusIdList.isEmpty()){
-					paymentManagementService.saveBonusPayment(paymentVo, bonusIdList);
-				}
+				
+				paymentManagementService.saveSalaryBonusPayment(paymentVo, salaryIdList, bonusIdList);
+				
+				
 				redirectAttributes.addFlashAttribute("css", "success");
 				redirectAttributes.addFlashAttribute("msg", "Payment saved successfully!");
 		        return "redirect:/salarybonus/listSalaryBonus";  
@@ -579,12 +577,12 @@ public class PaymentManagementController {
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
-			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MM-yyyy"));
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.SALARY_DATE_FORMAT));
 			totalamount = totalamount.add(salaryBonusVo.getTakehomeAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
-		paymentvo.setType("salary");
+		paymentvo.setType(GeneralUtils.MODULE_SALARY);
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("salaryList", salaryBonusVoList);
 		model.addAttribute("idList", idList);
@@ -604,7 +602,7 @@ public class PaymentManagementController {
 		logger.debug("saveSalaryPayment() : " + paymentVo.toString());
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
-			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "MM-yyyy"));
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.SALARY_DATE_FORMAT));
 		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
@@ -613,22 +611,22 @@ public class PaymentManagementController {
 				result.rejectValue("cashamount", "error.notequal.paymentform.salarytotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.salarytotalamount");
 			}
-			if(!validateInputDate(lastdate, "MM-yyyy", paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, GeneralUtils.SALARY_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.salarylastdate");
 			}
 			
-			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "MM-yyyy", paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, GeneralUtils.SALARY_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.salarylastdate");
 			}
 			
 			if(!hasErrors){
-				paymentVo.setReferenceType("salary");
+				paymentVo.setReferenceType(GeneralUtils.MODULE_SALARY);
 				try{ 
-					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					paymentVo.setPaymentDate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
-						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+						paymentVo.setChequedate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
@@ -667,12 +665,12 @@ public class PaymentManagementController {
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(idList);
 		BigDecimal totalamount = BigDecimal.ZERO;
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
-			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.BONUS_DATE_FORMAT));
 			totalamount = totalamount.add(salaryBonusVo.getBonusAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
-		paymentvo.setType("bonus");
+		paymentvo.setType(GeneralUtils.MODULE_BONUS);
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("bonusList", salaryBonusVoList);
 		model.addAttribute("idList", idList);
@@ -692,7 +690,7 @@ public class PaymentManagementController {
 		logger.debug("saveBonusPayment() : " + paymentVo.toString());
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusIdList);
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
-			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), "yyyy"));
+			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.BONUS_DATE_FORMAT));
 		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
@@ -701,22 +699,22 @@ public class PaymentManagementController {
 				result.rejectValue("cashamount", "error.notequal.paymentform.bonustotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.bonustotalamount");
 			}
-			if(!validateInputDate(lastdate, "yyyy", paymentVo.getPaymentdateString())){
+			if(!validateInputDate(lastdate, GeneralUtils.BONUS_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.bonuslastdate");
 			}
 			
-			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, "yyyy", paymentVo.getChequedateString())){
+			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, GeneralUtils.BONUS_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.bonuslastdate");
 			}
 			
 			if(!hasErrors){
-				paymentVo.setReferenceType("bonus");
+				paymentVo.setReferenceType(GeneralUtils.MODULE_BONUS);
 				try{ 
-					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					paymentVo.setPaymentDate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
-						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+						paymentVo.setChequedate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
@@ -794,9 +792,9 @@ public class PaymentManagementController {
 			try{
 				if(paymentVo.getBouncedateString() != null && !paymentVo.getBouncedateString().isEmpty() 
 						&& paymentVo.getBouncedateString().length() <= 10){
-					Date bounceChequeDate = new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getBouncedateString());
+					Date bounceChequeDate = new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getBouncedateString());
 					paymentVo.setBounceDate(bounceChequeDate);
-					if(!validateInputDate(lastdate, "dd/MM/yyyy", paymentVo.getBouncedateString())){
+					if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getBouncedateString())){
 						result.rejectValue("bouncedateString", "error.paymentform.bouncedate.before.chequedate");
 					}
 				}else{
@@ -807,21 +805,21 @@ public class PaymentManagementController {
 				result.rejectValue("bouncedateString", "error.notvalid.paymentform.bouncedate");
 			}
 			
-			if(paymentVo.getBounceDate() != null && !validateInputDate(paymentVo.getBouncedateString(), "dd/MM/yyyy", paymentVo.getPaymentdateString())){
+			if(paymentVo.getBounceDate() != null && !validateInputDate(paymentVo.getBouncedateString(), GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.chequebounceddate");
 			}
 			
 			if(paymentVo.getBounceDate() != null && 
-					paymentVo.getPaymentmodecheque() && !validateInputDate(paymentVo.getBouncedateString(), "dd/MM/yyyy", paymentVo.getChequedateString())){
+					paymentVo.getPaymentmodecheque() && !validateInputDate(paymentVo.getBouncedateString(), GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.chequebounceddate");
 			}
 			
 			if(!result.hasErrors()){
 				paymentVo.setReferenceType(paymentVo.getType());
 				try{ 
-					paymentVo.setPaymentDate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getPaymentdateString()));
+					paymentVo.setPaymentDate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getPaymentdateString()));
 					if(paymentVo.getPaymentmodecheque())
-						paymentVo.setChequedate(new SimpleDateFormat("dd/MM/yyyy").parse(paymentVo.getChequedateString()));
+						paymentVo.setChequedate(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).parse(paymentVo.getChequedateString()));
 				}catch(Exception e) {
 					logger.info("Error parsing date string");
 				}
