@@ -34,6 +34,9 @@ public class PaymentFormValidator implements Validator {
 
 		boolean hasPayment = true;
 		switch(paymentVo.getType()) {
+			case "salary":
+			case "bonus":
+			case "salarybonus":
 			case "expense":
 				if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque() && !paymentVo.getPaymentmodedirector()) {
 					errors.rejectValue("paymentmodedirector", "error.notempty.paymentform.paymentmode");

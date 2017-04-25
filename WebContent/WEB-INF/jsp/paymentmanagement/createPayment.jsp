@@ -108,7 +108,7 @@
 					</div>
 			  	</div>
 			</div>
-			<c:if test="${paymentForm.type ==  'expense'}">
+			<c:if test="${(paymentForm.type ==  'expense') || (paymentForm.type == 'bonus') || (paymentForm.type == 'salary') || (paymentForm.type == 'salarybonus')}">
 				<div class="row">
 				  	<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label"></label>

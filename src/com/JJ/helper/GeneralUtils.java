@@ -41,10 +41,16 @@ public class GeneralUtils {
 	public static final String BOUNCED = "Y";
 	public static final String UNBOUNCED = "N";
 	public static final String TYPE_SALARY = "Salary";
+	public static final String TYPE_SALARY_BONUS = "SalaryBonus";
 	public static final String TYPE_BONUS = "Bonus";
 	public static final String YES_IND = "Y";
 	public static final String NO_IND = "N";
 	public static final String NONE = "NONE";
+	
+	public static final String MODULE_SALARY = "salary";
+	public static final String MODULE_BONUS = "bonus";
+	public static final String MODULE_EXPENSE = "expense";
+	public static final String MODULE_INVOICE = "invoice";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){

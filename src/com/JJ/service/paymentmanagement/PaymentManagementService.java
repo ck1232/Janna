@@ -221,7 +221,7 @@ public class PaymentManagementService {
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
-		if("expense".equals(paymentVo.getType()) && paymentVo.getPaymentmodedirector()){
+		if(("expense".equals(paymentVo.getType()) || "salary".equals(paymentVo.getType()) || "bonus".equals(paymentVo.getType()) || "salarybonus".equals(paymentVo.getType())) && paymentVo.getPaymentmodedirector()){
 			PaymentDetailVO paymentDetailVO = convertDirectorPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);

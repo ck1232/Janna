@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -60,6 +61,10 @@ public class PaymentManagementController {
 	private ChequeManagementService chequeManagementService;
 	private ExpenseTypeLookup expenseTypeLookup;
 	private PaymentFormValidator paymentFormValidator;
+	
+	private List<String> payByDirectorModuleList = Arrays.asList(GeneralUtils.MODULE_BONUS, GeneralUtils.MODULE_EXPENSE,
+			GeneralUtils.MODULE_SALARY);
+	private List<String> giroModuleList = Arrays.asList(GeneralUtils.MODULE_INVOICE);
 	
 	@Autowired
 	public PaymentManagementController(PaymentManagementService paymentManagementService,
@@ -351,7 +356,7 @@ public class PaymentManagementController {
 		if(paymentVo.getPaymentmodecheque()) {
 			inputAmount = inputAmount.add(paymentVo.getChequeamount());
 		}
-		if("expense".equals(paymentVo.getType()) && paymentVo.getPaymentmodedirector()) {
+		if(("expense".equals(paymentVo.getType()) || "salary".equals(paymentVo.getType()) || "bonus".equals(paymentVo.getType()) || "salarybonus".equals(paymentVo.getType())) && paymentVo.getPaymentmodedirector()) {
 			inputAmount = inputAmount.add(paymentVo.getDirectoramount());
 		}
 		if("invoice".equals(paymentVo.getType()) && paymentVo.getPaymentmodegiro()) {
@@ -444,6 +449,7 @@ public class PaymentManagementController {
 		Collections.sort(salaryBonusVoList, new SalaryBonusComparator());
 		
 		PaymentVO paymentvo = new PaymentVO();
+		paymentvo.setType("salarybonus");
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("salaryList", salaryBonusVoList);
 		model.addAttribute("idList", ids);
@@ -513,6 +519,7 @@ public class PaymentManagementController {
 				hasErrors = true;
 				result.rejectValue("cashamount", "error.notequal.paymentform.totalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.totalamount");
+				result.rejectValue("directoramount", "error.notequal.paymentform.totalamount");
 			}
 			
 			if(!hasErrors){
@@ -577,6 +584,7 @@ public class PaymentManagementController {
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
+		paymentvo.setType("salary");
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("salaryList", salaryBonusVoList);
 		model.addAttribute("idList", idList);
@@ -664,6 +672,7 @@ public class PaymentManagementController {
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
+		paymentvo.setType("bonus");
 		model.addAttribute("paymentForm", paymentvo);
 		model.addAttribute("bonusList", salaryBonusVoList);
 		model.addAttribute("idList", idList);
