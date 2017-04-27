@@ -213,7 +213,7 @@ public class ExpenseManagementController {
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("updateExpense() : " + expenseVO.toString());
-		
+		GeneralUtils.validate(expenseVO, "expenseForm" ,result);
 		if (result.hasErrors()) {
 			Map<String,String> expenseTypeList = expenseTypeLookup.getExpenseTypeMap();
 	    	model.addAttribute("expenseTypeList", expenseTypeList);

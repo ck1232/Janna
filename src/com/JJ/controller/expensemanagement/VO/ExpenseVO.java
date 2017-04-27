@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -27,10 +28,8 @@ public class ExpenseVO extends Base implements Serializable {
     
     private String supplier;
     
-//    @NotNull(message="error.notempty.expenseform.totalamount")
-//    @NotEmpty(message="error.notempty.expenseform.totalamount")
-//    @DecimalMin(value="1", message="error.notvalid.expenseform.totalamount")
-//    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    @NotNull(message="error.notempty.expenseform.totalamount")
+    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
     private BigDecimal totalAmt;
 
     private String remarks;
@@ -40,7 +39,6 @@ public class ExpenseVO extends Base implements Serializable {
     //non db fields
     private String expensetype;
     
-    @NotNull(message="error.notempty.expenseform.expensedate")
     @NotEmpty(message="error.notempty.expenseform.expensedate")
     @InDateRange(dateFormat="dd/MM/yyyy", message="error.notvalid.expenseform.expensedate")
     private String expensedateString;

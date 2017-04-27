@@ -35,7 +35,7 @@
 				<form:input path="expenseId" type="hidden" id="expenseId"/>
 				<div class="row">
 					<div class="form-group ${status.error ? 'has-error' : ''}">
-						<label class="col-sm-2 control-label">Expense Date</label>
+						<label class="col-sm-2 control-label">Expense Date*</label>
 						<div class="col-sm-5">
 	                  		<form:input path="expensedateString" type="text" class="form-control" 
 	                  			  id="expensedateString" placeholder="Press to select date"/>
@@ -45,7 +45,7 @@
 	 			</div>
 	 			<div class="row">
 				  	<div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Type</label>
+							<label class="col-sm-2 control-label">Type*</label>
 							<div class="col-sm-5">
 			                    <form:select path="expenseTypeId" class="form-control" id="expenseTypeId">
 			                    	<form:option value="" label="--- Select ---"/>
@@ -57,7 +57,7 @@
 				</div>
 				<div class="row">
 				  	<div id="invoicediv" class="form-group ${status.error ? 'has-error' : ''}" style="display:none">
-				  		<label class="col-sm-2 control-label">Invoice no</label>
+				  		<label class="col-sm-2 control-label">Invoice no*</label>
 						<div class="col-sm-5">
 							<form:input path="invoiceNo" type="text" class="form-control"
 		                                id="invoiceNo" placeholder="Enter invoice no" />
@@ -77,9 +77,9 @@
 				</div>
 				<div class="row">
 				  	<div class="form-group ${status.error ? 'has-error' : ''}">
-						<label class="col-sm-2 control-label">Amount</label>
+						<label class="col-sm-2 control-label">Amount*</label>
 						<div class="col-sm-5">
-							<form:input path="totalAmt" type="number" class="form-control"
+							<form:input path="totalAmt" type="text" class="form-control"
 		                                id="totalAmt" placeholder="Enter amount" />
 							<form:errors path="totalAmt" class="text-danger" />
 						</div>
@@ -87,7 +87,7 @@
 				</div>
 				<div class="row">		  
 				  	<div class="form-group ${status.error ? 'has-error' : ''}">
-						<label class="col-sm-2 control-label">Supplier</label>
+						<label class="col-sm-2 control-label">Supplier*</label>
 						<div class="col-sm-5" id="addSupplierDiv">
 							<form:input path="supplier" type="text" class="form-control typeahead"
 		                                id="supplier" placeholder="Enter supplier" />

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -154,10 +155,14 @@ public class GeneralUtils {
 		ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 		Validator validator = validatorFactory.getValidator();
 		Set<ConstraintViolation<Object>> violations = validator.validate(obj);
-		
+		List<String> errorComponent = new ArrayList<String>();
 		for (ConstraintViolation<Object> violation : violations) 
         {
-            String propertyPath = violation.getPropertyPath().toString();
+			String propertyPath = violation.getPropertyPath().toString();
+			if(errorComponent.contains(propertyPath)){
+				continue;
+			}
+			errorComponent.add(propertyPath);
             String[] codes = new String[]{violation.getMessage()};
             Object[] argument = new Object[]{};
             Object rejectedValue = violation.getInvalidValue();
