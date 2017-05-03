@@ -1,12 +1,10 @@
 package com.JJ.validator;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
@@ -23,7 +21,7 @@ public class EmployeeFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		EmployeeVO employeeVo = (EmployeeVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.employeeform.name");
+		/*ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.employeeform.name");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employeeType", "error.notempty.employeeform.employmenttype");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nationality", "error.notempty.employeeform.nationality");
 		
@@ -34,7 +32,7 @@ public class EmployeeFormValidator implements Validator {
 			if(value.compareTo(BigDecimal.ZERO) < 0) {
 				errors.rejectValue("basicSalary", "error.negative.employeeform.basicsalary");
 			}
-		}
+		}*/
 		
 		if(!employeeVo.getEmploymentStartDateString().isEmpty() && !employeeVo.getEmploymentEndDateString().isEmpty()) {
 			Date startdate = null, enddate = null;
@@ -55,13 +53,13 @@ public class EmployeeFormValidator implements Validator {
 			}
 		}
 		
-		if(!employeeVo.getDobString().isEmpty()) {
+		/*if(employeeVo.getDobString() != null && !employeeVo.getDobString().isEmpty()) {
 			try{
 				new SimpleDateFormat("dd/MM/yyyy").parse(employeeVo.getDobString());
 			}catch(Exception e) {
 				errors.rejectValue("dobString", "error.notvalid.employeeform.dob");
 			}
-		}
+		}*/
 	}
 	
 }

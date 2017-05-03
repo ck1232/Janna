@@ -4,24 +4,35 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.JJ.model.Base;
+import com.JJ.validator.annotation.ValidDate;
 
 public class InvoiceVO extends Base implements Serializable {
 	
 	private Integer grantId;
 	
     private Integer invoiceId;
-
+    
+    @NotEmpty(message="error.notempty.grantform.organisation")
     private String messenger;
 
     private Date invoiceDate;
-
+    
+    @NotNull(message="error.notempty.grantform.totalamount")
+    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    @Min(value=0L, message="error.negative.grantform.totalamount")
     private BigDecimal totalAmt;
 
     private String status;
     
     //non db fields
-    
+    @ValidDate(dateFormat="dd/MM/yyyy", message="error.notempty.grantform.date")
   	private String invoicedateString;
   	
   	private String type;

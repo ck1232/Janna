@@ -116,6 +116,7 @@ public class EmployeeManagementController {
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("saveEmployee() : " + employeeVo.toString());
+		GeneralUtils.validate(employeeVo, "employeeForm" ,result);
 		if (result.hasErrors()) {
 			initData();
 	    	model.addAttribute("employmentTypeList", employmentTypeList);
@@ -163,7 +164,7 @@ public class EmployeeManagementController {
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("updateEmployee() : " + employeeVo.toString());
-		
+		GeneralUtils.validate(employeeVo, "employeeForm" ,result);
 		if (result.hasErrors()) {
 			initData();
 			model.addAttribute("employmentTypeList", employmentTypeList);

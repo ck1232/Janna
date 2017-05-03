@@ -150,7 +150,10 @@ public class InvoiceManagementController {
 		model.addAttribute("invoice", invoiceVO);
 		List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId(invoiceVO.getType(), Integer.valueOf(splitId[0]));
 		model.addAttribute("paymentList", paymentList);
-		List<PaymentRsVO> rsList = paymentRSManagementService.getAllPaymentByPaymentDetailId(paymentList.get(0).getPaymentDetailId());
+		List<PaymentRsVO> rsList = new ArrayList<PaymentRsVO>();
+		if(paymentList != null && paymentList.size() > 0){
+			rsList = paymentRSManagementService.getAllPaymentByPaymentDetailId(paymentList.get(0).getPaymentDetailId());
+		}
 		List<InvoiceVO> otherList = new ArrayList<InvoiceVO>();
 		List<Integer> idList = new ArrayList<Integer>();
 		if(rsList != null && !rsList.isEmpty()) {
@@ -182,7 +185,7 @@ public class InvoiceManagementController {
 	@RequestMapping(value = "/createGrant", method = RequestMethod.POST)
     public String saveGrant(@ModelAttribute("grantForm") @Validated InvoiceVO invoiceVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		
+		GeneralUtils.validate(invoiceVO, "grantForm" ,result);
 		logger.debug("saveGrant() : " + invoiceVO.toString());
 		if (result.hasErrors()) {
 			return "createGrant";
@@ -198,6 +201,7 @@ public class InvoiceManagementController {
 	@RequestMapping(value = "/createGrantAndPay", method = RequestMethod.POST)
     public String saveGrantAndPay(@ModelAttribute("grantForm") @Validated InvoiceVO invoiceVO, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		GeneralUtils.validate(invoiceVO, "grantForm" ,result);
 		List<String> idList = new ArrayList<String>();
 		logger.debug("saveGrantAndPay() : " + invoiceVO.toString());
 		if (result.hasErrors()) {

@@ -4,31 +4,47 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.JJ.model.Base;
+import com.JJ.validator.annotation.ValidDate;
 
 public class EmployeeVO extends Base implements Serializable {
     private Integer employeeId;
-
+    
+    @NotEmpty(message="error.notempty.employeeform.name")
     private String name;
-
+    
+    @NotEmpty(message="error.notempty.employeeform.employmenttype")
     private String employeeType;
     
     private String employeeTypeString;
 
     private Date dob;
     
+    @ValidDate(dateFormat="dd/MM/yyyy", nullable=true, message="error.notvalid.employeeform.startdate")
     private String dobString;
 
+    @NotEmpty(message="error.notempty.employeeform.nationality")
     private String nationality;
-
+    
+    @NotNull(message="error.notempty.employeeform.basicsalary")
+    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    @Min(value=0L, message="error.negative.employeeform.basicsalary")
     private BigDecimal basicSalary;
 
     private Date employmentStartDate;
     
+    @ValidDate(dateFormat="dd/MM/yyyy", nullable=true, message="error.notvalid.employeeform.startdate")
     private String employmentStartDateString;
 
     private Date employmentEndDate;
     
+    @ValidDate(dateFormat="dd/MM/yyyy", nullable=true, message="error.notvalid.employeeform.enddate")
     private String employmentEndDateString;
 
     private String cdacInd;

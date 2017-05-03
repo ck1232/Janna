@@ -20,7 +20,7 @@
 			              <div class="box-body">
 				              	<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Name</label>
+										<label class="col-sm-2 control-label">Name*</label>
 										<div class="col-sm-5">
 											<form:input path="name" type="text" class="form-control"
 						                                id="name" placeholder="Enter employee name" />
@@ -30,7 +30,7 @@
 								</div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Employment Type</label>
+										<label class="col-sm-2 control-label">Employment Type*</label>
 										<div class="col-sm-5">
 						                    <form:select path="employeeType" class="form-control" id="employeeType">
 												<form:option value="" label="--- Select ---"/>
@@ -52,7 +52,7 @@
 					            </div>
 					            <div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Nationality</label>
+										<label class="col-sm-2 control-label">Nationality*</label>
 										<div class="col-sm-5">
 											<form:input path="nationality" type="text" class="form-control"
 						                                id="nationality" placeholder="Enter employee nationality" />
@@ -62,9 +62,9 @@
 								</div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Basic Salary</label>
+										<label class="col-sm-2 control-label">Basic Salary*</label>
 										<div class="col-sm-5">
-											<form:input path="basicSalary" type="number" class="form-control"
+											<form:input path="basicSalary" type="text" class="form-control"
 						                                id="basicSalary" placeholder="Enter employee basic salary" />
 											<form:errors path="basicSalary" class="text-danger" />
 										</div>

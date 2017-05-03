@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.JJ.model.Base;
-import com.JJ.validator.annotation.InDateRange;
+import com.JJ.validator.annotation.ValidDate;
 
 public class ExpenseVO extends Base implements Serializable {
     private Integer expenseId;
@@ -40,7 +40,7 @@ public class ExpenseVO extends Base implements Serializable {
     private String expensetype;
     
     @NotEmpty(message="error.notempty.expenseform.expensedate")
-    @InDateRange(dateFormat="dd/MM/yyyy", message="error.notvalid.expenseform.expensedate")
+    @ValidDate(dateFormat="dd/MM/yyyy", message="error.notvalid.expenseform.expensedate")
     private String expensedateString;
     
 	private static final long serialVersionUID = 1L;

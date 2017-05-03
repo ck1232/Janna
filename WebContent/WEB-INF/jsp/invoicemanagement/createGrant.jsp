@@ -20,7 +20,7 @@
 			              <div class="box-body">
 				              	<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Organisation</label>
+										<label class="col-sm-2 control-label">Organisation*</label>
 										<div class="col-sm-5">
 											<form:input path="messenger" type="text" class="form-control"
 						                                id="messenger" placeholder="Enter organisation" />
@@ -30,7 +30,7 @@
 								</div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Grant Date</label>
+										<label class="col-sm-2 control-label">Grant Date*</label>
 										<div class="col-sm-5">
 						                    <form:input path="invoicedateString" type="text" class="form-control"
 						                                id="invoicedateString" placeholder="Press to select date" />
@@ -40,9 +40,9 @@
 								</div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Total Amount</label>
+										<label class="col-sm-2 control-label">Total Amount*</label>
 										<div class="col-sm-5">
-											<form:input path="totalAmt" type="number" class="form-control"
+											<form:input path="totalAmt" type="text" class="form-control"
 						                                id="totalAmt" placeholder="Enter total amount" />
 											<form:errors path="totalAmt" class="text-danger" />
 										</div>
