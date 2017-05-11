@@ -132,6 +132,7 @@ public class SalaryBonusManagementController {
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("saveSalaryBonus() : " + salaryBonusVO.toString());
+		GeneralUtils.validate(salaryBonusVO, "salaryBonusForm" ,result);
 		if (result.hasErrors()) {
 			initData();
 			model.addAttribute("employeeList", employeeList);
@@ -151,6 +152,7 @@ public class SalaryBonusManagementController {
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		List<String> idList = new ArrayList<String>();
 		logger.debug("saveSalaryBonus() : " + salaryBonusVO.toString());
+		GeneralUtils.validate(salaryBonusVO, "salaryBonusForm" ,result);
 		if (result.hasErrors()) {
 			initData();
 			model.addAttribute("employeeList", employeeList);
@@ -197,7 +199,7 @@ public class SalaryBonusManagementController {
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		
 		logger.debug("updateSalaryBonus() : " + salaryBonusVO.toString());
-		
+		GeneralUtils.validate(salaryBonusVO, "salaryBonusForm" ,result);
 		if (result.hasErrors()) {
 			initData();
 	    	model.addAttribute("employeeList", employeeList);

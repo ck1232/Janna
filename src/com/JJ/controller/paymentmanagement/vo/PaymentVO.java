@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+
+import com.JJ.validator.annotation.ValidDate;
+
 public class PaymentVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -11,18 +16,29 @@ public class PaymentVO implements Serializable {
 	private Date bounceDate;
 	private String bouncedateString;
 	private Date paymentDate;
+	
+	@ValidDate(dateFormat="dd/MM/yyyy", message="error.notvalid.paymentform.paymentdate")
 	private String paymentdateString;
 	private Boolean paymentmodecash;
+	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    @Min(value=0L, message="error.notvalid.paymentform.cashamount")
 	private BigDecimal cashamount;
 	private Boolean paymentmodecheque;
 	private String chequeId;
 	private String chequeno;
+	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    @Min(value=0L, message="error.notvalid.paymentform.chequeamount")
 	private BigDecimal chequeamount;
 	private Date chequedate;
+	@ValidDate(dateFormat="dd/MM/yyyy",nullable=true, message="error.notvalid.paymentform.chequedate")
 	private String chequedateString;
 	private Boolean paymentmodedirector;
+	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+	@Min(value=0L, message="error.notvalid.paymentform.directoramount")
 	private BigDecimal directoramount;
 	private Boolean paymentmodegiro;
+	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+	@Min(value=0L, message="error.notvalid.paymentform.giroamount")
 	private BigDecimal giroamount;
 	private String type;
 	

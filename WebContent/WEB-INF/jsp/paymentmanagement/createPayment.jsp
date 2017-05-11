@@ -40,7 +40,7 @@
  			</c:if>
 			<div class="row">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-sm-2 control-label">Payment Date</label>
+					<label class="col-sm-2 control-label">Payment Date*</label>
 					<div class="col-sm-4">
                   		<form:input path="paymentdateString" type="text" class="form-control" 
                   			  id="paymentdateString" placeholder="Press to select date"/>

@@ -20,7 +20,7 @@
 			              <div class="box-body">
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Employee Name</label>
+										<label class="col-sm-2 control-label">Employee Name*</label>
 										<div class="col-sm-5">
 						                    <form:select path="employeeId" class="form-control" id="employeeId">
 												<form:option value="" label="--- Select ---"/>
@@ -32,7 +32,7 @@
 								</div>
 								<div class="row">
 						            <div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Date</label>
+										<label class="col-sm-2 control-label">Date*</label>
 											<div class="col-sm-5">
 						                  		<form:input path="dateString" type="text" class="form-control" 
 						                  			  id="dateString" placeholder="Press to select date"/>
@@ -42,7 +42,7 @@
 					            </div>
 								<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
-										<label class="col-sm-2 control-label">Type</label>
+										<label class="col-sm-2 control-label">Type*</label>
 										<div class="col-sm-5">
 						                    <form:select path="type" class="form-control" id="type">
 												<form:option value="" label="--- Select ---"/>
@@ -55,7 +55,7 @@
 								<div id="salarydiv" style="display:none">
 						            <div class="row">
 							            <div class="form-group ${status.error ? 'has-error' : ''}">
-											<label class="col-sm-2 control-label">Basic Salary</label>
+											<label class="col-sm-2 control-label">Basic Salary*</label>
 												<div class="col-sm-5">
 							                  		<form:input path="basicSalaryAmt" type="text" class="form-control" 
 							                  			  id="basicSalaryAmt" placeholder="Enter basic salary"/>
@@ -187,7 +187,7 @@
 						        <div id="bonusdiv" style="display:none">
 						            <div class="row">
 							            <div class="form-group ${status.error ? 'has-error' : ''}">
-											<label class="col-sm-2 control-label">Bonus Amount</label>
+											<label class="col-sm-2 control-label">Bonus Amount*</label>
 												<div class="col-sm-5">
 							                  		<form:input path="bonusAmt" type="text" class="form-control" 
 							                  			  id="bonusAmt" placeholder="Enter bonus amount"/>

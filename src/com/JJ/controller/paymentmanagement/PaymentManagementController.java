@@ -130,6 +130,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveExpensePayment() : " + paymentVo.toString());
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
 		for(ExpenseVO expense : expenseList) {
 			expense.setExpensedateString(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).format(expense.getExpenseDate()));
@@ -239,6 +240,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveInvoicePayment() : " + paymentVo.toString());
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
 			if(!validateInputAmount(totalamount, paymentVo)){
@@ -297,6 +299,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveGrantPayment() : " + paymentVo.toString());
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
 			if(!validateInputAmount(totalamount, paymentVo)){
@@ -467,7 +470,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveSalaryBonusPayment() : " + paymentVo.toString());
-		
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		List<Integer> salaryIdList = new ArrayList<Integer>();
 		List<Integer> bonusIdList = new ArrayList<Integer>();
 		if(ids == null || ids.size() < 1){
@@ -600,6 +603,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveSalaryPayment() : " + paymentVo.toString());
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllSalaryByIdList(salaryIdList);
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.SALARY_DATE_FORMAT));
@@ -688,6 +692,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveBonusPayment() : " + paymentVo.toString());
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		List<SalaryBonusVO> salaryBonusVoList = salaryBonusManagementService.getAllBonusByIdList(bonusIdList);
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.BONUS_DATE_FORMAT));
@@ -772,6 +777,7 @@ public class PaymentManagementController {
     		@ModelAttribute("paymentForm") @Validated PaymentVO paymentVo, 
     		BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.debug("saveBounceChequePayment() : " + paymentVo.toString());
+		GeneralUtils.validate(paymentVo, "paymentForm", result);
 		List<ChequeVO> chequeVoList = chequeManagementService.getAllChequeByIdList(chequeIdList);
 		if(chequeVoList == null || chequeVoList.isEmpty()) {
 			redirectAttributes.addFlashAttribute("css", "danger");

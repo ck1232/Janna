@@ -1,11 +1,9 @@
 package com.JJ.validator;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
@@ -22,10 +20,10 @@ public class SalaryBonusFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		SalaryBonusVO salaryBonusVo = (SalaryBonusVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employeeId", "error.notempty.salarybonusform.name");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", "error.notempty.salarybonusform.type");
+//		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "employeeId", "error.notempty.salarybonusform.name");
+//		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", "error.notempty.salarybonusform.type");
 		
-		if(salaryBonusVo.getDateString() == null || salaryBonusVo.getDateString().trim().isEmpty()){
+		/*if(salaryBonusVo.getDateString() == null || salaryBonusVo.getDateString().trim().isEmpty()){
 			errors.rejectValue("dateString", "error.notempty.salarybonusform.date");
 		}else{
 			try{
@@ -33,7 +31,7 @@ public class SalaryBonusFormValidator implements Validator {
 			}catch(Exception e) {
 				errors.rejectValue("dateString", "error.notvalid.salarybonusform.date");
 			}
-		}
+		}*/
 		
 		if(!salaryBonusVo.getType().isEmpty()) {
 			if(salaryBonusVo.getType().toLowerCase().equals("salary")) {

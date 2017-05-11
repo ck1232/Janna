@@ -22,7 +22,7 @@ public class PaymentFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		PaymentVO paymentVo = (PaymentVO) target;
 		
-		if(paymentVo.getPaymentdateString() == null || paymentVo.getPaymentdateString().trim().isEmpty()){
+		/*if(paymentVo.getPaymentdateString() == null || paymentVo.getPaymentdateString().trim().isEmpty()){
 			errors.rejectValue("paymentdateString", "error.notempty.paymentform.paymentdate");
 		}else{
 			try{
@@ -30,7 +30,7 @@ public class PaymentFormValidator implements Validator {
 			}catch(Exception e) {
 				errors.rejectValue("paymentdateString", "error.notvalid.paymentform.paymentdate");
 			}
-		}
+		}*/
 
 		boolean hasPayment = true;
 		switch(paymentVo.getType()) {

@@ -4,15 +4,24 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.JJ.model.Base;
+import com.JJ.validator.annotation.ValidDate;
 
 public class SalaryBonusVO extends Base implements Serializable {
     private Integer id;
 
     private Date date;
-    
+    @NotNull(message="error.notempty.salarybonusform.date")
+    @ValidDate(dateFormat="dd/MM/yyyy", message="error.notvalid.salarybonusform.date")
     private String dateString;
-
+    @NotNull(message="error.notempty.salarybonusform.name")
+    @Min(value=1L, message="error.notempty.salarybonusform.name")
     private Integer employeeId;
     
     private String name;
@@ -28,7 +37,8 @@ public class SalaryBonusVO extends Base implements Serializable {
     private Date employmentEndDate;
 
     private String cdacInd;
-
+    @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+    @Min(value=0L, message="error.negative.salarybonusform.basicsalary")
     private BigDecimal basicSalaryAmt;
 
     private BigDecimal overTimeAmt;
@@ -62,9 +72,10 @@ public class SalaryBonusVO extends Base implements Serializable {
     private BigDecimal grossAmt;
     
 	private BigDecimal takehomeAmt;
-	
+	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+	@Min(value=0L, message="error.negative.salarybonusform.bonusamount")
 	private BigDecimal bonusAmt;
-	
+	@NotEmpty(message="error.notempty.salarybonusform.type")
 	private String type;
 
     private String status;
