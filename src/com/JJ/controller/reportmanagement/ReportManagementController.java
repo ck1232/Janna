@@ -39,11 +39,11 @@ public class ReportManagementController {
 	@RequestMapping(value = "/viewReportGen", method = RequestMethod.GET)
 	public String viewReportGen(Model model) {
 		//get list of years
-		List<String> yearList = new ArrayList<String>();
-		for(int i=0;i>-5;i--){
-			yearList.add(GeneralUtils.convertDateToString(GeneralUtils.getNewDate(i), "yyyy"));
-		}
-		model.addAttribute("yearList", yearList);
+//		List<String> yearList = new ArrayList<String>();
+//		for(int i=0;i>-5;i--){
+//			yearList.add(GeneralUtils.convertDateToString(GeneralUtils.getNewDate(i), "yyyy"));
+//		}
+//		model.addAttribute("yearList", yearList);
 		ExpenseControlReportCriteria reportCriteria = new ExpenseControlReportCriteria();
 		model.addAttribute("expenseControlForm", reportCriteria);
 		return "viewReportGen";
@@ -66,7 +66,7 @@ public class ReportManagementController {
         HSSFWorkbook wb = reportManagementService.writeToFile(file, bonusList, reportCriteria);
         if(wb != null){
         	response.setContentType("application/vnd.ms-excel");
-            response.addHeader("Content-Disposition", "attachment; filename=Expense_Control_"+reportCriteria.getYear()+".xls");
+            response.addHeader("Content-Disposition", "attachment; filename=Expense_Control_"+ "2017"/*reportCriteria.getYear()*/+".xls");
             try{
             	wb.write(response.getOutputStream());
                 response.getOutputStream().flush();

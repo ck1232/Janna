@@ -6,35 +6,90 @@
     <section class="content">
     	<div class="row">
     		<div class="col-md-12">
-    			<!--BOX-->
-                <div class="box">
-                	<!--BOX HEADER-->
-                    <div class="box-header with-border">
-                    	<h3 class="box-title">Report Generation</h3>
-                    </div>
-                    <c:url var="post_url" value="/report/generateExpenseControlReport" />
-                    <form:form id="generateExpenseControlForm" method="post" modelAttribute="expenseControlForm" action="${post_url}">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		            <div class="box-body">
-		            	<div class="row">
-		            		<div class="form-group">
-			            		<div class="col-sm-2">Expense Control</div>
-			            		<div class="col-sm-2">
-			            			<form:select path="year" class="form-control" id="year">
-				   						<form:options items="${yearList}" />
-									</form:select>
+    			<c:url var="post_url" value="/report/generateExpenseControlReport" />
+    			<form:form id="generateExpenseControlForm" method="post" modelAttribute="expenseControlForm" action="${post_url}">
+	    			<!--BOX 1-->
+	                <div class="box">
+	                	<!--BOX HEADER-->
+	                    <div class="box-header with-border">
+	                    	<h3 class="box-title">Report Details</h3>
+	                    </div>
+	                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			            <div class="box-body">
+			            	<div class="row">
+			            		<div class="form-group">
+				            		<div class="col-sm-2">Date as of</div>
+				            		<div class="col-sm-2">
+										<form:input path="startdateString" type="text" class="form-control" 
+				                  			  		id="startdateString" placeholder="Press to select date"/>
+									</div>
 								</div>
-								<div class="col-sm-2">
-									<button type="submit" class="btn btn-primary" form ="generateExpenseControlForm">Generate</button>
+							</div>
+							<div class="row">
+			            		<div class="form-group">
+				            		<div class="col-sm-2">End Date</div>
+				            		<div class="col-sm-2">
+										<form:input path="enddateString" type="text" class="form-control" 
+				                  			  		id="enddateString" placeholder="Press to select date"/>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!-- /.box-body -->
-					</form:form>
-		            <!--/.FORM-->
-		      	</div>
-		    	<!-- /.BOX -->
+						<!-- /.box-body -->
+			      	</div>
+			      	<!-- /.BOX 1 -->
+			      	<!--BOX 2-->
+	                <div class="box">
+	                	<!--BOX HEADER-->
+	                    <div class="box-header with-border">
+	                    	<h3 class="box-title">Report Type</h3>
+	                    </div>
+			            <div class="box-body">
+			            	<div class="row">
+			            		<div class="form-group">
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Expense" /></label> Expense</div>
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Invoice" /></label> Invoice</div>
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Salary" /></label> Salary</div>
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Bonus" /></label> Bonus</div>
+								</div>
+							</div>
+							<div class="row">
+			            		<div class="form-group">
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Grant" /></label> Grant</div>
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Summary" /></label> Summary</div>
+				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Chinastock" /></label> China Stock</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-body -->
+			      	</div>
+			      	<!-- /.BOX 2 -->
+		      	</form:form>
+		      	<!--/.FORM-->
+		    	<div class="col-sm-2">
+					<button type="submit" class="btn btn-primary" form ="generateExpenseControlForm">Generate</button>
+				</div>
         	</div>
     	</div>
     </section>
+    
+    <script>
+      $( function() {
+    	  $('#startdateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
+		   
+	 } );
+
+      $( function() {
+    	  $('#enddateString').datepicker({
+	    		format: 'dd/mm/yyyy',
+		      	autoclose: true
+		    });
+		   
+	 } );
+
+      
+
+    </script>
