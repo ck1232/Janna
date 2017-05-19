@@ -1,12 +1,19 @@
 package com.JJ.controller.reportmanagement;
 
+import java.util.Date;
+import java.util.List;
+
 public class ExpenseControlReportCriteria{
 	
 	private String startdateString;
 	
 	private String enddateString;
 	
-	private String [] type;
+	private Date startDate;
+	
+	private Date endDate;
+	
+	private List<String> type;
 
 	public String getStartdateString() {
 		return startdateString;
@@ -24,16 +31,30 @@ public class ExpenseControlReportCriteria{
 		this.enddateString = enddateString;
 	}
 
-	public String [] getType() {
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public List<String> getType() {
 		return type;
 	}
 
-	public void setType(String [] type) {
+	public void setType(List<String> type) {
 		this.type = type;
 	}
 	
-	
-
 //	private String year;
 //
 //	public String getYear() {

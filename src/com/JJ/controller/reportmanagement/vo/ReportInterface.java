@@ -3,8 +3,8 @@ package com.JJ.controller.reportmanagement.vo;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public interface ReportInterface {
-	public Sheet exportReport(Date dateAsOf, Map<String, Object> additionalMap);
+	public void exportReport(Workbook workbook, Date dateAsOf,Date endDate, Map<String, Object> additionalMap);
 }
