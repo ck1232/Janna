@@ -1,6 +1,7 @@
 package com.JJ.helper;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +21,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.validation.BindingResult;
@@ -189,5 +192,78 @@ public class GeneralUtils {
 			
 		}
 		return false;
+	}
+	
+	public static <T> List<String> convertListToStringList(List<T> objList, String variableName, boolean unique){
+		List<String> list = new ArrayList<String>();
+		if(objList != null && objList.size() > 0){
+			for(T obj : objList){
+				Object variableObj = getObjectProprty(obj, variableName);
+				if(variableObj != null && variableObj instanceof String){
+					String stringObj = (String)variableObj;
+					list.add(stringObj);
+				}
+			}
+			if(unique){
+				Set<String> stringSet = new HashSet<String>();
+				for(String string:list){
+					stringSet.add(string);
+				}
+				list.clear();
+				list.addAll(stringSet);
+			}
+			
+		}
+		return list;
+	}
+	
+	public static <T> List<Long> convertListToLongList(List<T> objList, String variableName){
+		List<Long> list = new ArrayList<Long>();
+		if(objList != null && objList.size() > 0){
+			for(T obj : objList){
+				Object variableObj = getObjectProprty(obj, variableName);
+				if(variableObj != null && variableObj instanceof Long){
+					Long stringObj = (Long)variableObj;
+					list.add(stringObj);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static <T> List<BigDecimal> convertListToBigDecimalList(List<T> objList, String variableName){
+		List<BigDecimal> list = new ArrayList<BigDecimal>();
+		if(objList != null && objList.size() > 0){
+			for(T obj : objList){
+				Object variableObj = getObjectProprty(obj, variableName);
+				if(variableObj != null && variableObj instanceof BigDecimal){
+					BigDecimal stringObj = (BigDecimal)variableObj;
+					list.add(stringObj);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static <T> List<Integer> convertListToIntegerList(List<T> objList, String variableName){
+		List<Integer> list = new ArrayList<Integer>();
+		if(objList != null && objList.size() > 0){
+			for(T obj : objList){
+				Object variableObj = getObjectProprty(obj, variableName);
+				if(variableObj != null && variableObj instanceof Integer){
+					Integer stringObj = (Integer)variableObj;
+					list.add(stringObj);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static Object getObjectProprty(Object obj, String variableName){
+		try {
+			return PropertyUtils.getProperty(obj, variableName);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
