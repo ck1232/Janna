@@ -6,5 +6,5 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Workbook;
 
 public interface ReportInterface {
-	public void exportReport(Workbook workbook, Date dateAsOf,Date endDate, Map<String, Object> additionalMap);
+	public Workbook exportReport(Workbook workbook, Date dateAsOf,Date endDate, Map<String, Object> additionalMap);
 }

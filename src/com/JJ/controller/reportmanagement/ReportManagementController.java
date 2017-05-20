@@ -80,7 +80,7 @@ public class ReportManagementController {
 			Workbook wb = new HSSFWorkbook();
 			//generate report
 			for(ReportInterface report :reportControllerList){
-				report.exportReport(wb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
+				wb = report.exportReport(wb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
 			}
 			
 			downloadExcel(wb, request, response);
