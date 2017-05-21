@@ -22,7 +22,6 @@ public class ExpenseTypeService {
 	
 	@Autowired
 	public ExpenseTypeService(ExpenseTypeDbObjectMapper expenseTypeMapper) {
-		super();
 		this.expenseTypeMapper = expenseTypeMapper;
 	}
 	public List<ExpenseTypeVO> getExpenseType(){

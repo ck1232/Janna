@@ -32,7 +32,7 @@ public class ExcelColumn {
 	}
 	
 	public enum ColumnStyle{
-		Header, Bold, Underline, Italic, Bg_blue, ;
+		Header, Bold, Underline, Italic, Bg_blue;
 	}
 
 
