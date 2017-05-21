@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import com.JJ.lookup.VO.PaymentModeVO;
+import com.JJ.lookup.vo.PaymentModeVO;
 import com.JJ.lookupservice.PaymentModeService;
 @Lazy
 @Component

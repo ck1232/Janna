@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import com.JJ.lookup.VO.ExpenseTypeVO;
+import com.JJ.lookup.vo.ExpenseTypeVO;
 import com.JJ.lookupservice.ExpenseTypeService;
 @Lazy
 @Component

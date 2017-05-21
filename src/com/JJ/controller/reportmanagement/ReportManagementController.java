@@ -31,10 +31,11 @@ public class ReportManagementController {
 	private static final Logger logger = Logger.getLogger(ReportManagementController.class);
 	
 	private ReportManagementService reportManagementService;
-	
+	private ExpenseReport expenseReport;
 	@Autowired
-	public ReportManagementController(ReportManagementService reportManagementService) {
+	public ReportManagementController(ReportManagementService reportManagementService, ExpenseReport expenseReport) {
 		this.reportManagementService = reportManagementService;
+		this.expenseReport = expenseReport;
 	}
 	
 	@RequestMapping(value = "/viewReportGen", method = RequestMethod.GET)
@@ -94,7 +95,7 @@ public class ReportManagementController {
 			for(ReportTypeEnum typeEnum : enumList){
 				switch (typeEnum) {
 				case EXPENSE:
-					list.add(new ExpenseReport());
+					list.add(expenseReport);
 					break;
 				case BONUS:
 					break;

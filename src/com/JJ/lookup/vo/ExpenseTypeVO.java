@@ -1,4 +1,4 @@
-package com.JJ.lookup.VO;
+package com.JJ.lookup.vo;
 
 import java.io.Serializable;
 

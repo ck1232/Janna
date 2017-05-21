@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.dao.PaymentModeDbObjectMapper;
-import com.JJ.lookup.VO.PaymentModeVO;
+import com.JJ.lookup.vo.PaymentModeVO;
 import com.JJ.model.PaymentModeDbObject;
 import com.JJ.model.PaymentModeDbObjectExample;
 

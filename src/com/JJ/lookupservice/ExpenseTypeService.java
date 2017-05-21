@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.dao.ExpenseTypeDbObjectMapper;
-import com.JJ.lookup.VO.ExpenseTypeVO;
+import com.JJ.lookup.vo.ExpenseTypeVO;
 import com.JJ.model.ExpenseTypeDbObject;
 import com.JJ.model.ExpenseTypeDbObjectExample;
 
