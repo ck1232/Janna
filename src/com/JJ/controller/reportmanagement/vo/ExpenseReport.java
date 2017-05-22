@@ -40,14 +40,20 @@ public class ExpenseReport implements ReportInterface {
 			List<ExpenseReportVO> expenseReportList = new ArrayList<ExpenseReportVO>();
 			for(ExpenseVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId());
+				ExpenseReportVO expenseReportVo;
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
-						ExpenseReportVO expenseReportVo = new ExpenseReportVO();
+						expenseReportVo = new ExpenseReportVO();
 						expenseReportVo.setExpense(vo);
 						expenseReportVo.setPaymentDetail(paymentVO);
 						expenseReportList.add(expenseReportVo);
 					}
+				}else{
+					expenseReportVo = new ExpenseReportVO();
+					expenseReportVo.setExpense(vo);
+					expenseReportList.add(expenseReportVo);
 				}
+				
 			}
 			ReportMapping reportMapping = new ReportMapping();
 			reportMapping.addDateMapping("Date", "expense.expenseDate");
