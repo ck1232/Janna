@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,46 +47,67 @@ public class ReportManagementController {
 //			yearList.add(GeneralUtils.convertDateToString(GeneralUtils.getNewDate(i), "yyyy"));
 //		}
 //		model.addAttribute("yearList", yearList);
+		initData(model);
 		ExpenseControlReportCriteria reportCriteria = new ExpenseControlReportCriteria();
+		model.addAttribute("expenseControlForm", reportCriteria);
+		return "viewReportGen";
+	}
+	
+	private void initData(Model model) {
 		List<String> allReportTypeList = new ArrayList<String>();
 		if(ReportTypeEnum.values().length > 0){
 			for(ReportTypeEnum reportType:ReportTypeEnum.values()){
 				allReportTypeList.add(reportType.getName());
 			}
 		}
-		
-		model.addAttribute("expenseControlForm", reportCriteria);
 		model.addAttribute("reportList", allReportTypeList);
-		return "viewReportGen";
 	}
 	
 	@RequestMapping(value = "/generateExpenseControlReport", method = RequestMethod.POST)
 	public String generateExpenseControlReport(@ModelAttribute("expenseControlForm") ExpenseControlReportCriteria reportCriteria,
-			Model model, HttpServletRequest request, HttpServletResponse response) {
+			BindingResult result, Model model, HttpServletRequest request, HttpServletResponse response) {
 		
 		logger.debug("generateExpenseControlReport() : " + reportCriteria.toString());
-		reportCriteria.setStartDate(GeneralUtils.convertStringToDate(reportCriteria.getStartdateString(), GeneralUtils.STANDARD_DATE_FORMAT));
-		reportCriteria.setEndDate(GeneralUtils.convertStringToDate(reportCriteria.getEnddateString(), GeneralUtils.STANDARD_DATE_FORMAT));
-		if(reportCriteria != null && reportCriteria.getType()!= null 
-				&& reportCriteria.getType().size() > 0){
-			List<ReportTypeEnum> enumList = new ArrayList<ReportTypeEnum>();
-			for(String reportType :reportCriteria.getType()){
-				ReportTypeEnum reportEnum = ReportTypeEnum.getEnumFromName(reportType);
-				if(reportEnum != null){
-					enumList.add(reportEnum);
-				}
-			}
-			
-			List<ReportInterface> reportControllerList = getReportController(enumList);
-			//create a blank workbook
-			Workbook wb = new HSSFWorkbook();
-			//generate report
-			for(ReportInterface report :reportControllerList){
-				wb = report.exportReport(wb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
-			}
-			
-			downloadExcel(wb, request, response);
+		if(reportCriteria.getStartdateString() == "") {
+			result.rejectValue("startdateString", "error.notempty.reportform.startdate");
 		}
+		if(reportCriteria.getEnddateString() == "") {
+			result.rejectValue("enddateString", "error.notempty.reportform.enddate");
+		}
+		if(reportCriteria.getStartdateString() != "" && reportCriteria.getEnddateString() != ""){
+			reportCriteria.setStartDate(GeneralUtils.convertStringToDate(reportCriteria.getStartdateString(), GeneralUtils.STANDARD_DATE_FORMAT));
+			reportCriteria.setEndDate(GeneralUtils.convertStringToDate(reportCriteria.getEnddateString(), GeneralUtils.STANDARD_DATE_FORMAT));
+			if(reportCriteria.getStartDate().after(reportCriteria.getEndDate())){
+				result.rejectValue("startdateString", "error.reportform.startdate.after.enddate");
+				result.rejectValue("enddateString", "error.reportform.startdate.before.enddate");
+			}
+		}
+		if(reportCriteria.getType().isEmpty()) {
+			result.rejectValue("type", "error.notempty.reportform.type");
+		}
+		if(result.hasErrors()) {
+			initData(model);
+			return "viewReportGen";
+		}
+
+		List<ReportTypeEnum> enumList = new ArrayList<ReportTypeEnum>();
+		for(String reportType :reportCriteria.getType()){
+			ReportTypeEnum reportEnum = ReportTypeEnum.getEnumFromName(reportType);
+			if(reportEnum != null){
+				enumList.add(reportEnum);
+			}
+		}
+		
+		List<ReportInterface> reportControllerList = getReportController(enumList);
+		//create a blank workbook
+		Workbook wb = new HSSFWorkbook();
+		//generate report
+		for(ReportInterface report :reportControllerList){
+			wb = report.exportReport(wb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
+		}
+		
+		downloadExcel(wb, request, response);
+		
 		return null;
 	}
 	
