@@ -31,7 +31,7 @@ public class ExpenseReport implements ReportInterface {
 		Sheet sheet = workbook.createSheet("Expense report");
 		List<InvoiceVO> vo = invoiceService.getAllInvoice();
 		ReportMapping reportMapping = new ReportMapping();
-		reportMapping.addNumberMapping("Invoice ID", "invoiceId");
+		reportMapping.addChinaMoneyMapping("Amt", "totalAmt");
 		ReportUtils.writeData(sheet, vo, reportMapping);
 		return workbook;
 	}

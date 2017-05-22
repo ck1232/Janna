@@ -35,6 +35,10 @@ public class ReportMapping {
 		mapping.put(header, new ExcelColumn(variableName, ColumnType.Money));
 	}
 	
+	public void addChinaMoneyMapping(String header, String variableName){
+		mapping.put(header, new ExcelColumn(variableName, ColumnType.China_Money));
+	}
+	
 	public void addPercentageMapping(String header, String variableName){
 		mapping.put(header, new ExcelColumn(variableName, ColumnType.Percentage));
 	}

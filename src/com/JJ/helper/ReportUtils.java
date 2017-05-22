@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import com.JJ.helper.vo.ExcelColumn;
 import com.JJ.helper.vo.ReportMapping;
@@ -17,6 +19,7 @@ public class ReportUtils {
 		if(list != null && list.size() > 0 && sheet != null 
 				&& reportMapping != null && reportMapping.size() > 0){
 			int rowNum = sheet.getPhysicalNumberOfRows();
+			reportMapping = setCellStyleForColumn(sheet.getWorkbook(), reportMapping);
 			Row row = sheet.createRow(rowNum++);
 			writeHeader(row, reportMapping);
 			for(T obj : list){
@@ -31,6 +34,7 @@ public class ReportUtils {
 		for(String header : reportMapping.getMapping().keySet()){
 			ExcelColumn column = reportMapping.getMapping().get(header);
 			Cell cell = row.createCell(cellNum++);
+			cell.setCellStyle(column.getCellStyle());
 			Object value = GeneralUtils.getObjectProprty(object, column.getVariableName());
 			if(value == null){
 				cell.setCellValue("");
@@ -48,32 +52,14 @@ public class ReportUtils {
 							}
 						}
 						break;
+					case Percentage:
+					case Number:
+					case Decimal:
+					case China_Money:
 					case Money:
 						{
 							Number num = (Number)value;
-							NumberFormat mf = new DecimalFormat("'$'#.##");
-							cell.setCellValue(mf.format(num));
-						}
-						break;
-					case Decimal:
-						{
-							Number num = (Number)value;
-							NumberFormat mf = new DecimalFormat("#.##");
-							cell.setCellValue(mf.format(num));
-						}
-						break;
-					case Number:
-						{
-							Number num = (Number)value;
-							NumberFormat mf = new DecimalFormat("#");
-							cell.setCellValue(mf.format(num));
-						}
-						break;
-					case Percentage:
-						{
-							Number num = (Number)value;
-							NumberFormat mf = new DecimalFormat("#.##'%'");
-							cell.setCellValue(mf.format(num));
+							cell.setCellValue(num.doubleValue());
 						}
 						break;
 					default:cell.setCellValue(value.toString());break;
@@ -88,5 +74,15 @@ public class ReportUtils {
 			Cell cell = row.createCell(cellNum++);
 			cell.setCellValue(header);
 		}
+	}
+	
+	private static ReportMapping setCellStyleForColumn(Workbook wb, ReportMapping reportMapping){
+		ExcelUtils excelUtils = new ExcelUtils(wb);
+		for(String header : reportMapping.getMapping().keySet()){
+			ExcelColumn column = reportMapping.getMapping().get(header);
+			CellStyle cs = excelUtils.generateCellStyle(column.getColumnType(), column.getColumnStyleList());
+			column.setCellStyle(cs);
+		}
+		return reportMapping;
 	}
 }
