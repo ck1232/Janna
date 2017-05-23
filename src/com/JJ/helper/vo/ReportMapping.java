@@ -2,6 +2,7 @@ package com.JJ.helper.vo;
 
 import java.util.LinkedHashMap;
 
+import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
 import com.JJ.helper.vo.ExcelColumn.ColumnType;
 
 public class ReportMapping {
@@ -29,6 +30,10 @@ public class ReportMapping {
 	
 	public void addTextMapping(String header, String variableName){
 		mapping.put(header, new ExcelColumn(variableName, ColumnType.Text));
+	}
+	
+	public void addTextMapping(String header, String variableName, ColumnStyle...columnStyles){
+		mapping.put(header, new ExcelColumn(variableName, ColumnType.Text, columnStyles));
 	}
 	
 	public void addMoneyMapping(String header, String variableName){

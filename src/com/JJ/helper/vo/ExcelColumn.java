@@ -2,6 +2,7 @@ package com.JJ.helper.vo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -22,7 +23,7 @@ public class ExcelColumn {
 	public ExcelColumn(String variableName, ColumnType columnType, ColumnStyle... styleList) {
 		this.variableName = variableName;
 		this.columnType = columnType;
-		this.columnStyleList = new ArrayList<ColumnStyle>();
+		this.columnStyleList = new LinkedList<ColumnStyle>();
 		if(styleList != null){
 			for(ColumnStyle style : styleList){
 				columnStyleList.add(style);
@@ -55,7 +56,7 @@ public class ExcelColumn {
 	}
 	
 	public enum ColumnStyle{
-		Header, Bold, Underline, Italic, Bg_blue;
+		Header, Bold, Underline, Italic, Bg_blue, Bg_skyBlue;
 	}
 
 
@@ -84,7 +85,7 @@ public class ExcelColumn {
 	}
 
 
-	public void setColumnStyleList(List<ColumnStyle> columnStyleList) {
+	public void setColumnStyleList(LinkedList<ColumnStyle> columnStyleList) {
 		this.columnStyleList = columnStyleList;
 	}
 }

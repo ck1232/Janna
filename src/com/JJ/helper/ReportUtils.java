@@ -1,30 +1,54 @@
 package com.JJ.helper;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.ss.format.CellTextFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import com.JJ.helper.vo.ExcelColumn;
+import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
+import com.JJ.helper.vo.ExcelColumn.ColumnType;
 import com.JJ.helper.vo.ReportMapping;
 
 public class ReportUtils {
 	public static <T>void writeData(Sheet sheet, List<T> list, ReportMapping reportMapping){
+		int rowNum = sheet.getPhysicalNumberOfRows();
+		Row row = sheet.createRow(rowNum++);
+		ExcelUtils excelUtils = new ExcelUtils(sheet.getWorkbook());
+		writeHeader(row, reportMapping, excelUtils);
 		if(list != null && list.size() > 0 && sheet != null 
 				&& reportMapping != null && reportMapping.size() > 0){
-			int rowNum = sheet.getPhysicalNumberOfRows();
-			reportMapping = setCellStyleForColumn(sheet.getWorkbook(), reportMapping);
-			Row row = sheet.createRow(rowNum++);
-			writeHeader(row, reportMapping);
+			reportMapping = setCellStyleForColumn(excelUtils, reportMapping);
 			for(T obj : list){
 				row = sheet.createRow(rowNum++);
 				writeRow(row, obj, reportMapping);
+			}
+			setAutoSizeColumn(sheet, reportMapping);
+		}
+	}
+	
+	public static void writeRow(Sheet sheet, String text, int offset){
+		int rowNum = sheet.getPhysicalNumberOfRows();
+		int cellNum = 0;
+		if(offset >= 0){
+			cellNum += offset;
+		}
+		
+		
+		Row row = sheet.createRow(rowNum++);
+		Cell cell = row.createCell(cellNum);
+		cell.setCellValue(text);
+	}
+	
+	private static void setAutoSizeColumn(Sheet sheet, ReportMapping reportMapping){
+		if(reportMapping != null && reportMapping.size() > 0){
+			for(int i=0;i<reportMapping.size();i++){
+				sheet.autoSizeColumn(i);
 			}
 		}
 	}
@@ -68,16 +92,17 @@ public class ReportUtils {
 		}
 	}
 	
-	private static void writeHeader(Row row, ReportMapping reportMapping){
+	private static void writeHeader(Row row, ReportMapping reportMapping, ExcelUtils excelUtils){
 		int cellNum = 0;
 		for(String header : reportMapping.getMapping().keySet()){
 			Cell cell = row.createCell(cellNum++);
 			cell.setCellValue(header);
+			CellStyle cs = excelUtils.generateCellStyle(ColumnType.Text, Arrays.asList(ColumnStyle.Header));
+			cell.setCellStyle(cs);
 		}
 	}
 	
-	private static ReportMapping setCellStyleForColumn(Workbook wb, ReportMapping reportMapping){
-		ExcelUtils excelUtils = new ExcelUtils(wb);
+	private static ReportMapping setCellStyleForColumn(ExcelUtils excelUtils, ReportMapping reportMapping){
 		for(String header : reportMapping.getMapping().keySet()){
 			ExcelColumn column = reportMapping.getMapping().get(header);
 			CellStyle cs = excelUtils.generateCellStyle(column.getColumnType(), column.getColumnStyleList());
