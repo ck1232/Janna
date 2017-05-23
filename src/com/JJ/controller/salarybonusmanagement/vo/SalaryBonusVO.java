@@ -28,6 +28,8 @@ public class SalaryBonusVO extends Base implements Serializable {
     
     private String employeeType;
     
+    private String employeeTypeString;
+    
     private Date dob;
 
     private String nationality;
@@ -128,6 +130,14 @@ public class SalaryBonusVO extends Base implements Serializable {
 
 	public void setEmployeeType(String employeeType) {
 		this.employeeType = employeeType == null ? null : employeeType.trim();
+	}
+
+	public String getEmployeeTypeString() {
+		return employeeTypeString;
+	}
+
+	public void setEmployeeTypeString(String employeeTypeString) {
+		this.employeeTypeString = employeeTypeString;
 	}
 
 	public Date getDob() {

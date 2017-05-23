@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.JJ.controller.reportmanagement.vo.ExpenseReport;
 import com.JJ.controller.reportmanagement.vo.ReportInterface;
+import com.JJ.controller.reportmanagement.vo.SalaryReport;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.reportmanagement.ReportManagementService;
 
@@ -33,10 +34,13 @@ public class ReportManagementController {
 	
 	private ReportManagementService reportManagementService;
 	private ExpenseReport expenseReport;
+	private SalaryReport salaryReport;
 	@Autowired
-	public ReportManagementController(ReportManagementService reportManagementService, ExpenseReport expenseReport) {
+	public ReportManagementController(ReportManagementService reportManagementService, 
+			ExpenseReport expenseReport, SalaryReport salaryReport) {
 		this.reportManagementService = reportManagementService;
 		this.expenseReport = expenseReport;
+		this.salaryReport = salaryReport;
 	}
 	
 	@RequestMapping(value = "/viewReportGen", method = RequestMethod.GET)
@@ -128,6 +132,7 @@ public class ReportManagementController {
 				case INVOICE:
 					break;
 				case SALARY:
+					list.add(salaryReport);
 					break;
 				case SUMMARY:
 					break;

@@ -3,6 +3,7 @@ package com.JJ.service.salarybonusmanagement;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.employeemanagement.EmploymentTypeEnum;
 import com.JJ.controller.employeemanagement.vo.EmployeeVO;
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.salarybonusmanagement.TypeEnum;
@@ -46,14 +48,37 @@ public class SalaryBonusManagementService {
 	//get all salary and bonus
 	public List<SalaryBonusVO> getAllSalaryBonusVo() {
 		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
-		
+		salaryBonusVoList.addAll(getAllSalaryVo());
+		salaryBonusVoList.addAll(getAllBonusVo());
+		return salaryBonusVoList;
+	}
+	
+	public List<SalaryBonusVO> getAllSalaryVo(){
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
 		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
 		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<EmployeeSalaryDbObject> salaryList = employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample);
 		if(salaryList != null && !salaryList.isEmpty()){
 			salaryBonusVoList.addAll(convertSalaryToSalaryBonusVOList(salaryList));
 		}
-		
+		return salaryBonusVoList;
+	}
+	
+	public List<SalaryBonusVO> getAllSalaryVo(Date startDate, Date endDate){
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
+		EmployeeSalaryDbObjectExample employeeSalaryDbObjectExample = new EmployeeSalaryDbObjectExample();
+		employeeSalaryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andSalaryDateGreaterThanOrEqualTo(startDate).andSalaryDateLessThanOrEqualTo(endDate);
+		employeeSalaryDbObjectExample.setOrderByClause("salary_date");
+		List<EmployeeSalaryDbObject> salaryList = employeeSalaryDbObjectMapper.selectByExample(employeeSalaryDbObjectExample);
+		if(salaryList != null && !salaryList.isEmpty()){
+			salaryBonusVoList.addAll(convertSalaryToSalaryBonusVOList(salaryList));
+		}
+		return salaryBonusVoList;
+	}
+	
+	public List<SalaryBonusVO> getAllBonusVo(){
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
 		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
 		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<EmployeeBonusDbObject> bonusList = employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample);
@@ -242,6 +267,7 @@ public class SalaryBonusManagementService {
 				vo.setEmployeeId(employee.getEmployeeId());
 				vo.setName(employee.getName());
 				vo.setEmployeeType(employee.getEmployeeType());
+				vo.setEmployeeTypeString(EmploymentTypeEnum.getEnum(employee.getEmployeeType()));
 				vo.setDob(employee.getDob());
 				vo.setNationality(employee.getNationality());
 				vo.setBasicSalaryAmt(dbObj.getBasicSalaryAmt());
