@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +84,7 @@ public class ExpenseReport implements ReportInterface {
 			reportMapping.addTextMapping("Cheque No", "paymentDetail.chequeNum");
 			reportMapping.addDateMapping("Date deducted (per Bank)", "paymentDetail.debitDate");
 			reportMapping.addTextMapping("Remark", "paymentDetail.remarks");
+			
 			for(String key : expenseReportMap.keySet()){
 				Sheet sheet = workbook.createSheet(key);
 				ReportUtils.writeData(sheet, expenseReportMap.get(key), reportMapping);

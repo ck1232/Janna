@@ -1,10 +1,8 @@
 package com.JJ.helper;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.poi.ss.format.CellTextFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -32,17 +30,28 @@ public class ReportUtils {
 		}
 	}
 	
-	public static void writeRow(Sheet sheet, String text, int offset){
+	public static void writeBlankRows(Sheet sheet, int numOfRows){
+		int rowNum = sheet.getPhysicalNumberOfRows();
+		if(numOfRows > 0){
+			for(int i=0;i<numOfRows;i++){
+				sheet.createRow(rowNum++);
+			}
+		}
+	}
+	
+	public static void writeRow(Sheet sheet, String text, int offset, ColumnStyle...columnStyles){
 		int rowNum = sheet.getPhysicalNumberOfRows();
 		int cellNum = 0;
 		if(offset >= 0){
 			cellNum += offset;
 		}
+		ExcelUtils excelUtils = new ExcelUtils(sheet.getWorkbook());
 		
-		
+		CellStyle cs = excelUtils.generateCellStyle(ColumnType.Text, GeneralUtils.convertArrayToLinkedList(columnStyles));
 		Row row = sheet.createRow(rowNum++);
 		Cell cell = row.createCell(cellNum);
 		cell.setCellValue(text);
+		cell.setCellStyle(cs);
 	}
 	
 	private static void setAutoSizeColumn(Sheet sheet, ReportMapping reportMapping){
@@ -58,7 +67,6 @@ public class ReportUtils {
 		for(String header : reportMapping.getMapping().keySet()){
 			ExcelColumn column = reportMapping.getMapping().get(header);
 			Cell cell = row.createCell(cellNum++);
-			cell.setCellStyle(column.getCellStyle());
 			Object value = GeneralUtils.getObjectProprty(object, column.getVariableName());
 			if(value == null){
 				cell.setCellValue("");
@@ -66,6 +74,8 @@ public class ReportUtils {
 				switch(column.getColumnType()){
 					case Text: cell.setCellValue((String)value);
 						break;
+					case Date_MonthYear:
+					case Date_Year:
 					case Date: 
 						{
 							if(value instanceof Date){
@@ -89,6 +99,7 @@ public class ReportUtils {
 					default:cell.setCellValue(value.toString());break;
 				}
 			}
+			cell.setCellStyle(column.getCellStyle());
 		}
 	}
 	
@@ -97,7 +108,7 @@ public class ReportUtils {
 		for(String header : reportMapping.getMapping().keySet()){
 			Cell cell = row.createCell(cellNum++);
 			cell.setCellValue(header);
-			CellStyle cs = excelUtils.generateCellStyle(ColumnType.Text, Arrays.asList(ColumnStyle.Header));
+			CellStyle cs = excelUtils.generateCellStyle(ColumnType.Text, GeneralUtils.convertArrayToLinkedList(ColumnStyle.Header));
 			cell.setCellStyle(cs);
 		}
 	}

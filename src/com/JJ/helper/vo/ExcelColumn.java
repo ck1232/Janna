@@ -1,23 +1,20 @@
 package com.JJ.helper.vo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 
 public class ExcelColumn {
 	private String variableName;
 	private ColumnType columnType;
-	private List<ColumnStyle> columnStyleList;
+	private LinkedList<ColumnStyle> columnStyleList;
 	//cellStyle is computed automatically, please dont set cellStyle
 	private CellStyle cellStyle;
 	
 	public ExcelColumn(String variableName, ColumnType columnType) {
 		this.variableName = variableName;
 		this.columnType = columnType;
-		this.columnStyleList = new ArrayList<ColumnStyle>();
+		this.columnStyleList = new LinkedList<ColumnStyle>();
 	}
 	
 	public ExcelColumn(String variableName, ColumnType columnType, ColumnStyle... styleList) {
@@ -31,16 +28,10 @@ public class ExcelColumn {
 		}
 	}
 	
-	public ExcelColumn(String variableName, ColumnType columnType, List<ColumnStyle> styleList) {
+	public ExcelColumn(String variableName, ColumnType columnType, LinkedList<ColumnStyle> styleList) {
 		this.variableName = variableName;
 		this.columnType = columnType;
 		this.columnStyleList = styleList;
-	}
-	
-	public ExcelColumn(String variableName, ColumnType columnType, ColumnStyle styleList) {
-		this.variableName = variableName;
-		this.columnType = columnType;
-		this.columnStyleList = Arrays.asList(styleList);
 	}
 	
 	public CellStyle getCellStyle() {
@@ -52,7 +43,7 @@ public class ExcelColumn {
 	}
 	
 	public enum ColumnType{
-		Text, Money, China_Money, Date, Percentage, Decimal, Number;
+		Text, Money, China_Money, Date, Percentage, Decimal, Number, Date_MonthYear, Date_Year;
 	}
 	
 	public enum ColumnStyle{
@@ -80,7 +71,7 @@ public class ExcelColumn {
 	}
 
 
-	public List<ColumnStyle> getColumnStyleList() {
+	public LinkedList<ColumnStyle> getColumnStyleList() {
 		return columnStyleList;
 	}
 

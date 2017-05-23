@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,7 +62,8 @@ public class GeneralUtils {
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
-	public static final String BONUS_DATE_FORMAT = "yyyy";
+	public static final String EXCEL_DATE_MONTH_YEAR_FORMAT = "mmm-yy";
+	public static final String EXCEL_DATE_YEAR_FORMAT = "yy";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){
@@ -265,5 +267,15 @@ public class GeneralUtils {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public static <T>LinkedList<T> convertArrayToLinkedList(@SuppressWarnings("unchecked") T... array){
+		LinkedList<T> list = new LinkedList<T>();
+		if(array != null){
+			for(T obj : array){
+				list.add(obj);
+			}
+		}
+		return list;
 	}
 }

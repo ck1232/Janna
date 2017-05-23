@@ -52,6 +52,14 @@ public class ReportMapping {
 		mapping.put(header, new ExcelColumn(variableName, ColumnType.Date));
 	}
 	
+	public void addDateMonthYearMapping(String header, String variableName){
+		mapping.put(header, new ExcelColumn(variableName, ColumnType.Date_MonthYear));
+	}
+	
+	public void addDateYearMapping(String header, String variableName){
+		mapping.put(header, new ExcelColumn(variableName, ColumnType.Date_Year));
+	}
+	
 	public void addDecimalMapping(String header, String variableName){
 		mapping.put(header, new ExcelColumn(variableName, ColumnType.Decimal));
 	}
