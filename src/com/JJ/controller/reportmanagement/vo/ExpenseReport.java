@@ -48,6 +48,9 @@ public class ExpenseReport implements ReportInterface {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
 						expenseReportVo = new ExpenseReportVO();
 						expenseReportVo.setExpense(vo);
+						if(paymentVO.getPaymentMode() == 2 && 
+								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
+							continue;
 						expenseReportVo.setPaymentDetail(paymentVO);
 						expenseReportList.add(expenseReportVo);
 					}
@@ -80,6 +83,8 @@ public class ExpenseReport implements ReportInterface {
 			reportMapping.addTextMapping("Supplier", "expense.supplier");
 			reportMapping.addDateMapping("Date Paid", "paymentDetail.paymentDate");
 			reportMapping.addTextMapping("Cheque No", "paymentDetail.chequeNum");
+			reportMapping.addDateMapping("Date deducted (per Bank)", "paymentDetail.debitDate");
+			reportMapping.addTextMapping("Remark", "paymentDetail.remarks");
 			for(String key : expenseReportMap.keySet()){
 				Sheet sheet = workbook.createSheet(key);
 				ReportUtils.writeData(sheet, expenseReportMap.get(key), reportMapping);
