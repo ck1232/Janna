@@ -22,6 +22,7 @@
 				            		<div class="col-lg-4">
 										<form:input path="startdateString" type="text" class="form-control" 
 				                  			  		id="startdateString" placeholder="Press to select date"/>
+				                  		<form:errors path="startdateString" class="text-danger" />
 									</div>
 								</div>
 							</div>
@@ -31,6 +32,7 @@
 				            		<div class="col-lg-4">
 										<form:input path="enddateString" type="text" class="form-control" 
 				                  			  		id="enddateString" placeholder="Press to select date"/>
+				                  		<form:errors path="enddateString" class="text-danger" />
 									</div>
 								</div>
 							</div>
@@ -51,20 +53,12 @@
 			            				<div class="col-sm-3"><label><form:checkbox path="type" value="${report}" /></label> ${report}</div>
 			            			</c:forEach>
 			            		</div>
-			            		<%-- <div class="form-group">
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Expense" /></label> Expense</div>
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Invoice" /></label> Invoice</div>
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Salary" /></label> Salary</div>
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Bonus" /></label> Bonus</div>
-								</div> --%>
 							</div>
-							<%-- <div class="row">
-			            		<div class="form-group">
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Grant" /></label> Grant</div>
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Summary" /></label> Summary</div>
-				            		<div class="col-sm-3"><label><form:checkbox path="type" value="Chinastock" /></label> China Stock</div>
+							<div class="row">
+								<div class="col-sm-3">
+									<form:errors path="type" class="text-danger" />
 								</div>
-							</div> --%>
+							</div>
 						</div>
 						<!-- /.box-body -->
 			      	</div>

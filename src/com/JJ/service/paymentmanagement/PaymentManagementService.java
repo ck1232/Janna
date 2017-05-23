@@ -401,8 +401,10 @@ public class PaymentManagementService {
 						vo.setBounceChequeInd(chequeVO.getBounceChequeInd());
 						vo.setBounceDate(chequeVO.getBounceDate());
 						vo.setBounceDateString(chequeVO.getBounceDateString());
+						vo.setDebitDate(chequeVO.getDebitDate());
 						vo.setChequeId(Integer.toString(chequeVO.getChequeId()));
 						vo.setChequeNum(chequeVO.getChequeNum());
+						vo.setRemarks(chequeVO.getRemarks());
 					}
 					
 				}

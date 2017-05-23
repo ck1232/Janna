@@ -30,6 +30,10 @@ public class PaymentDetailVO extends Base implements Serializable {
     
     private String bounceDateString;
     
+    private Date debitDate;
+    
+    private String remarks;
+    
     private static final long serialVersionUID = 1L;
 
     public Integer getPaymentDetailId() {
@@ -118,6 +122,22 @@ public class PaymentDetailVO extends Base implements Serializable {
 
 	public void setBounceDateString(String bounceDateString) {
 		this.bounceDateString = bounceDateString;
+	}
+
+	public Date getDebitDate() {
+		return debitDate;
+	}
+
+	public void setDebitDate(Date debitDate) {
+		this.debitDate = debitDate;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 
 	@Override

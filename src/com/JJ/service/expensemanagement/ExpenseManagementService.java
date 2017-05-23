@@ -2,6 +2,7 @@ package com.JJ.service.expensemanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,15 @@ public class ExpenseManagementService {
 	public List<ExpenseVO> getAllExpense() {
 		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
 		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(expenseDbObjectExample));
+		return expenseList;
+	}
+	
+	public List<ExpenseVO> getAllExpense(Date startDate, Date endDate) {
+		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
+		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andExpenseDateGreaterThanOrEqualTo(startDate).andExpenseDateLessThanOrEqualTo(endDate);
+		expenseDbObjectExample.setOrderByClause("expense_date");
 		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(expenseDbObjectExample));
 		return expenseList;
 	}
