@@ -62,8 +62,8 @@ public class GeneralUtils {
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
-	public static final String EXCEL_DATE_MONTH_YEAR_FORMAT = "mmm-yy";
-	public static final String EXCEL_DATE_YEAR_FORMAT = "yy";
+	public static final String EXCEL_DATE_MONTH_YEAR_FORMAT = "MMM-yy";
+	public static final String EXCEL_DATE_YEAR_FORMAT = "yyyy";
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){

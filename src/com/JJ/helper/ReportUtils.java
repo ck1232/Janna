@@ -67,6 +67,7 @@ public class ReportUtils {
 		for(String header : reportMapping.getMapping().keySet()){
 			ExcelColumn column = reportMapping.getMapping().get(header);
 			Cell cell = row.createCell(cellNum++);
+			cell.setCellStyle(column.getCellStyle());
 			Object value = GeneralUtils.getObjectProprty(object, column.getVariableName());
 			if(value == null){
 				cell.setCellValue("");
@@ -80,7 +81,7 @@ public class ReportUtils {
 						{
 							if(value instanceof Date){
 								Date date = (Date)value;
-								cell.setCellValue(GeneralUtils.convertDateToString(date, GeneralUtils.STANDARD_DATE_FORMAT));
+								cell.setCellValue(date);
 							}else{
 								cell.setCellValue("");
 							}
@@ -99,7 +100,6 @@ public class ReportUtils {
 					default:cell.setCellValue(value.toString());break;
 				}
 			}
-			cell.setCellStyle(column.getCellStyle());
 		}
 	}
 	

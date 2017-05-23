@@ -69,7 +69,7 @@ public class SalaryReport implements ReportInterface {
 				}
 			}
 			ReportMapping reportMapping = new ReportMapping();
-			reportMapping.addDateMapping("Month", "salary.date");
+			reportMapping.addDateMonthYearMapping("Month", "salary.date");
 			reportMapping.addTextMapping("Name", "salary.name");
 			reportMapping.addTextMapping("Type", "salary.employeeTypeString");
 			reportMapping.addDateMapping("DOB", "salary.dob");
