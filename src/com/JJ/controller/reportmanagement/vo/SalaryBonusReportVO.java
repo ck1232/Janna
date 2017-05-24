@@ -5,18 +5,19 @@ import java.io.Serializable;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 
-public class SalaryReportVO implements Serializable {
+public class SalaryBonusReportVO implements Serializable {
     
-	private SalaryBonusVO salary;
+	private SalaryBonusVO salarybonus;
     
     private PaymentDetailVO paymentDetail;
     
-	public SalaryBonusVO getSalary() {
-		return salary;
+
+	public SalaryBonusVO getSalarybonus() {
+		return salarybonus;
 	}
 
-	public void setSalary(SalaryBonusVO salary) {
-		this.salary = salary;
+	public void setSalarybonus(SalaryBonusVO salarybonus) {
+		this.salarybonus = salarybonus;
 	}
 
 	public PaymentDetailVO getPaymentDetail() {

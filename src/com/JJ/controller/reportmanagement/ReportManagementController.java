@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.JJ.controller.reportmanagement.vo.BonusReport;
 import com.JJ.controller.reportmanagement.vo.ChinaStockReport;
 import com.JJ.controller.reportmanagement.vo.ExpenseReport;
 import com.JJ.controller.reportmanagement.vo.ReportInterface;
@@ -36,13 +37,17 @@ public class ReportManagementController {
 	private ReportManagementService reportManagementService;
 	private ExpenseReport expenseReport;
 	private SalaryReport salaryReport;
+	private BonusReport bonusReport;
 	private ChinaStockReport chinaStockReport;
+	
 	@Autowired
 	public ReportManagementController(ReportManagementService reportManagementService, 
-			ExpenseReport expenseReport, SalaryReport salaryReport, ChinaStockReport chinaStockReport) {
+			ExpenseReport expenseReport, SalaryReport salaryReport, 
+			BonusReport bonusReport, ChinaStockReport chinaStockReport) {
 		this.reportManagementService = reportManagementService;
 		this.expenseReport = expenseReport;
 		this.salaryReport = salaryReport;
+		this.bonusReport = bonusReport;
 		this.chinaStockReport = chinaStockReport;
 	}
 	
@@ -127,6 +132,7 @@ public class ReportManagementController {
 					list.add(expenseReport);
 					break;
 				case BONUS:
+					list.add(bonusReport);
 					break;
 				case CHINA_STOCK:
 					list.add(chinaStockReport);

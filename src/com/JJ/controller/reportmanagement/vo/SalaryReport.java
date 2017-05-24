@@ -48,14 +48,14 @@ public class SalaryReport implements ReportInterface {
 		
 		List<SalaryBonusVO> dbVoList = salaryService.getAllSalaryVo(dateAsOf, endDate);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
-			List<SalaryReportVO> salaryReportList = new ArrayList<SalaryReportVO>();
+			List<SalaryBonusReportVO> salaryReportList = new ArrayList<SalaryBonusReportVO>();
 			for(SalaryBonusVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId("salary", vo.getId());
-				SalaryReportVO salaryReportVo;
+				SalaryBonusReportVO salaryReportVo;
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
-						salaryReportVo = new SalaryReportVO();
-						salaryReportVo.setSalary(vo);
+						salaryReportVo = new SalaryBonusReportVO();
+						salaryReportVo.setSalarybonus(vo);
 						if(paymentVO.getPaymentMode() == 2 && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
@@ -63,27 +63,27 @@ public class SalaryReport implements ReportInterface {
 						salaryReportList.add(salaryReportVo);
 					}
 				}else{
-					salaryReportVo = new SalaryReportVO();
-					salaryReportVo.setSalary(vo);
+					salaryReportVo = new SalaryBonusReportVO();
+					salaryReportVo.setSalarybonus(vo);
 					salaryReportList.add(salaryReportVo);
 				}
 			}
 			ReportMapping reportMapping = new ReportMapping();
-			reportMapping.addDateMonthYearMapping("Month", "salary.date");
-			reportMapping.addTextMapping("Name", "salary.name");
-			reportMapping.addTextMapping("Type", "salary.employeeTypeString");
-			reportMapping.addDateMapping("DOB", "salary.dob");
-			reportMapping.addTextMapping("Nationality", "salary.nationality");
-			reportMapping.addMoneyMapping("Amount", "salary.grossAmt");
-			reportMapping.addMoneyMapping("Overtime", "salary.overTimeAmt");
-			reportMapping.addMoneyMapping("Allowance", "salary.allowance");
-			reportMapping.addMoneyMapping("Medical", "salary.medical");
-			reportMapping.addMoneyMapping("Employee CPF", "salary.employeeCpf");
-			reportMapping.addMoneyMapping("Employer CPF", "salary.employerCpf");
-			reportMapping.addMoneyMapping("CDAC", "salary.cdacAmt");
-			reportMapping.addMoneyMapping("SDL", "salary.sdlAmt");
-			reportMapping.addMoneyMapping("Foreign Worker Levy", "salary.fwLevy");
-			reportMapping.addMoneyMapping("Take Home Salary", "salary.takehomeAmt");
+			reportMapping.addDateMonthYearMapping("Month", "salarybonus.date");
+			reportMapping.addTextMapping("Name", "salarybonus.name");
+			reportMapping.addTextMapping("Type", "salarybonus.employeeTypeString");
+			reportMapping.addDateMapping("DOB", "salarybonus.dob");
+			reportMapping.addTextMapping("Nationality", "salarybonus.nationality");
+			reportMapping.addMoneyMapping("Amount", "salarybonus.grossAmt");
+			reportMapping.addMoneyMapping("Overtime", "salarybonus.overTimeAmt");
+			reportMapping.addMoneyMapping("Allowance", "salarybonus.allowance");
+			reportMapping.addMoneyMapping("Medical", "salarybonus.medical");
+			reportMapping.addMoneyMapping("Employee CPF", "salarybonus.employeeCpf");
+			reportMapping.addMoneyMapping("Employer CPF", "salarybonus.employerCpf");
+			reportMapping.addMoneyMapping("CDAC", "salarybonus.cdacAmt");
+			reportMapping.addMoneyMapping("SDL", "salarybonus.sdlAmt");
+			reportMapping.addMoneyMapping("Foreign Worker Levy", "salarybonus.fwLevy");
+			reportMapping.addMoneyMapping("Take Home Salary", "salarybonus.takehomeAmt");
 			reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
 			reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
 			Sheet sheet = workbook.createSheet("Salary");

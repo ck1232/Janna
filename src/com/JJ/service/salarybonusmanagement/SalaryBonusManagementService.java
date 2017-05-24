@@ -88,6 +88,19 @@ public class SalaryBonusManagementService {
 		return salaryBonusVoList;
 	}
 	
+	public List<SalaryBonusVO> getAllBonusVo(Date startDate, Date endDate){
+		List<SalaryBonusVO> salaryBonusVoList = new ArrayList<SalaryBonusVO>();
+		EmployeeBonusDbObjectExample employeeBonusDbObjectExample = new EmployeeBonusDbObjectExample();
+		employeeBonusDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andBonusDateGreaterThanOrEqualTo(startDate).andBonusDateLessThanOrEqualTo(endDate);
+		employeeBonusDbObjectExample.setOrderByClause("bonus_date");
+		List<EmployeeBonusDbObject> bonusList = employeeBonusDbObjectMapper.selectByExample(employeeBonusDbObjectExample);
+		if(bonusList != null && !bonusList.isEmpty()) {
+			salaryBonusVoList.addAll(convertBonusToSalaryBonusVOList(bonusList));
+		}
+		return salaryBonusVoList;
+	}
+	
 	public SalaryBonusVO findSalaryById(Integer id) {
 		EmployeeSalaryDbObject employeeSalaryDbObject = employeeSalaryDbObjectMapper.selectByPrimaryKey(id);
 		if(employeeSalaryDbObject != null && employeeSalaryDbObject.getSalaryId() != null){
@@ -238,6 +251,7 @@ public class SalaryBonusManagementService {
 				vo.setEmployeeId(employeeVO.getEmployeeId());
 				vo.setName(employeeVO.getName());
 				vo.setEmployeeType(employeeVO.getEmployeeType());
+				vo.setEmployeeTypeString(EmploymentTypeEnum.getEnum(employeeVO.getEmployeeType()));
 				vo.setDob(employeeVO.getDob());
 				vo.setNationality(employeeVO.getNationality());
 				vo.setBasicSalaryAmt(employeeVO.getBasicSalary());
@@ -245,6 +259,8 @@ public class SalaryBonusManagementService {
 				vo.setEmploymentEndDate(employeeVO.getEmploymentEndDate());
 				vo.setCdacInd(employeeVO.getCdacInd());
 				vo.setBonusAmt(dbObj.getBonusAmt());
+				vo.setEmployeeCpf(dbObj.getEmployeeCpf());
+				vo.setEmployerCpf(dbObj.getEmployerCpf());
 				vo.setType(GeneralUtils.TYPE_BONUS);
 				vo.setStatus(dbObj.getStatus());
 				vo.setDeleteInd(dbObj.getDeleteInd());
@@ -279,6 +295,8 @@ public class SalaryBonusManagementService {
 				vo.setOverTimeRemarks(dbObj.getOverTimeRemarks());
 				vo.setAllowance(dbObj.getAllowance());
 				vo.setMedical(dbObj.getMedical());
+				vo.setEmployeeCpf(dbObj.getEmployeeCpf());
+				vo.setEmployerCpf(dbObj.getEmployerCpf());
 				vo.setLeaveBalance(dbObj.getLeaveBalance());
 				vo.setLeaveTaken(dbObj.getLeaveTaken());
 				vo.setUnpaidLeaveAmt(dbObj.getUnpaidLeaveAmt());
