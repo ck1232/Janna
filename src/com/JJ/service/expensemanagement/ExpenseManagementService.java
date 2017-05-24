@@ -51,6 +51,24 @@ public class ExpenseManagementService {
 		return expenseList;
 	}
 	
+	public List<ExpenseVO> getAllExpenseExcludeParamType(Date startDate, Date endDate, Integer type) {
+		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
+		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andExpenseDateGreaterThanOrEqualTo(startDate).andExpenseDateLessThanOrEqualTo(endDate).andExpenseTypeIdNotEqualTo(type);
+		expenseDbObjectExample.setOrderByClause("expense_date");
+		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(expenseDbObjectExample));
+		return expenseList;
+	}
+	
+	public List<ExpenseVO> getAllExpense(Date startDate, Date endDate, Integer type) {
+		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
+		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andExpenseDateGreaterThanOrEqualTo(startDate).andExpenseDateLessThanOrEqualTo(endDate).andExpenseTypeIdEqualTo(type);
+		expenseDbObjectExample.setOrderByClause("expense_date");
+		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(expenseDbObjectExample));
+		return expenseList;
+	}
+	
 	public List<ExpenseVO> getAllExpenseByIdList(List<Integer> idList) {
 		ExpenseDbObjectExample example = new ExpenseDbObjectExample();
 		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andExpenseIdIn(idList);
