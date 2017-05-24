@@ -2,13 +2,14 @@ package com.JJ.controller.reportmanagement;
 
 
 public enum ReportTypeEnum {
-	EXPENSE("Expense"),
-	INVOICE("Invoice"),
 	SALARY("Salary"),
 	BONUS("Bonus"),
+	CHINA_STOCK("China Stock"),
+	EXPENSE("Expense"),
+	INVOICE("Invoice"),
 	GRANT("Grant"),
-	SUMMARY("Summary"),
-	CHINA_STOCK("China Stock");
+	SUMMARY("Summary");
+	
 	private String name;
 
 	private ReportTypeEnum(String name) {
