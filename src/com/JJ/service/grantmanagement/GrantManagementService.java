@@ -2,6 +2,7 @@ package com.JJ.service.grantmanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class GrantManagementService {
 	public List<InvoiceVO> getAllGrant() {
 		GrantDbObjectExample grantDbObjectExample = new GrantDbObjectExample();
 		grantDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+		return convertToInvoiceVOList(grantDbObjectMapper.selectByExample(grantDbObjectExample));
+	}
+	
+	public List<InvoiceVO> getAllGrant(Date startDate, Date endDate) {
+		GrantDbObjectExample grantDbObjectExample = new GrantDbObjectExample();
+		grantDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andGrantDateGreaterThanOrEqualTo(startDate).andGrantDateLessThanOrEqualTo(endDate);
+		grantDbObjectExample.setOrderByClause("grant_date");
 		return convertToInvoiceVOList(grantDbObjectMapper.selectByExample(grantDbObjectExample));
 	}
 	

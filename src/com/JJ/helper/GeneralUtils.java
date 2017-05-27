@@ -62,6 +62,7 @@ public class GeneralUtils {
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
+	public static final String BONUS_DATE_FORMAT = "yyyy";
 	public static final String EXCEL_DATE_MONTH_YEAR_FORMAT = "MMM-yy";
 	public static final String EXCEL_DATE_YEAR_FORMAT = "yyyy";
 	

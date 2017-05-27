@@ -45,6 +45,14 @@ public class InvoiceManagementService {
 		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
 	}
 	
+	public List<InvoiceVO> getAllInvoice(Date startDate, Date endDate) {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andInvoiceDateGreaterThanOrEqualTo(startDate).andInvoiceDateLessThanOrEqualTo(endDate);
+		invoiceDbObjectExample.setOrderByClause("invoice_date");
+		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
+	}
+	
 	public List<InvoiceVO> getAllInvoiceByIdList(List<Integer> idList) {
 		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
 		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);

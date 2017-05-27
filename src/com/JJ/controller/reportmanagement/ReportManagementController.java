@@ -1,8 +1,11 @@
 package com.JJ.controller.reportmanagement;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.JJ.controller.reportmanagement.vo.BonusReport;
 import com.JJ.controller.reportmanagement.vo.ChinaStockReport;
 import com.JJ.controller.reportmanagement.vo.ExpenseReport;
+import com.JJ.controller.reportmanagement.vo.InvoiceReport;
 import com.JJ.controller.reportmanagement.vo.ReportInterface;
 import com.JJ.controller.reportmanagement.vo.SalaryReport;
 import com.JJ.helper.GeneralUtils;
@@ -38,16 +42,19 @@ public class ReportManagementController {
 	private ExpenseReport expenseReport;
 	private SalaryReport salaryReport;
 	private BonusReport bonusReport;
+	private InvoiceReport invoiceReport;
 	private ChinaStockReport chinaStockReport;
 	
 	@Autowired
 	public ReportManagementController(ReportManagementService reportManagementService, 
 			ExpenseReport expenseReport, SalaryReport salaryReport, 
-			BonusReport bonusReport, ChinaStockReport chinaStockReport) {
+			BonusReport bonusReport, InvoiceReport invoiceReport,
+			ChinaStockReport chinaStockReport) {
 		this.reportManagementService = reportManagementService;
 		this.expenseReport = expenseReport;
 		this.salaryReport = salaryReport;
 		this.bonusReport = bonusReport;
+		this.invoiceReport = invoiceReport;
 		this.chinaStockReport = chinaStockReport;
 	}
 	
@@ -112,14 +119,20 @@ public class ReportManagementController {
 		
 		List<ReportInterface> reportControllerList = getReportController(enumList);
 		//create a blank workbook
-		Workbook wb = new HSSFWorkbook();
+		Workbook expensewb = new HSSFWorkbook();
+		Workbook invoiceWb = new HSSFWorkbook();
 		//generate report
 		for(ReportInterface report :reportControllerList){
-			wb = report.exportReport(wb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
+			if(report instanceof InvoiceReport){
+				invoiceWb = report.exportReport(invoiceWb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
+				continue;
+			}
+			expensewb = report.exportReport(expensewb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
 		}
-		
-		downloadExcel(wb, request, response);
-		
+		List<Workbook> wbList = new ArrayList<Workbook>();
+		wbList.add(expensewb);
+		wbList.add(invoiceWb);
+		downloadExcelZip(wbList, request, response);
 		return null;
 	}
 	
@@ -140,6 +153,7 @@ public class ReportManagementController {
 				case GRANT:
 					break;
 				case INVOICE:
+					list.add(invoiceReport);
 					break;
 				case SALARY:
 					list.add(salaryReport);
@@ -154,6 +168,36 @@ public class ReportManagementController {
 		return list;
 	}
 
+	public void downloadExcelZip(List<Workbook> wbList, HttpServletRequest request, HttpServletResponse response) {
+        if(wbList != null && !wbList.isEmpty()){
+//        	response.setContentType("application/vnd.ms-excel");
+//            response.addHeader("Content-Disposition", "attachment; filename=Expense_Control_"+ "2017"/*reportCriteria.getYear()*/+".xls");
+        	response.setContentType("application/zip");
+        	response.addHeader("Content-Disposition", "attachment; filename=report.zip");
+        	try{
+        		ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+        		try{
+            		for(Workbook wb : wbList) {
+            			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            			wb.write(bos);
+            			byte[] bytes = bos.toByteArray();
+            			zos.putNextEntry(new ZipEntry(wb.getSheetName(0)+".xls"));
+            			zos.write(bytes);
+            			zos.closeEntry();
+            		}
+//                    response.getOutputStream().flush();
+                } 
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+        		zos.close();
+        	}catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        	
+        }
+    }
+	
 	public void downloadExcel(Workbook wb, HttpServletRequest request, HttpServletResponse response) {
         if(wb != null){
         	response.setContentType("application/vnd.ms-excel");
