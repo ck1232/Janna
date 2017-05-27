@@ -119,19 +119,19 @@ public class ReportManagementController {
 		
 		List<ReportInterface> reportControllerList = getReportController(enumList);
 		//create a blank workbook
+		List<Workbook> wbList = new ArrayList<Workbook>();
 		Workbook expensewb = new HSSFWorkbook();
 		Workbook invoiceWb = new HSSFWorkbook();
 		//generate report
 		for(ReportInterface report :reportControllerList){
 			if(report instanceof InvoiceReport){
 				invoiceWb = report.exportReport(invoiceWb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
+				wbList.add(invoiceWb);
 				continue;
 			}
 			expensewb = report.exportReport(expensewb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
 		}
-		List<Workbook> wbList = new ArrayList<Workbook>();
 		wbList.add(expensewb);
-		wbList.add(invoiceWb);
 		downloadExcelZip(wbList, request, response);
 		return null;
 	}
@@ -170,8 +170,6 @@ public class ReportManagementController {
 
 	public void downloadExcelZip(List<Workbook> wbList, HttpServletRequest request, HttpServletResponse response) {
         if(wbList != null && !wbList.isEmpty()){
-//        	response.setContentType("application/vnd.ms-excel");
-//            response.addHeader("Content-Disposition", "attachment; filename=Expense_Control_"+ "2017"/*reportCriteria.getYear()*/+".xls");
         	response.setContentType("application/zip");
         	response.addHeader("Content-Disposition", "attachment; filename=report.zip");
         	try{
@@ -185,7 +183,6 @@ public class ReportManagementController {
             			zos.write(bytes);
             			zos.closeEntry();
             		}
-//                    response.getOutputStream().flush();
                 } 
                 catch (IOException ex) {
                     ex.printStackTrace();
