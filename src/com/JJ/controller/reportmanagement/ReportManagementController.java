@@ -183,7 +183,7 @@ public class ReportManagementController {
             			ByteArrayOutputStream bos = new ByteArrayOutputStream();
             			wb.write(bos);
             			byte[] bytes = bos.toByteArray();
-            			zos.putNextEntry(new ZipEntry(wb.getSheetName(0)+".xls"));
+            			zos.putNextEntry(new ZipEntry(wb.getSheetName(wb.getNumberOfSheets()-1)+".xls"));
             			zos.write(bytes);
             			zos.closeEntry();
             		}
