@@ -1,11 +1,16 @@
 package com.JJ.helper.vo;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 
 import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
 import com.JJ.helper.vo.ExcelColumn.ColumnType;
 
-public class ReportMapping {
+public class ReportMapping implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private LinkedHashMap<String, ExcelColumn> mapping;
 	
 	public ReportMapping(){

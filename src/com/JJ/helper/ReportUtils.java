@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import com.JJ.helper.vo.ExcelColumn;
 import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
@@ -23,12 +24,37 @@ public class ReportUtils {
 				&& reportMapping != null && reportMapping.size() > 0){
 			reportMapping = setCellStyleForColumn(excelUtils, reportMapping);
 			for(T obj : list){
+				boolean isTotal = false;
+				Object monthObj = GeneralUtils.getObjectProprty(obj, "month");
+				if(monthObj != null && monthObj instanceof String){
+					String month = monthObj.toString();
+					if("total".equalsIgnoreCase(month)){
+						sheet.createRow(rowNum++);
+						isTotal = true;
+					}
+				}
+				row = sheet.createRow(rowNum++);
+				writeRow(row, obj, reportMapping, isTotal, excelUtils, sheet.getWorkbook());
+			}
+			setAutoSizeColumn(sheet, reportMapping);
+		}
+	}
+	
+	/*public static <T>void writeData(Sheet sheet, LinkedList<T> list, ReportMapping reportMapping){
+		int rowNum = sheet.getPhysicalNumberOfRows();
+		Row row = sheet.createRow(rowNum++);
+		ExcelUtils excelUtils = new ExcelUtils(sheet.getWorkbook());
+		writeHeader(row, reportMapping, excelUtils);
+		if(list != null && list.size() > 0 && sheet != null 
+				&& reportMapping != null && reportMapping.size() > 0){
+			reportMapping = setCellStyleForColumn(excelUtils, reportMapping);
+			for(T obj : list){
 				row = sheet.createRow(rowNum++);
 				writeRow(row, obj, reportMapping);
 			}
 			setAutoSizeColumn(sheet, reportMapping);
 		}
-	}
+	}*/
 	
 	public static void writeBlankRows(Sheet sheet, int numOfRows){
 		int rowNum = sheet.getPhysicalNumberOfRows();
@@ -62,12 +88,21 @@ public class ReportUtils {
 		}
 	}
 	
-	private static void writeRow(Row row, Object object, ReportMapping reportMapping){
+	private static void writeRow(Row row, Object object, ReportMapping reportMapping, boolean isTotal, ExcelUtils excelUtils, Workbook workbook){
 		int cellNum = 0;
 		for(String header : reportMapping.getMapping().keySet()){
 			ExcelColumn column = reportMapping.getMapping().get(header);
 			Cell cell = row.createCell(cellNum++);
-			cell.setCellStyle(column.getCellStyle());
+			CellStyle cs = column.getCellStyle();
+			if(isTotal){
+				CellStyle csTotal = workbook.createCellStyle();
+				csTotal.cloneStyleFrom(cs);
+				csTotal = excelUtils.getBorderTopBtmDouble(csTotal);
+				cell.setCellStyle(csTotal);
+			}else{
+				cell.setCellStyle(cs);
+			}
+			
 			Object value = GeneralUtils.getObjectProprty(object, column.getVariableName());
 			if(value == null){
 				cell.setCellValue("");

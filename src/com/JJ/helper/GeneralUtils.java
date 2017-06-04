@@ -7,8 +7,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,11 +63,14 @@ public class GeneralUtils {
 	public static final String MODULE_INVOICE = "invoice";
 	public static final String MODULE_GRANT = "grant";
 	
+	public static final Integer EXPENSE_TYPE_CHINA_STOCK = 15;
+	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
 	public static final String BONUS_DATE_FORMAT = "yyyy";
 	public static final String EXCEL_DATE_MONTH_YEAR_FORMAT = "MMM-yy";
 	public static final String EXCEL_DATE_YEAR_FORMAT = "yyyy";
+	public static final List<String> monthList = Arrays.asList("Jan","Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"); 
 	
 	private static final Logger logger = Logger.getLogger(GeneralUtils.class);	
 	public static <T> String convertListToJSONString(List<T> list){
@@ -277,6 +283,50 @@ public class GeneralUtils {
 				list.add(obj);
 			}
 		}
+		return list;
+	}
+	
+	public static <T>List<T> sortByMonth(List<T> list){
+		Collections.sort(list, new Comparator<T>(){
+
+			@Override
+			public int compare(T o1, T o2) {
+				String t1Month = (String) getObjectProprty(o1, "month");
+				String t2Month = (String) getObjectProprty(o2, "month");
+				int t1Index = monthList.indexOf(t1Month);
+				int t2Index = monthList.indexOf(t2Month);
+				if(t1Index >= 0 && t2Index >= 0){
+					return t1Index - t2Index;
+				}else if (t1Index >= 0){
+					return -1;
+				}else {
+					return 1;
+				}
+			}
+			
+		});
+		return list;
+	}
+	
+	public static <T>List<T> sortAccordingToSortList(List<T> list, final List<String> sortList){
+		Collections.sort(list, new Comparator<T>(){
+
+			@Override
+			public int compare(T o1, T o2) {
+				String t1Month = (String) getObjectProprty(o1, "month");
+				String t2Month = (String) getObjectProprty(o2, "month");
+				int t1Index = sortList.indexOf(t1Month);
+				int t2Index = sortList.indexOf(t2Month);
+				if(t1Index >= 0 && t2Index >= 0){
+					return t1Index - t2Index;
+				}else if (t1Index >= 0){
+					return -1;
+				}else {
+					return 1;
+				}
+			}
+			
+		});
 		return list;
 	}
 }

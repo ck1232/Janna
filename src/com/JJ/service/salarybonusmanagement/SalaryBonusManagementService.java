@@ -239,6 +239,13 @@ public class SalaryBonusManagementService {
 		return takehomeamount;
 	}
 	
+	private BigDecimal calculateTakeHomeAmountBonus(SalaryBonusVO vo, EmployeeBonusDbObject bonus) {
+		BigDecimal takehomeamount = vo.getBonusAmt();
+		if(bonus.getEmployeeCpf() != null)
+			takehomeamount = takehomeamount.subtract(bonus.getEmployeeCpf());
+		return takehomeamount;
+	}
+	
 	public List<SalaryBonusVO> convertBonusToSalaryBonusVOList(List<EmployeeBonusDbObject> bonusDbObjectList) {
 		List<SalaryBonusVO> voList = new ArrayList<SalaryBonusVO>();
 		if(bonusDbObjectList != null && bonusDbObjectList.size() > 0){
@@ -261,6 +268,7 @@ public class SalaryBonusManagementService {
 				vo.setBonusAmt(dbObj.getBonusAmt());
 				vo.setEmployeeCpf(dbObj.getEmployeeCpf());
 				vo.setEmployerCpf(dbObj.getEmployerCpf());
+				vo.setTakehomeAmt(calculateTakeHomeAmountBonus(vo, dbObj));
 				vo.setType(GeneralUtils.TYPE_BONUS);
 				vo.setStatus(dbObj.getStatus());
 				vo.setDeleteInd(dbObj.getDeleteInd());

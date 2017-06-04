@@ -1,10 +1,13 @@
 package com.JJ.helper.vo;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 
-public class ExcelColumn {
+public class ExcelColumn implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private String variableName;
 	private ColumnType columnType;
 	private LinkedList<ColumnStyle> columnStyleList;
@@ -47,7 +50,7 @@ public class ExcelColumn {
 	}
 	
 	public enum ColumnStyle{
-		Header, Bold, Underline, Italic, Bg_blue, Bg_skyBlue;
+		Header, Bold, Underline, Italic, Bg_blue, Bg_skyBlue, Border_Top_Btm_Double;
 	}
 
 

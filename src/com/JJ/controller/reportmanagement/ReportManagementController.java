@@ -28,6 +28,7 @@ import com.JJ.controller.reportmanagement.vo.ExpenseReport;
 import com.JJ.controller.reportmanagement.vo.InvoiceReport;
 import com.JJ.controller.reportmanagement.vo.ReportInterface;
 import com.JJ.controller.reportmanagement.vo.SalaryReport;
+import com.JJ.controller.reportmanagement.vo.SummaryReport;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.reportmanagement.ReportManagementService;
 
@@ -44,18 +45,20 @@ public class ReportManagementController {
 	private BonusReport bonusReport;
 	private InvoiceReport invoiceReport;
 	private ChinaStockReport chinaStockReport;
+	private SummaryReport summaryReport;
 	
 	@Autowired
 	public ReportManagementController(ReportManagementService reportManagementService, 
 			ExpenseReport expenseReport, SalaryReport salaryReport, 
 			BonusReport bonusReport, InvoiceReport invoiceReport,
-			ChinaStockReport chinaStockReport) {
+			ChinaStockReport chinaStockReport, SummaryReport summaryReport) {
 		this.reportManagementService = reportManagementService;
 		this.expenseReport = expenseReport;
 		this.salaryReport = salaryReport;
 		this.bonusReport = bonusReport;
 		this.invoiceReport = invoiceReport;
 		this.chinaStockReport = chinaStockReport;
+		this.summaryReport = summaryReport;
 	}
 	
 	@RequestMapping(value = "/viewReportGen", method = RequestMethod.GET)
@@ -159,6 +162,7 @@ public class ReportManagementController {
 					list.add(salaryReport);
 					break;
 				case SUMMARY:
+					list.add(summaryReport);
 					break;
 				default:
 					break;

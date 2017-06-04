@@ -41,6 +41,7 @@ public class ExcelUtils {
 					case Header :
 					case Bg_skyBlue: cs = getSkyBlue(cs);break;
 					case Bg_blue: cs = getBgBlue(cs);break;
+					case Border_Top_Btm_Double : getBorderTopBtmDouble(cs);break;
 					default:break;
 				}
 			}
@@ -59,6 +60,12 @@ public class ExcelUtils {
 			}
 			cs.setFont(font);
 		}
+		return cs;
+	}
+
+	public CellStyle getBorderTopBtmDouble(CellStyle cs) {
+		cs.setBorderTop(CellStyle.BORDER_THIN);
+		cs.setBorderBottom(CellStyle.BORDER_DOUBLE);
 		return cs;
 	}
 
