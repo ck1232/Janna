@@ -195,6 +195,8 @@ public class SummaryReport implements ReportInterface {
 			addCurrentAccPayable(accPayableSummaryHashMap.get(Total), paymentVO);
 		}
 		accPayableSummaryList.addAll(accPayableSummaryHashMap.values());
+		accPayableSummaryList = GeneralUtils.sortByMonth(accPayableSummaryList);
+		
 		//account payable ReportMapping
 		ReportUtils.writeBlankRows(sheet, 2);
 		ReportUtils.writeRow(sheet, "Accounts Payable", 0, ColumnStyle.Bold);
