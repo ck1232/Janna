@@ -65,7 +65,7 @@ public class ChinaStockReport implements ReportInterface {
 			reportMapping.addMoneyMapping("Amount (RMB)", "paymentDetail.paymentAmt");
 			reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
 			Sheet sheet = workbook.createSheet("RMB Purchase");
-			ReportUtils.writeData(sheet, expenseReportList, reportMapping);
+			ReportUtils.writeData(sheet, expenseReportList, reportMapping, "");
 		}
 		return workbook;
 	}

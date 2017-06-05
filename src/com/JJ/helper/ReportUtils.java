@@ -15,7 +15,7 @@ import com.JJ.helper.vo.ExcelColumn.ColumnType;
 import com.JJ.helper.vo.ReportMapping;
 
 public class ReportUtils {
-	public static <T>void writeData(Sheet sheet, List<T> list, ReportMapping reportMapping){
+	public static <T>void writeData(Sheet sheet, List<T> list, ReportMapping reportMapping, String name){
 		int rowNum = sheet.getPhysicalNumberOfRows();
 		Row row = sheet.createRow(rowNum++);
 		ExcelUtils excelUtils = new ExcelUtils(sheet.getWorkbook());
@@ -25,7 +25,7 @@ public class ReportUtils {
 			reportMapping = setCellStyleForColumn(excelUtils, reportMapping);
 			for(T obj : list){
 				boolean isTotal = false;
-				Object monthObj = GeneralUtils.getObjectProprty(obj, "month");
+				Object monthObj = GeneralUtils.getObjectProprty(obj, name);
 				if(monthObj != null && monthObj instanceof String){
 					String month = monthObj.toString();
 					if("total".equalsIgnoreCase(month)){

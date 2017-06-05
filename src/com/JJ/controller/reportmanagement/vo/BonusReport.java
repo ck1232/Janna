@@ -79,10 +79,10 @@ public class BonusReport implements ReportInterface {
 			reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
 			Sheet sheet = workbook.createSheet("Bonus");
 			ReportUtils.writeRow(sheet, (year-1) + " Bonus paid in " + year + " (already recognise in " + (year-1) + " Income Statement)", 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, paidBonusReportList, reportMapping);
+			ReportUtils.writeData(sheet, paidBonusReportList, reportMapping, "");
 			ReportUtils.writeBlankRows(sheet, 2);
 			ReportUtils.writeRow(sheet, year + " Bonus not paid - To add as accruals as it will be paid in " + (year+1), 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, unpaidBonusReportList, reportMapping);
+			ReportUtils.writeData(sheet, unpaidBonusReportList, reportMapping, "");
 			
 		}
 		return workbook;

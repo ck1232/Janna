@@ -87,7 +87,7 @@ public class ExpenseReport implements ReportInterface {
 			
 			for(String key : expenseReportMap.keySet()){
 				Sheet sheet = workbook.createSheet(key);
-				ReportUtils.writeData(sheet, expenseReportMap.get(key), reportMapping);
+				ReportUtils.writeData(sheet, expenseReportMap.get(key), reportMapping, "");
 			}
 		}
 		return workbook;

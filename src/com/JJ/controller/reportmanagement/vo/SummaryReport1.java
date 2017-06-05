@@ -73,7 +73,7 @@ public class SummaryReport1 implements ReportInterface {
 			reportMapping.addMoneyMapping(Total, "expenseCategorySum(total)");
 			Sheet sheet = workbook.createSheet("Summary");
 			ReportUtils.writeBlankRows(sheet, 2);
-			ReportUtils.writeData(sheet, summaryReportList, reportMapping);		
+			ReportUtils.writeData(sheet, summaryReportList, reportMapping, "month");		
 			
 			//Payment ReportMapping
 			reportMapping = new ReportMapping();
@@ -84,7 +84,7 @@ public class SummaryReport1 implements ReportInterface {
 			reportMapping.addMoneyMapping("Not Paid", "paymentCategorySum(unpaid)");
 			reportMapping.addMoneyMapping(Total, "paymentCategorySum(total)");
 			ReportUtils.writeBlankRows(sheet, 2);
-			ReportUtils.writeData(sheet, summaryReportList, reportMapping);		
+			ReportUtils.writeData(sheet, summaryReportList, reportMapping, "month");		
 		}
 		
 		return workbook;

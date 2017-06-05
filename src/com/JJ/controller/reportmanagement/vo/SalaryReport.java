@@ -87,7 +87,7 @@ public class SalaryReport implements ReportInterface {
 			reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
 			reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
 			Sheet sheet = workbook.createSheet("Salary");
-			ReportUtils.writeData(sheet, salaryReportList, reportMapping);
+			ReportUtils.writeData(sheet, salaryReportList, reportMapping, "");
 		}
 		return workbook;
 	}

@@ -308,13 +308,13 @@ public class GeneralUtils {
 		return list;
 	}
 	
-	public static <T>List<T> sortAccordingToSortList(List<T> list, final List<String> sortList){
+	public static <T>List<T> sortAccordingToSortList(List<T> list, final List<String> sortList, final String name){
 		Collections.sort(list, new Comparator<T>(){
 
 			@Override
 			public int compare(T o1, T o2) {
-				String t1Month = (String) getObjectProprty(o1, "month");
-				String t2Month = (String) getObjectProprty(o2, "month");
+				String t1Month = (String) getObjectProprty(o1, name);
+				String t2Month = (String) getObjectProprty(o2, name);
 				int t1Index = sortList.indexOf(t1Month);
 				int t2Index = sortList.indexOf(t2Month);
 				if(t1Index >= 0 && t2Index >= 0){

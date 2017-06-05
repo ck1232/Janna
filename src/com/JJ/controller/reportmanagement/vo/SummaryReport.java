@@ -128,12 +128,12 @@ public class SummaryReport implements ReportInterface {
 			//Expense ReportMapping
 			ReportUtils.writeBlankRows(sheet, 2);
 			ReportUtils.writeRow(sheet, "Expenses by Type (exclude Salary)", 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, expenseSummaryList, initExpenseReportMapping());		
+			ReportUtils.writeData(sheet, expenseSummaryList, initExpenseReportMapping(), "month");		
 			
 			//Payment ReportMapping
 			ReportUtils.writeBlankRows(sheet, 2);
 			ReportUtils.writeRow(sheet, "Payment records (exclude salary)", 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, paymentSummaryList, initPaymentReportMapping());		
+			ReportUtils.writeData(sheet, paymentSummaryList, initPaymentReportMapping(), "month");		
 		}
 	}
 	
@@ -153,11 +153,11 @@ public class SummaryReport implements ReportInterface {
 			}
 		}
 		salarybonusSummaryList.addAll(salarySummaryHashMap.values());	
-		salarybonusSummaryList = GeneralUtils.sortAccordingToSortList(salarybonusSummaryList, accPayableSummaryHeaders);
+		salarybonusSummaryList = GeneralUtils.sortAccordingToSortList(salarybonusSummaryList, accPayableSummaryHeaders, "month");
 		//Salary ReportMapping
 		ReportUtils.writeBlankRows(sheet, 2);
 		ReportUtils.writeRow(sheet, "Salary and Bonus", 0, ColumnStyle.Bold);
-		ReportUtils.writeData(sheet, salarybonusSummaryList, initSalaryBonusReportMapping());		
+		ReportUtils.writeData(sheet, salarybonusSummaryList, initSalaryBonusReportMapping(), "month");		
 	}
 	
 	private void generateAccPayableReport(Date dateAsOf, Date endDate) {
@@ -198,7 +198,7 @@ public class SummaryReport implements ReportInterface {
 		//account payable ReportMapping
 		ReportUtils.writeBlankRows(sheet, 2);
 		ReportUtils.writeRow(sheet, "Accounts Payable", 0, ColumnStyle.Bold);
-		ReportUtils.writeData(sheet, accPayableSummaryList, initAccPayableReportMapping());
+		ReportUtils.writeData(sheet, accPayableSummaryList, initAccPayableReportMapping(), "month");
 	}
 	
 

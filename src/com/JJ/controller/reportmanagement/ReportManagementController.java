@@ -134,7 +134,8 @@ public class ReportManagementController {
 			}
 			expensewb = report.exportReport(expensewb, reportCriteria.getStartDate(), reportCriteria.getEndDate(), null);
 		}
-		wbList.add(expensewb);
+		if(expensewb.getNumberOfSheets() > 0)
+			wbList.add(expensewb);
 		downloadExcelZip(wbList, request, response);
 		return null;
 	}
