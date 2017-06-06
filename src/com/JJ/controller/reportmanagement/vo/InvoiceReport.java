@@ -146,7 +146,7 @@ public class InvoiceReport implements ReportInterface {
 	}
 	
 	private ReportMapping initInvoiceSummaryReportMapping(Date date) {
-		String dateAsOfString = GeneralUtils.convertDateToString(date, "DD MMM YYYY");
+		String dateAsOfString = GeneralUtils.convertDateToString(date, "dd MMM YYYY");
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addTextMapping("", "title");
 		reportMapping.addTextMapping("Description", "description");
