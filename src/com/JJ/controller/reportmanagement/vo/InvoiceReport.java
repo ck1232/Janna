@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.JJ.controller.invoicemanagement.InvoiceStatusEnum;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.helper.GeneralUtils;
@@ -65,23 +64,34 @@ public class InvoiceReport implements ReportInterface {
 			for(InvoiceVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId(vo.getType(), 
 						vo.getType().equals("invoice") ? vo.getInvoiceId() : vo.getGrantId());
-				InvoiceReportVO invoiceReportVo;
+				InvoiceReportVO invoiceReportVo = new InvoiceReportVO();
+				invoiceReportVo.setInvoice(vo);
+				invoiceReportVo.setPaymentDetailList(new ArrayList<PaymentDetailVO>());
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
-						invoiceReportVo = new InvoiceReportVO();
-						invoiceReportVo.setInvoice(vo);
 						if(paymentVO.getPaymentMode() == 2 && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
-						invoiceReportVo.setPaymentDetail(paymentVO);
-						allInvoiceReportList.add(invoiceReportVo);
+						invoiceReportVo.getPaymentDetailList().add(paymentVO);
 					}
-				}else{
-					if(vo.getStatus().equals(InvoiceStatusEnum.PENDING.toString())) {
-						invoiceReportVo = new InvoiceReportVO();
-						invoiceReportVo.setInvoice(vo);
-						allInvoiceReportList.add(invoiceReportVo);
+				}
+				allInvoiceReportList.add(invoiceReportVo);
+			}
+			
+			for(InvoiceReportVO report : allInvoiceReportList) {
+				List<PaymentDetailVO> paymentDetailList = report.getPaymentDetailList();
+				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
+					String paymentMode = "";
+					for(PaymentDetailVO vo : paymentDetailList){
+						if(vo.getPaymentMode() != null && vo.getPaymentMode() == 2) { // payment mode is cheque
+							report.setChequeDate(vo.getPaymentDate());
+							report.setChequeNo(vo.getChequeNum());
+							report.setDebitDate(vo.getDebitDate());
+						}
+						paymentMode += vo.getPaymentModeString() + ",";
 					}
+					report.setPaymentMode(paymentMode.substring(0, paymentMode.length()-1));
+					report.setPaymentAmt(report.getInvoice().getTotalAmt());
 				}
 			}
 			
@@ -127,11 +137,11 @@ public class InvoiceReport implements ReportInterface {
 		reportMapping.addTextMapping("Name", "invoice.messenger");
 		reportMapping.addDateMapping("Date of Invoice", "invoice.invoiceDate");
 		reportMapping.addMoneyMapping("Amount", "invoice.totalAmt");
-		reportMapping.addTextMapping("Payment Mode", "paymentDetail.paymentModeString");
-		reportMapping.addDateMapping("Cheque Date", "paymentDetail.paymentDate");
-		reportMapping.addTextMapping("Cheque No", "paymentDetail.chequeNum");
-		reportMapping.addMoneyMapping("Cheque amount", "paymentDetail.paymentAmt");
-		reportMapping.addDateMapping("Date debited (per Bank)", "paymentDetail.debitDate");;
+		reportMapping.addTextMapping("Payment Mode", "paymentMode");
+		reportMapping.addDateMapping("Cheque Date", "chequeDate");
+		reportMapping.addTextMapping("Cheque No", "chequeNo");
+		reportMapping.addMoneyMapping("Payment amount", "paymentAmt");
+		reportMapping.addDateMapping("Date debited (per Bank)", "debitDate");;
 		return reportMapping;
 	}
 	
@@ -148,7 +158,7 @@ public class InvoiceReport implements ReportInterface {
 	
 	private void addCurrentInvoice(TotalIncomeSummaryVO vo, InvoiceReportVO invoice){
 		vo.setIncome(vo.getIncome().add(invoice.getInvoice().getTotalAmt())); //set income
-		if(invoice.getPaymentDetail() != null)
+		if(invoice.getPaymentDetailList() != null && !invoice.getPaymentDetailList().isEmpty())
 			vo.setMoneyReceived(vo.getMoneyReceived().add(invoice.getInvoice().getTotalAmt())); //set money received
 	}
 	
