@@ -1,1 +1,1 @@
-"categoryid":${category.id}
+"categoryid":${category.categoryId}

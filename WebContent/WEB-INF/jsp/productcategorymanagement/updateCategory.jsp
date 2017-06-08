@@ -16,16 +16,15 @@
 			<c:url var="post_url" value="/product/category/updateProductCategoryToDb" />
 			<form:form id="updateProductCategoryToDbForm" method="post" modelAttribute="categoryForm" action="${post_url }">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<form:input path="id" type="hidden" id="id"/>
-				<form:input path="deleteind" type="hidden" id="deleteind"/>
-				<form:input path="id" type="hidden" id="id"/>
+				<form:input path="categoryId" type="hidden" id="categoryId"/>
+				<form:input path="deleteInd" type="hidden" id="deleteInd"/>
 	 			<div class="row">
 		 			<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Name</label>
 						<div class="col-sm-10">
-							<form:input path="name" type="text" class="form-control"
-						                    id="name" placeholder="Enter name" />
-							<form:errors path="name" class="text-danger" />
+							<form:input path="categoryName" type="text" class="form-control"
+						                    id="categoryName" placeholder="Enter name" />
+							<form:errors path="categoryName" class="text-danger" />
 						</div>
 					</div>
 				</div>
@@ -34,8 +33,8 @@
 						<label class="col-sm-2 control-label">Parent Category</label>
 						<div class="col-sm-10">
 							<div class="checkbox">
-						  		<label><form:checkbox path="isparent" id="isparent" /></label>
-		   						<form:errors path="isparent" class="text-danger" />
+						  		<label><form:checkbox path="isParentBoolean" id="isParentBoolean" /></label>
+		   						<form:errors path="isParentBoolean" class="text-danger" />
 							</div>
 						</div>
 		  			</div>
@@ -45,8 +44,8 @@
 						<label class="col-sm-2 control-label">Allow Display</label>
 						<div class="col-sm-10">
 							<div class="checkbox">
-						  		<label><form:checkbox path="displayind" id="displayind" /></label>
-		   						<form:errors path="displayind" class="text-danger" />
+						  		<label><form:checkbox path="displayIndBoolean" id="displayIndBoolean" /></label>
+		   						<form:errors path="displayIndBoolean" class="text-danger" />
 							</div>
 						</div>
 		  			</div>

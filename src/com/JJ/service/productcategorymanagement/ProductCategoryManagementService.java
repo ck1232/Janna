@@ -47,6 +47,7 @@ public class ProductCategoryManagementService {
 		if(ProductCategoryVO != null){
 			ProductCategoryDbObject dbObj = convertToProductCategoryDbObjectList(Arrays.asList(ProductCategoryVO)).get(0);
 			productCategoryDbObjectMapper.insert(dbObj);
+			ProductCategoryVO.setCategoryId(dbObj.getCategoryId());
 		}
 	}
 	
@@ -63,8 +64,7 @@ public class ProductCategoryManagementService {
 	}
 	
 	public void updateProductcategory(ProductCategoryVO productCategoryVO) {
-		if(productCategoryVO != null && productCategoryVO.getDeleteInd() != null &&
-				productCategoryVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+		if(productCategoryVO != null && productCategoryVO.getCategoryId() != null){
 			ProductCategoryDbObject dbObj = convertToProductCategoryDbObjectList(Arrays.asList(productCategoryVO)).get(0);
 			productCategoryDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
@@ -80,8 +80,10 @@ public class ProductCategoryManagementService {
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
 				vo.setDisplayIndString(dbObj.getDisplayInd().equals("1") ? "Y" : "N");
+				vo.setDisplayIndBoolean(dbObj.getDisplayInd().equals("1")? Boolean.TRUE : Boolean.FALSE);
 				vo.setIsParent(dbObj.getIsParent());
 				vo.setIsParentString(dbObj.getIsParent().equals("1") ? "Y" : "N");
+				vo.setIsParentBoolean(dbObj.getIsParent().equals("1") ? Boolean.TRUE : Boolean.FALSE);
 				vo.setVersion(dbObj.getVersion());
 				productCategoryVOList.add(vo);
 			}
@@ -97,8 +99,8 @@ public class ProductCategoryManagementService {
 				dbObj.setCategoryId(vo.getCategoryId());
 				dbObj.setCategoryName(vo.getCategoryName());
 				dbObj.setDeleteInd(vo.getDeleteInd());
-				dbObj.setDisplayInd(vo.getDisplayInd());
-				dbObj.setIsParent(vo.getIsParent());
+				dbObj.setDisplayInd(vo.getDisplayIndBoolean() == Boolean.TRUE ? "1" : "0");
+				dbObj.setIsParent(vo.getIsParentBoolean() == Boolean.TRUE ? "1" : "0");
 				dbObj.setVersion(vo.getVersion());
 				productCategoryDbObjectList.add(dbObj);
 			}

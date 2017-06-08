@@ -19,9 +19,9 @@
                     <form:form id="updateSubCategoryToDbForm" method="post" modelAttribute="category" action="${post_url}">
 		              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
-		              		<form:input path="id" type="hidden" id="id"/>
+		              		<form:input path="categoryId" type="hidden" id="categoryId"/>
 							<div class="col-sm-2">Category Name</div>
-							<div class="col-sm-10">${category.name}</div>
+							<div class="col-sm-10">${category.categoryName}</div>
 						<br/><br/>
 						
 						<tiles:insertAttribute name = "datatable" />

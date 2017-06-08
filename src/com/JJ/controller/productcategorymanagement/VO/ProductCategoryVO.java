@@ -14,10 +14,14 @@ public class ProductCategoryVO extends Base implements Serializable {
     private String isParent;
     
     private String isParentString;
+    
+    private Boolean isParentBoolean;
 
     private String displayInd;
     
     private String displayIndString;
+    
+    private Boolean displayIndBoolean;
 
     private List<ProductSubCategoryVO> subcategoryList;
 
@@ -55,6 +59,14 @@ public class ProductCategoryVO extends Base implements Serializable {
 		this.isParentString = isParentString;
 	}
 
+	public Boolean getIsParentBoolean() {
+		return isParentBoolean;
+	}
+
+	public void setIsParentBoolean(Boolean isParentBoolean) {
+		this.isParentBoolean = isParentBoolean;
+	}
+
 	public String getDisplayInd() {
         return displayInd;
     }
@@ -71,7 +83,15 @@ public class ProductCategoryVO extends Base implements Serializable {
 		this.displayIndString = displayIndString;
 	}
 	
-    public List<ProductSubCategoryVO> getSubcategoryList() {
+    public Boolean getDisplayIndBoolean() {
+		return displayIndBoolean;
+	}
+
+	public void setDisplayIndBoolean(Boolean displayIndBoolean) {
+		this.displayIndBoolean = displayIndBoolean;
+	}
+
+	public List<ProductSubCategoryVO> getSubcategoryList() {
 		return subcategoryList;
 	}
 

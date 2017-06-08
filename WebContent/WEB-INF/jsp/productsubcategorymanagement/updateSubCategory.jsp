@@ -11,16 +11,16 @@
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="post" action="<c:url value="/product/subcategory/listSubCategory" />">
-                    	<input type="hidden" name="editBtn" value="${subcategoryForm.productcategoryid}"/>
+                    	<input type="hidden" name="editBtn" value="${subcategoryForm.categoryId}"/>
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <c:url var = "post_url" value="/product/subcategory/updateSubCategoryToDb" />
                     <form:form id="updateSubCategoryToDbForm" method="post" modelAttribute="subcategoryForm" action="${post_url }">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		              <div class="box-body">
-		              		<form:input path="id" type="hidden" id="id"/>
-		              		<form:input path="productcategoryid" type="hidden" id="productcategoryid"/>
-		              		<form:input path="deleteind" type="hidden" id="deleteind"/>
+		              		<form:input path="subCategoryId" type="hidden" id="subCategoryId"/>
+		              		<form:input path="categoryId" type="hidden" id="categoryId"/>
+		              		<form:input path="deleteInd" type="hidden" id="deleteInd"/>
 		              		<div class="row">
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">SubCategory Name</label>
@@ -36,8 +36,8 @@
 									<label class="col-sm-2 control-label">Allow Display</label>
 									<div class="col-sm-10">
 										<div class="checkbox">
-									  		<label><form:checkbox path="displayind" id="displayind" /></label>
-									     	<form:errors path="displayind" class="text-danger" />
+									  		<label><form:checkbox path="displayIndBoolean" id="displayIndBoolean" /></label>
+									     	<form:errors path="displayIndBoolean" class="text-danger" />
 										</div>
 									</div>
 							  	</div>

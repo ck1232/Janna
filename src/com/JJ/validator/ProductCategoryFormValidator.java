@@ -19,7 +19,7 @@ public class ProductCategoryFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 //		ProductCategoryVO productCategoryVO = (ProductCategoryVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.notempty.productcategoryform.name");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "categoryName", "error.notempty.productcategoryform.name");
 		
 	}
 	

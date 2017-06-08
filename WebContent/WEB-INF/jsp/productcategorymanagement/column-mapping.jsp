@@ -6,9 +6,9 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "name"},
-{"data": "isparentString"},
-{"data": "displayindString"},
+{"data": "categoryName"},
+{"data": "isParentString"},
+{"data": "displayIndString"},
 {
     "className":      '',
     "orderable":      false,

@@ -14,6 +14,8 @@ public class ProductSubCategoryVO extends Base implements Serializable {
     private String displayInd;
     
     private String displayIndString;
+    
+    private Boolean displayIndBoolean;
 
     private static final long serialVersionUID = 1L;
 
@@ -57,7 +59,15 @@ public class ProductSubCategoryVO extends Base implements Serializable {
 		this.displayIndString = displayIndString;
 	}
 
-    @Override
+    public Boolean getDisplayIndBoolean() {
+		return displayIndBoolean;
+	}
+
+	public void setDisplayIndBoolean(Boolean displayIndBoolean) {
+		this.displayIndBoolean = displayIndBoolean;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());

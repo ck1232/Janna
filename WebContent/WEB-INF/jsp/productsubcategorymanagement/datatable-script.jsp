@@ -22,14 +22,14 @@ $(function () {
 	            ],
       "order": [1, 'asc'],
       'rowCallback': function(row, data, dataIndex){
-          $(row).find('input[type="checkbox"]').prop('value', data.id);
+          $(row).find('input[type="checkbox"]').prop('value', data.subCategoryId);
           if(data.checked == "Y"){
           	$(row).find('input[type="checkbox"]').prop('checked', true);
           }else{
         	  $(row).find('input[type="checkbox"]').prop('checked', false);
           }
-          $(row).find('button[name="editBtn"]').prop('value', data.id);
-          $(row).find('button[name="viewBtn"]').prop('value', data.id);
+          $(row).find('button[name="editBtn"]').prop('value', data.subCategoryId);
+          $(row).find('button[name="viewBtn"]').prop('value', data.subCategoryId);
           $(row).find('div[name="iconDiv"]').html(data.icon+" <i class='fa "+data.icon+"'></i>");
           
        }

@@ -65,6 +65,7 @@ public class ProductSubCategoryManagementService {
 		if(productSubCategoryVO != null){
 			ProductSubCategoryDbObject dbObj = convertToProductSubCategoryDbObjectList(Arrays.asList(productSubCategoryVO)).get(0);
 			productSubCategoryDbObjectMapper.insert(dbObj);
+			productSubCategoryVO.setSubCategoryId(dbObj.getSubCategoryId());
 		}
 	}
 	
@@ -108,6 +109,7 @@ public class ProductSubCategoryManagementService {
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
 				vo.setDisplayIndString(dbObj.getDisplayInd().equals("1") ? "Y" : "N");
+				vo.setDisplayIndBoolean(dbObj.getDisplayInd().equals("1") ? Boolean.TRUE : Boolean.FALSE);
 				vo.setName(dbObj.getName());
 				vo.setSubCategoryId(dbObj.getSubCategoryId());
 				vo.setVersion(dbObj.getVersion());
@@ -124,7 +126,7 @@ public class ProductSubCategoryManagementService {
 				ProductSubCategoryDbObject dbObj = new ProductSubCategoryDbObject();
 				dbObj.setCategoryId(vo.getCategoryId());
 				dbObj.setDeleteInd(vo.getDeleteInd());
-				dbObj.setDisplayInd(vo.getDisplayInd());
+				dbObj.setDisplayInd(vo.getDisplayIndBoolean() == Boolean.TRUE ? "1" : "0");
 				dbObj.setName(vo.getName());
 				dbObj.setSubCategoryId(vo.getSubCategoryId());
 				dbObj.setVersion(vo.getVersion());

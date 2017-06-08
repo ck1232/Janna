@@ -94,12 +94,12 @@ public class ProductCategoryManagementController {
 			return "createProductCategory";
 		} else {
 			productCategoryManagementService.saveProductCategory(productCategoryVO);
-			if(!productCategoryVO.getIsParent().equals("1")) {
+			if(productCategoryVO.getIsParentBoolean()) {
 				ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
 				productSubCategoryVO.setName(productCategoryVO.getCategoryName());
 		    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
 		    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
-		    	productSubCategoryVO.setDisplayInd(productCategoryVO.getDisplayInd());
+		    	productSubCategoryVO.setDisplayIndBoolean(productCategoryVO.getDisplayIndBoolean());
 				productSubCategoryManagementService.saveProductSubCategory(productSubCategoryVO);
 			}
 			redirectAttributes.addFlashAttribute("css", "success");
@@ -163,7 +163,7 @@ public class ProductCategoryManagementController {
 			return "updateProductCategory";
 		} else {
 			ProductCategoryVO currentCategory = productCategoryManagementService.findById(productCategoryVO.getCategoryId());
-			if(productCategoryVO.getIsParent() != currentCategory.getIsParent()){ // to parent
+			if(productCategoryVO.getIsParentBoolean() != currentCategory.getIsParentBoolean()){ // to parent
 				//check if have products
 				List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productCategoryVO.getCategoryId());
 				for(ProductSubCategoryVO psc: subcategoryList) {
@@ -176,14 +176,15 @@ public class ProductCategoryManagementController {
 					}
 				}
 			}
-			productSubCategoryManagementService.deleteProductSubCategoryByCategory(productCategoryVO.getCategoryId());
+			
 			productCategoryManagementService.updateProductcategory(productCategoryVO);
-			if(!productCategoryVO.getIsParent().equals("1")) {
+			if(productCategoryVO.getIsParentBoolean()) {
+				productSubCategoryManagementService.deleteProductSubCategoryByCategory(productCategoryVO.getCategoryId());
 				ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
 				productSubCategoryVO.setName(productCategoryVO.getCategoryName());
 		    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
 		    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
-		    	productSubCategoryVO.setDisplayInd(productCategoryVO.getDisplayInd());
+		    	productSubCategoryVO.setDisplayIndBoolean(productCategoryVO.getDisplayIndBoolean());
 				productSubCategoryManagementService.saveProductSubCategory(productSubCategoryVO);
 			}
 			redirectAttributes.addFlashAttribute("css", "success");
