@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: jj
+-- Host: localhost    Database: jj
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.9-MariaDB
+-- Server version	5.5.5-10.1.21-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -561,6 +561,40 @@ INSERT INTO `invoice_grant` VALUES (1,'IRAS','2017-01-05',533.83,'PAID','euphona
 UNLOCK TABLES;
 
 --
+-- Table structure for table `menu_items`
+--
+
+DROP TABLE IF EXISTS `menu_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menu_items` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `display_ind` char(1) NOT NULL DEFAULT 'N',
+  `parent_id` int(11) DEFAULT NULL,
+  `href` varchar(512) DEFAULT NULL,
+  `sequence` int(3) NOT NULL DEFAULT '0',
+  `version` int(5) NOT NULL,
+  `created_by` varchar(255) NOT NULL,
+  `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` varchar(255) NOT NULL,
+  `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `delete_ind` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menu_items`
+--
+
+LOCK TABLES `menu_items` WRITE;
+/*!40000 ALTER TABLE `menu_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `menu_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `module`
 --
 
@@ -704,7 +738,7 @@ CREATE TABLE `product` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_ind` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -745,7 +779,7 @@ CREATE TABLE `product_category` (
 
 LOCK TABLES `product_category` WRITE;
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
-INSERT INTO `product_category` VALUES (1,'light bulb','1','1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(2,'hel','1','1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(3,'testing','1','1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(4,'lamp','1','0',1,'','0000-00-00 00:00:00','euphona','2017-06-08 21:14:06','N');
+INSERT INTO `product_category` VALUES (1,'light bulb','Y','Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(2,'hel','Y','Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(3,'testing','Y','Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(4,'lamp','Y','N',1,'','0000-00-00 00:00:00','euphona','2017-06-08 21:14:06','N');
 /*!40000 ALTER TABLE `product_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -946,7 +980,7 @@ CREATE TABLE `product_sub_category` (
 
 LOCK TABLES `product_sub_category` WRITE;
 /*!40000 ALTER TABLE `product_sub_category` DISABLE KEYS */;
-INSERT INTO `product_sub_category` VALUES (1,'Light Bulbs',1,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(2,'Light Bulbs',1,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(3,'test1',3,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(4,'test2',3,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(5,'test3',3,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(6,'lamp',4,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(7,'lamp',4,'1',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(8,'lamp',4,'1',1,'euphona','2017-06-08 21:14:07','euphona','2017-06-08 21:25:13','N');
+INSERT INTO `product_sub_category` VALUES (1,'Light Bulbs',1,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(2,'Light Bulbs',1,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(3,'test1',3,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(4,'test2',3,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(5,'test3',3,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','N'),(6,'lamp',4,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(7,'lamp',4,'Y',0,'','0000-00-00 00:00:00','','0000-00-00 00:00:00','Y'),(8,'lamp',4,'Y',1,'euphona','2017-06-08 21:14:07','euphona','2017-06-08 21:25:13','N');
 /*!40000 ALTER TABLE `product_sub_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1946,4 +1980,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-09 22:26:55
+-- Dump completed on 2017-06-10 22:43:06
