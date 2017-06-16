@@ -54,10 +54,13 @@ public class InvoiceManagementService {
 	}
 	
 	public List<InvoiceVO> getAllInvoiceByIdList(List<Integer> idList) {
-		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
-		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
-		invoiceDbObjectExample.setOrderByClause("invoice_date desc");
-		return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
+		if(idList != null && !idList.isEmpty()){
+			InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+			invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
+			invoiceDbObjectExample.setOrderByClause("invoice_date desc");
+			return convertToInvoiceVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
+		}
+		return new ArrayList<InvoiceVO>();
 	}
 	
 	public List<String> getAllMessenger() {
