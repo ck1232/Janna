@@ -4,7 +4,7 @@
     "className":      '',
     "orderable":      false,
     "data":           "",
-    "defaultContent": '<div name="statusDiv" style="text-align:center;"><div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div></div>'
+    "defaultContent": '<div name="statusDiv" style="text-align:center;"><div style="text-align:center;"><input type="checkbox" name="checkboxId" onchange="checkboxClicked(this);"/></div></div>'
 },
 {"data": "dateString"},
 {"data": "name"},

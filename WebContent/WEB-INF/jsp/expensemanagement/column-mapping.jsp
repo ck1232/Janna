@@ -4,7 +4,7 @@
     "className":      '',
     "orderable":      false,
     "data":           "",
-    "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
+    "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId" onchange="checkboxClicked(this);"/></div>'
 },
 {	"data": "expenseDate",
 	"render": function (data) {
