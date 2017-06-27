@@ -70,10 +70,13 @@ public class ExpenseManagementService {
 	}
 	
 	public List<ExpenseVO> getAllExpenseByIdList(List<Integer> idList) {
-		ExpenseDbObjectExample example = new ExpenseDbObjectExample();
-		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andExpenseIdIn(idList);
-		example.setOrderByClause("expense_date desc");
-		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(example));
+		List<ExpenseVO> expenseList = new ArrayList<ExpenseVO>();
+		if(idList != null && !idList.isEmpty()){
+			ExpenseDbObjectExample example = new ExpenseDbObjectExample();
+			example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andExpenseIdIn(idList);
+			example.setOrderByClause("expense_date desc");
+			expenseList.addAll(convertToExpenseVOList(expenseDbObjectMapper.selectByExample(example)));
+		}
 		return expenseList;
 	}
 	
