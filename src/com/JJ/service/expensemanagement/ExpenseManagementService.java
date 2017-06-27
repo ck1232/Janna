@@ -153,6 +153,9 @@ public class ExpenseManagementService {
 				vo.setStatus(dbObj.getStatus());
 				vo.setSupplier(dbObj.getSupplier());
 				vo.setTotalAmt(dbObj.getTotalAmt());
+				String currency = "$";
+				vo.setTotalAmtString(currency+vo.getTotalAmt());
+				
 				expenseVOList.add(vo);
 			}
 		}

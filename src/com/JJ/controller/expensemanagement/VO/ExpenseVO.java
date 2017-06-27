@@ -31,7 +31,7 @@ public class ExpenseVO extends Base implements Serializable {
     @NotNull(message="error.notempty.expenseform.totalamount")
     @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
     private BigDecimal totalAmt;
-
+    
     private String remarks;
 
     private String status;
@@ -42,6 +42,8 @@ public class ExpenseVO extends Base implements Serializable {
     @NotEmpty(message="error.notempty.expenseform.expensedate")
     @ValidDate(dateFormat="dd/MM/yyyy", message="error.notvalid.expenseform.expensedate")
     private String expensedateString;
+    
+    private String totalAmtString;
     
 	private static final long serialVersionUID = 1L;
 
@@ -134,7 +136,15 @@ public class ExpenseVO extends Base implements Serializable {
 	}
 
 
-    @Override
+    public String getTotalAmtString() {
+		return totalAmtString;
+	}
+
+	public void setTotalAmtString(String totalAmtString) {
+		this.totalAmtString = totalAmtString;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
@@ -151,6 +161,7 @@ public class ExpenseVO extends Base implements Serializable {
         sb.append(", totalAmt=").append(totalAmt);
         sb.append(", remarks=").append(remarks);
         sb.append(", status=").append(status);
+        sb.append(", totalAmtString=").append(totalAmtString);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");
