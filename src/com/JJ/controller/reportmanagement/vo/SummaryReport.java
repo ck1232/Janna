@@ -125,16 +125,16 @@ public class SummaryReport implements ReportInterface {
 			expenseSummaryList = GeneralUtils.sortByMonth(expenseSummaryList);
 			paymentSummaryList.addAll(paymentSummaryHashMap.values());
 			paymentSummaryList = GeneralUtils.sortByMonth(paymentSummaryList);
-			//Expense ReportMapping
-			ReportUtils.writeBlankRows(sheet, 2);
-			ReportUtils.writeRow(sheet, "Expenses by Type (exclude Salary)", 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, expenseSummaryList, initExpenseReportMapping(), "month");		
-			
-			//Payment ReportMapping
-			ReportUtils.writeBlankRows(sheet, 2);
-			ReportUtils.writeRow(sheet, "Payment records (exclude salary)", 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, paymentSummaryList, initPaymentReportMapping(), "month");		
 		}
+		//Expense ReportMapping
+		ReportUtils.writeBlankRows(sheet, 2);
+		ReportUtils.writeRow(sheet, "Expenses by Type (exclude Salary)", 0, ColumnStyle.Bold);
+		ReportUtils.writeData(sheet, expenseSummaryList, initExpenseReportMapping(), "month");		
+		
+		//Payment ReportMapping
+		ReportUtils.writeBlankRows(sheet, 2);
+		ReportUtils.writeRow(sheet, "Payment records (exclude salary)", 0, ColumnStyle.Bold);
+		ReportUtils.writeData(sheet, paymentSummaryList, initPaymentReportMapping(), "month");	
 	}
 	
 	private void generateSalaryBonusReport(Date dateAsOf, Date endDate) {

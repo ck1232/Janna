@@ -16,6 +16,8 @@ import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.ReportUtils;
 import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
+import com.JJ.lookup.PaymentModeLookup;
+import com.JJ.lookup.vo.PaymentModeVO;
 import com.JJ.helper.vo.ReportMapping;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
@@ -24,12 +26,15 @@ public class BonusReport implements ReportInterface {
 
 	private SalaryBonusManagementService bonusService;
 	private PaymentManagementService paymentService;
+	private PaymentModeLookup paymentModeLookup;
 	
 	@Autowired
 	public BonusReport(SalaryBonusManagementService bonusService,
-			PaymentManagementService paymentService) {
+			PaymentManagementService paymentService,
+			PaymentModeLookup paymentModeLookup) {
 		this.bonusService = bonusService;
 		this.paymentService = paymentService;
+		this.paymentModeLookup = paymentModeLookup;
 	}
 
 	@Override
@@ -39,7 +44,8 @@ public class BonusReport implements ReportInterface {
 	    Calendar cal = Calendar.getInstance();
 	    cal.setTime(dateAsOf);
 	    int year = cal.get(Calendar.YEAR);
-		
+	    PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
+	    
 		List<SalaryBonusVO> dbVoList = bonusService.getAllBonusVo(dateAsOf, endDate);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			List<SalaryBonusReportVO> paidBonusReportList = new ArrayList<SalaryBonusReportVO>();
@@ -51,7 +57,7 @@ public class BonusReport implements ReportInterface {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
 						salaryReportVo = new SalaryBonusReportVO();
 						salaryReportVo.setSalarybonus(vo);
-						if(paymentVO.getPaymentMode() == 2 && 
+						if(paymentVO.getPaymentMode() == chequeModeVo.getPaymentModeId() && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
 						salaryReportVo.setPaymentDetail(paymentVO);

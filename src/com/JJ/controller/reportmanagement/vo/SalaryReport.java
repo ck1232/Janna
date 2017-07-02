@@ -15,6 +15,8 @@ import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.ReportUtils;
 import com.JJ.helper.vo.ReportMapping;
+import com.JJ.lookup.PaymentModeLookup;
+import com.JJ.lookup.vo.PaymentModeVO;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 @Component
@@ -22,12 +24,15 @@ public class SalaryReport implements ReportInterface {
 	
 	private SalaryBonusManagementService salaryService;
 	private PaymentManagementService paymentService;
+	private PaymentModeLookup paymentModeLookup;
 	
 	@Autowired
 	public SalaryReport(SalaryBonusManagementService salaryService,
-			PaymentManagementService paymentService) {
+			PaymentManagementService paymentService,
+			PaymentModeLookup paymentModeLookup) {
 		this.salaryService = salaryService;
 		this.paymentService = paymentService;
+		this.paymentModeLookup = paymentModeLookup;
 	}
 
 
@@ -46,6 +51,8 @@ public class SalaryReport implements ReportInterface {
 		lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));
 		endDate = lastDay.getTime();
 		
+		PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
+		
 		List<SalaryBonusVO> dbVoList = salaryService.getAllSalaryVo(dateAsOf, endDate);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			List<SalaryBonusReportVO> salaryReportList = new ArrayList<SalaryBonusReportVO>();
@@ -56,7 +63,7 @@ public class SalaryReport implements ReportInterface {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
 						salaryReportVo = new SalaryBonusReportVO();
 						salaryReportVo.setSalarybonus(vo);
-						if(paymentVO.getPaymentMode() == 2 && 
+						if(paymentVO.getPaymentMode() == chequeModeVo.getPaymentModeId() && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
 						salaryReportVo.setPaymentDetail(paymentVO);

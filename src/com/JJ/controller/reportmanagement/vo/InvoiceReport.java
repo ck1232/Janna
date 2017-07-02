@@ -19,6 +19,8 @@ import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.helper.ReportUtils;
 import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
+import com.JJ.lookup.PaymentModeLookup;
+import com.JJ.lookup.vo.PaymentModeVO;
 import com.JJ.helper.vo.ReportMapping;
 import com.JJ.service.grantmanagement.GrantManagementService;
 import com.JJ.service.invoicemanagement.InvoiceManagementService;
@@ -29,6 +31,7 @@ public class InvoiceReport implements ReportInterface {
 	private InvoiceManagementService invoiceService;
 	private GrantManagementService grantService;
 	private PaymentManagementService paymentService;
+	private PaymentModeLookup paymentModeLookup;
 	
 	List<TotalIncomeSummaryVO> summaryList;
 	HashMap<String, TotalIncomeSummaryVO> summaryHashMap;
@@ -37,10 +40,12 @@ public class InvoiceReport implements ReportInterface {
 	@Autowired
 	public InvoiceReport(InvoiceManagementService invoiceService,
 			GrantManagementService grantService,
-			PaymentManagementService paymentService) {
+			PaymentManagementService paymentService,
+			PaymentModeLookup paymentModeLookup) {
 		this.invoiceService = invoiceService;
 		this.grantService = grantService;
 		this.paymentService = paymentService;
+		this.paymentModeLookup = paymentModeLookup;
 	}
 
 	@Override
@@ -60,6 +65,7 @@ public class InvoiceReport implements ReportInterface {
 		}
 		
 		if(dbVoList != null && !dbVoList.isEmpty()) {
+			PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
 			List<InvoiceReportVO> allInvoiceReportList = new ArrayList<InvoiceReportVO>();
 			for(InvoiceVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId(vo.getType(), 
@@ -69,7 +75,7 @@ public class InvoiceReport implements ReportInterface {
 				invoiceReportVo.setPaymentDetailList(new ArrayList<PaymentDetailVO>());
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
-						if(paymentVO.getPaymentMode() == 2 && 
+						if(paymentVO.getPaymentMode() == chequeModeVo.getPaymentModeId() && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
 						invoiceReportVo.getPaymentDetailList().add(paymentVO);
@@ -83,7 +89,7 @@ public class InvoiceReport implements ReportInterface {
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					String paymentMode = "";
 					for(PaymentDetailVO vo : paymentDetailList){
-						if(vo.getPaymentMode() != null && vo.getPaymentMode() == 2) { // payment mode is cheque
+						if(vo.getPaymentMode() != null && vo.getPaymentMode() == chequeModeVo.getPaymentModeId()) { // payment mode is cheque
 							report.setChequeDate(vo.getPaymentDate());
 							report.setChequeNo(vo.getChequeNum());
 							report.setDebitDate(vo.getDebitDate());
