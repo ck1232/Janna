@@ -410,6 +410,7 @@ public class PaymentManagementService {
 				}
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setPaymentAmt(dbObj.getPaymentAmt());
+				vo.setPaymentAmtString("$"+dbObj.getPaymentAmt());
 				vo.setPaymentDate(dbObj.getPaymentDate());
 				vo.setPaymentDateString(GeneralUtils.convertDateToString(dbObj.getPaymentDate(), GeneralUtils.STANDARD_DATE_FORMAT));
 				vo.setPaymentDetailId(dbObj.getPaymentDetailId());

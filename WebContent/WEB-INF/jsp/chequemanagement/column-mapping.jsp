@@ -14,7 +14,7 @@
         		return date.getDate() + " " + monthNames[month] + " " + date.getFullYear();
              }
 },
-{"data": "chequeAmt"},
+{"data": "chequeAmtString"},
 {"data": "bounceChequeInd"},
 {"data": "paidFor"},
 {

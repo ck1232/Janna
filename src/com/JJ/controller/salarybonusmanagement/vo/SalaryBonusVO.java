@@ -73,10 +73,16 @@ public class SalaryBonusVO extends Base implements Serializable {
     
     private BigDecimal grossAmt;
     
+    private String grossAmtString;
+    
 	private BigDecimal takehomeAmt;
+	
+	private String takehomeAmtString;
+	
 	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
 	@Min(value=0L, message="error.negative.salarybonusform.bonusamount")
 	private BigDecimal bonusAmt;
+	private String bonusAmtString;
 	@NotEmpty(message="error.notempty.salarybonusform.type")
 	private String type;
 
@@ -308,6 +314,14 @@ public class SalaryBonusVO extends Base implements Serializable {
 		this.grossAmt = grossAmt;
 	}
 
+	public String getGrossAmtString() {
+		return grossAmtString;
+	}
+
+	public void setGrossAmtString(String grossAmtString) {
+		this.grossAmtString = grossAmtString;
+	}
+
 	public BigDecimal getTakehomeAmt() {
 		return takehomeAmt;
 	}
@@ -316,12 +330,28 @@ public class SalaryBonusVO extends Base implements Serializable {
 		this.takehomeAmt = takehomeAmt;
 	}
 
+	public String getTakehomeAmtString() {
+		return takehomeAmtString;
+	}
+
+	public void setTakehomeAmtString(String takehomeAmtString) {
+		this.takehomeAmtString = takehomeAmtString;
+	}
+
 	public BigDecimal getBonusAmt() {
 		return bonusAmt;
 	}
 
 	public void setBonusAmt(BigDecimal bonusAmt) {
 		this.bonusAmt = bonusAmt;
+	}
+
+	public String getBonusAmtString() {
+		return bonusAmtString;
+	}
+
+	public void setBonusAmtString(String bonusAmtString) {
+		this.bonusAmtString = bonusAmtString;
 	}
 
 	public String getType() {

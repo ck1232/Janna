@@ -154,8 +154,9 @@ public class ExpenseManagementService {
 				vo.setSupplier(dbObj.getSupplier());
 				vo.setTotalAmt(dbObj.getTotalAmt());
 				String currency = "$";
+				if(vo.getexpensetype().equals("Stock(China)"))
+					currency = "¥";
 				vo.setTotalAmtString(currency+vo.getTotalAmt());
-				
 				expenseVOList.add(vo);
 			}
 		}

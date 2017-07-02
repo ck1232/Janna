@@ -50,7 +50,7 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Basic Salary</div>
-								    <div class="col-sm-5">${employee.basicSalary}</div>
+								    <div class="col-sm-5">${employee.basicSalaryString}</div>
 								</div>
 							</div>	
 							<div class="row">
@@ -81,54 +81,62 @@
 			<div class="box-header with-border">
                   	<h3 class="box-title">All Salary</h3>
                   </div>
-            	<div class="box-body">
-            		<div class="row">
-						<div class="col-sm-3">Month</div>
-						<div class="col-sm-3">Salary Amount</div>
-						<div class="col-sm-3">Status</div>
-					</div>
-					<c:forEach items="${salaryList}" var="salary">
-						<c:if test="${salaryList != null}">
-							<div class="row">
-								<div class="col-sm-3">${salary.dateString}</div>
-								<div class="col-sm-3">${salary.takehomeAmt}</div>
-								<div class="col-sm-3">${salary.status}</div>
-								<div class="col-sm-3"><c:if test="${salary.status != 'PAID'}"><button type="submit" name="payBtn" value="${salary.id},${salary.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if></div>
-							</div>
+            	<div class="box-body no-padding">
+            		<table class="table table-striped">
+            			<c:if test="${salaryList.size() > 0}">
+		           			<tr>
+		                		<th style="width: 16%">Month</th>
+		                		<th style="width: 16%">Salary Amount</th>
+		                  		<th style="width: 16%">Status</th>
+		                	</tr>
+		                	<c:forEach items="${salaryList}" var="salary">
+								<tr>
+									<td>${salary.dateString}</td>
+								    <td>${salary.takehomeAmtString}</td>
+								    <td>
+								    	<c:if test="${salary.status != 'PAID'}"><button type="submit" name="payBtn" value="${salary.id},${salary.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if>
+								    	<c:if test="${salary.status == 'PAID'}">${salary.status}</c:if>
+								    </td>
+								</tr>
+							</c:forEach>
 						</c:if>
-						<c:if test="${salaryList == null}">
-							<div class="row">
-								<div class="col-sm-12">No salary available</div>
-							</div>
+						<c:if test="${salaryList.size() == 0}">
+							<tr>
+								<td>No salary available</td>
+							</tr>
 						</c:if>
-					</c:forEach>
+	           		</table>
 			</div>
 		</div>
 		<div class="box">
 			<div class="box-header with-border">
                   	<h3 class="box-title">All Bonus</h3>
                   </div>
-            	<div class="box-body">
-            		<div class="row">
-						<div class="col-sm-3">Year</div>
-						<div class="col-sm-3">Bonus Amount</div>
-						<div class="col-sm-3">Status</div>
-					</div>
-					<c:forEach items="${bonusList}" var="bonus">
-						<c:if test="${bonusList != null}">
-							<div class="row">
-								<div class="col-sm-3">${bonus.dateString}</div>
-								<div class="col-sm-3">${bonus.bonusAmt}</div>
-								<div class="col-sm-3">${bonus.status}</div>
-								<div class="col-sm-3"><c:if test="${bonus.status != 'PAID'}"><button type="submit" name="payBtn" value="${bonus.id},${bonus.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if></div>
-							</div>
+            	<div class="box-body no-padding">
+            		<table class="table table-striped">
+            			<c:if test="${salaryList.size() > 0}">
+		           			<tr>
+		                		<th style="width: 16%">Year</th>
+		                		<th style="width: 16%">Bonus Amount</th>
+		                  		<th style="width: 16%">Status</th>
+		                	</tr>
+		                	<c:forEach items="${bonusList}" var="bonus">
+								<tr>
+									<td>${bonus.dateString}</td>
+								    <td>${bonus.bonusAmtString}</td>
+								    <td>
+								    	<c:if test="${bonus.status != 'PAID'}"><button type="submit" name="payBtn" value="${bonus.id},${bonus.type}" class="btn btn-primary" form ="paySalaryBonusForm">Pay</button></c:if>
+								    	<c:if test="${bonus.status == 'PAID'}">${bonus.status}</c:if>
+								    </td>
+								</tr>
+							</c:forEach>
 						</c:if>
-						<c:if test="${bonusList == null}">
-							<div class="row">
-								<div class="col-sm-12">No bonus available</div>
-							</div>
+						<c:if test="${bonusList.size() == 0}">
+							<tr>
+								<td>No bonus available</td>
+							</tr>
 						</c:if>
-					</c:forEach>
+	           		</table>
 			</div>
 		</div>
     	<div class="row">

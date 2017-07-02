@@ -21,7 +21,7 @@
 },
 {"data": "expensetype"},
 {"data": "description"},
-{"data": "totalAmt"},
+{"data": "totalAmtString"},
 {"data": "supplier"},
 {"data": "status"},
 {

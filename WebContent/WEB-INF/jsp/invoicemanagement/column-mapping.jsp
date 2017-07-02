@@ -8,7 +8,7 @@
 },
 {"data": "invoiceId"},
 {"data": "messenger"},
-{"data": "totalAmt"},
+{"data": "totalAmtString"},
 {"data": "status"},
 {	"data": "invoiceDate",
 	"render": function (data) {

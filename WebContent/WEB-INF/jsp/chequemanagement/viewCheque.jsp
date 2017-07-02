@@ -90,7 +90,7 @@
 								<td>${expense.expensedateString}</td>
 							    <td>${expense.expensetype}</td>
 							    <td>${expense.description}</td>
-							    <td>${expense.totalAmt}</td>
+							    <td>${expense.totalAmtString}</td>
 							    <td>${expense.supplier}</td>
 							    <td>${expense.status}</td>
 							</tr>
@@ -116,7 +116,7 @@
 							<tr>
 								<td>${salary.dateString}</td>
 							    <td>${salary.name}</td>
-							    <td>${salary.takehomeAmt}</td>
+							    <td>${salary.takehomeAmtString}</td>
 							    <td>${salary.status}</td>
 							</tr>
 						</c:forEach>
@@ -141,7 +141,7 @@
 							<tr>
 								<td>${bonus.dateString}</td>
 							    <td>${bonus.name}</td>
-							    <td>${bonus.bonusAmt}</td>
+							    <td>${bonus.bonusAmtString}</td>
 							    <td>${bonus.status}</td>
 							</tr>
 						</c:forEach>
@@ -167,9 +167,9 @@
 							<tr>
 								<td>${invoice.invoiceId}</td>
 							    <td>${invoice.messenger}</td>
-							    <td>${invoice.totalAmt}</td>
+							    <td>${invoice.totalAmtString}</td>
 							    <td>${invoice.invoicedateString}</td>
-							    <td>${salary.status}</td>
+							    <td>${invoice.status}</td>
 							</tr>
 						</c:forEach>
 	           		</table>

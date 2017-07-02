@@ -17,6 +17,10 @@ import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.helper.ReportUtils;
 import com.JJ.helper.vo.ReportMapping;
+import com.JJ.lookup.ExpenseTypeLookup;
+import com.JJ.lookup.PaymentModeLookup;
+import com.JJ.lookup.vo.ExpenseTypeVO;
+import com.JJ.lookup.vo.PaymentModeVO;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 @Component
@@ -24,12 +28,18 @@ public class ExpenseReport implements ReportInterface {
 	
 	private ExpenseManagementService expenseService;
 	private PaymentManagementService paymentService;
+	private ExpenseTypeLookup expenseTypeLookup;
+	private PaymentModeLookup paymentModeLookup;
 	
 	@Autowired
 	public ExpenseReport(ExpenseManagementService expenseService,
-			PaymentManagementService paymentService) {
+			PaymentManagementService paymentService,
+			ExpenseTypeLookup expenseTypeLookup,
+			PaymentModeLookup paymentModeLookup) {
 		this.expenseService = expenseService;
 		this.paymentService = paymentService;
+		this.expenseTypeLookup = expenseTypeLookup;
+		this.paymentModeLookup = paymentModeLookup;
 	}
 
 
@@ -37,7 +47,9 @@ public class ExpenseReport implements ReportInterface {
 	@Override
 	public Workbook exportReport(Workbook workbook, Date dateAsOf, Date endDate,
 			Map<String, Object> additionalMap) {
-		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, 15);
+		ExpenseTypeVO expenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Stock(China)");
+		PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
+		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, expenseTypeVO.getExpenseTypeId());
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			List<ExpenseReportVO> expenseReportList = new ArrayList<ExpenseReportVO>();
 			for(ExpenseVO vo : dbVoList) {
@@ -47,7 +59,7 @@ public class ExpenseReport implements ReportInterface {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
 						expenseReportVo = new ExpenseReportVO();
 						expenseReportVo.setExpense(vo);
-						if(paymentVO.getPaymentMode() == 2 && 
+						if(paymentVO.getPaymentMode() == chequeModeVo.getPaymentModeId() && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
 						expenseReportVo.setPaymentDetail(paymentVO);

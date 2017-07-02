@@ -19,6 +19,8 @@ public class PaymentDetailVO extends Base implements Serializable {
     private String paymentModeString;
 
     private BigDecimal paymentAmt;
+    
+    private String paymentAmtString;
 
     private String chequeId;
     
@@ -84,7 +86,15 @@ public class PaymentDetailVO extends Base implements Serializable {
         this.paymentAmt = paymentAmt;
     }
 
-    public String getChequeId() {
+    public String getPaymentAmtString() {
+		return paymentAmtString;
+	}
+
+	public void setPaymentAmtString(String paymentAmtString) {
+		this.paymentAmtString = paymentAmtString;
+	}
+
+	public String getChequeId() {
         return chequeId;
     }
 
@@ -150,6 +160,7 @@ public class PaymentDetailVO extends Base implements Serializable {
         sb.append(", paymentDate=").append(paymentDate);
         sb.append(", paymentMode=").append(paymentMode);
         sb.append(", paymentAmt=").append(paymentAmt);
+        sb.append(", paymentAmtString=").append(paymentAmtString);
         sb.append(", chequeId=").append(chequeId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

@@ -28,6 +28,8 @@ public class InvoiceVO extends Base implements Serializable {
     @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
     @Min(value=0L, message="error.negative.grantform.totalamount")
     private BigDecimal totalAmt;
+    
+    private String totalAmtString;
 
     private String status;
     
@@ -79,7 +81,15 @@ public class InvoiceVO extends Base implements Serializable {
         this.totalAmt = totalAmt;
     }
 
-    public String getStatus() {
+    public String getTotalAmtString() {
+		return totalAmtString;
+	}
+
+	public void setTotalAmtString(String totalAmtString) {
+		this.totalAmtString = totalAmtString;
+	}
+
+	public String getStatus() {
         return status;
     }
 
@@ -113,6 +123,7 @@ public class InvoiceVO extends Base implements Serializable {
         sb.append(", messenger=").append(messenger);
         sb.append(", invoiceDate=").append(invoiceDate);
         sb.append(", totalAmt=").append(totalAmt);
+        sb.append(", totalAmtString=").append(totalAmtString);
         sb.append(", status=").append(status);
         sb.append(", invoicedateString=").append(invoicedateString);
         sb.append(", type=").append(type);

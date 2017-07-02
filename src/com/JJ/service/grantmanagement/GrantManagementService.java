@@ -109,6 +109,7 @@ public class GrantManagementService {
 				vo.setMessenger(dbObj.getOrganisation());
 				vo.setStatus(dbObj.getStatus());
 				vo.setTotalAmt(dbObj.getTotalAmt());
+				vo.setTotalAmtString("$"+dbObj.getTotalAmt());
 				vo.setType("grant");
 				vo.setVersion(dbObj.getVersion());
 				grantVOList.add(vo);

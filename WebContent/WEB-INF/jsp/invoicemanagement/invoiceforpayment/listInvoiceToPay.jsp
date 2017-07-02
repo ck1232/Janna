@@ -29,7 +29,7 @@
 					  		<div class="form-group">
 							    <c:if test="${invoice.type == 'invoice'}"><div class="col-sm-2">${invoice.invoiceId}</div></c:if>
 							    <div class="col-sm-4">${invoice.messenger}</div>
-							    <div class="col-sm-2">${invoice.totalAmt}</div>
+							    <div class="col-sm-2">${invoice.totalAmtString}</div>
 							    <div class="col-sm-2">${invoice.invoicedateString}</div>
 							    <div class="col-sm-2">${invoice.status}</div>
 							</div>

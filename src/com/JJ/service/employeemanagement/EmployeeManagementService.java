@@ -90,6 +90,7 @@ public class EmployeeManagementService {
 				vo.setDobString(GeneralUtils.convertDateToString(dbObj.getDob(), "dd/MM/yyyy"));
 				vo.setNationality(dbObj.getNationality());
 				vo.setBasicSalary(dbObj.getBasicSalary());
+				vo.setBasicSalaryString("$"+dbObj.getBasicSalary());
 				vo.setEmploymentStartDate(dbObj.getEmploymentStartDate());
 				vo.setEmploymentStartDateString(GeneralUtils.convertDateToString(dbObj.getEmploymentStartDate(), "dd/MM/yyyy"));
 				vo.setEmploymentEndDate(dbObj.getEmploymentEndDate());

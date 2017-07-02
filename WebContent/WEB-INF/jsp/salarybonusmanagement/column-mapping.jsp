@@ -9,9 +9,9 @@
 {"data": "dateString"},
 {"data": "name"},
 {"data": "type"},
-{"data": "grossAmt"},
-{"data": "takehomeAmt"},
-{"data": "bonusAmt"},
+{"data": "grossAmtString"},
+{"data": "takehomeAmtString"},
+{"data": "bonusAmtString"},
 {"data": "status"},
 {
     "className":      '',

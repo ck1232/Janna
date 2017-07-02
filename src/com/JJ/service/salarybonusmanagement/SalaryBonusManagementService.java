@@ -266,9 +266,11 @@ public class SalaryBonusManagementService {
 				vo.setEmploymentEndDate(employeeVO.getEmploymentEndDate());
 				vo.setCdacInd(employeeVO.getCdacInd());
 				vo.setBonusAmt(dbObj.getBonusAmt());
+				vo.setBonusAmtString("$"+dbObj.getBonusAmt());
 				vo.setEmployeeCpf(dbObj.getEmployeeCpf());
 				vo.setEmployerCpf(dbObj.getEmployerCpf());
 				vo.setTakehomeAmt(calculateTakeHomeAmountBonus(vo, dbObj));
+				vo.setTakehomeAmtString("$"+vo.getTakehomeAmt());
 				vo.setType(GeneralUtils.TYPE_BONUS);
 				vo.setStatus(dbObj.getStatus());
 				vo.setDeleteInd(dbObj.getDeleteInd());
@@ -313,7 +315,9 @@ public class SalaryBonusManagementService {
 				vo.setSdlAmt(dbObj.getSdlAmt());
 				vo.setFwLevy(dbObj.getFwLevy());
 				vo.setGrossAmt(calculateGrossAmount(dbObj));
+				vo.setGrossAmtString("$"+vo.getGrossAmt());
 				vo.setTakehomeAmt(calculateTakeHomeAmount(vo, dbObj));
+				vo.setTakehomeAmtString("$"+vo.getTakehomeAmt());
 				vo.setType(GeneralUtils.TYPE_SALARY);
 				vo.setStatus(dbObj.getStatus());
 				voList.add(vo);

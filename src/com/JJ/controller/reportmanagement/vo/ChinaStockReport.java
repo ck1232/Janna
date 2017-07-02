@@ -43,11 +43,11 @@ public class ChinaStockReport implements ReportInterface {
 	@Override
 	public Workbook exportReport(Workbook workbook, Date dateAsOf, Date endDate,
 			Map<String, Object> additionalMap) {
-		ExpenseTypeVO expenseVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Stock(China)");
+		ExpenseTypeVO expenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Stock(China)");
 		PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
-		List<ExpenseVO> dbVoList = expenseService.getAllExpense(dateAsOf, endDate, expenseVO.getExpenseTypeId());
+		List<ExpenseVO> dbVoList = expenseService.getAllExpense(dateAsOf, endDate, expenseTypeVO.getExpenseTypeId());
+		List<ExpenseReportVO> expenseReportList = new ArrayList<ExpenseReportVO>();
 		if(dbVoList != null && !dbVoList.isEmpty()) {
-			List<ExpenseReportVO> expenseReportList = new ArrayList<ExpenseReportVO>();
 			for(ExpenseVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId());
 				ExpenseReportVO expenseReportVo;
@@ -67,16 +67,17 @@ public class ChinaStockReport implements ReportInterface {
 					expenseReportList.add(expenseReportVo);
 				}
 			}
-			ReportMapping reportMapping = new ReportMapping();
-			reportMapping.addDateMapping("Date", "expense.expenseDate");
-			reportMapping.addTextMapping("Invoice", "expense.invoiceNo");
-			reportMapping.addTextMapping("Description", "expense.description");
-			reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
-			reportMapping.addChinaMoneyMapping("Amount (RMB)", "paymentDetail.paymentAmt");
-			reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
-			Sheet sheet = workbook.createSheet("RMB Purchase");
-			ReportUtils.writeData(sheet, expenseReportList, reportMapping, "");
+			
 		}
+		ReportMapping reportMapping = new ReportMapping();
+		reportMapping.addDateMapping("Date", "expense.expenseDate");
+		reportMapping.addTextMapping("Invoice", "expense.invoiceNo");
+		reportMapping.addTextMapping("Description", "expense.description");
+		reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
+		reportMapping.addChinaMoneyMapping("Amount (RMB)", "paymentDetail.paymentAmt");
+		reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
+		Sheet sheet = workbook.createSheet("RMB Purchase");
+		ReportUtils.writeData(sheet, expenseReportList, reportMapping, "");
 		return workbook;
 	}
 	

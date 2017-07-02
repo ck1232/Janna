@@ -22,7 +22,7 @@
 											<tr>
 												<td style="width: 16%">${payment.paymentDateString}</td>
 							          			<td style="width: 16%">${payment.paymentModeString}</td>
-							          			<td style="width: 16%">${payment.paymentAmt}</td>
+							          			<td style="width: 16%">${payment.paymentAmtString}</td>
 							          			<td style="width: 16%">${payment.chequeNum}</td>
 							          			<td style="width: 16%">
 							          				<c:if test="${payment.bounceChequeInd == 'N'}">No</c:if>

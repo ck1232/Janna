@@ -180,10 +180,9 @@ public class ExpenseManagementController {
 		}
 		model.addAttribute("expense", expenseVO);
 		List<PaymentDetailVO> paymentList = paymentManagementService.getAllPaymentByRefTypeAndRefId("expense", expenseVO.getExpenseId());
+		List<ExpenseVO> otherList = new ArrayList<ExpenseVO>();
 		if(paymentList != null && !paymentList.isEmpty()){
-			model.addAttribute("paymentList", paymentList);
 			List<PaymentRsVO> rsList = paymentRSManagementService.getAllPaymentByPaymentDetailId(paymentList.get(0).getPaymentDetailId());
-			List<ExpenseVO> otherList = new ArrayList<ExpenseVO>();
 			List<Integer> idList = new ArrayList<Integer>();
 			if(rsList != null && !rsList.isEmpty()) {
 				for(PaymentRsVO vo : rsList) {
@@ -193,8 +192,9 @@ public class ExpenseManagementController {
 				}
 				otherList = expenseManagementService.getAllExpenseByIdList(idList);
 			}
-			model.addAttribute("otherList", otherList);
 		}
+		model.addAttribute("paymentList", paymentList);
+		model.addAttribute("otherList", otherList);
 		return "viewExpense";
 	}
 	

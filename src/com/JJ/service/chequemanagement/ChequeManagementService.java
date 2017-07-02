@@ -95,6 +95,7 @@ public class ChequeManagementService {
 				vo.setBounceDate(dbObj.getBounceDate());
 				vo.setBounceDateString(GeneralUtils.convertDateToString(dbObj.getBounceDate(), "dd/MM/yyyy"));
 				vo.setChequeAmt(dbObj.getChequeAmt());
+				vo.setChequeAmtString("$"+dbObj.getChequeAmt());
 				vo.setChequeDate(dbObj.getChequeDate());
 				vo.setChequeDateString(GeneralUtils.convertDateToString(dbObj.getChequeDate(), "dd/MM/yyyy"));
 				vo.setChequeId(dbObj.getChequeId());

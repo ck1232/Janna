@@ -35,7 +35,7 @@
 							<div class="row">
 						  		<div class="form-group">	  
 									<div class="col-sm-2">Total Price</div>
-									<div class="col-sm-5">${invoice.totalAmt}</div>
+									<div class="col-sm-5">${invoice.totalAmtString}</div>
 								</div>
 							</div>	
 							<div class="row">
@@ -73,7 +73,7 @@
 										<tr>
 											<td style="width: 16%">${other.invoiceId}</td>
 						          			<td style="width: 16%">${other.messenger}</td>
-						          			<td style="width: 16%">${other.totalAmt}</td>
+						          			<td style="width: 16%">${other.totalAmtString}</td>
 						          			<td style="width: 16%">${other.invoicedateString}</td>
 						          			<td style="width: 16%">${other.status}</td>
 					          			</tr>

@@ -60,7 +60,7 @@
 					</div>
 					<div class="row">
 						<div class="form-group ${status.error ? 'has-error' : ''}">
-							<label class="col-sm-2 control-label">Basic Salary</label>
+							<label class="col-sm-2 control-label">Basic Salary($)</label>
 							<div class="col-sm-5">
 								<form:input path="basicSalary" type="text" class="form-control"
 				                                id="basicSalary" placeholder="Enter employee basic salary" />

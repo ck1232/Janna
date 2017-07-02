@@ -9,7 +9,7 @@
 {"data": "name"},
 {"data": "employeeTypeString"},
 {"data": "nationality"},
-{"data": "basicSalary"},
+{"data": "basicSalaryString"},
 {
     "className":      '',
     "orderable":      false,

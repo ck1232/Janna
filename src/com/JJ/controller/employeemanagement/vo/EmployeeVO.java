@@ -36,6 +36,8 @@ public class EmployeeVO extends Base implements Serializable {
     @Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
     @Min(value=0L, message="error.negative.employeeform.basicsalary")
     private BigDecimal basicSalary;
+    
+    private String basicSalaryString;
 
     private Date employmentStartDate;
     
@@ -117,7 +119,15 @@ public class EmployeeVO extends Base implements Serializable {
         this.basicSalary = basicSalary;
     }
 
-    public Date getEmploymentStartDate() {
+    public String getBasicSalaryString() {
+		return basicSalaryString;
+	}
+
+	public void setBasicSalaryString(String basicSalaryString) {
+		this.basicSalaryString = basicSalaryString;
+	}
+
+	public Date getEmploymentStartDate() {
         return employmentStartDate;
     }
 
@@ -177,6 +187,7 @@ public class EmployeeVO extends Base implements Serializable {
         sb.append(", dob=").append(dob);
         sb.append(", nationality=").append(nationality);
         sb.append(", basicSalary=").append(basicSalary);
+        sb.append(", basicSalaryString=").append(basicSalaryString);
         sb.append(", employmentStartDate=").append(employmentStartDate);
         sb.append(", employmentEndDate=").append(employmentEndDate);
         sb.append(", cdacInd=").append(cdacInd);

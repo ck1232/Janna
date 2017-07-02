@@ -26,7 +26,7 @@
 							    <div class="col-sm-2">${salary.dateString}</div>
 							    <div class="col-sm-2">${salary.name}</div>
 							    
-							    <div class="col-sm-2"><c:choose><c:when test="${salary.takehomeAmt != null}">${salary.takehomeAmt}</c:when><c:otherwise>${salary.bonusAmt}</c:otherwise></c:choose></div>
+							    <div class="col-sm-2"><c:choose><c:when test="${salary.takehomeAmt != null}">${salary.takehomeAmtString}</c:when><c:otherwise>${salary.bonusAmtString}</c:otherwise></c:choose></div>
 							    <div class="col-sm-2">${salary.status}</div>
 							</div>
 						</div>
