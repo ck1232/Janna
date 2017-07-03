@@ -20,6 +20,8 @@ import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.helper.ReportUtils;
 import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
+import com.JJ.lookup.ExpenseTypeLookup;
+import com.JJ.lookup.vo.ExpenseTypeVO;
 import com.JJ.helper.vo.ReportMapping;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
@@ -31,6 +33,7 @@ public class SummaryReport implements ReportInterface {
 	private ExpenseManagementService expenseService;
 	private PaymentManagementService paymentService;
 	private SalaryBonusManagementService salaryService;
+	private ExpenseTypeLookup expenseTypeLookup;
 	
 	private Sheet sheet;
 	private List<ExpenseSummaryReportVO> expenseSummaryList;
@@ -51,25 +54,29 @@ public class SummaryReport implements ReportInterface {
 	@Autowired
 	public SummaryReport(ExpenseManagementService expenseService,
 			PaymentManagementService paymentService,
-			SalaryBonusManagementService salaryService) {
+			SalaryBonusManagementService salaryService,
+			ExpenseTypeLookup expenseTypeLookup) {
 		this.expenseService = expenseService;
 		this.paymentService = paymentService;
 		this.salaryService = salaryService;
+		this.expenseTypeLookup = expenseTypeLookup;
 	}
 
 	@Override
 	public Workbook exportReport(Workbook workbook, Date dateAsOf, Date endDate,
 			Map<String, Object> additionalMap) {
 		//init
+		sheet = workbook.createSheet("Summary");
 		initReport(workbook);
 		generateExpensePaymentReport(dateAsOf, endDate);
+		initReport(workbook);
 		generateSalaryBonusReport(dateAsOf, endDate);
+		initReport(workbook);
 		generateAccPayableReport(dateAsOf, endDate);
 		return workbook;
 	}
 	
 	private void initReport(Workbook workbook){
-		sheet = workbook.createSheet("Summary");
 		expenseSummaryList = new ArrayList<ExpenseSummaryReportVO>();
 		paymentSummaryList = new ArrayList<PaymentSummaryReportVO>();
 		salarybonusSummaryList = new ArrayList<SalarySummaryReportVO>();
@@ -91,7 +98,10 @@ public class SummaryReport implements ReportInterface {
 
 
 	private void generateExpensePaymentReport(Date dateAsOf, Date endDate) {
-		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, GeneralUtils.EXPENSE_TYPE_CHINA_STOCK);
+		ExpenseTypeVO chinaStkPaymentExpenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("China Stock Payment");
+		List<Integer> typeList = new ArrayList<Integer>();
+		typeList.add(chinaStkPaymentExpenseTypeVO.getExpenseTypeId());
+		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, typeList);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			for(ExpenseVO vo : dbVoList) {
 				String expMonth = GeneralUtils.convertDateToString(vo.getExpenseDate(), monthFormat);
@@ -161,26 +171,31 @@ public class SummaryReport implements ReportInterface {
 	}
 	
 	private void generateAccPayableReport(Date dateAsOf, Date endDate) {
-		if(paymentSummaryList.isEmpty()) {
-			List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, GeneralUtils.EXPENSE_TYPE_CHINA_STOCK);
-			if(dbVoList != null && !dbVoList.isEmpty()) {
-				for(ExpenseVO vo : dbVoList) {
-					String expMonth = GeneralUtils.convertDateToString(vo.getExpenseDate(), monthFormat);
-					List<PaymentDetailVO> paymentVOList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId());
-					if(paymentVOList.isEmpty()){ //if unpaid
-						if(!paymentSummaryHashMap.containsKey(expMonth)){
-							paymentSummaryHashMap.put(expMonth, new PaymentSummaryReportVO(expMonth));
-						}
-						PaymentDetailVO payment = new PaymentDetailVO();
-						payment.setPaymentAmt(vo.getTotalAmt());
-						payment.setPaymentMode(0);
-						addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(expMonth), payment);
-						addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(Total), payment);
+		ExpenseTypeVO chinaExpenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Stock(China)");
+		ExpenseTypeVO chinaStockPaymentExpenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("China Stock Payment");
+		List<Integer> typeList = new ArrayList<Integer>();
+		typeList.add(chinaExpenseTypeVO.getExpenseTypeId());
+		typeList.add(chinaStockPaymentExpenseTypeVO.getExpenseTypeId());
+		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, typeList);
+		if(dbVoList != null && !dbVoList.isEmpty()) {
+			for(ExpenseVO vo : dbVoList) {
+				String expMonth = GeneralUtils.convertDateToString(vo.getExpenseDate(), monthFormat);
+				List<PaymentDetailVO> paymentVOList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId());
+				if(paymentVOList.isEmpty()){ //if unpaid
+					if(!paymentSummaryHashMap.containsKey(expMonth)){
+						paymentSummaryHashMap.put(expMonth, new PaymentSummaryReportVO(expMonth));
 					}
+					logger.info("Id:"+vo.getExpenseId()+", Type = " + vo.getexpensetype() + ", Amount = " + vo.getTotalAmt());
+					PaymentDetailVO payment = new PaymentDetailVO();
+					payment.setPaymentAmt(vo.getTotalAmt());
+					payment.setPaymentMode(0);
+					addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(expMonth), payment);
+					addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(Total), payment);
 				}
-				paymentSummaryList.addAll(paymentSummaryHashMap.values());
 			}
+			paymentSummaryList.addAll(paymentSummaryHashMap.values());
 		}
+		
 		
 		for(PaymentSummaryReportVO paymentVO : paymentSummaryList) {
 			String month = paymentVO.getMonth();
@@ -208,8 +223,9 @@ public class SummaryReport implements ReportInterface {
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addTextMapping("", "month");
 		reportMapping.addMoneyMapping("Stock", "stockAmt");
+		reportMapping.addMoneyMapping("China Stock", "chinaStockAmt");
 		reportMapping.addMoneyMapping("Sub-Con", "subConAmt");
-		reportMapping.addMoneyMapping("Vehicle - Fuel", "vehiclefuelAmt");
+		reportMapping.addMoneyMapping("Vehicle - Fuel", "vehicleFuelAmt");
 		reportMapping.addMoneyMapping("Vehicle - Road Tax", "vehicleRoadTaxAmt");
 		reportMapping.addMoneyMapping("Vehicle - Repair", "vehicleRepairAmt");
 		reportMapping.addMoneyMapping("Vehicle - Car Parking and ERP", "vehicleParkingERPAmt");
@@ -308,6 +324,8 @@ public class SummaryReport implements ReportInterface {
 		case 14: //Fees and Taxes
 			expenseSummary.setFeeTaxesAmt(expenseSummary.getFeeTaxesAmt().add(vo.getTotalAmt()));
 			return;
+		case 15: //China Stock
+			expenseSummary.setChinaStockAmt(expenseSummary.getChinaStockAmt().add(vo.getTotalAmt()));
 		default:
 			return;
 		}

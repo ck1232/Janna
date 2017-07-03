@@ -5,8 +5,9 @@ import java.math.BigDecimal;
 public class ExpenseSummaryReportVO {
 	private String month;
 	private BigDecimal stockAmt;
+	private BigDecimal chinaStockAmt;
 	private BigDecimal subConAmt;
-	private BigDecimal vehiclefuelAmt;
+	private BigDecimal vehicleFuelAmt;
 	private BigDecimal vehicleRoadTaxAmt;
 	private BigDecimal vehicleRepairAmt;
 	private BigDecimal vehicleParkingERPAmt;
@@ -23,6 +24,7 @@ public class ExpenseSummaryReportVO {
 	public ExpenseSummaryReportVO(String expMonth) {
 		setMonth(expMonth);
 		setStockAmt(BigDecimal.ZERO);
+		setChinaStockAmt(BigDecimal.ZERO);
 		setSubConAmt(BigDecimal.ZERO);
 		setVehicleFuelAmt(BigDecimal.ZERO);
 		setVehicleRoadTaxAmt(BigDecimal.ZERO);
@@ -50,6 +52,12 @@ public class ExpenseSummaryReportVO {
 	public void setStockAmt(BigDecimal stockAmt) {
 		this.stockAmt = stockAmt;
 	}
+	public BigDecimal getChinaStockAmt() {
+		return chinaStockAmt;
+	}
+	public void setChinaStockAmt(BigDecimal chinaStockAmt) {
+		this.chinaStockAmt = chinaStockAmt;
+	}
 	public BigDecimal getSubConAmt() {
 		return subConAmt;
 	}
@@ -57,10 +65,10 @@ public class ExpenseSummaryReportVO {
 		this.subConAmt = subConAmt;
 	}
 	public BigDecimal getVehicleFuelAmt() {
-		return vehiclefuelAmt;
+		return vehicleFuelAmt;
 	}
-	public void setVehicleFuelAmt(BigDecimal vehiclefuelAmt) {
-		this.vehiclefuelAmt = vehiclefuelAmt;
+	public void setVehicleFuelAmt(BigDecimal vehicleFuelAmt) {
+		this.vehicleFuelAmt = vehicleFuelAmt;
 	}
 	public BigDecimal getVehicleRoadTaxAmt() {
 		return vehicleRoadTaxAmt;

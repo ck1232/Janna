@@ -64,6 +64,9 @@ public class ChinaStockReport implements ReportInterface {
 				}else{
 					expenseReportVo = new ExpenseReportVO();
 					expenseReportVo.setExpense(vo);
+					PaymentDetailVO paymentVO = new PaymentDetailVO();
+					paymentVO.setPaymentAmt(vo.getTotalAmt());
+					expenseReportVo.setPaymentDetail(paymentVO);
 					expenseReportList.add(expenseReportVo);
 				}
 			}

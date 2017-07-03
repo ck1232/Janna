@@ -63,8 +63,6 @@ public class GeneralUtils {
 	public static final String MODULE_INVOICE = "invoice";
 	public static final String MODULE_GRANT = "grant";
 	
-	public static final Integer EXPENSE_TYPE_CHINA_STOCK = 15;
-	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
 	public static final String BONUS_DATE_FORMAT = "yyyy";

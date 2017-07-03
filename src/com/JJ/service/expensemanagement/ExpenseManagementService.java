@@ -51,10 +51,10 @@ public class ExpenseManagementService {
 		return expenseList;
 	}
 	
-	public List<ExpenseVO> getAllExpenseExcludeParamType(Date startDate, Date endDate, Integer type) {
+	public List<ExpenseVO> getAllExpenseExcludeParamType(Date startDate, Date endDate, List<Integer> typeList) {
 		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
 		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
-		.andExpenseDateGreaterThanOrEqualTo(startDate).andExpenseDateLessThanOrEqualTo(endDate).andExpenseTypeIdNotEqualTo(type);
+		.andExpenseDateGreaterThanOrEqualTo(startDate).andExpenseDateLessThanOrEqualTo(endDate).andExpenseTypeIdNotIn(typeList);
 		expenseDbObjectExample.setOrderByClause("expense_date");
 		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(expenseDbObjectExample));
 		return expenseList;

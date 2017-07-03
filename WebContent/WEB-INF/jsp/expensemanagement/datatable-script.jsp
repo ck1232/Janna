@@ -38,6 +38,10 @@ $(function () {
         	 $(row).find('button[name="editBtn"]').prop('value', data.expenseId);
         	 $(row).find('button[name="payBtn"]').prop('value', data.expenseId);
           }
+
+          if(data.expensetype == "China Stock Payment"){
+        	  $(row).find('div[name="statusDiv"]').css("display","none");
+          }
        }
     });
 

@@ -47,9 +47,11 @@ public class ExpenseReport implements ReportInterface {
 	@Override
 	public Workbook exportReport(Workbook workbook, Date dateAsOf, Date endDate,
 			Map<String, Object> additionalMap) {
-		ExpenseTypeVO expenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Stock(China)");
+		ExpenseTypeVO expenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("China Stock Payment");
 		PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
-		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, expenseTypeVO.getExpenseTypeId());
+		List<Integer> typeList = new ArrayList<Integer>();
+		typeList.add(expenseTypeVO.getExpenseTypeId());
+		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, typeList);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			List<ExpenseReportVO> expenseReportList = new ArrayList<ExpenseReportVO>();
 			for(ExpenseVO vo : dbVoList) {
