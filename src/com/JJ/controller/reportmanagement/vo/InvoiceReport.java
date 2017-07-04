@@ -58,6 +58,8 @@ public class InvoiceReport implements ReportInterface {
 		summaryHashMap.put("SALES", new TotalIncomeSummaryVO("SALES", ""));
 		summaryHashMap.put("TOTAL", new TotalIncomeSummaryVO("TOTAL", ""));
 		
+		List<InvoiceReportVO> allInvoiceReportList = new ArrayList<InvoiceReportVO>();
+		
 		List<InvoiceVO> dbVoList = invoiceService.getAllInvoice(dateAsOf, endDate);
 		List<InvoiceVO> grantList = grantService.getAllGrant(dateAsOf, endDate);
 		if(!grantList.isEmpty()){
@@ -66,7 +68,6 @@ public class InvoiceReport implements ReportInterface {
 		
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
-			List<InvoiceReportVO> allInvoiceReportList = new ArrayList<InvoiceReportVO>();
 			for(InvoiceVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId(vo.getType(), 
 						vo.getType().equals("invoice") ? vo.getInvoiceId() : vo.getGrantId());
@@ -102,17 +103,16 @@ public class InvoiceReport implements ReportInterface {
 			}
 			
 			Collections.sort(allInvoiceReportList, new InvoiceReportComparator());	
-			Sheet sheet = workbook.createSheet("Invoice");
-			ReportUtils.writeRow(sheet, "TOTAL / CONSOLIDATION", 0, ColumnStyle.Bold);
 			generateSummaryHashMap(allInvoiceReportList);
 			summaryList.addAll(summaryHashMap.values());
 			summaryList = GeneralUtils.sortAccordingToSortList(summaryList, invoiceSummaryHeaders, "title");
-			ReportUtils.writeData(sheet, summaryList, initInvoiceSummaryReportMapping(endDate), "title");
-			ReportUtils.writeBlankRows(sheet, 2);
-			ReportUtils.writeRow(sheet, "DETAILS", 0, ColumnStyle.Bold);		
-			ReportUtils.writeData(sheet, allInvoiceReportList, initInvoiceReportMapping(), "");
-			
 		}
+		Sheet sheet = workbook.createSheet("Invoice");
+		ReportUtils.writeRow(sheet, "TOTAL / CONSOLIDATION", 0, ColumnStyle.Bold);
+		ReportUtils.writeData(sheet, summaryList, initInvoiceSummaryReportMapping(endDate), "title");
+		ReportUtils.writeBlankRows(sheet, 2);
+		ReportUtils.writeRow(sheet, "DETAILS", 0, ColumnStyle.Bold);		
+		ReportUtils.writeData(sheet, allInvoiceReportList, initInvoiceReportMapping(), "");
 		return workbook;
 	}
 	
