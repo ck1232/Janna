@@ -229,13 +229,11 @@ public class SalaryBonusManagementService {
 	}
 	
 	//calculate take home amount from EmployeeSalary and gross amount
-	//take home amount = gross amount - employee cpf - cdac amount
+	//take home amount = gross amount - employee cpf
 	private BigDecimal calculateTakeHomeAmount(SalaryBonusVO vo, EmployeeSalaryDbObject salary) {
 		BigDecimal takehomeamount = vo.getGrossAmt();
 		if(salary.getEmployeeCpf() != null)
 			takehomeamount = takehomeamount.subtract(salary.getEmployeeCpf());
-		if(salary.getCdacAmt() != null)
-			takehomeamount = takehomeamount.subtract(salary.getCdacAmt());
 		return takehomeamount;
 	}
 	
@@ -332,7 +330,7 @@ public class SalaryBonusManagementService {
 			for(SalaryBonusVO vo : salaryBonusVoList) {
 				EmployeeSalaryDbObject dbObj = new EmployeeSalaryDbObject();
 				dbObj.setSalaryId(vo.getId());
-				dbObj.setSalaryDate(vo.getDate());
+				dbObj.setSalaryDate(GeneralUtils.convertStringToDate(vo.getDateString(), "dd/MM/yyyy"));
 				dbObj.setEmployeeId(vo.getEmployeeId());
 				dbObj.setBasicSalaryAmt(vo.getBasicSalaryAmt());
 				dbObj.setOverTimeAmt(vo.getOverTimeAmt());

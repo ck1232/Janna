@@ -126,8 +126,7 @@ public class InvoiceManagementService {
 	}
 	
 	public void updateInvoice(InvoiceVO invoiceVO) {
-		if(invoiceVO != null && invoiceVO.getDeleteInd() != null &&
-				invoiceVO.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
+		if(invoiceVO != null && invoiceVO.getInvoiceId() != null){
 			InvoiceDbObject dbObj = convertToInvoiceDbObjectList(Arrays.asList(invoiceVO)).get(0);
 			dbObj.setMessenger(invoiceVO.getMessenger());
 			dbObj.setInvoiceDate(invoiceVO.getInvoiceDate());
