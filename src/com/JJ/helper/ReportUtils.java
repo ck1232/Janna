@@ -36,8 +36,8 @@ public class ReportUtils {
 				row = sheet.createRow(rowNum++);
 				writeRow(row, obj, reportMapping, isTotal, excelUtils, sheet.getWorkbook());
 			}
-			setAutoSizeColumn(sheet, reportMapping);
 		}
+		setAutoSizeColumn(sheet, reportMapping);
 	}
 	
 	/*public static <T>void writeData(Sheet sheet, LinkedList<T> list, ReportMapping reportMapping){
