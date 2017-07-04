@@ -44,12 +44,12 @@ public class BonusReport implements ReportInterface {
 	    Calendar cal = Calendar.getInstance();
 	    cal.setTime(dateAsOf);
 	    int year = cal.get(Calendar.YEAR);
-	    PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
 	    
+	    List<SalaryBonusReportVO> paidBonusReportList = new ArrayList<SalaryBonusReportVO>();
+		List<SalaryBonusReportVO> unpaidBonusReportList = new ArrayList<SalaryBonusReportVO>();
+	    PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
 		List<SalaryBonusVO> dbVoList = bonusService.getAllBonusVo(dateAsOf, endDate);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
-			List<SalaryBonusReportVO> paidBonusReportList = new ArrayList<SalaryBonusReportVO>();
-			List<SalaryBonusReportVO> unpaidBonusReportList = new ArrayList<SalaryBonusReportVO>();
 			for(SalaryBonusVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId("bonus", vo.getId());
 				SalaryBonusReportVO salaryReportVo;
@@ -71,26 +71,25 @@ public class BonusReport implements ReportInterface {
 					}
 				}
 			}
-			ReportMapping reportMapping = new ReportMapping();
-			reportMapping.addDateMonthYearMapping("Month", "salarybonus.date");
-			reportMapping.addTextMapping("Name", "salarybonus.name");
-			reportMapping.addTextMapping("Type", "salarybonus.employeeTypeString");
-			reportMapping.addDateMapping("DOB", "salarybonus.dob");
-			reportMapping.addTextMapping("Nationality", "salarybonus.nationality");
-			reportMapping.addMoneyMapping("Bonus", "salarybonus.bonusAmt");
-			reportMapping.addMoneyMapping("Employee CPF", "salarybonus.employeeCpf");
-			reportMapping.addMoneyMapping("Employer CPF", "salarybonus.employerCpf");
-			reportMapping.addMoneyMapping("Take Home Salary", "salarybonus.takehomeAmt");
-			reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
-			reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
-			Sheet sheet = workbook.createSheet("Bonus");
-			ReportUtils.writeRow(sheet, (year-1) + " Bonus paid in " + year + " (already recognise in " + (year-1) + " Income Statement)", 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, paidBonusReportList, reportMapping, "");
-			ReportUtils.writeBlankRows(sheet, 2);
-			ReportUtils.writeRow(sheet, year + " Bonus not paid - To add as accruals as it will be paid in " + (year+1), 0, ColumnStyle.Bold);
-			ReportUtils.writeData(sheet, unpaidBonusReportList, reportMapping, "");
-			
 		}
+		ReportMapping reportMapping = new ReportMapping();
+		reportMapping.addDateMonthYearMapping("Month", "salarybonus.date");
+		reportMapping.addTextMapping("Name", "salarybonus.name");
+		reportMapping.addTextMapping("Type", "salarybonus.employeeTypeString");
+		reportMapping.addDateMapping("DOB", "salarybonus.dob");
+		reportMapping.addTextMapping("Nationality", "salarybonus.nationality");
+		reportMapping.addMoneyMapping("Bonus", "salarybonus.bonusAmt");
+		reportMapping.addMoneyMapping("Employee CPF", "salarybonus.employeeCpf");
+		reportMapping.addMoneyMapping("Employer CPF", "salarybonus.employerCpf");
+		reportMapping.addMoneyMapping("Take Home Salary", "salarybonus.takehomeAmt");
+		reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
+		reportMapping.addTextMapping("Cheque No.", "paymentDetail.chequeNum");
+		Sheet sheet = workbook.createSheet("Bonus");
+		ReportUtils.writeRow(sheet, (year-1) + " Bonus paid in " + year + " (already recognise in " + (year-1) + " Income Statement)", 0, ColumnStyle.Bold);
+		ReportUtils.writeData(sheet, paidBonusReportList, reportMapping, "");
+		ReportUtils.writeBlankRows(sheet, 2);
+		ReportUtils.writeRow(sheet, year + " Bonus not paid - To add as accruals as it will be paid in " + (year+1), 0, ColumnStyle.Bold);
+		ReportUtils.writeData(sheet, unpaidBonusReportList, reportMapping, "");
 		return workbook;
 	}
 

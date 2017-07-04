@@ -47,6 +47,8 @@ public class ExpenseReport implements ReportInterface {
 	@Override
 	public Workbook exportReport(Workbook workbook, Date dateAsOf, Date endDate,
 			Map<String, Object> additionalMap) {
+		ReportMapping reportMapping = initReportMapping();
+		LinkedHashMap<String, List<ExpenseReportVO>> expenseReportMap = new LinkedHashMap<String, List<ExpenseReportVO>>();
 		ExpenseTypeVO expenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("China Stock Payment");
 		PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
 		List<Integer> typeList = new ArrayList<Integer>();
@@ -73,7 +75,7 @@ public class ExpenseReport implements ReportInterface {
 					expenseReportList.add(expenseReportVo);
 				}
 			}
-			LinkedHashMap<String, List<ExpenseReportVO>> expenseReportMap = new LinkedHashMap<String, List<ExpenseReportVO>>();
+			
 			Calendar cal = Calendar.getInstance();
 			for(ExpenseReportVO expensevo : expenseReportList){
 				cal.setTime(expensevo.getExpense().getExpenseDate());
@@ -86,25 +88,32 @@ public class ExpenseReport implements ReportInterface {
 					expenseReportMap.put(month, toPutList);
 				}
 			}
-			ReportMapping reportMapping = new ReportMapping();
-			reportMapping.addDateMapping("Date", "expense.expenseDate");
-			reportMapping.addTextMapping("Expense Type", "expense.expensetype");
-			reportMapping.addTextMapping("Invoice No", "expense.invoiceNo");
-			reportMapping.addTextMapping("Description", "expense.description");
-			reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
-			reportMapping.addMoneyMapping("Amount", "paymentDetail.paymentAmt");
-			reportMapping.addTextMapping("Supplier", "expense.supplier");
-			reportMapping.addDateMapping("Date Paid", "paymentDetail.paymentDate");
-			reportMapping.addTextMapping("Cheque No", "paymentDetail.chequeNum");
-			reportMapping.addDateMapping("Date deducted (per Bank)", "paymentDetail.debitDate");
-			reportMapping.addTextMapping("Remark", "paymentDetail.remarks");
 			
 			for(String key : expenseReportMap.keySet()){
 				Sheet sheet = workbook.createSheet(key);
 				ReportUtils.writeData(sheet, expenseReportMap.get(key), reportMapping, "");
 			}
+		}else{
+			Sheet sheet = workbook.createSheet("Expense");
+			ReportUtils.writeData(sheet, new ArrayList<ExpenseReportVO>(), reportMapping, "");
 		}
 		return workbook;
+	}
+	
+	private ReportMapping initReportMapping(){
+		ReportMapping reportMapping = new ReportMapping();
+		reportMapping.addDateMapping("Date", "expense.expenseDate");
+		reportMapping.addTextMapping("Expense Type", "expense.expensetype");
+		reportMapping.addTextMapping("Invoice No", "expense.invoiceNo");
+		reportMapping.addTextMapping("Description", "expense.description");
+		reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");
+		reportMapping.addMoneyMapping("Amount", "paymentDetail.paymentAmt");
+		reportMapping.addTextMapping("Supplier", "expense.supplier");
+		reportMapping.addDateMapping("Date Paid", "paymentDetail.paymentDate");
+		reportMapping.addTextMapping("Cheque No", "paymentDetail.chequeNum");
+		reportMapping.addDateMapping("Date deducted (per Bank)", "paymentDetail.debitDate");
+		reportMapping.addTextMapping("Remark", "paymentDetail.remarks");
+		return reportMapping;
 	}
 	
 }
