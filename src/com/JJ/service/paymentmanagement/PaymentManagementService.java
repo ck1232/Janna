@@ -2,6 +2,7 @@ package com.JJ.service.paymentmanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -275,6 +276,23 @@ public class PaymentManagementService {
 			}
 			PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
 			example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andPaymentDetailIdIn(idList);
+			example.setOrderByClause("payment_date desc, payment_mode asc, cheque_id asc");				
+			paymentdetailList = convertToPaymentDetailVOList(paymentDetailDbObjectMapper.selectByExample(example));
+		}
+		return paymentdetailList;
+	}
+	
+	public List<PaymentDetailVO> getAllPaymentByRefTypeAndRefId(String refType, Integer refId, Date startDate, Date endDate) {
+		List<PaymentDetailVO> paymentdetailList = new ArrayList<PaymentDetailVO>();
+		List<PaymentRsVO> paymentRsVOList = paymentRSManagementService.getAllPaymentByRefTypeAndRefId(refType, refId);
+		List<Integer> idList = new ArrayList<Integer>();
+		if(paymentRsVOList != null && paymentRsVOList.size() > 0) {
+			for(PaymentRsVO paymentRs : paymentRsVOList) {
+				idList.add(paymentRs.getPaymentDetailId());
+			}
+			PaymentDetailDbObjectExample example = new PaymentDetailDbObjectExample();
+			example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+			.andPaymentDateGreaterThanOrEqualTo(startDate).andPaymentDateLessThanOrEqualTo(endDate).andPaymentDetailIdIn(idList);
 			example.setOrderByClause("payment_date desc, payment_mode asc, cheque_id asc");				
 			paymentdetailList = convertToPaymentDetailVOList(paymentDetailDbObjectMapper.selectByExample(example));
 		}

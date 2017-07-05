@@ -60,6 +60,15 @@ public class ExpenseManagementService {
 		return expenseList;
 	}
 	
+	public List<ExpenseVO> getAllExpenseOfParamType(List<Integer> typeList) {
+		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
+		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andExpenseTypeIdIn(typeList);
+		expenseDbObjectExample.setOrderByClause("expense_date");
+		List<ExpenseVO> expenseList = convertToExpenseVOList(expenseDbObjectMapper.selectByExample(expenseDbObjectExample));
+		return expenseList;
+	}
+	
 	public List<ExpenseVO> getAllExpense(Date startDate, Date endDate, Integer type) {
 		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
 		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
