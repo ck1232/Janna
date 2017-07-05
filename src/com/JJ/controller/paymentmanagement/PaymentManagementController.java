@@ -144,7 +144,7 @@ public class PaymentManagementController {
 				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");
 				result.rejectValue("directoramount", "error.notequal.paymentform.expensetotalamount");
 			}
-			if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
+			/*if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.expenselastdate");
 			}
@@ -152,7 +152,7 @@ public class PaymentManagementController {
 			if(paymentVo.getPaymentmodecheque() && !validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.expenselastdate");
-			}
+			}*/
 			
 			if(!hasErrors){
 				paymentVo.setReferenceType(GeneralUtils.MODULE_EXPENSE);
@@ -249,7 +249,7 @@ public class PaymentManagementController {
 				result.rejectValue("chequeamount", "error.notequal.paymentform.invoicetotalamount");
 				result.rejectValue("giroamount", "error.notequal.paymentform.invoicetotalamount");
 			}
-			if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
+			/*if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
@@ -258,7 +258,7 @@ public class PaymentManagementController {
 					!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
-			}
+			}*/
 			
 			if(!hasErrors){
 				paymentVo.setReferenceType(GeneralUtils.MODULE_INVOICE);
@@ -308,7 +308,7 @@ public class PaymentManagementController {
 				result.rejectValue("chequeamount", "error.notequal.paymentform.granttotalamount");
 				result.rejectValue("giroamount", "error.notequal.paymentform.granttotalamount");
 			}
-			if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
+			/*if(!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getPaymentdateString())){
 				hasErrors = true;
 				result.rejectValue("paymentdateString", "error.paymentform.paymentdate.before.invoicelastdate");
 			}
@@ -317,7 +317,7 @@ public class PaymentManagementController {
 					!validateInputDate(lastdate, GeneralUtils.STANDARD_DATE_FORMAT, paymentVo.getChequedateString())){
 				hasErrors = true;
 				result.rejectValue("chequedateString", "error.paymentform.chequedate.before.invoicelastdate");
-			}
+			}*/
 			
 			if(!hasErrors){
 				paymentVo.setReferenceType(GeneralUtils.MODULE_GRANT);
