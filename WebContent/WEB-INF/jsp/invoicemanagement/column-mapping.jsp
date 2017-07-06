@@ -30,6 +30,7 @@
     "width":		  "100px",
     "defaultContent": '<div class ="outer">'+
     '<div class="inner"><button name="viewBtn" class="btn btn-primary" type="submit" form="viewInvoiceForm">View</button></div>'+
+    '<div name="editBtnDiv" class="inner"><button name="editBtn" class="btn btn-primary" type="submit" form="updateGrantForm">Edit</button></div>'+
     '<div name="payBtnDiv" class="inner"><button name="payBtn" class="btn btn-primary" type="submit" form="payInvoiceForm">Pay</button></div>'+
     '</div>'
 },

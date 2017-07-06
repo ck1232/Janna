@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <form id="createGrantForm" method="get" action="<c:url value="/invoice/createGrant" />"></form>
+<form id="updateGrantForm" method="post" action="<c:url value="/invoice/updateGrant" />">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 <form id="viewInvoiceForm" method="post" action="<c:url value="/invoice/viewInvoice" />">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>

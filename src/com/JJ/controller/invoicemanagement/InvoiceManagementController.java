@@ -214,6 +214,42 @@ public class InvoiceManagementController {
 		return paymentManagementController.createPayInvoice(idList, redirectAttributes, model);
     }  
 	
+	@RequestMapping(value = "/updateGrant", method = RequestMethod.POST)
+	public String getGrantToUpdate(@RequestParam("editBtn") String id, Model model, 
+			final RedirectAttributes redirectAttributes) {
+		String[] splitId = id.split("-");
+		if(splitId[0] != null && splitId[1] != null){
+			InvoiceVO grantVO = grantManagementService.getGrantById(new Integer(splitId[0]));
+			if(grantVO.getGrantId() == null){
+				redirectAttributes.addFlashAttribute("css", "danger");
+				redirectAttributes.addFlashAttribute("msg", "Grant not found!");
+				return "redirect:listInvoice";
+			}
+			logger.debug("Loading update grant page for " + grantVO.toString());
+			model.addAttribute("grantForm", grantVO);
+		}
+		return "updateGrant";
+	}
+	
+	@RequestMapping(value = "/updateGrantToDb", method = RequestMethod.POST)
+	public String updateGrant(@ModelAttribute("grantForm") @Validated InvoiceVO grantVO,
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		
+		logger.debug("updateGrant() : " + grantVO.toString());
+		GeneralUtils.validate(grantVO, "grantForm" ,result);
+		if (result.hasErrors()) {
+			return "updateGrant";
+		} else {
+			grantVO.setInvoiceDate(GeneralUtils.convertStringToDate(grantVO.getInvoicedateString(), "dd/MM/yyyy"));
+			grantManagementService.updateGrant(grantVO);
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Grant updated successfully!");
+		}
+		
+		return "redirect:listInvoice";
+	}
+	
+	
 	private boolean checkFileFormat(String filename) {
 		String[] split = filename.split(Pattern.quote("."));
 		String format = split[split.length-1];
