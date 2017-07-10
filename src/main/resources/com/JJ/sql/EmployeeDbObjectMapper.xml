@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JJ.dao.EmployeeDbObjectMapper">
+  <resultMap id="BaseResultMap" type="com.JJ.model.EmployeeDbObject">
+    <id column="employee_id" jdbcType="INTEGER" property="employeeId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="employee_type" jdbcType="VARCHAR" property="employeeType" />
+    <result column="dob" jdbcType="DATE" property="dob" />
+    <result column="nationality" jdbcType="VARCHAR" property="nationality" />
+    <result column="basic_salary" jdbcType="DECIMAL" property="basicSalary" />
+    <result column="employment_start_date" jdbcType="DATE" property="employmentStartDate" />
+    <result column="employment_end_date" jdbcType="DATE" property="employmentEndDate" />
+    <result column="cdac_ind" jdbcType="CHAR" property="cdacInd" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_on" jdbcType="TIMESTAMP" property="createdOn" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_on" jdbcType="TIMESTAMP" property="updatedOn" />
+    <result column="delete_ind" jdbcType="CHAR" property="deleteInd" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    employee_id, name, employee_type, dob, nationality, basic_salary, employment_start_date, 
+    employment_end_date, cdac_ind, version, created_by, created_on, updated_by, updated_on, 
+    delete_ind
+  </sql>
+  <select id="selectByExample" parameterType="com.JJ.model.EmployeeDbObjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from employee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from employee
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from employee
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.JJ.model.EmployeeDbObjectExample">
+    delete from employee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.JJ.model.EmployeeDbObject">
+    <selectKey keyProperty="employeeId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into employee (name, employee_type, dob, 
+      nationality, basic_salary, employment_start_date, 
+      employment_end_date, cdac_ind, version, 
+      created_by, created_on, updated_by, 
+      updated_on, delete_ind)
+    values (#{name,jdbcType=VARCHAR}, #{employeeType,jdbcType=VARCHAR}, #{dob,jdbcType=DATE}, 
+      #{nationality,jdbcType=VARCHAR}, #{basicSalary,jdbcType=DECIMAL}, #{employmentStartDate,jdbcType=DATE}, 
+      #{employmentEndDate,jdbcType=DATE}, #{cdacInd,jdbcType=CHAR}, #{version,jdbcType=INTEGER}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdOn,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedOn,jdbcType=TIMESTAMP}, #{deleteInd,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.JJ.model.EmployeeDbObject">
+    <selectKey keyProperty="employeeId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="employeeType != null">
+        employee_type,
+      </if>
+      <if test="dob != null">
+        dob,
+      </if>
+      <if test="nationality != null">
+        nationality,
+      </if>
+      <if test="basicSalary != null">
+        basic_salary,
+      </if>
+      <if test="employmentStartDate != null">
+        employment_start_date,
+      </if>
+      <if test="employmentEndDate != null">
+        employment_end_date,
+      </if>
+      <if test="cdacInd != null">
+        cdac_ind,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdOn != null">
+        created_on,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="updatedOn != null">
+        updated_on,
+      </if>
+      <if test="deleteInd != null">
+        delete_ind,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeType != null">
+        #{employeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="dob != null">
+        #{dob,jdbcType=DATE},
+      </if>
+      <if test="nationality != null">
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="basicSalary != null">
+        #{basicSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="employmentStartDate != null">
+        #{employmentStartDate,jdbcType=DATE},
+      </if>
+      <if test="employmentEndDate != null">
+        #{employmentEndDate,jdbcType=DATE},
+      </if>
+      <if test="cdacInd != null">
+        #{cdacInd,jdbcType=CHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        #{deleteInd,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.JJ.model.EmployeeDbObjectExample" resultType="java.lang.Integer">
+    select count(*) from employee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update employee
+    <set>
+      <if test="record.employeeId != null">
+        employee_id = #{record.employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeType != null">
+        employee_type = #{record.employeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dob != null">
+        dob = #{record.dob,jdbcType=DATE},
+      </if>
+      <if test="record.nationality != null">
+        nationality = #{record.nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="record.basicSalary != null">
+        basic_salary = #{record.basicSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="record.employmentStartDate != null">
+        employment_start_date = #{record.employmentStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.employmentEndDate != null">
+        employment_end_date = #{record.employmentEndDate,jdbcType=DATE},
+      </if>
+      <if test="record.cdacInd != null">
+        cdac_ind = #{record.cdacInd,jdbcType=CHAR},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdOn != null">
+        created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedBy != null">
+        updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedOn != null">
+        updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteInd != null">
+        delete_ind = #{record.deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update employee
+    set employee_id = #{record.employeeId,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      employee_type = #{record.employeeType,jdbcType=VARCHAR},
+      dob = #{record.dob,jdbcType=DATE},
+      nationality = #{record.nationality,jdbcType=VARCHAR},
+      basic_salary = #{record.basicSalary,jdbcType=DECIMAL},
+      employment_start_date = #{record.employmentStartDate,jdbcType=DATE},
+      employment_end_date = #{record.employmentEndDate,jdbcType=DATE},
+      cdac_ind = #{record.cdacInd,jdbcType=CHAR},
+      version = #{record.version,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{record.updatedBy,jdbcType=VARCHAR},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{record.deleteInd,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.JJ.model.EmployeeDbObject">
+    update employee
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeType != null">
+        employee_type = #{employeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="dob != null">
+        dob = #{dob,jdbcType=DATE},
+      </if>
+      <if test="nationality != null">
+        nationality = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="basicSalary != null">
+        basic_salary = #{basicSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="employmentStartDate != null">
+        employment_start_date = #{employmentStartDate,jdbcType=DATE},
+      </if>
+      <if test="employmentEndDate != null">
+        employment_end_date = #{employmentEndDate,jdbcType=DATE},
+      </if>
+      <if test="cdacInd != null">
+        cdac_ind = #{cdacInd,jdbcType=CHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdOn != null">
+        created_on = #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedOn != null">
+        updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteInd != null">
+        delete_ind = #{deleteInd,jdbcType=CHAR},
+      </if>
+    </set>
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.JJ.model.EmployeeDbObject">
+    update employee
+    set name = #{name,jdbcType=VARCHAR},
+      employee_type = #{employeeType,jdbcType=VARCHAR},
+      dob = #{dob,jdbcType=DATE},
+      nationality = #{nationality,jdbcType=VARCHAR},
+      basic_salary = #{basicSalary,jdbcType=DECIMAL},
+      employment_start_date = #{employmentStartDate,jdbcType=DATE},
+      employment_end_date = #{employmentEndDate,jdbcType=DATE},
+      cdac_ind = #{cdacInd,jdbcType=CHAR},
+      version = #{version,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      delete_ind = #{deleteInd,jdbcType=CHAR}
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </update>
+</mapper>
