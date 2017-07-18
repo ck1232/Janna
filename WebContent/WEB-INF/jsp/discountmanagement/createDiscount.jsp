@@ -24,9 +24,9 @@
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Name</label>
 									<div class="col-sm-10">
-										<form:input path="discountname" type="text" class="form-control"
-						                                id="discountname" placeholder="Enter discount name" />
-										<form:errors path="discountname" class="text-danger" />
+										<form:input path="discountName" type="text" class="form-control"
+						                                id="discountName" placeholder="Enter discount name" />
+										<form:errors path="discountName" class="text-danger" />
 									</div>
 							  	</div>
 							</div>
@@ -34,9 +34,9 @@
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Type</label>
 									<div class="col-sm-10">
-										<form:select path="discounttype" class="selectpicker" id="discounttype" name ="discounttype">
+										<form:select path="discountType" class="selectpicker" id="discountType" name ="discountType">
 											<c:forEach items="${discTypeList}" var="discType">
-										    	<option value = "${discType}" <c:if test="${discType == discountForm.discounttype }">selected</c:if>>
+										    	<option value = "${discType}" <c:if test="${discType == discountForm.discountType }">selected</c:if>>
 										    		${discType}
 										    	</option>
 										    </c:forEach>
@@ -48,9 +48,9 @@
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Value</label>
 									<div class="col-sm-10">
-										<form:input path="discountvalue" type="number" class="form-control"
-					                                id="discountvalue" placeholder="Enter value" />
-										<form:errors path="discountvalue" class="text-danger" />
+										<form:input path="discountValue" type="number" class="form-control"
+					                                id="discountValue" placeholder="Enter value" />
+										<form:errors path="discountValue" class="text-danger" />
 									</div>
 							  	</div>
 							</div>
@@ -58,9 +58,9 @@
 							  	<div class="form-group ${status.error ? 'has-error' : ''}">
 									<label class="col-sm-2 control-label">Apply Type</label>
 									<div class="col-sm-10">
-										<form:select path="applytype" class="selectpicker" id="applytype" name ="applytype">
+										<form:select path="applyType" class="selectpicker" id="applyType" name ="applyType">
 											<c:forEach items="${applyTypeList}" var="appType">
-										    	<option value = "${appType}" <c:if test="${appType == discountForm.applytype }">selected</c:if>>
+										    	<option value = "${appType}" <c:if test="${appType == discountForm.applyType }">selected</c:if>>
 										    		${appType}
 										    	</option>
 										    </c:forEach>

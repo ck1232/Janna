@@ -6,10 +6,10 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "discountname"},
-{"data": "discounttype"},
-{"data": "discountvalue"},
-{"data": "applytype"},
+{"data": "discountName"},
+{"data": "discountType"},
+{"data": "discountValue"},
+{"data": "applyType"},
 {
     "className":      '',
     "orderable":      false,

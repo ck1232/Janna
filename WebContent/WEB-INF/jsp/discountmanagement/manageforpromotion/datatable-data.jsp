@@ -1,1 +1,1 @@
-"promotionid":${promotion.promotionid}
+"promotionId":${promotion.promotionId}

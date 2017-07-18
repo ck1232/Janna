@@ -1,1 +1,1 @@
-<input type="hidden" value="${promotion.promotionid}" name="promotionid"/>
+<input type="hidden" value="${promotion.promotionId}" name="promotionId"/>

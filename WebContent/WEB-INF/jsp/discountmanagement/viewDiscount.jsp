@@ -16,32 +16,32 @@
                     <form id="backToListButton" method="get" action="<c:url value="/product/discount/listDiscount" />"></form>
                     <form id="updateDiscountForm" method="post" action="<c:url value="/product/discount/updateDiscount" />">
                     	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<input type="hidden" name="editBtn" value="${discount.discountid}"/>
+                    	<input type="hidden" name="editBtn" value="${discount.discountId}"/>
                     </form>
                     <!--/.FORM-->
 		             	<div class="box-body">
 							<div class="row">
 						  		<div class="form-group">
 									<div class="col-sm-2">Discount Name</div>
-									<div class="col-sm-10">${discount.discountname}</div>
+									<div class="col-sm-10">${discount.discountName}</div>
 								</div>
 							</div>
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Discount Type</div>
-								    <div class="col-sm-10">${discount.discounttype}</div>
+								    <div class="col-sm-10">${discount.discountType}</div>
 								</div>
 							</div>			
 							<div class="row">
 						  		<div class="form-group">	  
 									<div class="col-sm-2">Discount Value</div>
-									<div class="col-sm-10">${discount.discountvalue}</div>
+									<div class="col-sm-10">${discount.discountValue}</div>
 								</div>
 							</div>	
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Apply Type</div>
-								    <div class="col-sm-10">${discount.applytype}</div>
+								    <div class="col-sm-10">${discount.applyType}</div>
 								</div>
 							</div>	
 							<br/>

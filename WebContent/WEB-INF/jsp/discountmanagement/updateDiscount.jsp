@@ -16,15 +16,15 @@
 			<c:url var="post_url" value="/product/discount/updateDiscountToDb" />
 			<form:form id="updateDiscountToDbForm" method="post" modelAttribute="discountForm" action="${post_url }">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<form:input path="discountid" type="hidden" id="discountid"/>
-				<form:input path="deleteind" type="hidden" id="deleteind"/>
+				<form:input path="discountId" type="hidden" id="discountId"/>
+				<form:input path="deleteInd" type="hidden" id="deleteInd"/>
 				<div class="row">
 					<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Name</label>
 						<div class="col-sm-10">
-							<form:input path="discountname" type="text" class="form-control"
-		                    				id="discountname" placeholder="Enter discount name" />
-							<form:errors path="discountname" class="text-danger" />
+							<form:input path="discountName" type="text" class="form-control"
+		                    				id="discountName" placeholder="Enter discount name" />
+							<form:errors path="discountName" class="text-danger" />
 						</div>
 		 			</div>
 	 			</div>
@@ -32,9 +32,9 @@
 				  	<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Type</label>
 						<div class="col-sm-10">
-							<form:select path="discounttype" class="selectpicker" id="discounttype" name ="discounttype">
+							<form:select path="discountType" class="selectpicker" id="discountType" name ="discountType">
 								<c:forEach items="${discTypeList}" var="discType">
-							    	<option value = "${discType}" <c:if test="${discType == discountForm.discounttype }">selected</c:if>>
+							    	<option value = "${discType}" <c:if test="${discType == discountForm.discountType }">selected</c:if>>
 							    		${discType}
 							    	</option>
 							    </c:forEach>
@@ -46,9 +46,9 @@
 					<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Value</label>
 						<div class="col-sm-10">
-							<form:input path="discountvalue" class="form-control"
-						                    id="discountvalue" placeholder="Enter discount value" />
-							<form:errors path="discountvalue" class="text-danger" />
+							<form:input path="discountValue" class="form-control"
+						                    id="discountValue" placeholder="Enter discount value" />
+							<form:errors path="discountValue" class="text-danger" />
 						</div>	
 					</div>
 				</div>
@@ -56,9 +56,9 @@
 				  	<div class="form-group ${status.error ? 'has-error' : ''}">
 						<label class="col-sm-2 control-label">Apply Type</label>
 						<div class="col-sm-10">
-							<form:select path="applytype" class="selectpicker" id="applytype" name ="applytype">
+							<form:select path="applyType" class="selectpicker" id="applyType" name ="applyType">
 								<c:forEach items="${applyTypeList}" var="appType">
-							    	<option value = "${appType}" <c:if test="${appType == discountForm.applytype }">selected</c:if>>
+							    	<option value = "${appType}" <c:if test="${appType == discountForm.applyType }">selected</c:if>>
 							    		${appType}
 							    	</option>
 							    </c:forEach>
