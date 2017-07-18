@@ -4,10 +4,10 @@
     "data":           "",
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
-{"data": "promotionname"},
-{"data": "promotionstartdate"},
-{"data": "promotionenddate"},
-{"data": "isactive"},
+{"data": "promotionName"},
+{"data": "promotionStartDate"},
+{"data": "promotionEndDate"},
+{"data": "isActive"},
 {
     "className":      '',
     "orderable":      false,

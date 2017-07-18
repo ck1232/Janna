@@ -14,25 +14,25 @@
                     <c:url var="post_url" value="/product/promotion/updatePromotionToDb" />
                     <form:form id="updatePromotionToDbForm" method="post" modelAttribute="promotionForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <form:input path="promotionstartdate" type="hidden" id="promotionstartdate"/>
-                    <form:input path="promotionenddate" type="hidden" id="promotionenddate"/>
-                    <form:input path="deleteind" type="hidden" id="deleteind"/>
+                    <form:input path="promotionStartDate" type="hidden" id="promotionStartDate"/>
+                    <form:input path="promotionEndDate" type="hidden" id="promotionEndDate"/>
+                    <form:input path="deleteInd" type="hidden" id="deleteInd"/>
 		              <div class="box-body">
-		              		<form:input path="promotionid" type="hidden" id="promotionid"/>
+		              		<form:input path="promotionId" type="hidden" id="promotionId"/>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Name</label>
 							<div class="col-sm-10">
-								<form:input path="promotionname" type="text" class="form-control"
-				                                id="promotionname" placeholder="Enter promotion name" />
-								<form:errors path="promotionname" class="text-danger" />
+								<form:input path="promotionName" type="text" class="form-control"
+				                                id="promotionName" placeholder="Enter promotion name" />
+								<form:errors path="promotionName" class="text-danger" />
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
 							<label class="col-sm-2 control-label">Message</label>
 							<div class="col-sm-10">
-								<form:input path="promotionmessage" type="text" class="form-control"
-				                                id="promotionmessage" placeholder="Enter promotion message" />
-								<form:errors path="promotionmessage" class="text-danger" />
+								<form:input path="promotionMessage" type="text" class="form-control"
+				                                id="promotionMessage" placeholder="Enter promotion message" />
+								<form:errors path="promotionMessage" class="text-danger" />
 							</div>
 						  </div>
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -47,8 +47,8 @@
 							<label class="col-sm-2 control-label">Active</label>
 							<div class="col-sm-10">
 								<div class="checkbox">
-							  		<label><form:checkbox path="isactive" id="isactive" /></label>
-							     	<form:errors path="isactive" class="text-danger" />
+							  		<label><form:checkbox path="isActiveBoolean" id="isActiveBoolean" /></label>
+							     	<form:errors path="isActiveBoolean" class="text-danger" />
 								</div>
 							</div>
 						  </div>
@@ -82,27 +82,27 @@
    	 			}
            	}, 
    	    	function(start, end, label) {
-       	    	$("#promotionstartdate").prop("value", start.format('YYYY-MM-DD h:mm'));
-       	    	$("#promotionenddate").prop("value", end.format('YYYY-MM-DD h:mm'));
+       	    	$("#promotionStartDate").prop("value", start.format('YYYY-MM-DD h:mm'));
+       	    	$("#promotionEndDate").prop("value", end.format('YYYY-MM-DD h:mm'));
         });
 
 	   	var date = new Date();
 		var day = date.getUTCDate();
 		var month = date.getUTCMonth();
 		var year = date.getUTCFullYear();
-	   if (document.getElementById("promotionstartdate").value == '') {			
-			$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
+	   if (document.getElementById("promotionStartDate").value == '') {			
+			$("#promotionStartDate").datepicker("setDate", new Date(year, month, day));
 	    }
-	   if (document.getElementById("promotionenddate").value == '') {			
-			$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
+	   if (document.getElementById("promotionEndDate").value == '') {			
+			$("#promotionEndDate").datepicker("setDate", new Date(year, month, day));
 	    }
 
 	    $("#updatePromotionBtn").click(function(){
-	    	if (document.getElementById("promotionstartdate").value == '') {			
-				$("#promotionstartdate").datepicker("setDate", new Date(year, month, day));
+	    	if (document.getElementById("promotionStartDate").value == '') {			
+				$("#promotionStartDate").datepicker("setDate", new Date(year, month, day));
 		    }
-		   if (document.getElementById("promotionenddate").value == '') {			
-				$("#promotionenddate").datepicker("setDate", new Date(year, month, day));
+		   if (document.getElementById("promotionEndDate").value == '') {			
+				$("#promotionEndDate").datepicker("setDate", new Date(year, month, day));
 		    }
 		}); 
 		   

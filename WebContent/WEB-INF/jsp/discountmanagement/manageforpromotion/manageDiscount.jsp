@@ -16,9 +16,9 @@
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/product/promotion/listPromotion" />"></form>
 		              <div class="box-body">
-		              		<input type="hidden" id="id" value="${promotion.promotionid}"/>
+		              		<input type="hidden" id="id" value="${promotion.promotionId}"/>
 							<div class="col-sm-2">Name</div>
-							<div class="col-sm-10">${promotion.promotionname}</div>
+							<div class="col-sm-10">${promotion.promotionName}</div>
 							
 						<br/><br/>
 						<tiles:insertAttribute name = "datatable1" />
