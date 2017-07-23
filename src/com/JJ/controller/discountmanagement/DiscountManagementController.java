@@ -203,7 +203,7 @@ public class DiscountManagementController {
 	}
 	
 	@RequestMapping(value = "/getDiscountListInPromotion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getDiscountListInPromotion(@RequestParam("promotionid") String id, Model model) {
+	public @ResponseBody String getDiscountListInPromotion(@RequestParam("promotionId") String id, Model model) {
 		logger.debug("getting discount list");
 		List<DiscountVO> discountList = discountManagementService.getAllDiscountsInPromotion(new Integer(id));
 		return GeneralUtils.convertListToJSONString(discountList);
@@ -219,7 +219,7 @@ public class DiscountManagementController {
 	}
 	
 	@RequestMapping(value = "/getDiscountListNotInPromotion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getDiscountListNotInPromotion(@RequestParam("promotionid") String id, Model model) {
+	public @ResponseBody String getDiscountListNotInPromotion(@RequestParam("promotionId") String id, Model model) {
 		logger.debug("getting discount list");
 		List<DiscountVO> discountList = discountManagementService.getAllDiscountsNotInPromotion(new Integer(id));
 		return GeneralUtils.convertListToJSONString(discountList);
@@ -227,34 +227,34 @@ public class DiscountManagementController {
 	
 	@RequestMapping(value = "/addDiscount", method = RequestMethod.POST)
 	public String addDiscountToPromo(@RequestParam(value = "checkboxId2", required=false) List<String> ids,
-			@RequestParam("promotionid") String promotionid,
+			@RequestParam("promotionId") String promotionId,
 			final RedirectAttributes redirectAttributes) {
 		if(ids == null || ids.size() < 1){
 			redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
-			return "redirect:manageDiscount/" + promotionid;
+			return "redirect:manageDiscount/" + promotionId;
 		}
 		for (String id : ids) {
 			DiscountVO discountVO = discountManagementService.findById(new Integer(id));
-			discountVO.setPromoId(new Integer(promotionid));
+			discountVO.setPromoId(new Integer(promotionId));
 			discountManagementService.updateDiscount(discountVO);
 			logger.debug("added to promotion: "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Discount(s) added successfully!");
-		return "redirect:manageDiscount/" + promotionid;
+		return "redirect:manageDiscount/" + promotionId;
 	}
 	
 	
 	
 	@RequestMapping(value = "/removeDiscount", method = RequestMethod.POST)
 	public String removeDiscountFromPromo(@RequestParam(value = "checkboxId", required=false) List<String> ids,
-			@RequestParam("promotionid") String promotionid,
+			@RequestParam("promotionId") String promotionId,
 			final RedirectAttributes redirectAttributes) {
 		if(ids == null || ids.size() < 1){
 			redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
-			return "redirect:manageDiscount/" + promotionid;
+			return "redirect:manageDiscount/" + promotionId;
 		}
 		for (String id : ids) {
 			DiscountVO discountVO = discountManagementService.findById(new Integer(id));
@@ -264,7 +264,7 @@ public class DiscountManagementController {
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Discount(s) removed successfully!");
-		return "redirect:manageDiscount/" + promotionid;
+		return "redirect:manageDiscount/" + promotionId;
 	}
 	
 	

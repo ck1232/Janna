@@ -63,8 +63,7 @@ public class PromotionManagementService {
 	}
 	
 	public void updatePromotion(PromotionVO promotionVo) {
-		if(promotionVo != null && promotionVo.getDeleteInd() != null &&
-				promotionVo.getDeleteInd().equals(GeneralUtils.NOT_DELETED)) {
+		if(promotionVo != null && promotionVo.getPromotionId() != null) {
 			PromotionDbObject dbObj = convertToPromotionDbObjectList(Arrays.asList(promotionVo)).get(0);
 			promotionDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
@@ -77,6 +76,7 @@ public class PromotionManagementService {
 				PromotionVO promotionVo = new PromotionVO();
 				promotionVo.setDeleteInd(dbObj.getDeleteInd());
 				promotionVo.setIsActive(dbObj.getIsActive());
+				promotionVo.setIsActiveBoolean(dbObj.getIsActive().equals("Y") ? Boolean.TRUE : Boolean.FALSE);
 				promotionVo.setPromotionEndDate(dbObj.getPromotionEndDate());
 				promotionVo.setPromotionId(dbObj.getPromotionId());
 				promotionVo.setPromotionMessage(dbObj.getPromotionMessage());
@@ -95,7 +95,7 @@ public class PromotionManagementService {
 			for(PromotionVO vo : promotionVOList){
 				PromotionDbObject dbObj = new PromotionDbObject();
 				dbObj.setDeleteInd(vo.getDeleteInd());
-				dbObj.setIsActive(vo.getIsActive());
+				dbObj.setIsActive(vo.getIsActiveBoolean() == Boolean.TRUE ? "Y" : "N");
 				dbObj.setPromotionEndDate(vo.getPromotionEndDate());
 				dbObj.setPromotionId(vo.getPromotionId());
 				dbObj.setPromotionMessage(vo.getPromotionMessage());

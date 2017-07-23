@@ -4,6 +4,6 @@
 
 <div class="margin">
 	<div class="btn-grp">
-		<button class="btn btn-primary pull-right" type="submit" form="datatableForm2" formaction="<c:url value="/product/discount/addDiscount" />"><i class="fa fa-user-times"></i> add to Promotion</button>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm2" formaction="<c:url value="/product/discount/addDiscount" />"><i class="fa fa-plus"></i> Add</button>
 	</div>
 </div>

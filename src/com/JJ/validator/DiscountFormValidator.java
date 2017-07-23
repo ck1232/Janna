@@ -19,18 +19,18 @@ public class DiscountFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		DiscountVO discount = (DiscountVO) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "discountname", "error.notempty.discountform.discountname");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "discountvalue", "error.notempty.discountform.discountvalue");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "discountName", "error.notempty.discountform.discountname");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "discountValue", "error.notempty.discountform.discountvalue");
 		
 		if(!errors.hasErrors()) {
 			Float value = discount.getDiscountValue().floatValue();
 			if("Percentage %".equals(discount.getDiscountType())) {
 				if(value < 0 || value > 100) {
-					errors.rejectValue("discountvalue", "error.percent.discountform.discountvalue");
+					errors.rejectValue("discountValue", "error.percent.discountform.discountvalue");
 				}
 			}else if("Value $".equals(discount.getDiscountType())) {
 				if(value < 0) {
-					errors.rejectValue("discountvalue", "error.negative.discountform.discountvalue");
+					errors.rejectValue("discountValue", "error.negative.discountform.discountvalue");
 				}
 			}
 		}

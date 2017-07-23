@@ -66,7 +66,7 @@ public class PromotionManagementController {
     public String showAddPromotionForm(Model model) {  
     	logger.debug("loading showAddPromotionForm");
     	PromotionVO promotionVo = new PromotionVO();
-    	promotionVo.setIsActive("1");
+    	promotionVo.setIsActive("Y");
     	DateFormat df = new SimpleDateFormat("dd-MM-YYYY K:mm a");
     	Date now = new Date();
     	Date startDate = new Date(now.getYear(), now.getMonth(), now.getDate());
@@ -88,8 +88,8 @@ public class PromotionManagementController {
     @InitBinder("promotionForm")
 	protected void initBinder(WebDataBinder binder) {
     	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm");
-    	binder.registerCustomEditor(Date.class, "promotionstartdate", new CustomDateEditor(dateFormat, false));
-    	binder.registerCustomEditor(Date.class, "promotionenddate", new CustomDateEditor(dateFormat, false));
+    	binder.registerCustomEditor(Date.class, "promotionStartDate", new CustomDateEditor(dateFormat, false));
+    	binder.registerCustomEditor(Date.class, "promotionEndDate", new CustomDateEditor(dateFormat, false));
 		binder.setValidator(promotionFormValidator);
 	}
 	
