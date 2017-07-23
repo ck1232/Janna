@@ -2,6 +2,7 @@ package com.JJ.security;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,13 +22,15 @@ import com.JJ.controller.common.MenuInterceptor;
 @ComponentScan({"com.JJ"})
 @PropertySources({
 	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
-	@PropertySource(value = "classpath:admin-prod-config.properties", ignoreResourceNotFound=true)
+	@PropertySource(value = "file:C:\\Inetpub\\vhosts\\ziumlight.com\\Configuration\\application-${spring.profiles.active}.properties", ignoreResourceNotFound=true)
 })
 public class AppConfig extends WebMvcConfigurerAdapter{
 
 	private MenuInterceptor menuInterceptor;
 	@Autowired
 	private SqlSessionFactory  sqlSessionFactory;
+	@Value("${image.folder}")
+    private String imageFolderSource;
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver
@@ -47,5 +50,6 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/development/**").addResourceLocations("/development/");
+        registry.addResourceHandler("/images/**").addResourceLocations("file:"+imageFolderSource);
     }
 }
