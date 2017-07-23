@@ -30,6 +30,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +42,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,6 +96,9 @@ public class CommonController {
 	
 	@Value("${jdbc.query.password}")
     private String password;
+	
+	@Value("${image.folder}")
+    private String imageFolderSource;
 	
 	@Autowired
 	public CommonController(SubModuleManagementService subModuleManagementService, ModuleManagementService moduleManagementService,
@@ -361,6 +368,24 @@ public class CommonController {
 		redirectAttributes.addFlashAttribute("sqlStatement", sqlStatement);
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:query";
+	}
+	
+	@RequestMapping(value="/images/{imageName}", method = RequestMethod.GET)
+	public ResponseEntity<FileSystemResource> getImage (@PathVariable String imageName) {
+		try{
+			File file = new File(imageFolderSource+imageName+".jpg");
+			if(!file.exists()){
+				file = new File(imageFolderSource+"No-image-found.jpg");
+			}
+			FileSystemResource fys = new FileSystemResource(file);
+			return ResponseEntity.ok().contentLength(fys.contentLength())
+					.contentType(MediaType.IMAGE_JPEG).body(fys);
+		}catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResponseEntity.ok().contentLength(0)
+					.contentType(MediaType.IMAGE_JPEG).body(null);
+		}
 	}
 	
 	@RequestMapping(value="/query/export", method = RequestMethod.POST)
