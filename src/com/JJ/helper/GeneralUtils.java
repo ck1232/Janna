@@ -63,6 +63,9 @@ public class GeneralUtils {
 	public static final String MODULE_INVOICE = "invoice";
 	public static final String MODULE_GRANT = "grant";
 	
+	public static final String TYPE_PRODUCT_CATEGORY = "product_category";
+	public static final String CATEGORY_PATH = "\\JJ\\images\\category\\";
+	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	public static final String SALARY_DATE_FORMAT = "MM-yyyy";
 	public static final String BONUS_DATE_FORMAT = "yyyy";
@@ -105,11 +108,27 @@ public class GeneralUtils {
 	public static <T> Map<Integer, T> convertListToIntegerMap(List<T> list, String attribute) {
 		   Map<Integer, T> map = new HashMap<Integer, T>();
 		   for (T obj : list) {
-			   Class<?> clazz = obj.getClass();
 			   try{
-				   Field field = clazz.getField(attribute);
-				   Integer fieldValue = Integer.parseInt((String)field.get(obj));
+				   Integer fieldValue = (Integer)getObjectProprty(obj, attribute);
 				   map.put(fieldValue, obj);
+			   }catch(Exception ex){
+				   ex.printStackTrace();
+				   logger.error(ex.getMessage());
+			   }
+		       
+		   }   
+		   return map;
+	}
+	
+	public static <T> Map<Integer, List<T>> convertListToIntegerListMap(List<T> list, String attribute) {
+		   Map<Integer, List<T>> map = new HashMap<Integer, List<T>>();
+		   for (T obj : list) {
+			   try{
+				   Integer fieldValue = (Integer)getObjectProprty(obj, attribute);
+				   if(!map.containsKey(fieldValue)){
+					   map.put(fieldValue, new ArrayList<T>());
+				   }
+				   map.get(fieldValue).add(obj);
 			   }catch(Exception ex){
 				   ex.printStackTrace();
 				   logger.error(ex.getMessage());

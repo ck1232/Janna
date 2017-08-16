@@ -3,6 +3,7 @@ package com.JJ.service.productcategorymanagement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -10,37 +11,77 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.common.vo.ImageLinkVO;
+import com.JJ.controller.productcategorymanagement.ImageLinkRefTypeEnum;
 import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.dao.ProductCategoryDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ProductCategoryDbObject;
 import com.JJ.model.ProductCategoryDbObjectExample;
+import com.JJ.service.filelinkmanagement.ImageService;
+import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementService;
 
 @Service
 @Scope("prototype")
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ProductCategoryManagementService {
 	private ProductCategoryDbObjectMapper productCategoryDbObjectMapper;
+	private ImageService imageService;
+	private ProductSubCategoryManagementService subCategoryService;
 	
 	@Autowired
-	public ProductCategoryManagementService(ProductCategoryDbObjectMapper productCategoryDbObjectMapper) {
+	public ProductCategoryManagementService(ProductCategoryDbObjectMapper productCategoryDbObjectMapper,
+			ImageService imageService,
+			ProductSubCategoryManagementService subCategoryService) {
 		this.productCategoryDbObjectMapper = productCategoryDbObjectMapper;
+		this.imageService = imageService;
+		this.subCategoryService = subCategoryService;
 		
 	}
 	
 	public ProductCategoryVO findById(Integer id) {
 		ProductCategoryDbObject productCategoryDbObject = productCategoryDbObjectMapper.selectByPrimaryKey(id);
 		if(productCategoryDbObject != null && productCategoryDbObject.getCategoryId() != null){
-			return convertToProductCategoryVOList(Arrays.asList(productCategoryDbObject)).get(0);
-		}else{
-			return new ProductCategoryVO();
+			ProductCategoryVO vo = convertToProductCategoryVOList(Arrays.asList(productCategoryDbObject)).get(0);
+			if(vo != null) {
+				List<ProductCategoryVO> voList = getImageForCategory(Arrays.asList(vo));
+				if(voList!=null &&!voList.isEmpty())
+					return voList.get(0);
+			}
 		}
+		return new ProductCategoryVO();
+	}
+	
+	private List<ProductCategoryVO> getImageForCategory(List<ProductCategoryVO> categoryList) {
+		if(!categoryList.isEmpty()){
+			List<Integer> refIdList = GeneralUtils.convertListToIntegerList(categoryList, "categoryId");
+			Map<Integer, List<ImageLinkVO>> imageLinkMap = imageService.getAllImageLinkByRefTypeAndIdList(ImageLinkRefTypeEnum.PRODUCT_CATEGORY.getType(), refIdList);
+			for(ProductCategoryVO vo : categoryList) {
+				List<ImageLinkVO> imageList = imageLinkMap.get(vo.getCategoryId());
+				vo.setImageList(new ArrayList<ImageLinkVO>());
+				if(imageList != null && !imageList.isEmpty()) {
+					for(ImageLinkVO imageLinkVO : imageList) {
+						if(imageLinkVO.getSequence() == 1) {
+							vo.setFirstImageLink(imageLinkVO);
+						}
+						vo.getImageList().add(imageLinkVO);
+					}
+				}else{
+					ImageLinkVO imageLink = new ImageLinkVO();
+					imageLink.setImagePath("/JJ/development/images/No-image-found.jpg");
+					vo.setFirstImageLink(imageLink);
+				}
+			}
+		}
+		return categoryList;
 	}
 	
 	public List<ProductCategoryVO> getAllCategories() {
 		ProductCategoryDbObjectExample productCategoryDbObjectExample = new ProductCategoryDbObjectExample();
 		productCategoryDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
-		return convertToProductCategoryVOList(productCategoryDbObjectMapper.selectByExample(productCategoryDbObjectExample));
+		List<ProductCategoryVO> categoryList = convertToProductCategoryVOList(productCategoryDbObjectMapper.selectByExample(productCategoryDbObjectExample));
+		return getImageForCategory(categoryList);
 	}
 	
 	public void saveProductCategory(ProductCategoryVO ProductCategoryVO) {
@@ -61,6 +102,27 @@ public class ProductCategoryManagementService {
 		ProductCategoryDbObject dbObj = new ProductCategoryDbObject();
 		dbObj.setDeleteInd(GeneralUtils.DELETED);
 		productCategoryDbObjectMapper.updateByExampleSelective(dbObj, productCategoryDbObjectExample);
+	}
+	
+	public void initUpdateProductCategory(ProductCategoryVO productCategoryVO, List<ImageLinkVO> imageList, List<ImageLinkVO> deletedImageList) {
+		updateProductcategory(productCategoryVO);
+		//if category is parent, auto add in sub-category
+		if(productCategoryVO.getIsParentBoolean()) {
+			subCategoryService.deleteProductSubCategoryByCategory(productCategoryVO.getCategoryId());
+			ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
+			productSubCategoryVO.setName(productCategoryVO.getCategoryName());
+	    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+	    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
+	    	productSubCategoryVO.setDisplayIndBoolean(productCategoryVO.getDisplayIndBoolean());
+	    	subCategoryService.saveProductSubCategory(productSubCategoryVO);
+		}
+		for(ImageLinkVO imageLink : imageList) {
+			if(!imageLink.isRemoveInd())
+				imageService.saveImageLink(imageLink);
+			else{
+				imageService.deleteImageLink(imageLink);
+			}
+		}
 	}
 	
 	public void updateProductcategory(ProductCategoryVO productCategoryVO) {

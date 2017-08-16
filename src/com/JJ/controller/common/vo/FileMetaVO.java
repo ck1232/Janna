@@ -1,10 +1,16 @@
 package com.JJ.controller.common.vo;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 //ignore "bytes" when return json format
 @JsonIgnoreProperties({"bytes"}) 
-public class FileMetaVO {
+public class FileMetaVO implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer imageId;
 	private String fileName;
     private String fileSize;

@@ -1,8 +1,11 @@
 package com.JJ.controller.productcategorymanagement.VO;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.model.Base;
 
@@ -24,6 +27,14 @@ public class ProductCategoryVO extends Base implements Serializable {
     private Boolean displayIndBoolean;
 
     private List<ProductSubCategoryVO> subcategoryList;
+    
+    private List<ImageLinkVO> imageList;
+    
+    private ImageLinkVO firstImageLink;
+    
+    private LinkedList<FileMetaVO> imageMetaList;
+    
+    private List<ImageLinkVO> deletedImageList;
 
     private static final long serialVersionUID = 1L;
 
@@ -97,6 +108,38 @@ public class ProductCategoryVO extends Base implements Serializable {
 
 	public void setSubcategoryList(List<ProductSubCategoryVO> subcategoryList) {
 		this.subcategoryList = subcategoryList;
+	}
+
+	public List<ImageLinkVO> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<ImageLinkVO> imageList) {
+		this.imageList = imageList;
+	}
+
+	public ImageLinkVO getFirstImageLink() {
+		return firstImageLink;
+	}
+
+	public void setFirstImageLink(ImageLinkVO firstImageLink) {
+		this.firstImageLink = firstImageLink;
+	}
+
+	public LinkedList<FileMetaVO> getImageMetaList() {
+		return imageMetaList;
+	}
+
+	public void setImageMetaList(LinkedList<FileMetaVO> imageMetaList) {
+		this.imageMetaList = imageMetaList;
+	}
+
+	public List<ImageLinkVO> getDeletedImageList() {
+		return deletedImageList;
+	}
+
+	public void setDeletedImageList(List<ImageLinkVO> deletedImageList) {
+		this.deletedImageList = deletedImageList;
 	}
 
 	@Override

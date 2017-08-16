@@ -370,7 +370,7 @@ public class CommonController {
 		return "redirect:query";
 	}
 	
-	@RequestMapping(value="/images/{imageName}", method = RequestMethod.GET)
+	/*@RequestMapping(value="/images/{imageName}", method = RequestMethod.GET)
 	public ResponseEntity<FileSystemResource> getImage (@PathVariable String imageName) {
 		try{
 			File file = new File(imageFolderSource+imageName+".jpg");
@@ -386,7 +386,7 @@ public class CommonController {
 			return ResponseEntity.ok().contentLength(0)
 					.contentType(MediaType.IMAGE_JPEG).body(null);
 		}
-	}
+	}*/
 	
 	@RequestMapping(value="/query/export", method = RequestMethod.POST)
 	public String runSqlExportPage (@RequestParam(value="sqlStatement", required=true) String sqlStatement,

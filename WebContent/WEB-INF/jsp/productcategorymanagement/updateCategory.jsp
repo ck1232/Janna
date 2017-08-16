@@ -50,7 +50,14 @@
 						</div>
 		  			</div>
 		  		</div>
-	
+		  		<div class="row">		  
+		 			<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Image</label>
+						<div class="col-sm-10">
+							<tiles:insertAttribute name="upload"/>
+						</div>
+		  			</div>
+		  		</div>
 				<br/>
 				<br/>
 	
