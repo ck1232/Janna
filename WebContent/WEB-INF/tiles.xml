@@ -530,7 +530,7 @@
     </definition>
     
     <definition name="updateProductCategory" extends="main_template">  
-        <put-attribute name="title" value="Update Role" /> 
+        <put-attribute name="title" value="Update Product Category" /> 
         <put-attribute name="body">
         	<definition template="/WEB-INF/jsp/template/body.jsp">
         		<put-attribute name="heading" value="Update Product Category" />

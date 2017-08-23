@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -157,63 +156,68 @@ public class ProductCategoryManagementController {
 	@RequestMapping(value = "/updateProductCategory", method = RequestMethod.POST)
 	public String getCategoryToUpdate(HttpSession session, @RequestParam("editBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		ProductCategoryVO productCategoryVO = productCategoryManagementService.findById(new Integer(id));
-		if (productCategoryVO == null) {
+		productCategory = productCategoryManagementService.findById(new Integer(id));
+		if (productCategory == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Product Category not found");
 		}
-		productCategory = productCategoryVO;
-		if(productCategoryVO.getImageMetaList() == null){
-			productCategoryVO.setImageMetaList(new LinkedList<FileMetaVO>());
-    	}
-		for(ImageLinkVO img: productCategoryVO.getImageList()) { //imageList from DB convert to imageMeta for display
-			FileMetaVO fileMeta = new FileMetaVO();
-			
-	        fileMeta.setFileName(img.getImagePath().substring(img.getImagePath().lastIndexOf("\\")+1));
-	        String filePath = imageFolderSource+img.getImagePath().substring(StringUtils.ordinalIndexOf(img.getImagePath(), "\\",3)+1);
-	        File file = new File(filePath);
-	        FileInputStream fin = null;
-	        try {
-	            // create FileInputStream object
-	            fin = new FileInputStream(file);
-	            byte fileContent[] = new byte[(int)file.length()];
-	            fin.read(fileContent);
-	            img.setSize(file.length());
-		        fileMeta.setFileSize(file.length()/1024+" Kb");
-		        fileMeta.setFileType(new MimetypesFileTypeMap().getContentType(file));
-		        fileMeta.setBytes(fileContent);
-		        fileMeta.setSequence(img.getSequence());
-		        fileMeta.setImageId(img.getImageLinkId());
-		        productCategory.getImageMetaList().add(fileMeta);
-	        }catch(Exception e){
-	        	e.printStackTrace();
-	        }
-		}
-		reshuffleFiles(productCategoryVO.getImageMetaList());
-		session.setAttribute("productCategory", productCategoryVO);
+		initImages(session, model);
 		model.addAttribute("categoryForm", productCategory);
+		return "updateProductCategory";
+	}
+	
+	private void initImages(HttpSession session, Model model){
+		if(productCategory.getImageMetaList() == null){
+			productCategory.setImageMetaList(new LinkedList<FileMetaVO>());
+			for(ImageLinkVO img: productCategory.getImageList()) { //imageList from DB convert to imageMeta for display
+				FileMetaVO fileMeta = new FileMetaVO();
+				
+		        fileMeta.setFileName(img.getImagePath().substring(img.getImagePath().lastIndexOf("\\")+1));
+		        String filePath = imageFolderSource+img.getImagePath().substring(0,img.getImagePath().lastIndexOf("\\")) + "/" + fileMeta.getFileName();
+		        filePath = filePath.replace("/", "\\");
+		        File file = new File(filePath);
+		        FileInputStream fin = null;
+		        try {
+		            // create FileInputStream object
+		            fin = new FileInputStream(file);
+		            byte fileContent[] = new byte[(int)file.length()];
+		            fin.read(fileContent);
+		            img.setSize(file.length());
+			        fileMeta.setFileSize(file.length()/1024+" Kb");
+			        fileMeta.setFileType(new MimetypesFileTypeMap().getContentType(file));
+			        fileMeta.setBytes(fileContent);
+			        fileMeta.setSequence(img.getSequence());
+			        fileMeta.setImageId(img.getImageLinkId());
+			        productCategory.getImageMetaList().add(fileMeta);
+		        }catch(Exception e){
+		        	e.printStackTrace();
+		        }
+			}
+    	}
+		reshuffleFiles(productCategory.getImageMetaList());
+		session.setAttribute("productCategory", productCategory);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String json = "";
 		try {
-			json = mapper.writeValueAsString(productCategoryVO.getImageList());
+			json = mapper.writeValueAsString(productCategory.getImageList());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		model.addAttribute("images", json);
-		return "updateProductCategory";
 	}
 	
 	@RequestMapping(value = "/updateProductCategory/{id}", method = RequestMethod.GET)
-	public String getCategoryToUpdateByRedirect(@PathVariable String id, Model model) {
+	public String getCategoryToUpdateByRedirect(@PathVariable String id, HttpSession session, Model model) {
 		logger.debug("id = " + id);
-		ProductCategoryVO productCategoryVO = productCategoryManagementService.findById(new Integer(id));
-		if (productCategoryVO == null) {
+		productCategory = productCategoryManagementService.findById(new Integer(id));
+		if (productCategory == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Product Category not found");
 		}
-		model.addAttribute("categoryForm", productCategoryVO);
+		initImages(session, model);
+		model.addAttribute("categoryForm", productCategory);
 		return "updateProductCategory";
 	}
 	
@@ -222,10 +226,9 @@ public class ProductCategoryManagementController {
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes, HttpSession session) {
 		
 		logger.debug("updateProductCategory() : " + productCategoryVO.toString());
-		ProductCategoryVO vo = (ProductCategoryVO) session.getAttribute("productCategory");
-		if (result.hasErrors()) {
-			return "updateProductCategory";
-		} else {
+		
+		productCategory = (ProductCategoryVO) session.getAttribute("productCategory");
+		if (!result.hasErrors()) {
 			ProductCategoryVO currentCategory = productCategoryManagementService.findById(productCategoryVO.getCategoryId());
 			if(productCategoryVO.getIsParentBoolean() != currentCategory.getIsParentBoolean()){ // to parent
 				//check if category contains products
@@ -236,56 +239,64 @@ public class ProductCategoryManagementController {
 						redirectAttributes.addFlashAttribute("css", "danger");
 						redirectAttributes.addFlashAttribute("msg", "Please remove products from the category!");
 						return "redirect:updateProductCategory/" + productCategoryVO.getCategoryId();
-						
 					}
 				}
 			}
 			
 			//process image files
 			HashMap<Integer, FileMetaVO> imageHM = new HashMap<Integer, FileMetaVO>();
-			Iterator<FileMetaVO> i  = vo.getImageMetaList().iterator();
+			Iterator<FileMetaVO> i  = productCategory.getImageMetaList().iterator();
 			while(i.hasNext()){
 				FileMetaVO fileVo = i.next();
 				if(fileVo.getImageId() != null){ //already exist
 					imageHM.put(fileVo.getImageId(), fileVo);
 				}else{ //newly uploaded
 					ImageLinkVO imageVO = convertFileMetaVOToImageLinkVO(fileVo, productCategoryVO);
-					vo.getImageList().add(imageVO);
+					productCategory.getImageList().add(imageVO);
 				}
 			}	
 			
-			for(ImageLinkVO img : vo.getImageList()){
+			boolean pass = true;
+			for(ImageLinkVO img : productCategory.getImageList()){
 				if(img.getImageLinkId() == null) { //new
 					if(!uploadFileToDisk(img)){ //if fail upload
 						redirectAttributes.addFlashAttribute("css", "danger");
 						redirectAttributes.addFlashAttribute("msg", "Error with uploading " + img.getFileName() + "!");
-						return "redirect:updateProductCategory/" + productCategoryVO.getCategoryId();
+						pass = false;
+						break;
 					}
 				}else{ //existing
 					if(!img.isRemoveInd()) {
 						FileMetaVO file = imageHM.get(img.getImageLinkId());
 						img.setSequence(file.getSequence());
-					}else{ //if delete in dropzone
-						if(!deleteFileFromDisk(imageFolderSource+img.getImagePath().substring(StringUtils.ordinalIndexOf(img.getImagePath(), "\\",3)+1))) {
-							redirectAttributes.addFlashAttribute("css", "danger");
-							redirectAttributes.addFlashAttribute("msg", "Error with deleting " + img.getFileName() + "!");
-							return "redirect:updateProductCategory/" + productCategoryVO.getCategoryId();
-						}
 					}
+//					else{ //if delete in dropzone
+//						if(!deleteFileFromDisk(imageFolderSource+img.getImagePath().substring(StringUtils.ordinalIndexOf(img.getImagePath(), "\\",3)+1))) {
+//							redirectAttributes.addFlashAttribute("css", "danger");
+//							redirectAttributes.addFlashAttribute("msg", "Error with deleting " + img.getFileName() + "!");
+//							pass = false;
+//							break;
+//						}
+//					}
 				}
 			}
-			productCategoryManagementService.initUpdateProductCategory(productCategoryVO, vo.getImageList(), vo.getDeletedImageList());
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Product Category updated successfully!");
+			if(pass){
+				productCategoryManagementService.initUpdateProductCategory(productCategoryVO, productCategory.getImageList(), productCategory.getDeletedImageList());
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Product Category updated successfully!");
+				return "redirect:listProductCategory";
+			}
+			return "redirect:updateProductCategory/" + productCategoryVO.getCategoryId();
 		}
-		return "redirect:listProductCategory";
+		initImages(session, model);
+		return "updateProductCategory";
 	}
 	
 	private ImageLinkVO convertFileMetaVOToImageLinkVO(FileMetaVO fileVO, ProductCategoryVO productCategoryVO) {
 		ImageLinkVO imageVO = new ImageLinkVO();
 		imageVO.setRefType(GeneralUtils.TYPE_PRODUCT_CATEGORY);
 		imageVO.setRefId(productCategoryVO.getCategoryId());
-		imageVO.setImagePath(imageFolderSource+"category\\"+fileVO.getFileName());
+		imageVO.setImagePath(imageFolderSource+GeneralUtils.CATEGORY_PATH+fileVO.getFileName());
 		imageVO.setSequence(fileVO.getSequence());
 		imageVO.setFileName(fileVO.getFileName());
 		imageVO.setBytes(fileVO.getBytes());
@@ -293,7 +304,25 @@ public class ProductCategoryManagementController {
 	}
 	
 	private boolean uploadFileToDisk(ImageLinkVO img) {
+		//fileName - filename.jpg
+		//img.imagePath - d://images/category\filename.jpg
+		//
 		try {
+			int i = 1;
+			int s = StringUtils.ordinalIndexOf(img.getImagePath(), "/", 3);
+			String fileLoc = imageFolderSource.replace("/", "\\")+img.getImagePath().substring(s+1);
+			int periodIndex = fileLoc.lastIndexOf(".");
+			int slashIndex = fileLoc.lastIndexOf("\\");
+			String fileName = fileLoc.substring(slashIndex+1, periodIndex);
+			
+			while(checkFileExist(fileLoc)){
+				fileLoc = fileLoc.substring(0,slashIndex+1) + fileName + "_" + i + fileLoc.substring(periodIndex);
+				periodIndex = fileLoc.lastIndexOf(".");
+				slashIndex = fileLoc.lastIndexOf("\\");
+				img.setFileName(fileLoc.substring(slashIndex+1));
+				i++;
+			}
+			img.setImagePath(fileLoc);
 			FileOutputStream fos = new FileOutputStream(img.getImagePath());
 			fos.write(img.getBytes());
 			fos.close();
@@ -302,6 +331,14 @@ public class ProductCategoryManagementController {
 			return false;
 		}
 		return true;
+	}
+	
+	private boolean checkFileExist(String path){
+		File file = new File(path);
+		if(file.exists()){
+			return true;
+		}
+		return false;
 	}
 	
 	private boolean deleteFileFromDisk(String imgPath) {

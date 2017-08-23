@@ -50,6 +50,6 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/development/**").addResourceLocations("/development/");
-        registry.addResourceHandler("/images/**").addResourceLocations("file:///"+imageFolderSource);
+        registry.addResourceHandler("/images/**").addResourceLocations("file:"+imageFolderSource);
     }
 }

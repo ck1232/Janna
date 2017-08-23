@@ -71,14 +71,14 @@ $(function(){
 			 images.sort(sortImageBySequence);
 			for(i=0; i<images.length;i++){
 				var mockFile = {
-		                url: images[i].imagePath,
+		                url: images[i].displayPath,
 		                size: images[i].size,
-		                name: images[i].imagePath.substring(images[i].imagePath.lastIndexOf("\\")+1)
+		                name: images[i].displayPath.substring(images[i].displayPath.lastIndexOf("\\")+1)
 
 		            };
 				myDropzone.emit("addedfile", mockFile);
 
-				myDropzone.createThumbnailFromUrl(mockFile, images[i].imagePath);
+				myDropzone.createThumbnailFromUrl(mockFile, images[i].displayPath);
 				
 			    /*myDropzone.emit("thumbnail", mockFile, images[i].imagePath);*/
 

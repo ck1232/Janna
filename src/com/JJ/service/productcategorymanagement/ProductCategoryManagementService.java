@@ -69,7 +69,7 @@ public class ProductCategoryManagementService {
 					}
 				}else{
 					ImageLinkVO imageLink = new ImageLinkVO();
-					imageLink.setImagePath("/JJ/development/images/No-image-found.jpg");
+					imageLink.setDisplayPath(imageLink.getDisplayPath());
 					vo.setFirstImageLink(imageLink);
 				}
 			}

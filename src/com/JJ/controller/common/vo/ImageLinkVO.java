@@ -2,6 +2,7 @@ package com.JJ.controller.common.vo;
 
 import java.io.Serializable;
 
+import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Base;
 
 public class ImageLinkVO extends Base implements Serializable {
@@ -25,6 +26,8 @@ public class ImageLinkVO extends Base implements Serializable {
     private byte[] bytes;
     
     private boolean removeInd;
+    
+    private String displayPath;
 
     private static final long serialVersionUID = 1L;
 
@@ -61,9 +64,6 @@ public class ImageLinkVO extends Base implements Serializable {
     }
     
     public String getImagePath() {
-    	if(imagePath == null){
-    		return "/development/images/No-image-found.jpg";
-    	}
 		return imagePath;
 	}
 
@@ -109,6 +109,19 @@ public class ImageLinkVO extends Base implements Serializable {
 
 	public void setRemoveInd(boolean removeInd) {
 		this.removeInd = removeInd;
+	}
+
+	public String getDisplayPath() {
+		if(imagePath == null){
+			displayPath = "/JJ/development/images/No-image-found.jpg";
+    	}else{
+    		displayPath = GeneralUtils.IMAGE_PATH + imagePath;
+    	}
+		return displayPath;
+	}
+
+	public void setDisplayPath(String displayPath) {
+		this.displayPath = displayPath;
 	}
 
 	@Override

@@ -130,6 +130,7 @@ public class ImageService {
 							ImageLinkVO vo = new ImageLinkVO();
 							vo.setImageLinkId(dbObj.getFileLinkId());
 							vo.setImagePath(dbObj.getFilePath());
+							vo.setDisplayPath(vo.getDisplayPath());
 							vo.setSequence(rsDbObj.getSequence());
 							vo.setImageLinkRsId(rsDbObj.getImageLinkRsId());
 							vo.setRefType(rsDbObj.getRefType());
