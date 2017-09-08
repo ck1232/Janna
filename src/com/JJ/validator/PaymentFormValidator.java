@@ -44,7 +44,7 @@ public class PaymentFormValidator implements Validator {
 				}
 				break;
 			case "invoice":
-				if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque() && !paymentVo.getPaymentmodegiro()) {
+				if(!paymentVo.getPaymentmodecash() && !paymentVo.getPaymentmodecheque() && !paymentVo.getPaymentmodegiro() && !paymentVo.getPaymentmodePayToDirector()) {
 					errors.rejectValue("paymentmodegiro", "error.notempty.paymentform.paymentmode");
 					hasPayment = false;
 				}

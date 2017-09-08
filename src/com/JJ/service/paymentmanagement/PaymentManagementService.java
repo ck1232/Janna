@@ -263,6 +263,12 @@ public class PaymentManagementService {
 			paymentDetailVO = savePaymentDetail(paymentDetailVO);
 			paymentDetailList.add(paymentDetailVO);
 		}
+		
+		if(PaymentManagementController.giroModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodePayToDirector()){
+			PaymentDetailVO paymentDetailVO = convertPayToDirectorPaymentToPaymentDetailVOList(Arrays.asList(paymentVo)).get(0);
+			paymentDetailVO = savePaymentDetail(paymentDetailVO);
+			paymentDetailList.add(paymentDetailVO);
+		}
 		return paymentDetailList;
 	}
 	
@@ -402,6 +408,21 @@ public class PaymentManagementService {
 				paymentDetailVO.setPaymentAmt(vo.getGiroamount());
 				paymentDetailVO.setPaymentDate(vo.getPaymentDate());
 				paymentDetailVO.setPaymentMode(5);
+				paymentDetailDbObjectList.add(paymentDetailVO);
+			}
+		}
+		return paymentDetailDbObjectList;
+	}
+	
+	private List<PaymentDetailVO> convertPayToDirectorPaymentToPaymentDetailVOList(List<PaymentVO> paymentVOList) {
+		List<PaymentDetailVO> paymentDetailDbObjectList = new ArrayList<PaymentDetailVO>();
+		if(paymentVOList != null && paymentVOList.size() > 0){
+			for(PaymentVO vo : paymentVOList){
+				PaymentDetailVO paymentDetailVO = new PaymentDetailVO();
+				paymentDetailVO.setDeleteInd(GeneralUtils.NOT_DELETED);
+				paymentDetailVO.setPaymentAmt(vo.getPaytodirectoramount());
+				paymentDetailVO.setPaymentDate(vo.getPaymentDate());
+				paymentDetailVO.setPaymentMode(paymentModeLookup.getPaymentModeByValueMap().get("Pay To Director").getPaymentModeId());
 				paymentDetailDbObjectList.add(paymentDetailVO);
 			}
 		}

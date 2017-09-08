@@ -38,6 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.common.vo.JsonResponseVO;
 import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
+import com.JJ.controller.productmanagement.vo.ProductImageVO;
 import com.JJ.controller.productmanagement.vo.ProductOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
@@ -129,6 +130,16 @@ public class ProductManagementController {
 			List<ProductVO> productList = productService.getAllProductVo(id);
 			if(productList != null && productList.size() > 0){
 				newProduct = productList.get(0);
+				LinkedList<ProductImageVO> images = new LinkedList<ProductImageVO>();
+				ProductImageVO img1 = new ProductImageVO("Test1", "/images/product/piglet.jpg");
+				ProductImageVO img2 = new ProductImageVO("Test2", "/images/product/cute_pig.jpg");
+				ProductImageVO img3 = new ProductImageVO("Test3", "/images/product/piglet.jpg");
+				ProductImageVO img4 = new ProductImageVO("Test4", "/images/product/cute_pig.jpg");
+				images.add(img1);
+				images.add(img2);
+				images.add(img3);
+				images.add(img4);
+				newProduct.setImagesLink(images);
 				model.addAttribute("productForm", newProduct);
 				model.addAttribute("categoryList", getProductCategoryList());
 				return "editProduct";

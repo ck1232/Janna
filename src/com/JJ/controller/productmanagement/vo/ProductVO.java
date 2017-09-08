@@ -29,6 +29,8 @@ public class ProductVO extends Base implements Serializable {
     
     private LinkedList<FileMetaVO> images;
     
+    private LinkedList<ProductImageVO> imagesLink;
+    
     private List<String> tags;
     
     private ProductSubCategoryVO subCategory;
@@ -139,6 +141,14 @@ public class ProductVO extends Base implements Serializable {
 
 	public void setProductInfo(String productInfo) {
 		this.productInfo = productInfo;
+	}
+
+	public LinkedList<ProductImageVO> getImagesLink() {
+		return imagesLink;
+	}
+
+	public void setImagesLink(LinkedList<ProductImageVO> imagesLink) {
+		this.imagesLink = imagesLink;
 	}
 
 	@Override

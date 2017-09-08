@@ -40,6 +40,10 @@ public class PaymentVO implements Serializable {
 	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
 	@Min(value=0L, message="error.notvalid.paymentform.giroamount")
 	private BigDecimal giroamount;
+	@Digits(integer=6, fraction=2, message="error.decimal.twodecimcalpoint")
+	@Min(value=0L, message="error.notvalid.paymentform.paytodirectoramount")
+	private BigDecimal paytodirectoramount;
+	private Boolean paymentmodePayToDirector;
 	private String type;
 	
 	public String getReferenceType() {
@@ -178,6 +182,22 @@ public class PaymentVO implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public BigDecimal getPaytodirectoramount() {
+		return paytodirectoramount;
+	}
+
+	public void setPaytodirectoramount(BigDecimal paytodirectoramount) {
+		this.paytodirectoramount = paytodirectoramount;
+	}
+
+	public Boolean getPaymentmodePayToDirector() {
+		return paymentmodePayToDirector;
+	}
+
+	public void setPaymentmodePayToDirector(Boolean paymentmodePayToDirector) {
+		this.paymentmodePayToDirector = paymentmodePayToDirector;
 	}
 
 	@Override

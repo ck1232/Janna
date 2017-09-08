@@ -10,7 +10,7 @@
     "data":           "",
     "defaultContent": '<img height="100px" width="100px" name="img"/>'
 },
-{"data": "productname"},
+{"data": "productName"},
 {
     "className":      '',
     "orderable":      false,

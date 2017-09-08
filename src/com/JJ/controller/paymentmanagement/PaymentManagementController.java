@@ -365,6 +365,9 @@ public class PaymentManagementController {
 		if(giroModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodegiro()) {
 			inputAmount = inputAmount.add(paymentVo.getGiroamount());
 		}
+		if(giroModuleList.contains(paymentVo.getType()) && paymentVo.getPaymentmodePayToDirector()) {
+			inputAmount = inputAmount.add(paymentVo.getPaytodirectoramount());
+		}
 		if(totalamount.compareTo(inputAmount) == 0){
 			return true;
 		}

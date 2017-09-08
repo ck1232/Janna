@@ -8,8 +8,33 @@ public class ProductImageVO extends ProductImageDbObject implements Serializable
     private byte[] image;
 
     private byte[] thumbNailImage;
+    
+    private String url;
+    
+    private String name;
+    
+    public ProductImageVO(String name, String url) {
+		this.url = url;
+		this.name = name;
+	}
 
-    private static final long serialVersionUID = 1L;
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private static final long serialVersionUID = 1L;
 
     public byte[] getImage() {
         return image;

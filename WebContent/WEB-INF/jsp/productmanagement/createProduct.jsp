@@ -3,6 +3,18 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Content Wrapper. Contains page content -->
+	<style>
+		.product_image{
+			border-width: 1px;
+			border-color: black;
+			border-style: solid;
+			border-radius: 5px;
+			height: 250px;
+			margin-top: 10px;
+			padding: 5px;
+			text-align: center;
+		}
+	</style>
 	<script type="text/javascript">
 	Dropzone.options.dZUpload = {
     	    init: function() {
@@ -160,7 +172,7 @@
                     <c:url var="post_url" value="/product/product/saveProduct?_csrf=${_csrf.token}" />
                     <form:form id="productForm" method="post"  modelAttribute="productForm" action="${post_url}"  enctype="multipart/form-data">
                     	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    	<form:input path="id" type="hidden" class="form-control" id="productId"/>
+                    	<form:input path="productId" type="hidden" class="form-control" id="productId"/>
 			              <div class="box-body">
 			              	<!-- upper row -->
 				              <div class="row form-group">
@@ -194,22 +206,22 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Category:</label>
 											<div class="col-sm-10 input-group">
-												<form:select path="subcategoryId" type="text" class="form-control" id="subcategory" >
+												<form:select path="subCategory" type="text" class="form-control" id="subcategory" >
 													<form:option value="">No Category</form:option>
 								                	<c:forEach items="${categoryList}" var="category">
-								                		<c:if test="${category.isparent == true}">
+								                		<c:if test="${category.isParent == true}">
 								                			<optgroup label="${category.name}">
 								                				<c:forEach items="${category.subcategoryList}" var="sub">
-								                					<form:option value="${sub.id}">${sub.name}</form:option>
+								                					<form:option value="${sub.subCategoryId}">${sub.name}</form:option>
 								                				</c:forEach>
 								                			</optgroup>
 								                		</c:if>
-								                		<c:if test="${category.isparent == false}">
-								                			<form:option value="${category.subcategoryList.get(0).id}">${category.subcategoryList.get(0).name}</form:option>
+								                		<c:if test="${category.isParent == false}">
+								                			<form:option value="${category.subcategoryList.get(0).subCategoryId}">${category.subcategoryList.get(0).name}</form:option>
 								                		</c:if>
 								                	</c:forEach>
 								                </form:select>
-												<form:errors path="subcategoryId" class="text-danger" />
+												<form:errors path="subCategory" class="text-danger" />
 											</div>
 									  	</div>
 				              		</div>
@@ -219,10 +231,10 @@
 											<label class="col-sm-2 control-label">Price:</label>
 											<div class="col-sm-10 input-group">
 												<span class="input-group-addon">$</span>
-												<form:input path="unitPrice" type="text" class="form-control"
-								                                id="unitPrice" placeholder="" />
+												<form:input path="unitAmt" type="text" class="form-control"
+								                                id="unitAmt" placeholder="" />
 								                <span class="input-group-addon">.00</span>
-												<form:errors path="unitPrice" class="text-danger" />
+												<form:errors path="unitAmt" class="text-danger" />
 											</div>
 									  	</div>
 				              		</div>
@@ -282,10 +294,14 @@
 				              				<form:textarea path="productInfo" id="productInfoEditor" name="productInfo" rows="10" cols="80" />
 				              				<form:errors path="productInfo" class="text-danger" />
 				              			</div>
-				              			<div id="image_tab" class="tab-pane">
-									      	<div id="dZUpload" class="dropzone">
-											      <div class="dz-default dz-message"></div>
-											</div>
+				              			<div id="image_tab" class="tab-pane row">
+									      	<div class="col-sm-12">
+									      		<c:forEach items="${productForm.imagesLink}" var="image">
+									      			<div class="product_image col-sm-3 col-sm-offset-1" style="background-image: url(<c:url value="${image.url}" />); background-repeat:no-repeat;background-position: center; background-size: contain;">
+														<!--  <img alt="${image.name}" src="<c:url value="${image.url}" />" class="img-responsive col-sm-12"  style="height: 230px;width: 230px;"/>-->
+													</div>
+									      		</c:forEach>
+									      	</div>
 				              			</div>
 				              			<div id="option_tab" class="tab-pane">
 				              				<tiles:insertAttribute name = "options" />

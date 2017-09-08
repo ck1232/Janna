@@ -145,6 +145,24 @@
 						</div>
 				  	</div>
 				</div>
+				
+				<div class="row">
+				  	<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-4">
+							<div class="checkbox">
+						  		<label><form:checkbox path="paymentmodePayToDirector" value="payToDirector" id="paymentmodePayToDirector"/> Pay To Director</label>
+						     	<form:errors path="paymentmodePayToDirector" class="text-danger" />
+							</div>
+						</div>
+						<label id="directorAmountLabel" class="col-sm-2 control-label" style="display:none">Amount</label>
+						<div id="directorAmountInput" class="col-sm-4" style="display:none">
+		                    <form:input path="paytodirectoramount" type="text" class="form-control" 
+	                  			  id="paytodirectoramount" placeholder=""/>
+	                  		<form:errors path="paytodirectoramount" class="text-danger" />
+						</div>
+				  	</div>
+				</div>
 			</c:if>
   		</form:form>
 		<!--/.FORM-->
@@ -192,11 +210,16 @@
 
 		  $('#paymentmodegiro').change(function(event) {
 			  loadPaymentGiro();
-		    });	
+		    });
+		  
+		  $('#paymentmodePayToDirector').change(function(event){
+			  loadPaymentPayToDirector();
+		  });
 		  loadPaymentCash();
 		  loadPaymentCheque();
 		  loadPaymentDirector();
 		  loadPaymentGiro();
+		  loadPaymentPayToDirector();
 	 } );
  	 
 
@@ -247,6 +270,16 @@
 		   	$("#giroAmountInput").css("display","");
 		}
   	 }
-      
+     
+  	function loadPaymentPayToDirector(){
+		if($("#paymentmodePayToDirector").prop('checked') != true) {
+	      	$("#directorAmountLabel").css("display","none");
+	      	$("#directorAmountInput").css("display","none");
+	      	$("#paytodirectoramount").val("");
+		}else{
+		   	$("#directorAmountLabel").css("display","");
+		   	$("#directorAmountInput").css("display","");
+		}
+  	 }
 
     </script>
