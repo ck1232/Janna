@@ -35,7 +35,7 @@ $(function () {
           }
           $(row).find('input[type="checkbox"]').prop('value', dataId);
           $(row).find('button[name="viewBtn"]').prop('value', dataId);
-          if(data.status == "PAID"){
+          if(data.status == "PAID" || data.status == "BAD DEBT"){
         	  $(row).find('div[name="payBtnDiv"]').css("display","none");
         	  $(row).find('div[name="editBtnDiv"]').css("display","none");
         	  $(row).find('div[name="statusDiv"]').css("display","none");

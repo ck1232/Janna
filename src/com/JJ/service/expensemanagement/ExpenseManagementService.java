@@ -16,10 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.expensemanagement.VO.ExpenseVO;
 import com.JJ.dao.ExpenseDbObjectMapper;
+import com.JJ.dao.InvoiceDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.model.ExpenseDbObject;
 import com.JJ.model.ExpenseDbObjectExample;
+import com.JJ.model.InvoiceDbObject;
+import com.JJ.model.InvoiceDbObjectExample;
+import com.JJ.service.invoicemanagement.InvoiceManagementService;
 
 @Service
 @Scope("prototype")
@@ -28,11 +32,14 @@ public class ExpenseManagementService {
 	
 	private ExpenseDbObjectMapper expenseDbObjectMapper;
 	private ExpenseTypeLookup expenseTypeLookup;
+	private InvoiceDbObjectMapper invoiceDbObjectMapper;
 	@Autowired
 	public ExpenseManagementService(ExpenseDbObjectMapper expenseDbObjectMapper,
-			ExpenseTypeLookup expenseTypeLookup) {
+			ExpenseTypeLookup expenseTypeLookup,
+			InvoiceDbObjectMapper invoiceDbObjectMapper) {
 		this.expenseDbObjectMapper = expenseDbObjectMapper;
 		this.expenseTypeLookup = expenseTypeLookup;
+		this.invoiceDbObjectMapper = invoiceDbObjectMapper;
 	}
 		
 	public List<ExpenseVO> getAllExpense() {
@@ -60,6 +67,33 @@ public class ExpenseManagementService {
 		return expenseList;
 	}
 	
+	public List<ExpenseVO> getAllBadDebtExpense(Date startDate, Date endDate) {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
+		.andInvoiceDateGreaterThanOrEqualTo(startDate).andInvoiceDateLessThanOrEqualTo(endDate).andStatusEqualTo(InvoiceManagementService.BAD_DEBT);
+		invoiceDbObjectExample.setOrderByClause("invoice_date");
+		List<ExpenseVO> expenseList = convertBadDebtToExpenseVOList(invoiceDbObjectMapper.selectByExample(invoiceDbObjectExample));
+		return expenseList;
+	}
+	
+	
+	
+	private List<ExpenseVO> convertBadDebtToExpenseVOList(List<InvoiceDbObject> list) {
+		List<ExpenseVO> expenseList = new ArrayList<ExpenseVO>();
+		if(list != null && !list.isEmpty()){
+			for(InvoiceDbObject dbObj : list){
+				ExpenseVO vo = new ExpenseVO();
+				vo.setExpenseTypeId(999);
+				vo.setExpenseId(0);
+				vo.setTotalAmt(dbObj.getTotalAmt());
+				vo.setexpensetype(InvoiceManagementService.BAD_DEBT);
+				vo.setExpenseDate(dbObj.getInvoiceDate());
+				expenseList.add(vo);
+			}
+		}
+		return expenseList;
+	}
+
 	public List<ExpenseVO> getAllExpenseOfParamType(List<Integer> typeList) {
 		ExpenseDbObjectExample expenseDbObjectExample = new ExpenseDbObjectExample();
 		expenseDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)

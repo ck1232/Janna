@@ -249,6 +249,38 @@ public class InvoiceManagementController {
 		return "redirect:listInvoice";
 	}
 	
+	@RequestMapping(value = "/createBadDebt", method = RequestMethod.POST)
+	public String createBadDebt(@RequestParam(value = "checkboxId", required=false) List<String> ids,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listInvoice";
+		}
+		List<Integer> idList = new ArrayList<Integer>();
+		for (String id : ids) {
+			String[] splitId = id.split("-");
+			if(splitId[0] != null && splitId[1] != null){
+				if(splitId[1].toLowerCase().equals("invoice")) {
+					idList.add(new Integer(splitId[0]));
+					logger.debug("bad debt invoice: "+ id);
+				}else if(splitId[1].toLowerCase().equals("grant")) {
+					logger.debug("bad debt grant: "+ id);
+					redirectAttributes.addFlashAttribute("css", "danger");
+					redirectAttributes.addFlashAttribute("msg", "Grant(s) cannot be set as BAD DEBT!");
+					return "redirect:listInvoice";
+				}
+			}
+			
+		}
+		if(!idList.isEmpty()){
+			invoiceManagementService.updateBadDebt(idList);
+		}
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Invoice(s) set as BAD DEBT successfully!");
+		return "redirect:listInvoice";
+	}
+	
 	
 	private boolean checkFileFormat(String filename) {
 		String[] split = filename.split(Pattern.quote("."));

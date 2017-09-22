@@ -112,6 +112,8 @@ public class SummaryReport implements ReportInterface {
 		
 		//for expense except china stock payment
 		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, typeList);
+		//include bad debt
+		dbVoList.addAll(expenseService.getAllBadDebtExpense(dateAsOf, endDate));
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			for(ExpenseVO vo : dbVoList) {
 				String expMonth = GeneralUtils.convertDateToString(vo.getExpenseDate(), monthFormat);
@@ -263,6 +265,7 @@ public class SummaryReport implements ReportInterface {
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addTextMapping("", "month");
 		reportMapping.addMoneyMapping("Stock", "stockAmt");
+		reportMapping.addMoneyMapping("Bad Debt", "badDebtAmt");
 		reportMapping.addMoneyMapping("Sub-Con", "subConAmt");
 		reportMapping.addMoneyMapping("Vehicle - Fuel", "vehicleFuelAmt");
 		reportMapping.addMoneyMapping("Vehicle - Road Tax", "vehicleRoadTaxAmt");
@@ -374,6 +377,8 @@ public class SummaryReport implements ReportInterface {
 		case 15: //China Stock
 			expenseSummary.setStockAmt(expenseSummary.getStockAmt().add(vo.getTotalAmt()));
 			return;
+		case 999: //bad debt
+			expenseSummary.setBadDebtAmt(expenseSummary.getBadDebtAmt().add(vo.getTotalAmt()));
 		default:
 			return;
 		}

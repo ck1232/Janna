@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class ExpenseSummaryReportVO {
 	private String month;
 	private BigDecimal stockAmt;
+	private BigDecimal badDebtAmt;
 	private BigDecimal chinaStockAmt;
 	private BigDecimal subConAmt;
 	private BigDecimal vehicleFuelAmt;
@@ -24,6 +25,7 @@ public class ExpenseSummaryReportVO {
 	public ExpenseSummaryReportVO(String expMonth) {
 		setMonth(expMonth);
 		setStockAmt(BigDecimal.ZERO);
+		setBadDebtAmt(BigDecimal.ZERO);
 		setChinaStockAmt(BigDecimal.ZERO);
 		setSubConAmt(BigDecimal.ZERO);
 		setVehicleFuelAmt(BigDecimal.ZERO);
@@ -48,6 +50,12 @@ public class ExpenseSummaryReportVO {
 	}
 	public BigDecimal getStockAmt() {
 		return stockAmt;
+	}
+	public BigDecimal getBadDebtAmt() {
+		return badDebtAmt;
+	}
+	public void setBadDebtAmt(BigDecimal badDebtAmt) {
+		this.badDebtAmt = badDebtAmt;
 	}
 	public void setStockAmt(BigDecimal stockAmt) {
 		this.stockAmt = stockAmt;

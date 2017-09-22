@@ -34,6 +34,7 @@ public class InvoiceManagementService {
 	private static final Logger logger = Logger.getLogger(InvoiceManagementService.class);
 	private InvoiceDbObjectMapper invoiceDbObjectMapper;
 	private ExcelFileHelper excelFileHelper;
+	public static final String BAD_DEBT = "BAD DEBT";
 	@Autowired
 	public InvoiceManagementService(InvoiceDbObjectMapper invoiceDbObjectMapper) {
 		this.invoiceDbObjectMapper = invoiceDbObjectMapper;
@@ -143,6 +144,14 @@ public class InvoiceManagementService {
 	
 	public void deleteInvoice(Integer id) {
 		deleteInvoice(Arrays.asList(id));
+	}
+	
+	public void updateBadDebt(List<Integer> idList) {
+		InvoiceDbObjectExample invoiceDbObjectExample = new InvoiceDbObjectExample();
+		invoiceDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andInvoiceIdIn(idList);
+		InvoiceDbObject dbObj = new InvoiceDbObject();
+		dbObj.setStatus(InvoiceManagementService.BAD_DEBT);
+		invoiceDbObjectMapper.updateByExampleSelective(dbObj, invoiceDbObjectExample);
 	}
 	
 	public void deleteInvoice(List<Integer> idList) {

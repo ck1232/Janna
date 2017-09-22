@@ -39,7 +39,6 @@ import com.JJ.service.reportmanagement.ReportManagementService;
 public class ReportManagementController {
 	private static final Logger logger = Logger.getLogger(ReportManagementController.class);
 	
-	private ReportManagementService reportManagementService;
 	private ExpenseReport expenseReport;
 	private SalaryReport salaryReport;
 	private BonusReport bonusReport;
@@ -48,11 +47,10 @@ public class ReportManagementController {
 	private SummaryReport summaryReport;
 	
 	@Autowired
-	public ReportManagementController(ReportManagementService reportManagementService, 
+	public ReportManagementController( 
 			ExpenseReport expenseReport, SalaryReport salaryReport, 
 			BonusReport bonusReport, InvoiceReport invoiceReport,
 			ChinaStockReport chinaStockReport, SummaryReport summaryReport) {
-		this.reportManagementService = reportManagementService;
 		this.expenseReport = expenseReport;
 		this.salaryReport = salaryReport;
 		this.bonusReport = bonusReport;

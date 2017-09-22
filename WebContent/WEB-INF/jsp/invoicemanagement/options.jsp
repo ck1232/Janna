@@ -18,6 +18,7 @@
 		<security:authorize access="hasAnyAuthority('ROLE_ADMIN')">
 			<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/invoice/deleteInvoice" />"> Delete</button>
 		</security:authorize>
+		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/invoice/createBadDebt" />"><i class="fa fa-ban"></i> Bad debt</button>
 		<button class="btn btn-primary pull-right" type="submit" form="createGrantForm"><i class="fa fa-user-plus"></i> Add Grant</button>
 		<button class="btn btn-primary pull-right" type="submit" form="datatableForm" formaction="<c:url value="/payment/createPayInvoice" />"><i class="fa fa-user-plus"></i> Add Payment</button>
 	</div>

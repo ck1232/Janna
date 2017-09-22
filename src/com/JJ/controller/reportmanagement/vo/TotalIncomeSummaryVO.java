@@ -7,6 +7,7 @@ public class TotalIncomeSummaryVO {
 	private String description;
 	private BigDecimal income;
 	private BigDecimal moneyReceived;
+	private BigDecimal badDebt;
 	private BigDecimal outstanding;
 	
 	public TotalIncomeSummaryVO(String title, String description) {
@@ -15,6 +16,7 @@ public class TotalIncomeSummaryVO {
 		setIncome(BigDecimal.ZERO);
 		setMoneyReceived(BigDecimal.ZERO);
 		setOutstanding(BigDecimal.ZERO);
+		setBadDebt(BigDecimal.ZERO);
 	}
 	
 	public String getTitle() {
@@ -46,6 +48,14 @@ public class TotalIncomeSummaryVO {
 	}
 	public void setOutstanding(BigDecimal outstanding) {
 		this.outstanding = outstanding;
+	}
+
+	public BigDecimal getBadDebt() {
+		return badDebt;
+	}
+
+	public void setBadDebt(BigDecimal badDebt) {
+		this.badDebt = badDebt;
 	}
 	
 	

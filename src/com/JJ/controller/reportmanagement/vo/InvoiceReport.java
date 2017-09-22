@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.JJ.controller.invoicemanagement.InvoiceManagementController;
 import com.JJ.controller.invoicemanagement.vo.InvoiceVO;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.helper.GeneralUtils;
@@ -99,6 +100,8 @@ public class InvoiceReport implements ReportInterface {
 					}
 					report.setPaymentMode(paymentMode.substring(0, paymentMode.length()-1));
 					report.setPaymentAmt(report.getInvoice().getTotalAmt());
+				}else if(report.getInvoice() != null && report.getInvoice().getStatus().compareToIgnoreCase(InvoiceManagementService.BAD_DEBT) == 0){
+					report.setPaymentMode(InvoiceManagementService.BAD_DEBT);
 				}
 			}
 			
@@ -158,14 +161,18 @@ public class InvoiceReport implements ReportInterface {
 		reportMapping.addTextMapping("Description", "description");
 		reportMapping.addMoneyMapping("INCOME (A)", "income");
 		reportMapping.addMoneyMapping("MONEY RECEIVED (B)", "moneyReceived");
-		reportMapping.addMoneyMapping("OUTSTANDING AS AT " + dateAsOfString + "[(A)-(B)]", "outstanding");
+		reportMapping.addMoneyMapping("BAD DEBT (C)", "badDebt");
+		reportMapping.addMoneyMapping("OUTSTANDING AS AT " + dateAsOfString + "[(A)-(B)-(C)]", "outstanding");
 		return reportMapping;
 	}
 	
 	private void addCurrentInvoice(TotalIncomeSummaryVO vo, InvoiceReportVO invoice){
 		vo.setIncome(vo.getIncome().add(invoice.getInvoice().getTotalAmt())); //set income
-		if(invoice.getPaymentDetailList() != null && !invoice.getPaymentDetailList().isEmpty())
+		if(invoice.getPaymentDetailList() != null && !invoice.getPaymentDetailList().isEmpty()){
 			vo.setMoneyReceived(vo.getMoneyReceived().add(invoice.getInvoice().getTotalAmt())); //set money received
+		}else if (invoice.getInvoice() != null && invoice.getInvoice().getStatus().compareToIgnoreCase(InvoiceManagementService.BAD_DEBT) == 0){
+			vo.setBadDebt(vo.getBadDebt().add(invoice.getInvoice().getTotalAmt()));
+		}
 	}
 	
 	class InvoiceReportComparator implements Comparator<InvoiceReportVO> {
