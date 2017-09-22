@@ -10,6 +10,11 @@ import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 
 public class InvoiceReportVO implements Serializable {
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private InvoiceVO invoice;
     
     private List<PaymentDetailVO> paymentDetailList;

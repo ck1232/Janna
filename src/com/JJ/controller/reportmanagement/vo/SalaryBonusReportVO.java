@@ -7,6 +7,11 @@ import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 
 public class SalaryBonusReportVO implements Serializable {
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private SalaryBonusVO salarybonus;
     
     private PaymentDetailVO paymentDetail;
