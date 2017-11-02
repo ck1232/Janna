@@ -673,7 +673,7 @@ public class PaymentManagementController {
 		BigDecimal totalamount = BigDecimal.ZERO;
 		for(SalaryBonusVO salaryBonusVo : salaryBonusVoList) {
 			salaryBonusVo.setDateString(GeneralUtils.convertDateToString(salaryBonusVo.getDate(), GeneralUtils.BONUS_DATE_FORMAT));
-			totalamount = totalamount.add(salaryBonusVo.getBonusAmt());
+			totalamount = totalamount.add(salaryBonusVo.getTakehomeAmt());
 		}
 		
 		PaymentVO paymentvo = new PaymentVO();
