@@ -2,10 +2,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<form id="editOptionForm" method="post" action="<c:url value="/admin/updateUser" />">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
-
 <script>
 	var option = new Bloodhound({
 	  datumTokenizer: Bloodhound.tokenizers.whitespace,

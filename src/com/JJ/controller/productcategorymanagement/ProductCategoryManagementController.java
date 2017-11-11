@@ -341,6 +341,7 @@ public class ProductCategoryManagementController {
 		return false;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean deleteFileFromDisk(String imgPath) {
 		try {
 			File file = new File(imgPath);

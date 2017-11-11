@@ -5,7 +5,7 @@
     "defaultContent": '<div style="text-align:center;"><input type="checkbox" name="checkboxId"/></div>'
 },
 {"data": "name"},
-{"data": "displayind"},
+{"data": "displayInd"},
 {
     "className":      '',
     "orderable":      false,

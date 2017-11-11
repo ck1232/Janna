@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
 import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productmanagement.vo.ProductOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductSpecificationVO;
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
@@ -191,7 +192,12 @@ public class ProductService {
 				if(product.getSubCategoryId() != null && product.getSubCategoryId().intValue() > 0){
 					product.setSubCategory(subcategoryMap.get(product.getSubCategoryId()));
 				}
-			}
+				LinkedList<ImageLinkVO> imageLinkVOList = productImageService.getProductImage(product.getProductId());
+				if(imageLinkVOList != null){
+					product.setImagesLink(imageLinkVOList);
+				}
+				
+ 			}
 		}
 		return productVOList;
 	}
@@ -306,7 +312,7 @@ public class ProductService {
 					product.setSubCategory(subcategoryMap.get(product.getSubCategoryId()));
 				}
 				//getProductImage
-				List<ProductImageDbObjectWithBLOBs> productImage = productImageService.getProductImage(Arrays.asList(product.getProductId()));
+				LinkedList<ImageLinkVO> productImage = productImageService.getProductImage(product.getProductId());
 				
 				//get Product spec
 				ProductSpecificationVO productInfo =  productSpecificationService.getProductSpecification(product.getProductId());
@@ -323,16 +329,17 @@ public class ProductService {
 		return productVoList;
 	}
 
-	private ProductVO convertToProductVo(ProductVO productVo, List<ProductImageDbObjectWithBLOBs> productImageList, ProductSpecificationVO productInfo, List<ProductOptionVO> optionVoList, List<String> productTagsList){
+	private ProductVO convertToProductVo(ProductVO productVo, LinkedList<ImageLinkVO> productImage, ProductSpecificationVO productInfo, List<ProductOptionVO> optionVoList, List<String> productTagsList){
 		if(productVo != null){
 			productVo.setProductInfo(productInfo.getContent());
-			productVo.setImages(convertToFileMetaList(productImageList));
+			productVo.setImagesLink(productImage);
 			productVo.setOptionList(optionVoList);
 			productVo.setTags(productTagsList);
 		}
 		return productVo;
 	}
-	
+	@SuppressWarnings("unused")
+	@Deprecated
 	private LinkedList<FileMetaVO> convertToFileMetaList(List<ProductImageDbObjectWithBLOBs> productImageList){
 		LinkedList<FileMetaVO> fileMetaList = new LinkedList<FileMetaVO>();
 		if(productImageList != null && productImageList.size() > 0){
@@ -388,9 +395,10 @@ public class ProductService {
 			productDbObjectMapper.updateByPrimaryKeySelective(product);
 		}else{
 			productDbObjectMapper.insertSelective(product);
+			productVo.setProductId(product.getProductId());
 		}
 		//option
-		saveOption(productVo, product.getProductId());
+		saveOption(productVo);
 		//productinfo
 		productSpecificationService.saveProductInfo(productVo, product.getProductId());
 		//image
@@ -425,7 +433,7 @@ public class ProductService {
 	
 	
 	
-	private void saveOption(ProductVO productVo, Integer productId){
+	private void saveOption(ProductVO productVo){
 		
 		//find product option
 		if(productVo.getOptionList() != null && productVo.getOptionList().size() > 0){
@@ -475,7 +483,7 @@ public class ProductService {
 		//product suboption
 		//set all deleteInd to true
 		ProductSubOptionDbObjectExample example = new ProductSubOptionDbObjectExample();
-		example.createCriteria().andProductIdEqualTo(productId);
+		example.createCriteria().andProductIdEqualTo(productVo.getProductId());
 		ProductSubOptionDbObject subOption = new ProductSubOptionDbObject();
 		subOption.setDeleteInd(GeneralUtils.DELETED);
 		productSubOptionDbObjectMapper.updateByExampleSelective(subOption, example);
@@ -491,7 +499,7 @@ public class ProductService {
 			}
 			//delete if empty productsuboption exsits
 			ProductSubOptionDbObjectExample deleteExample = new ProductSubOptionDbObjectExample();
-			deleteExample.createCriteria().andProductIdEqualTo(productId).andProductOptionIdEqualTo(0).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+			deleteExample.createCriteria().andProductIdEqualTo(productVo.getProductId()).andProductOptionIdEqualTo(0).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 			ProductSubOptionDbObject updateProductSubOption = new ProductSubOptionDbObject();
 			updateProductSubOption.setDeleteInd(GeneralUtils.DELETED);
 			productSubOptionDbObjectMapper.updateByExampleSelective(updateProductSubOption, deleteExample);
@@ -525,21 +533,21 @@ public class ProductService {
 			//insert empty suboption
 			//select if empty productsuboption exsits
 			ProductSubOptionDbObjectExample selectExample = new ProductSubOptionDbObjectExample();
-			selectExample.createCriteria().andProductIdEqualTo(productId).andProductIdEqualTo(0);
+			selectExample.createCriteria().andProductIdEqualTo(productVo.getProductId()).andProductOptionIdEqualTo(0);
 			List<ProductSubOptionDbObject> productSubOptionList = productSubOptionDbObjectMapper.selectByExample(selectExample);
 			//insert empty suboption if dont exists
 			if(productSubOptionList == null || productSubOptionList.size() == 0){
 				ProductSubOptionDbObject productSubOption = new ProductSubOptionDbObject();
 				productSubOption.setDeleteInd(GeneralUtils.NOT_DELETED);
 				productSubOption.setCode(" ");
-				productSubOption.setProductId(productId);
+				productSubOption.setProductId(productVo.getProductId());
 				productSubOption.setProductOptionId(0);
 				productSubOptionDbObjectMapper.insert(productSubOption);
 			}
 		}
 		
 		//maintain productsuboption_rs
-		productVo.setProductId(productId);
+//		productVo.setProductId(productId);
 		saveProductSubOptionRs(productVo);
 	}
 	

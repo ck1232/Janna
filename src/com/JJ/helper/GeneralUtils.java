@@ -64,7 +64,9 @@ public class GeneralUtils {
 	public static final String MODULE_GRANT = "grant";
 	
 	public static final String TYPE_PRODUCT_CATEGORY = "product_category";
+	public static final String TYPE_PRODUCT = "product";
 	public static final String CATEGORY_PATH = "category\\";
+	public static final String PRODUCT_PATH = "product\\";
 	public static final String IMAGE_PATH = "\\JJ\\images\\";
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";

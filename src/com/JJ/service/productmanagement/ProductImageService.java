@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,11 +24,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.dao.ProductImageDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.ProductImageDbObjectExample;
 import com.JJ.model.ProductImageDbObjectWithBLOBs;
+import com.JJ.service.filelinkmanagement.ImageService;
 @Service
 @Scope("prototype")
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
@@ -36,12 +39,14 @@ public class ProductImageService {
 	private ProductImageDbObjectMapper productImageDbObjectMapper;
 	private final static int thumbnail_width = 200;
 	private final static int thumbnail_height = 200;
-	
+	private ImageService imageService;
 	@Autowired
-	public ProductImageService(ProductImageDbObjectMapper productImageDbObjectMapper) {
+	public ProductImageService(ProductImageDbObjectMapper productImageDbObjectMapper,
+			ImageService imageService) {
 		this.productImageDbObjectMapper = productImageDbObjectMapper;
+		this.imageService = imageService;
 	}
-	
+	@Deprecated
 	public List<ProductImageDbObjectWithBLOBs> getProductImage(List<Integer> productIdList){
 		List<ProductImageDbObjectWithBLOBs> productImageList = new ArrayList<ProductImageDbObjectWithBLOBs>();
 		if(productIdList != null && productIdList.size() > 0){
@@ -50,6 +55,16 @@ public class ProductImageService {
 			productImageList = productImageDbObjectMapper.selectByExampleWithBLOBs(example);
 		}
 		return productImageList;
+	}
+	
+	public Map<Integer, LinkedList<ImageLinkVO>> getProductImageList(List<Integer> productIdList){
+		Map<Integer, LinkedList<ImageLinkVO>> map = imageService.getAllImageLinkByRefTypeAndIdListOrdered(GeneralUtils.TYPE_PRODUCT, productIdList);
+		return map;
+	}
+	
+	public LinkedList<ImageLinkVO> getProductImage(Integer productId){
+		Map<Integer, LinkedList<ImageLinkVO>> map = getProductImageList(Arrays.asList(productId));
+		return map==null?null : map.get(productId);
 	}
 	
 	public void saveProductImage(ProductVO productVo, Integer productId){
@@ -61,13 +76,23 @@ public class ProductImageService {
 		productImageDbObjectMapper.updateByExampleSelective(obj, deleteExample);
 		//table image
 		LinkedList<FileMetaVO> images = productVo.getImages();
-		List<ProductImageDbObjectWithBLOBs> productImages = convertToProductImage(productId,images);
-		for(ProductImageDbObjectWithBLOBs productImage : productImages){
+		
+		for(FileMetaVO image : images){
+			List<ProductImageDbObjectWithBLOBs> productImages = convertToProductImage(productId,Arrays.asList(image));
+			ProductImageDbObjectWithBLOBs productImage = productImages.get(0);
 			productImage.setDeleteInd(GeneralUtils.NOT_DELETED);
 			if(productImage.getProductImageId() != null){
 				productImageDbObjectMapper.updateByPrimaryKeySelective(productImage);
 			}else{
-				productImageDbObjectMapper.insertSelective(productImage);
+				//write to file
+				ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(image, productVo.getProductId(), GeneralUtils.TYPE_PRODUCT);
+				boolean uploadSuccess = imageService.uploadFileToDisk(imageVO);
+				productImage.setImageName(imageVO.getFileName());
+				if(uploadSuccess){
+					imageService.saveImageLink(imageVO);
+					productImageDbObjectMapper.insertSelective(productImage);
+				}
+				
 			}
 		}
 	}
@@ -119,18 +144,6 @@ public class ProductImageService {
 			return new byte[0];
 		}
 	}
-	
-	public ProductImageDbObjectWithBLOBs getCoverImageByProductId(Integer productId){
-		ProductImageDbObjectExample selectExample = new ProductImageDbObjectExample();
-		selectExample.createCriteria().andProductIdEqualTo(productId).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
-		selectExample.setOrderByClause("sequence");
-		List<ProductImageDbObjectWithBLOBs> productImageList = productImageDbObjectMapper.selectByExampleWithBLOBs(selectExample);
-		if(productImageList != null && productImageList.size() > 0){
-			return productImageList.get(0);
-		}else{
-			return null;
-		}
-	}
 
 	public List<ProductVO> getProductVOImage(List<ProductVO> voList) {
 		if(voList != null && voList.size() > 0){
@@ -179,5 +192,15 @@ public class ProductImageService {
 			}
 		}
 		return fileMetaList;
+	}
+	
+	public ImageLinkVO getCoverImageByProductId(Integer productId){
+		LinkedList<ImageLinkVO> list = getProductImage(productId);
+		if(list != null && !list.isEmpty()){
+			ImageLinkVO imageLinkVO = list.get(0);
+			imageLinkVO = imageService.readImageFromURL(imageLinkVO);
+			return imageLinkVO;
+		}
+		return null;
 	}
 }

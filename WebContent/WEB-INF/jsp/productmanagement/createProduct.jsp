@@ -30,7 +30,7 @@
           		}).done(function(data) {
               		$.each(data, function(i, fileMeta){
               			var image = { name: fileMeta.fileName, size: fileMeta.fileSize};
-              			var imageUrl = "<c:out value="${pageContext.request.contextPath}" />/product/product/getImage/"+fileMeta.imageId;
+              			var imageUrl = "<c:out value="${pageContext.request.contextPath}" />/images/product/"+fileMeta.fileName;
               			console.log(imageUrl);
               			myDropzone.emit("addedfile", image);
               			myDropzone.createThumbnailFromUrl(image, imageUrl);
@@ -69,7 +69,8 @@
 		var uploadImageOrderList = [];
 
 		function getSortOrder(){
-			var listElements = $("#dZUpload").find(".dz-success img");
+			var listElements = $("#dZUpload").find(".dz-image img");
+			console.log(listElements);
 			uploadImageOrderList = [];
 
 			for(var i=0;i<listElements.length;i++){
@@ -169,8 +170,8 @@
                     </div>
                     <!--FORM-->
                     <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />"></form>
-                    <c:url var="post_url" value="/product/product/saveProduct?_csrf=${_csrf.token}" />
-                    <form:form id="productForm" method="post"  modelAttribute="productForm" action="${post_url}"  enctype="multipart/form-data">
+                    <c:url var="post_url" value="/product/product/saveProduct" />
+                    <form:form id="productForm" method="post"  modelAttribute="productForm" action="${post_url}">
                     	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     	<form:input path="productId" type="hidden" class="form-control" id="productId"/>
 			              <div class="box-body">
@@ -206,8 +207,8 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Category:</label>
 											<div class="col-sm-10 input-group">
-												<form:select path="subCategory" type="text" class="form-control" id="subcategory" >
-													<form:option value="">No Category</form:option>
+												<form:select path="subCategoryId" type="text" class="form-control" id="subcategory" >
+													<form:option value="0">No Category</form:option>
 								                	<c:forEach items="${categoryList}" var="category">
 								                		<c:if test="${category.isParent == true}">
 								                			<optgroup label="${category.name}">
@@ -294,14 +295,10 @@
 				              				<form:textarea path="productInfo" id="productInfoEditor" name="productInfo" rows="10" cols="80" />
 				              				<form:errors path="productInfo" class="text-danger" />
 				              			</div>
-				              			<div id="image_tab" class="tab-pane row">
-									      	<div class="col-sm-12">
-									      		<c:forEach items="${productForm.imagesLink}" var="image">
-									      			<div class="product_image col-sm-3 col-sm-offset-1" style="background-image: url(<c:url value="${image.url}" />); background-repeat:no-repeat;background-position: center; background-size: contain;">
-														<!--  <img alt="${image.name}" src="<c:url value="${image.url}" />" class="img-responsive col-sm-12"  style="height: 230px;width: 230px;"/>-->
-													</div>
-									      		</c:forEach>
-									      	</div>
+				              			<div id="image_tab" class="tab-pane">
+									      	<div id="dZUpload" class="dropzone">
+											      <div class="dz-default dz-message"></div>
+											</div>
 				              			</div>
 				              			<div id="option_tab" class="tab-pane">
 				              				<tiles:insertAttribute name = "options" />

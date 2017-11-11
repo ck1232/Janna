@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.JJ.controller.common.vo.FileMetaVO;
+import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.model.Base;
 
 public class ProductVO extends Base implements Serializable {
@@ -29,7 +30,7 @@ public class ProductVO extends Base implements Serializable {
     
     private LinkedList<FileMetaVO> images;
     
-    private LinkedList<ProductImageVO> imagesLink;
+    private LinkedList<ImageLinkVO> imagesLink;
     
     private List<String> tags;
     
@@ -143,11 +144,11 @@ public class ProductVO extends Base implements Serializable {
 		this.productInfo = productInfo;
 	}
 
-	public LinkedList<ProductImageVO> getImagesLink() {
+	public LinkedList<ImageLinkVO> getImagesLink() {
 		return imagesLink;
 	}
 
-	public void setImagesLink(LinkedList<ProductImageVO> imagesLink) {
+	public void setImagesLink(LinkedList<ImageLinkVO> imagesLink) {
 		this.imagesLink = imagesLink;
 	}
 

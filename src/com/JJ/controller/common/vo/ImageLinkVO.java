@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.Base;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageLinkVO extends Base implements Serializable {
 	private Integer imageLinkRsId;
 
