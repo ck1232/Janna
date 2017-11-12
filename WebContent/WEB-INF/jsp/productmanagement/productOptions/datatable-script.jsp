@@ -29,8 +29,8 @@ $(function () {
       
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
-          $(row).find('input[type="checkbox"]').prop('value', data.optionName);
-          $(row).find('button[name="editBtn"]').prop('value', data.optionName);
+          $(row).find('input[type="checkbox"]').prop('value', data.name);
+          $(row).find('button[name="editBtn"]').prop('value', data.name);
        }
     });
     

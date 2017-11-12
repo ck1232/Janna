@@ -31,7 +31,7 @@
               		$.each(data, function(i, fileMeta){
               			var image = { name: fileMeta.fileName, size: fileMeta.fileSize};
               			var imageUrl = "<c:out value="${pageContext.request.contextPath}" />/images/product/"+fileMeta.fileName;
-              			console.log(imageUrl);
+              			//console.log(imageUrl);
               			myDropzone.emit("addedfile", image);
               			myDropzone.createThumbnailFromUrl(image, imageUrl);
               			myDropzone.emit("complete", image);
@@ -39,7 +39,7 @@
 	    		});
 
 	    		this.on("removedfile", function(file){
-		    		console.log(file);
+		    		//console.log(file);
 		    		$(document).find(file.previewElement).remove();
 		    		var data = {"fileName": file.name};
 	    			var removePreUploadImageAjax = $.ajax({
@@ -70,7 +70,7 @@
 
 		function getSortOrder(){
 			var listElements = $("#dZUpload").find(".dz-image img");
-			console.log(listElements);
+			//console.log(listElements);
 			uploadImageOrderList = [];
 
 			for(var i=0;i<listElements.length;i++){
@@ -122,7 +122,7 @@
 	            file.previewElement.classList.add("dz-error");
 	        },
 	        removedfile: function (file) {
-	        	console.log(file.previewElement);
+	        	//console.log(file.previewElement);
 	        	$(document).find(file.previewElement).remove();
 	        	var deleteAjax = $.ajax({
 	        		  type: "POST",

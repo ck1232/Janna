@@ -23,7 +23,7 @@
 
 	function editOption(selectedOption){
 		var selectedOptionName = $(selectedOption).val();
-		var data = {"optionName" : selectedOptionName};
+		var data = {"name" : selectedOptionName};
 		var editOptionAjax = $.ajax({
 	  		  type: "POST",
 	  		  url: "editOption",
@@ -34,16 +34,16 @@
 
 				}
 	  		}).done(function(optionVo) {
-		  		if(optionVo.optionName == selectedOptionName){
-					$("#name").val(optionVo.optionName);
-					$("#optionId").val(optionVo.optionId);
+		  		if(optionVo.name == selectedOptionName){
+					$("#name").val(optionVo.name);
+					$("#optionId").val(optionVo.productOptionId);
 					$("#subOptionDiv").empty();
 					$.each(optionVo.subOptionList, function(index, element){
 						var view = "";
-						if(element.display == false){
+						if(element.displayInd == 'N'){
 							view = "-slash";
 						}
-						$( "#subOptionDiv" ).append( '<div class="subOptionDiv" style="padding:0px 5%;"><label>'+ element.subOptionName +'</label><a class="pull-right icon" onclick="removeSubOption(this)">x</a><a class="pull-right icon display" onclick="toggleView(this);"><i class="fa fa-eye'+view+'"></i></a><input type="hidden" value="'+element.subOptionId+'"/></div>' );
+						$( "#subOptionDiv" ).append( '<div class="subOptionDiv" style="padding:0px 5%;"><label>'+ element.name +'</label><a class="pull-right icon" onclick="removeSubOption(this)">x</a><a class="pull-right icon display" onclick="toggleView(this);"><i class="fa fa-eye'+view+'"></i></a><input type="hidden" value="'+element.productSuboptionId+'"/></div>' );
 					});
 					
 					/* if(data.subOption != ""){
@@ -86,16 +86,21 @@
 			for(var i=0; i< subOptionDivList.length;i++){
 				var item = subOptionDivList.get(i);
 				var displayInd = $(item).find(".display i").hasClass("fa-eye");
+				if(displayInd == true){
+					displayInd = 'Y';
+				}else{
+					displayInd = 'N';
+				}
 				var subOption = {
-					subOptionName:$(item).find("label").text(),
-					display:displayInd,
-					seq:i+1
+					name:$(item).find("label").text(),
+					displayInd:displayInd,
+					sequence:i+1
 				};
 				subOptionList.push(subOption);
 			}
 		}
 		var data = {
-			optionName : optionName,
+			name : optionName,
 			subOptionList : subOptionList
 		}
 
@@ -106,10 +111,9 @@
   		  contentType:"application/json; charset=utf-8",
 		  beforeSend: function( xhr ) {
 			  xhr.setRequestHeader(header, token);
-
 			}
   		}).done(function(data) {
-  	  		console.log(data);
+  	  		//console.log(data);
   	  		if(data.status == "fail"){
 				alert(data.message);
   	  	  	}else{
@@ -131,19 +135,24 @@
 			for(var i=0; i< subOptionDivList.length;i++){
 				var item = subOptionDivList.get(i);
 				var displayInd = $(item).find(".display i").hasClass("fa-eye");
+				if(displayInd == true){
+					displayInd = 'Y';
+				}else{
+					displayInd = 'N';
+				}
 				var subOptionInputId = $(item).find("input").val();
 				var subOption = {
-					subOptionId:subOptionInputId,
-					subOptionName:$(item).find("label").text(),
-					display:displayInd,
-					seq:i+1
+					productSuboptionId:subOptionInputId,
+					name:$(item).find("label").text(),
+					displayInd:displayInd,
+					sequence:i+1
 				};
 				subOptionList.push(subOption);
 			}
 		}
 		var data = {
-			optionId : optionInputId,
-			optionName : optionName,
+			productOptionId : optionInputId,
+			name : optionName,
 			subOptionList : subOptionList
 		}
 

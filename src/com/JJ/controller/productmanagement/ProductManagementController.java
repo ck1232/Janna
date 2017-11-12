@@ -354,6 +354,7 @@ public class ProductManagementController {
 			if(newProduct.getOptionList() == null){
 				newProduct.setOptionList(new ArrayList<ProductOptionVO>());
 			}
+			option.setDeleteInd(GeneralUtils.NOT_DELETED);
 			for(ProductOptionVO optionVo : newProduct.getOptionList()){
 				if(optionVo.getName().equalsIgnoreCase(option.getName())){
 					return new JsonResponseVO("fail", "Option Name already exists.");
@@ -374,12 +375,12 @@ public class ProductManagementController {
 				}
 			}
 		}
+		selectedOption = (ProductOptionVO) session.getAttribute("selectedOption");
 		if(selectedOption != null){
 			selectedOption.setName(option.getName());
 			selectedOption.setProductOptionId(option.getProductOptionId());
 			selectedOption.setSequence(option.getSequence());
 			selectedOption.setSubOptionList(option.getSubOptionList());
-			selectedOption = null;
 		}
 		return new JsonResponseVO("success");
 	}
@@ -397,12 +398,14 @@ public class ProductManagementController {
 		newProduct = (ProductVO) session.getAttribute("product");
 		if(newProduct.getOptionList() != null && newProduct.getOptionList().size() > 0){
 			for(ProductOptionVO option: newProduct.getOptionList()){
-				if(option.getName() != null && option.getName().compareToIgnoreCase(optionName.getName()) == 0){
+				if(option.getName() != null && optionName.getName() != null && option.getName().compareToIgnoreCase(optionName.getName()) == 0){
 					selectedOption = option;
+					session.setAttribute("selectedOption", selectedOption);
 					return option;
 				}
 			}
 		}
+		session.setAttribute("selectedOption", null);
 		return new ProductOptionVO();
 	}
 	

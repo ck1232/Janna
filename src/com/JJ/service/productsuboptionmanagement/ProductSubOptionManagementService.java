@@ -67,12 +67,12 @@ public class ProductSubOptionManagementService {
 		return new ArrayList<ProductSubOptionVO>();
 	}
 	
-	public void saveProductsuboption(ProductSubOptionVO vo) {
+	/*public void saveProductsuboption(ProductSubOptionVO vo) {
 		List<ProductSubOptionDbObject> dbObjList = convertToProductSubOptionDbObjectList(Arrays.asList(vo));
 		if(dbObjList != null && dbObjList.size() > 0){
 			productSubOptionDbObjectMapper.insert(dbObjList.get(0));
 		}
-	}
+	}*/
 	
 	public void deleteProductsuboption(Integer id) {
 		ProductSubOptionVO vo = findById(id);
@@ -93,7 +93,7 @@ public class ProductSubOptionManagementService {
 		}
 	}
 	
-	public void updateProductoption(ProductSubOptionVO vo) {
+	/*public void updateProductoption(ProductSubOptionVO vo) {
 		if(vo != null && vo.getDeleteInd() != null && vo.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
 			List<ProductSubOptionDbObject> dbObjList = convertToProductSubOptionDbObjectList(Arrays.asList(vo));
 			if(dbObjList != null && dbObjList.size() > 0){
@@ -101,7 +101,7 @@ public class ProductSubOptionManagementService {
 			}
 			
 		}
-	}
+	}*/
 	
 	public ProductSubOptionVO getSubOptionVo(Integer suboptionId){
 		ProductSubOptionDbObjectExample example = new ProductSubOptionDbObjectExample();
@@ -134,7 +134,7 @@ public class ProductSubOptionManagementService {
 	}
 
 	public List<ProductSubOptionDbObject> convertToProductSubOptionDbObjectList(
-			List<ProductSubOptionVO> voList) {
+			List<ProductSubOptionVO> voList, Integer productId, Integer optionId) {
 		List<ProductSubOptionDbObject> dbObjList = new ArrayList<ProductSubOptionDbObject>();
 		if(voList != null && voList.size() > 0){
 			for(ProductSubOptionVO vo : voList){
@@ -143,8 +143,8 @@ public class ProductSubOptionManagementService {
 				dbObj.setDeleteInd(vo.getDeleteInd());
 				dbObj.setDisplayInd(vo.getDisplayInd());
 				dbObj.setName(vo.getName());
-				dbObj.setProductId(vo.getProductId());
-				dbObj.setProductOptionId(vo.getProductSuboptionId());
+				dbObj.setProductId(productId);
+				dbObj.setProductOptionId(optionId);
 				dbObj.setProductSuboptionId(vo.getProductSuboptionId());
 				dbObj.setVersion(vo.getVersion());
 				dbObjList.add(dbObj);

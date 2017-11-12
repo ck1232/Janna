@@ -52,7 +52,7 @@ public class ProductOptionManagementService {
 				ProductOptionVO vo = new ProductOptionVO();
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
-				vo.setName(dbObj.getDisplayInd());
+				vo.setName(dbObj.getName());
 				vo.setProductOptionId(dbObj.getProductOptionId());
 				vo.setVersion(dbObj.getVersion());
 				list.add(vo);
@@ -91,7 +91,7 @@ public class ProductOptionManagementService {
 				ProductOptionDbObject obj = new ProductOptionDbObject();
 				obj.setDeleteInd(vo.getDeleteInd());
 				obj.setDisplayInd(vo.getDisplayInd());
-				obj.setName(vo.getDisplayInd());
+				obj.setName(vo.getName());
 				obj.setProductOptionId(vo.getProductOptionId());
 				obj.setVersion(vo.getVersion());
 				objList.add(obj);

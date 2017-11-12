@@ -472,6 +472,7 @@ public class ProductService {
 			
 			//insert into productOption
 			for(ProductOptionDbObject productOption : newOptionDbObjectList){
+				productOption.setDisplayInd(GeneralUtils.YES_IND);
 				productOptionDbObjectMapper.insert(productOption);
 				ProductOptionVO optionVo = optionMap.get(productOption.getName());
 				//set id for newly created optionVo
@@ -494,7 +495,7 @@ public class ProductService {
 			List<ProductSubOptionDbObject> productSubOptionList = new ArrayList<ProductSubOptionDbObject>();
 			for(ProductOptionVO optionVo : productVo.getOptionList()){
 				if(optionVo.getSubOptionList() != null && optionVo.getSubOptionList().size() > 0){
-					productSubOptionList.addAll(productSubOptionManagementService.convertToProductSubOptionDbObjectList(optionVo.getSubOptionList()));
+					productSubOptionList.addAll(productSubOptionManagementService.convertToProductSubOptionDbObjectList(optionVo.getSubOptionList(),productVo.getProductId(), optionVo.getProductOptionId()));
 				}
 			}
 			//delete if empty productsuboption exsits
