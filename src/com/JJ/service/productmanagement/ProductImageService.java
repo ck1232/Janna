@@ -68,35 +68,32 @@ public class ProductImageService {
 	}
 	
 	public void saveProductImage(ProductVO productVo, Integer productId){
-		//delete all images
-		ProductImageDbObjectExample deleteExample = new ProductImageDbObjectExample();
-		deleteExample.createCriteria().andProductIdEqualTo(productId);
-		ProductImageDbObjectWithBLOBs obj = new ProductImageDbObjectWithBLOBs();
-		obj.setDeleteInd(GeneralUtils.DELETED);
-		productImageDbObjectMapper.updateByExampleSelective(obj, deleteExample);
-		//table image
-		LinkedList<FileMetaVO> images = productVo.getImages();
-		
-		for(FileMetaVO image : images){
-			List<ProductImageDbObjectWithBLOBs> productImages = convertToProductImage(productId,Arrays.asList(image));
-			ProductImageDbObjectWithBLOBs productImage = productImages.get(0);
-			productImage.setDeleteInd(GeneralUtils.NOT_DELETED);
-			if(productImage.getProductImageId() != null){
-				productImageDbObjectMapper.updateByPrimaryKeySelective(productImage);
-			}else{
-				//write to file
-				ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(image, productVo.getProductId(), GeneralUtils.TYPE_PRODUCT);
-				boolean uploadSuccess = imageService.uploadFileToDisk(imageVO);
-				productImage.setImageName(imageVO.getFileName());
-				if(uploadSuccess){
-					imageService.saveImageLink(imageVO);
-					productImageDbObjectMapper.insertSelective(productImage);
+		//delete selected images
+		List<FileMetaVO> fileMetaVOs = productVo.getRemoveImagesLink();
+		if(fileMetaVOs != null && !fileMetaVOs.isEmpty()){
+			for(FileMetaVO removeImage : fileMetaVOs){
+				ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(removeImage, productVo.getProductId(), GeneralUtils.TYPE_PRODUCT);
+				if(imageVO != null && imageVO.getImageLinkRsId() != null){
+					imageService.deleteImageLinkByImageLinkRsId(imageVO);
 				}
-				
 			}
 		}
+		
+		//table image
+		LinkedList<FileMetaVO> images = productVo.getImages();
+		for(FileMetaVO image : images){
+			ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(image, productVo.getProductId(), GeneralUtils.TYPE_PRODUCT);
+			if(imageVO.getImageLinkRsId() == null){
+				boolean uploadSuccess = imageService.uploadFileToDisk(imageVO);
+				if(!uploadSuccess){
+					continue;
+				}
+			}
+			imageService.saveImageLink(imageVO);
+		}
 	}
-	
+	@SuppressWarnings("unused")
+	@Deprecated
 	private List<ProductImageDbObjectWithBLOBs> convertToProductImage(Integer productId,List<FileMetaVO> images){
 		List<ProductImageDbObjectWithBLOBs> productImages = new ArrayList<ProductImageDbObjectWithBLOBs>();
 		if(images != null && images.size() > 0 && productId != null){
@@ -118,7 +115,7 @@ public class ProductImageService {
 		}
 		return productImages;
 	}
-	
+	@Deprecated
 	private byte[] getThumbnail(byte[] source,int w, int h){
 		try {
 			InputStream in = new ByteArrayInputStream(source);

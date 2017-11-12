@@ -93,7 +93,7 @@ public class ImageService {
 		if(imageVO == null){ 
 			return;
 		}
-		if(imageVO.getImageLinkId() != null){ //existing
+		if(imageVO.getImageLinkRsId() != null){ //existing
 			ImageLinkRsDbObject dbObj = convertToExistingImageLinkRsDbObject(imageVO);
 			imageLinkRsDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}else{ //new
@@ -113,6 +113,7 @@ public class ImageService {
 		imageVO.setSequence(fileVO.getSequence());
 		imageVO.setFileName(fileVO.getFileName());
 		imageVO.setBytes(fileVO.getBytes());
+		imageVO.setImageLinkRsId(fileVO.getImageId());
 		return imageVO;
 	}
 	
@@ -123,6 +124,7 @@ public class ImageService {
 				FileMetaVO metaVO = new FileMetaVO();
 				metaVO.setFileName(image.getFileName());
 				metaVO.setFileSize("100KB");
+				metaVO.setImageId(image.getImageLinkRsId());
 				fileMetaVOList.add(metaVO);
 			}
 		}
@@ -149,6 +151,35 @@ public class ImageService {
 		imageLinkRsDbObjectMapper.updateByExampleSelective(imageLinkRs, imageLinkExample);
 	}
 	
+	public void deleteImageLinkByImageLinkRsId(ImageLinkVO imageVO) {
+		if(imageVO == null || imageVO.getImageLinkRsId() == null) {
+			return;
+		}
+		
+		ImageLinkRsDbObjectExample imageLinkExample = new ImageLinkRsDbObjectExample();
+		imageLinkExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andRefTypeEqualTo(imageVO.getRefType())
+					.andRefIdEqualTo(imageVO.getRefId()).andImageLinkRsIdEqualTo(imageVO.getImageLinkRsId());
+		ImageLinkRsDbObject imageLinkRs = new ImageLinkRsDbObject();
+		
+		List<ImageLinkRsDbObject> imageLinkList = imageLinkRsDbObjectMapper.selectByExample(imageLinkExample);
+		
+		imageLinkRs.setDeleteInd(GeneralUtils.DELETED);
+		imageLinkRs.setSequence(0);
+		imageLinkRsDbObjectMapper.updateByExampleSelective(imageLinkRs, imageLinkExample);
+		
+		if(imageLinkList != null && !imageLinkList.isEmpty()){
+			for(ImageLinkRsDbObject image : imageLinkList){
+				if(image.getImageLinkId() == null){continue;}
+				FileLinkDbObjectExample fileLinkExample = new FileLinkDbObjectExample();
+				fileLinkExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andFileLinkIdEqualTo(image.getImageLinkId());
+				FileLinkDbObject dbObj = new FileLinkDbObject();
+				dbObj.setDeleteInd(GeneralUtils.DELETED);
+				fileLinkDbObjectMapper.updateByExampleSelective(dbObj, fileLinkExample);
+			}
+		}
+		
+	}
+	
 	
 	
 	private ImageLinkRsDbObject convertToNewImageLinkRsDbObject(ImageLinkVO imageVO) {
@@ -171,7 +202,7 @@ public class ImageService {
 
 	private ImageLinkRsDbObject convertToExistingImageLinkRsDbObject(ImageLinkVO imageVO) {
 		ImageLinkRsDbObject dbObj = new ImageLinkRsDbObject();
-		if(imageVO != null && imageVO.getImageLinkId() != null) {
+		if(imageVO != null && imageVO.getImageLinkRsId() != null) {
 			dbObj.setImageLinkRsId(imageVO.getImageLinkRsId());
 			dbObj.setSequence(imageVO.getSequence());
 		}
@@ -278,6 +309,7 @@ public class ImageService {
 		try {
 			int i = 1;
 			int s = StringUtils.ordinalIndexOf(img.getImagePath(), "/", 3);
+			img.setImagePath(img.getImagePath().replaceAll(" ", "_"));
 			String fileLoc = imageFolderSource.replace("/", "\\")+img.getImagePath().substring(s+1);
 			int periodIndex = fileLoc.lastIndexOf(".");
 			int slashIndex = fileLoc.lastIndexOf("\\");

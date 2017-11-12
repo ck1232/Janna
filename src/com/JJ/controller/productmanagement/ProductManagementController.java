@@ -211,6 +211,9 @@ public class ProductManagementController {
 			while(iterator.hasNext()){
 				FileMetaVO file = iterator.next();
 				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
+					if(file.getImageId() != null && file.getImageId() > 0){
+						newProduct.addRemoveImagesLink(file);
+					}
 					iterator.remove();
 					break;
 				}
@@ -437,6 +440,7 @@ public class ProductManagementController {
 		product = generateProductCode(product);
 		reshuffleImage(newProduct.getImages());
 		product.setImages(newProduct.getImages());
+		product.setRemoveImagesLink(newProduct.getRemoveImagesLink());
 		
 		//temp solution for option sequence
 		if(product.getOptionList() != null && product.getOptionList().size() > 0){

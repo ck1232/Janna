@@ -2,6 +2,7 @@ package com.JJ.controller.productmanagement.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class ProductVO extends Base implements Serializable {
     private LinkedList<FileMetaVO> images;
     
     private LinkedList<ImageLinkVO> imagesLink;
+    
+    private List<FileMetaVO> removeImagesLink;
     
     private List<String> tags;
     
@@ -150,6 +153,21 @@ public class ProductVO extends Base implements Serializable {
 
 	public void setImagesLink(LinkedList<ImageLinkVO> imagesLink) {
 		this.imagesLink = imagesLink;
+	}
+
+	public List<FileMetaVO> getRemoveImagesLink() {
+		return removeImagesLink;
+	}
+
+	public void setRemoveImagesLink(List<FileMetaVO> removeImagesLink) {
+		this.removeImagesLink = removeImagesLink;
+	}
+	
+	public void addRemoveImagesLink(FileMetaVO fileMetaVO){
+		if(removeImagesLink == null){
+			removeImagesLink = new ArrayList<FileMetaVO>();
+		}
+		removeImagesLink.add(fileMetaVO);
 	}
 
 	@Override
