@@ -14,8 +14,8 @@
                     <c:url var="post_url" value="/product/option/updateProductOptionToDb" />
                     <form:form id="updateProductOptionToDbForm" method="post" modelAttribute="productOptionForm" action="${post_url}">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <form:input path="deleteind" type="hidden" id="deleteind"/>
-                    <form:input path="productoptionid" type="hidden" id="productoptionid"/>
+                    <form:input path="deleteInd" type="hidden" id="deleteInd"/>
+                    <form:input path="productOptionId" type="hidden" id="productOptionId"/>
 		              <div class="box-body">
 		              		
 						  <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -30,8 +30,8 @@
 							<label class="col-sm-2 control-label">Display</label>
 							<div class="col-sm-10">
 								<div class="checkbox">
-							  		<label><form:checkbox path="displayind" id="displayind" /></label>
-							     	<form:errors path="displayind" class="text-danger" />
+							  		<label><form:checkbox path="displayInd" id="displayInd" value="Y"/></label>
+							     	<form:errors path="displayInd" class="text-danger" />
 								</div>
 							</div>
 						  </div>

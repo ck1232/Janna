@@ -139,6 +139,9 @@ public class ProductOptionManagementController {
 		if (result.hasErrors()) {
 			return "updateProductOption";
 		} else {
+			if(productOptionVO.getDisplayInd() == null){
+				productOptionVO.setDisplayInd(GeneralUtils.NOT_ALLOW_DISPLAY);
+			}
 			List<ProductOptionVO> optionList = productOptionManagementService.getAllProductoptions();
 			ProductOptionVO currentOption = productOptionManagementService.findById(productOptionVO.getProductOptionId());
 			for(ProductOptionVO o: optionList){
