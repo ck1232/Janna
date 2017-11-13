@@ -355,6 +355,7 @@ public class ProductManagementController {
 				newProduct.setOptionList(new ArrayList<ProductOptionVO>());
 			}
 			option.setDeleteInd(GeneralUtils.NOT_DELETED);
+			option.setDisplayInd(GeneralUtils.ALLOW_DISPLAY);
 			for(ProductOptionVO optionVo : newProduct.getOptionList()){
 				if(optionVo.getName().equalsIgnoreCase(option.getName())){
 					return new JsonResponseVO("fail", "Option Name already exists.");

@@ -47,7 +47,6 @@ public class ProductSubOptionManagementService {
 	public List<ProductSubOptionVO> getAllProductsuboptionsByProductId(Integer productid) {
 		ProductSubOptionDbObjectExample productsuboptionExample = new ProductSubOptionDbObjectExample();
 		productsuboptionExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
-												.andDisplayIndEqualTo(GeneralUtils.ALLOW_DISPLAY)
 												.andProductIdEqualTo(productid);
 		List<ProductSubOptionDbObject> productsuboptionList = productSubOptionDbObjectMapper.selectByExample(productsuboptionExample);
 		return convertToProductSubOptionVOList(productsuboptionList);
@@ -55,8 +54,6 @@ public class ProductSubOptionManagementService {
 	
 	public List<ProductSubOptionVO> getAllProductsuboptionsByProductIdList(List<Integer> productid) {
 		if(productid != null && productid.size() > 0){
-			
-		
 		ProductSubOptionDbObjectExample productsuboptionExample = new ProductSubOptionDbObjectExample();
 		productsuboptionExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED)
 												.andDisplayIndEqualTo(GeneralUtils.ALLOW_DISPLAY)
