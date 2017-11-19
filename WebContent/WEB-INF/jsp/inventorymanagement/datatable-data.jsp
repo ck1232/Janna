@@ -1,1 +1,1 @@
-"productid":${product.id}
+"productid":${product.productId}

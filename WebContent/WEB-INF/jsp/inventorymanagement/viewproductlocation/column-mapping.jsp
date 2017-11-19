@@ -6,9 +6,9 @@
     "data":           null,
     "defaultContent": ''
 },
-{"data": "suboption1name"},
-{"data": "suboption2name"},
-{"data": "suboption3name"},
+{"data": "suboption1Name"},
+{"data": "suboption2Name"},
+{"data": "suboption3Name"},
 {"data": "qty"},
 {
     "className":      '',

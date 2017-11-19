@@ -7,13 +7,13 @@
 <script>
 
      var productList = new Bloodhound({
-    	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('productname'),
+    	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('productName'),
     	  queryTokenizer: Bloodhound.tokenizers.whitespace,
     	  prefetch: '<c:url context="/JJ" value="/batchintake/getProductList" />'
     	}); 
 
      var locationList = new Bloodhound({
-      	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('locationname'),
+      	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
       	  queryTokenizer: Bloodhound.tokenizers.whitespace,
       	  prefetch: '<c:url context="/JJ" value="/batchintake/getLocationList" />'
       	}); 
@@ -37,56 +37,56 @@
 	    
     	$('#addProductNameDiv .typeahead').typeahead(null, {
     		 name: 'productList',
-    		  display: 'productname',
+    		  display: 'productName',
     		source: productList
 		});
 		
     	$('#addProductNameDiv .typeahead').on('typeahead:selected', function(evt, item) {
-        	$("#productId").val(item.productid);
+        	$("#productId").val(item.productId);
     		getList(item);
     	});
 
 
     	
 
-    	$('#addLocationFromDiv .typeahead').keyup(function(){
-    		$("#locationFromId").val("");
-		});
+    	//$('#addLocationFromDiv .typeahead').keyup(function(){
+    		//$("#locationFrom").val("");
+		//});
 
     	$('#addLocationFromDiv .typeahead').typeahead(null, {
    		 name: 'locationList',
-   		 display: 'locationname',
+   		 display: 'name',
    		source: locationList
 		});
 
     	$('#addLocationFromDiv .typeahead').on('typeahead:selected', function(evt, item) {
-        	$("#locationFromHidden").val(item.locationid);
+        	$("#locationFromHidden").val(item.locationId);
     	});
 
 
     	
 
-    	$('#addLocationToDiv .typeahead').keyup(function(){
-    		$("#locationToId").val("");
-		});
+    	//$('#addLocationToDiv .typeahead').keyup(function(){
+    		//$("#locationTo").val("");
+		//});
 
     	$('#addLocationToDiv .typeahead').typeahead(null, {
    		 name: 'locationList',
-   		 display: 'locationname',
+   		 display: 'name',
    		source: locationList
 		});
 
     	$('#addLocationToDiv .typeahead').on('typeahead:selected', function(evt, item) {
-        	$("#locationToHidden").val(item.locationid);
+        	$("#locationToHidden").val(item.locationId);
     	});
 
     	
 	 } );
 
     function getList(item) {
-		var id = item.productid;
+		var id = item.productId;
 		var data = {
-	  	        "productid" : id
+	  	        "productId" : id
 	    	}
 		$.ajax({
 	  		  type: "POST",
@@ -106,11 +106,11 @@
   	  			$('#optionDiv').empty();
   	  			$.each(productVo.optionList, function(index){
 					$("#optionDiv").append('<div class="row"><div class="form-group">'+
-							'<label class="col-sm-3 control-label">'+this.optionName+'</label>'+
-							'<select class="selectpicker col-sm-9" id='+this.optionName+' name ='+this.optionName+'></select></div></div>');
-					var name = this.optionName;
+							'<label class="col-sm-3 control-label">'+this.name+'</label>'+
+							'<select class="selectpicker col-sm-9" id='+this.name+' name ='+this.name+'></select></div></div>');
+					var name = this.name;
 					$.each(this.subOptionList, function(index){
-						$('#'+name).append('<option value=' + this.subOptionId + '>' + this.subOptionName + '</option>');
+						$('#'+name).append('<option value=' + this.productSuboptionId + '>' + this.name + '</option>');
 					});
 					$('#'+name).selectpicker('val', "");
   	  	  	  	});
@@ -141,8 +141,8 @@
     	var productName = $("#name").val();
     	var productId = $("#productId").val();
     	var productData = {
-    	    productid  : productId,
-    		productname : productName
+    	    productId  : productId,
+    		productName : productName
     	}
     	var qty = $("#quantity").val();
     	var unitprice = $("#unitPrice").val();
@@ -155,7 +155,7 @@
 				var subOptionId = $(this).val();
 				var subOptionData = {
 					optionName : optionName,
-					subOptionId : subOptionId
+					productSuboptionId : subOptionId
 				}
 				subOptionList.push(subOptionData);
 			});
@@ -203,8 +203,8 @@
     	var productName = $("#editName").val();
     	var productId = $("#editProductId").val();
     	var productData = {
-    	    productid  : productId,
-    		productname : productName
+    	    productId  : productId,
+    		productName : productName
     	}
     	var qty = $("#editQuantity").val();
     	var unitprice = $("#editUnitPrice").val();
@@ -217,7 +217,7 @@
 				var subOptionId = $(this).val();
 				var subOptionData = {
 					optionName : optionName,
-					subOptionId : subOptionId
+					productSuboptionId : productSuboptionId
 				}
 				subOptionList.push(subOptionData);
 			});
@@ -286,9 +286,9 @@
 										<label class="col-sm-2 control-label">Location From</label>
 											<div class="col-sm-10" id="addLocationFromDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
-						                  			  path="locationFrom" id="locationFrom" />
-						                  		<form:input path="locationFromId" id="locationFromHidden" type="hidden"/>
-						                  		<form:errors path="locationFrom" class="text-danger" />
+						                  			  path="transferFromName" id="locationFrom" />
+						                  		<form:input path="transferFrom" id="locationFromHidden" type="hidden"/>
+						                  		<form:errors path="transferFromName" class="text-danger" />
 						                	</div>
 						           </div>
 					       </div>
@@ -298,9 +298,9 @@
 										<label class="col-sm-2 control-label">Location To</label>
 											<div class="col-sm-10" id="addLocationToDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
-						                  			  path="locationTo" id="locationTo" />
-						                  		<form:input path="locationToId" id="locationToHidden" type="hidden"/>
-						                  		<form:errors path="locationTo" class="text-danger" />
+						                  			  path="transferToName" id="locationTo" />
+						                  		<form:input path="transferTo" id="locationToHidden" type="hidden"/>
+						                  		<form:errors path="transferToName" class="text-danger" />
 						                	</div>
 						           </div>
 					       </div>
