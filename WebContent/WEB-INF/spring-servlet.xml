@@ -5,13 +5,16 @@
    	xmlns:context="http://www.springframework.org/schema/context"  
     xmlns:mvc="http://www.springframework.org/schema/mvc"
     xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:jpa="http://www.springframework.org/schema/data/jpa" 
     xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"> 
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"> 
 	
-	<context:component-scan base-package="com.JJ" />
+	<context:component-scan base-package="com.JJ2" />
+	<jpa:repositories base-package="com.JJ2.dao2" />
 	<!-- tiles -->
 	
 	<bean id="viewResolver"  
@@ -56,7 +59,7 @@
 	 <property name="maxActive" value="100" />
 	</bean>
 	 
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!--  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	   <property name="dataSource" ref="dataSource" />
 	   <property name="typeAliasesPackage" value="com.JJ.model"/>
 	   <property name="mapperLocations" value="classpath:com/JJ/sql/*.xml" />
@@ -70,16 +73,16 @@
 	</bean>
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	   <property name="dataSource" ref="dataSource" />
-	</bean>
+	</bean>-->
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	<!-- common -->
 	<mvc:resources mapping="/development/**" location="/development/"/>
     <mvc:annotation-driven />
     
-	<mvc:interceptors>
+	<!--  <mvc:interceptors>
     	<bean class="com.JJ.controller.common.MenuInterceptor" />
-	</mvc:interceptors>
+	</mvc:interceptors>-->
     <bean id="messageSource"
       class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     	<property name="basename" value="/WEB-INF/classes/message" />
@@ -87,4 +90,19 @@
 	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
 	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+  <property name="entityManagerFactory" ref="entityManagerFactory" />
+ </bean>
+ 
+ <bean id="entityManagerFactory"
+  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+  <property name="dataSource" ref="dataSource" />
+  <property name="packagesToScan" value="com.JJ2.entities" />
+  <property name="jpaVendorAdapter">
+   <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+    <property name="generateDdl" value="true" />
+   </bean>
+  </property>
+ </bean>
 </beans>

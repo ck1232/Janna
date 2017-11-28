@@ -26,8 +26,8 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.batchid);
-          $(row).find('button[name="editBtn"]').prop('value', data.batchid);
+          $(row).find('input[type="checkbox"]').prop('value', data.batchId);
+          $(row).find('button[name="editBtn"]').prop('value', data.batchId);
        }
     });
 

@@ -20,13 +20,13 @@ public class BatchIntakeFormValidator implements Validator {
 		BatchStockIntakeVO batchIntakeVO = (BatchStockIntakeVO) target;
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "remarks", "error.notempty.batchintakeform.remarks");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "storagelocation", "error.notempty.batchintakeform.storagelocation");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "totalcost", "error.notempty.batchintakeform.totalcost");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "storageLocation", "error.notempty.batchintakeform.storagelocation");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "totalCost", "error.notempty.batchintakeform.totalcost");
 		
 		if(batchIntakeVO.getTotalCost() != null){
 			Float value = batchIntakeVO.getTotalCost().floatValue();
 			if(value < 0) {
-				errors.rejectValue("totalcost", "error.negative.batchintakeform.totalcost");
+				errors.rejectValue("totalCost", "error.negative.batchintakeform.totalcost");
 			}
 		}
 	}

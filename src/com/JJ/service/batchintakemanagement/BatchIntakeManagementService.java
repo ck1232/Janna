@@ -73,6 +73,7 @@ public class BatchIntakeManagementService {
 		if(batchStockIntakeVO != null){
 			BatchStockIntakeDbObject dbObj = convertToBatchStockIntakeDbObjectList(Arrays.asList(batchStockIntakeVO)).get(0);
 			batchStockIntakeDbObjectMapper.insert(dbObj);
+			batchStockIntakeVO.setBatchId(dbObj.getBatchId());
 		}
 	}
 	

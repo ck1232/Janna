@@ -1,5 +1,5 @@
-{"data": "product.productname"},
-{"data": "subOptionList[, ].subOptionName"},
+{"data": "product.productName"},
+{"data": "subOptionList[, ].name"},
 {"data": "unitcost"},
 {"data": "qty"},
 {
