@@ -71,25 +71,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-//	  http.csrf().ignoringAntMatchers("/invoice/saveExcelInvoice")
-//	  	.and()
-//	  	.authorizeRequests()
-//	  	.accessDecisionManager(accessDecisionManager())
-//	  	.antMatchers("/invoice/saveExcelInvoice").anonymous()
-//	  	.antMatchers("/").authenticated()
-//	  	.antMatchers("/dashboard").fullyAuthenticated()
-//		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
-//		.antMatchers("/query", "/q").hasAnyRole("ROLE_ADMIN","ADMIN")
-//		.antMatchers("/product/**", "/batchintake/**", "/inventory**/**", "/promotion/**").hasAnyRole("PRODUCT_MGR", "ADMIN")
-//		.antMatchers("/invoice/**", "/expense/**", "/salarybonus/**", "/employee/**", "/cheque/**").hasAnyRole("DATA_ENTRY_USER", "ADMIN")
-//		
-////		.antMatchers("/**").authenticated()
-////		.antMatchers("/**").denyAll()
-//		.and().formLogin().loginPage("/login").permitAll()
-//		.usernameParameter("username").passwordParameter("password")
-//		.and().exceptionHandling().accessDeniedPage("/Access_Denied")
-//		.and().logout().invalidateHttpSession(true).logoutUrl("/logout").deleteCookies("JSESSIONID").permitAll()
-//		.and().sessionManagement().maximumSessions(1).expiredUrl("/login").and().invalidSessionUrl("/login");
+	  http.csrf().ignoringAntMatchers("/invoice/saveExcelInvoice")
+	  	.and()
+	  	.authorizeRequests()
+	  	.accessDecisionManager(accessDecisionManager())
+	  	.antMatchers("/invoice/saveExcelInvoice").anonymous()
+	  	.antMatchers("/").authenticated()
+	  	.antMatchers("/dashboard").fullyAuthenticated()
+		.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN","ADMIN")
+		.antMatchers("/query", "/q").hasAnyRole("ROLE_ADMIN","ADMIN")
+		.antMatchers("/product/**", "/batchintake/**", "/inventory**/**", "/promotion/**").hasAnyRole("PRODUCT_MGR", "ADMIN")
+		.antMatchers("/invoice/**", "/expense/**", "/salarybonus/**", "/employee/**", "/cheque/**").hasAnyRole("DATA_ENTRY_USER", "ADMIN")
+		
+//		.antMatchers("/**").authenticated()
+//		.antMatchers("/**").denyAll()
+		.and().formLogin().loginPage("/login").permitAll()
+		.usernameParameter("username").passwordParameter("password")
+		.and().exceptionHandling().accessDeniedPage("/Access_Denied")
+		.and().logout().invalidateHttpSession(true).logoutUrl("/logout").deleteCookies("JSESSIONID").permitAll()
+		.and().sessionManagement().maximumSessions(1).expiredUrl("/login").and().invalidSessionUrl("/login");
 	}
 	
 	@Bean
