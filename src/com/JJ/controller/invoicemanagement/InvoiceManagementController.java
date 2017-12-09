@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -72,7 +73,7 @@ public class InvoiceManagementController {
 	private PaymentManagementService paymentManagementService;
 	private InvoiceSearchValidator invoiceSearchValidator;
 	private GrantFormValidator grantFormValidator;
-
+	private ServletContext context;
 	private static final String uploadPassword = "uploadExcelFile1232";
 	@Autowired
 	public InvoiceManagementController(PaymentManagementController paymentManagementController,
@@ -80,13 +81,15 @@ public class InvoiceManagementController {
 			InvoiceManagementService invoiceManagementService,
 			GrantManagementService grantManagementService,
 			PaymentManagementService paymentManagementService,
-			InvoiceSearchValidator invoiceSearchValidator) {
+			InvoiceSearchValidator invoiceSearchValidator,
+			ServletContext context) {
 		this.paymentManagementController = paymentManagementController;
 		this.paymentRSManagementService = paymentRSManagementService;
 		this.invoiceManagementService = invoiceManagementService;
 		this.grantManagementService = grantManagementService;
 		this.paymentManagementService = paymentManagementService;
 		this.invoiceSearchValidator = invoiceSearchValidator;
+		this.context = context;
 	}
 	
 	
@@ -439,9 +442,17 @@ public class InvoiceManagementController {
     		final RedirectAttributes redirectAttributes) {
 		if (!result.hasErrors()) {
 			List<InvoiceVO> invoiceList = invoiceManagementService.searchInvoice(searchCriteria);
+			
 			if(invoiceList != null && !invoiceList.isEmpty()){
+				logger.debug("invoice record:"+ invoiceList.size());
 				String statementPeriod = getStatementPeriod(searchCriteria);
 				downloadExcel(invoiceList, statementPeriod, request, response);
+				try {
+					response.flushBuffer();
+				} catch (IOException e) {
+					e.printStackTrace();
+					logger.error("error", e);
+				}
 				return null;
 			}
 			else{
@@ -492,8 +503,13 @@ public class InvoiceManagementController {
 	
 	public void downloadExcel(List<InvoiceVO> invoiceList, String statementPeriod, 
 			HttpServletRequest request, HttpServletResponse response) {
-		String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/template/");
+		String dataDirectory = context.getRealPath("/WEB-INF/template/");
+		if(dataDirectory == null){
+			dataDirectory = "C:/Inetpub/vhosts/ziumlight.com/template";
+		}
         File file = new File(dataDirectory+"/invoice_summary_template.xls");
+        logger.debug(file.getPath());
+        
         HSSFWorkbook wb = invoiceManagementService.writeToFile(file, invoiceList, statementPeriod);
         if(wb != null){
         	response.setContentType("application/vnd.ms-excel");
@@ -503,6 +519,7 @@ public class InvoiceManagementController {
                 response.getOutputStream().flush();
             } 
             catch (IOException ex) {
+            	logger.error(ex);
                 ex.printStackTrace();
             }
         }

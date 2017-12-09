@@ -250,8 +250,6 @@ public class CommonController {
 	
 	@RequestMapping(value={"/downloadLogs"}, method = RequestMethod.POST)
 	public String downloadLogsPage (HttpServletResponse response, @RequestParam(value="download", required=true) int hashCode) throws Exception{
-//		String url = System.getProperty("wtp.deploy");
-//		File folder = new File(url + "//logs");
 		File folder = new File(logUrl);
 		List<File> fileList = Arrays.asList(folder.listFiles());
 		List<FileVO> filesList = convertToFileVO(fileList);
@@ -259,7 +257,7 @@ public class CommonController {
 			for(FileVO vo :filesList){
 				if(vo.hashCode()==hashCode){
 					response.setContentType("application/octet-stream");
-		         	response.addHeader("Content-Disposition", "attachment; filename="+vo.getFileName());
+		         	response.addHeader("Content-Disposition", "attachment; filename="+vo.getFileName()+".logs");
 		         	File file = vo.getFile();
 		         	FileInputStream fileIn = new FileInputStream(file);
 		            ServletOutputStream out = response.getOutputStream();

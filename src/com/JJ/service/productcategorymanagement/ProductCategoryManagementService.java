@@ -141,11 +141,11 @@ public class ProductCategoryManagementService {
 				vo.setCategoryName(dbObj.getCategoryName());
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
-				vo.setDisplayIndString(dbObj.getDisplayInd().equals("1") ? "Y" : "N");
-				vo.setDisplayIndBoolean(dbObj.getDisplayInd().equals("1")? Boolean.TRUE : Boolean.FALSE);
+				vo.setDisplayIndString(dbObj.getDisplayInd());
+				vo.setDisplayIndBoolean(GeneralUtils.ALLOW_DISPLAY.equals(dbObj.getDisplayInd())? Boolean.TRUE : Boolean.FALSE);
 				vo.setIsParent(dbObj.getIsParent());
-				vo.setIsParentString(dbObj.getIsParent().equals("1") ? "Y" : "N");
-				vo.setIsParentBoolean(dbObj.getIsParent().equals("1") ? Boolean.TRUE : Boolean.FALSE);
+				vo.setIsParentString(dbObj.getIsParent());
+				vo.setIsParentBoolean(GeneralUtils.YES_IND.equals(dbObj.getIsParent()) ? Boolean.TRUE : Boolean.FALSE);
 				vo.setVersion(dbObj.getVersion());
 				productCategoryVOList.add(vo);
 			}

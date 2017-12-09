@@ -163,18 +163,15 @@ public class ExcelFileHelper {
 			Cell cell = null;
 			cell = sheet.getRow(5).getCell(2);
 			cell.setCellValue("Company name");;
-			
 			/* Writing Messenger */
 			int[] messengerIndex = findIndex(sheet, "Messrs");
             int messengerContent = getLastCell(sheet, messengerIndex);
             cell = sheet.getRow(messengerIndex[0]).getCell(messengerContent+1);
             cell.setCellValue(invoiceList.get(0).getMessenger());
-            
             /* Writing Statement of Account As Of */
             int[] statementDateIndex = findIndexWithPattern(sheet, "Statement of Account as of");
             cell = sheet.getRow(statementDateIndex[0]).getCell(statementDateIndex[1]);
             cell.setCellValue("Statement of Account as " + statementPeriod);
-            
             /* Writing content */
             int[] dateHeaderIndex = findIndex(sheet, "Date");
             int[] invoiceNoHeaderIndex = findIndex(sheet, "Invoice");
@@ -185,6 +182,10 @@ public class ExcelFileHelper {
             int row = dateHeaderIndex[0] + 1;
             Double totalAmount = 0.0;
             for(InvoiceVO invoice : invoiceList) {
+            	logger.debug("row:"+row);
+            	if(row >= 49){
+            		break;
+            	}
             	cell = sheet.getRow(row).getCell(dateHeaderIndex[1]);
             	cell.setCellValue(formatter.format(invoice.getInvoiceDate()));
             	
@@ -205,14 +206,13 @@ public class ExcelFileHelper {
             	totalAmount += invoice.getTotalAmt().doubleValue();
             	row++;
             }
-            
             /* Writing Invoice Total Price */
             int[] totalPriceIndex = findIndex(sheet, "TOTAL");
             cell = sheet.getRow(totalPriceIndex[0]).getCell(totalPriceIndex[1]+1);
             cell.setCellValue(totalAmount);
-            
 			return workbook;
 		} catch (Exception e) {
+			logger.error("error",e);
 			e.printStackTrace();
 		}
 		return null;
