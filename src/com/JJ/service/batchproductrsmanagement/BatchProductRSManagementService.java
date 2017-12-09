@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.controller.batchintakemanagement.BatchIntakeManagementController;
 import com.JJ.controller.batchintakemanagement.vo.BatchIntakeProductVO;
 import com.JJ.controller.batchintakemanagement.vo.BatchProductRsVO;
 import com.JJ.controller.batchintakemanagement.vo.ProductSubOptionRsVO;
@@ -27,7 +29,7 @@ import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementServi
 @Scope("prototype")
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class BatchProductRSManagementService {
-	
+	private static final Logger logger = Logger.getLogger(BatchProductRSManagementService.class);
 	private BatchProductRsDbObjectMapper batchProductRsDbObjectMapper;
 	private ProductService productService;
 	private ProductSubOptionRsService productSubOptionRsService;
@@ -42,10 +44,12 @@ public class BatchProductRSManagementService {
 		this.productSubOptionManagementService = productSubOptionManagementService;
 	}
 	
+	
 	public BatchProductRsVO findById(Integer id) {
 		if(id != null){
 			BatchProductRsDbObject dbObj = batchProductRsDbObjectMapper.selectByPrimaryKey(id);
-			return convertToBatchProductRsVOList(Arrays.asList(dbObj)).get(0);
+			List<BatchProductRsVO> voList = convertToBatchProductRsVOList(Arrays.asList(dbObj));
+			if(!voList.isEmpty()) return voList.get(0);
 		}
 		return new BatchProductRsVO();
 	}
@@ -184,38 +188,44 @@ public class BatchProductRSManagementService {
 	public List<BatchIntakeProductVO> getAllBatchProductVoByBatchId(Integer batchId) {
 		List<BatchProductRsVO> rsList = getBatchproductByBatchId(batchId);
 		List<BatchIntakeProductVO> productVoList = new ArrayList<BatchIntakeProductVO>();
+		Boolean hasError = false;
 		if(rsList.size() != 0){
 			for(BatchProductRsVO rs: rsList){
 				BatchIntakeProductVO batchProduct = new BatchIntakeProductVO();
 				ProductSubOptionRsVO productoptionrs = productSubOptionRsService.getProductSubOptionRsById(rs.getProductSubOptionId());
-				ProductVO product = productService.getProductsById(productoptionrs.getProductId());
-				batchProduct.setProduct(product);
-				batchProduct.setQty(rs.getQty());
-				batchProduct.setUnitcost(rs.getUnitCost());
-				batchProduct.setBatchProductId(rs.getBatchProductRsId());
-				batchProduct.setSubOptionList(new ArrayList<ProductSubOptionVO>());
-				if(productoptionrs.getSuboption1Id() != null && productoptionrs.getSuboption1Id() > 0){
-					ProductSubOptionVO subOption1 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption1Id());
-					if(subOption1 != null){
-						batchProduct.getSubOptionList().add(subOption1);
+				if(productoptionrs != null){
+					ProductVO product = productService.getProductsById(productoptionrs.getProductId());
+					batchProduct.setProduct(product);
+					batchProduct.setQty(rs.getQty());
+					batchProduct.setUnitcost(rs.getUnitCost());
+					batchProduct.setBatchProductId(rs.getBatchProductRsId());
+					batchProduct.setSubOptionList(new ArrayList<ProductSubOptionVO>());
+					if(productoptionrs.getSuboption1Id() != null && productoptionrs.getSuboption1Id() > 0){
+						ProductSubOptionVO subOption1 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption1Id());
+						if(subOption1 != null){
+							batchProduct.getSubOptionList().add(subOption1);
+						}
 					}
-				}
-				if(productoptionrs.getSuboption2Id() != null && productoptionrs.getSuboption2Id() > 0){
-					ProductSubOptionVO subOption2 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption2Id());
-					if(subOption2 != null){
-						batchProduct.getSubOptionList().add(subOption2);
+					if(productoptionrs.getSuboption2Id() != null && productoptionrs.getSuboption2Id() > 0){
+						ProductSubOptionVO subOption2 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption2Id());
+						if(subOption2 != null){
+							batchProduct.getSubOptionList().add(subOption2);
+						}
 					}
-				}
-				if(productoptionrs.getSuboption3Id() != null && productoptionrs.getSuboption3Id() > 0){
-					ProductSubOptionVO subOption3 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption3Id());
-					if(subOption3 != null){
-						batchProduct.getSubOptionList().add(subOption3);
+					if(productoptionrs.getSuboption3Id() != null && productoptionrs.getSuboption3Id() > 0){
+						ProductSubOptionVO subOption3 = productSubOptionManagementService.getSubOptionVo(productoptionrs.getSuboption3Id());
+						if(subOption3 != null){
+							batchProduct.getSubOptionList().add(subOption3);
+						}
 					}
+					productVoList.add(batchProduct);
+				}else{
+					logger.info("Error loading product " + rs.getProductSubOptionId());
+					hasError = true;
 				}
-				productVoList.add(batchProduct);
 			}
 		}
-		return productVoList;
+		return hasError?null:productVoList;
 	}
 	
 }

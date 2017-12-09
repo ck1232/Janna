@@ -23,18 +23,18 @@
 	  		}).done(function(batchIntakePdt) {
 				//ensure that a valid batchIntakeProduct is return
 		  		if(batchIntakePdt.product.productname != ""){
-			  		$('#editName').val(batchIntakePdt.product.productname);
+			  		$('#editName').val(batchIntakePdt.product.productName);
 			  		$('#editUnitPrice').val(batchIntakePdt.unitcost);
 			  		$('#editQuantity').val(batchIntakePdt.qty);
 			  		$('#hashCodeId').val(hashCode);
 		  			$('#editOptionDiv').empty();
 	  	  			 $.each(batchIntakePdt.subOptionList, function(){
-		  	  			console.log(this.optionName + ":" + this.subOptionId);
+		  	  			console.log(this.optionName + ":" + this.productSuboptionId);
 		  	  				$("#editOptionDiv").append('<div class="row"><div class="form-group">'+
 							'<label class="col-sm-3 control-label">'+this.optionName+'</label>'+
 							'<div class="col-sm-9">'+
-								'<input class="form-control col-sm-12" type="text" disabled value="'+this.subOptionName+'"/>'+
-								'<input type="hidden" value="'+this.subOptionId+'">'+
+								'<input class="form-control col-sm-12" type="text" disabled value="'+this.name+'"/>'+
+								'<input type="hidden" value="'+this.productSuboptionId+'">'+
 							'</div></div></div>');
 		  	  			/* $('#'+this.optionName).selectpicker('val', this.subOptionId);
 		  	  			$('#'+this.optionName).selectpicker('refresh'); */

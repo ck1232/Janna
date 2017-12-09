@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -110,16 +112,18 @@ public class InventoryManagementController {
 	}
 	
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.GET)
-	public String createInventoryProduct(Model model) {
+	public String createInventoryProduct(HttpSession session, Model model) {
 		logger.debug("loading createInventoryProduct");
     	inventoryVO = new ProductInventoryVO();
     	inventoryVO.setDate(new Date());
     	model.addAttribute("inventoryProductForm", inventoryVO);
+    	session.setAttribute("inventory", inventoryVO);
         return "createInventoryProduct"; 
 	}
 	
 	@RequestMapping(value = "/getAddInventoryProductList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String getBatchProductList() {
+	public @ResponseBody String getBatchProductList(HttpSession session) {
+		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
 		if(inventoryVO.getProductItems() != null){
 			for(BatchIntakeProductVO batchIntakeProduct : inventoryVO.getProductItems() ){
 				batchIntakeProduct.setHashCode(batchIntakeProduct.hashCode());
@@ -144,7 +148,7 @@ public class InventoryManagementController {
 	}
 	
 	@RequestMapping(value = "/saveAddProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO saveAddProduct(@RequestBody BatchIntakeProductVO product) {
+	public @ResponseBody JsonResponseVO saveAddProduct(@RequestBody BatchIntakeProductVO product, HttpSession session) {
 		logger.debug("save add product");
 		boolean pass = true;
 		if(StringUtils.isNullOrEmpty(product.getProduct().getProductName()) ||
@@ -165,6 +169,7 @@ public class InventoryManagementController {
 			return new JsonResponseVO("error", "Please fill in all the details!");
 		}
 		
+		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
 		if(inventoryVO.getProductItems() == null) { 
 			inventoryVO.setProductItems(new ArrayList<BatchIntakeProductVO>());
 		}
@@ -199,12 +204,14 @@ public class InventoryManagementController {
 			}
 		}
 		inventoryVO.getProductItems().add(product);
+		session.setAttribute("inventory", inventoryVO);
 		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value = "/deleteInventoryProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO deleteBatchIntakeProduct(@RequestBody BatchIntakeProductVO product) {
+	public @ResponseBody JsonResponseVO deleteBatchIntakeProduct(@RequestBody BatchIntakeProductVO product, HttpSession session) {
 		logger.debug("delete inventory product");
+		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
 		if(inventoryVO.getProductItems() != null) {
 			Iterator<BatchIntakeProductVO> iterator = inventoryVO.getProductItems().iterator();
 			while(iterator.hasNext()){
@@ -215,11 +222,13 @@ public class InventoryManagementController {
 				}
 			}
 		}
+		session.setAttribute("inventory", inventoryVO);
 		return new JsonResponseVO("success");
 	}
 	
 	@RequestMapping(value="/editBatchIntakeProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody BatchIntakeProductVO editBatchIntakeProduct(@RequestBody BatchIntakeProductVO product) {
+	public @ResponseBody BatchIntakeProductVO editBatchIntakeProduct(@RequestBody BatchIntakeProductVO product, HttpSession session) {
+		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
 		if(inventoryVO.getProductItems() != null && inventoryVO.getProductItems().size() > 0){
 			for(BatchIntakeProductVO batchIntakeProduct : inventoryVO.getProductItems()){
 				if(batchIntakeProduct.getHashCode() == product.getHashCode()){
@@ -231,8 +240,9 @@ public class InventoryManagementController {
 	}
 	
 	@RequestMapping(value = "/saveEditProduct", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO saveEditProduct(@RequestBody BatchIntakeProductVO product) {
+	public @ResponseBody JsonResponseVO saveEditProduct(@RequestBody BatchIntakeProductVO product, HttpSession session) {
 		logger.debug("save edit product");
+		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
 		if(inventoryVO.getProductItems() != null) {
 			for(BatchIntakeProductVO batchproduct: inventoryVO.getProductItems()){
 				if((batchproduct.getHashCode()) == product.getHashCode()) {
@@ -242,12 +252,14 @@ public class InventoryManagementController {
 				}
 			}
 		}
+		session.setAttribute("inventory", inventoryVO);
 		return new JsonResponseVO("success");
 	}
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
 	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") ProductInventoryVO inventoryVO, 
-			final RedirectAttributes redirectAttributes) {
-		inventoryVO.setProductItems(this.inventoryVO.getProductItems());
+			final RedirectAttributes redirectAttributes, HttpSession session) {
+		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
+		//inventoryVO.setProductItems(this.inventoryVO.getProductItems());
 		try{
 			List<StorageLocationVO> locationList = inventoryProductManagementService.getAllStorageLocation();
 			Map<String, StorageLocationVO> locationMap = new HashMap<String, StorageLocationVO>();

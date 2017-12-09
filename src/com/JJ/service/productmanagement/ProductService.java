@@ -743,10 +743,11 @@ public class ProductService {
 			return new ArrayList<Integer>();
 		}
 		List<Integer> distinctSuboptionIdList = new ArrayList<Integer>();
-		distinctSuboptionIdList.addAll(duplicateSet);
+		distinctSuboptionIdList.addAll(duplicateSet); //remove duplicates from pass in list
 		ProductSubOptionDbObjectExample selectExample = new ProductSubOptionDbObjectExample();
 		selectExample.createCriteria().andProductIdEqualTo(productId).andProductSuboptionIdIn(distinctSuboptionIdList);
 		List<ProductSubOptionDbObject> productSuboption = productSubOptionDbObjectMapper.selectByExample(selectExample);
+		//if all id found in db
 		if(productSuboption != null && productSuboption.size() == distinctSuboptionIdList.size()){
 			List<Integer> optionIdList = new ArrayList<Integer>();
 			for(ProductSubOptionDbObject suboption:productSuboption){

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-{"data": "productname"},
+{"data": "productName"},
 {"data": "qty"},
 {
     "className":      '',

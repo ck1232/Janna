@@ -34,7 +34,9 @@ public class ProductSubOptionRsService {
 	
 	public ProductSubOptionRsVO getProductSubOptionRsById(Integer productsuboptionid) {
 		ProductSubOptionRsDbObject dbObj = productSubOptionRsDbObjectMapper.selectByPrimaryKey(productsuboptionid);
-		return convertToProductSubOptionRsVO(Arrays.asList(dbObj)).get(0);
+		if(dbObj != null)
+			return convertToProductSubOptionRsVO(Arrays.asList(dbObj)).get(0);
+		return null;
 	}
 	
 	public ProductSubOptionRsVO getProductSubOptionVo(Integer productSubOptionId){

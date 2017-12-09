@@ -97,7 +97,7 @@
 										<label class="col-sm-2 control-label">Supplier</label>
 										<div class="col-sm-5" id="addSupplierDiv">
 											<form:input path="supplier" type="text" class="form-control typeahead"
-						                                id="supplier" placeholder="Enter supplier" />
+						                                id="supplierId" placeholder="Enter supplier" />
 											<form:errors path="supplier" class="text-danger" />
 										</div>
 								  	</div>

@@ -31,7 +31,7 @@
 							<c:forEach items="${product.optionList}" var="option">
 								<div class="row">
 							  		<div class="form-group">
-									    <div class="col-sm-2">${option.optionName}</div>
+									    <div class="col-sm-2">${option.name}</div>
 									    <div class="col-sm-10">${option.subOptionListComma}</div>
 									</div>
 								</div>
@@ -45,7 +45,7 @@
 							<div class="row">
 						  		<div class="form-group">
 								    <div class="col-sm-2">Unit Price</div>
-								    <div class="col-sm-10">${product.unitPrice}</div>
+								    <div class="col-sm-10">${product.unitAmt}</div>
 								</div>
 							</div>
 						</div>

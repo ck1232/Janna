@@ -44,9 +44,9 @@
     		getList(item);
     	});
 
-    	$('#addLocationNameDiv .typeahead').keyup(function(){
-    		$("#storagelocation").val("");
-		});
+    	//$('#addLocationNameDiv .typeahead').keyup(function(){
+    	//	$("#storagelocation").val("");
+		//});
 
     	$('#addLocationNameDiv .typeahead').typeahead(null, {
    		 name: 'locationList',
@@ -82,11 +82,11 @@
   	  			$('#optionDiv').empty();
   	  			$.each(productVo.optionList, function(index){
 					$("#optionDiv").append('<div class="row"><div class="form-group">'+
-							'<label class="col-sm-3 control-label">'+this.optionName+'</label>'+
-							'<select class="selectpicker col-sm-9" id='+this.optionName+' name ='+this.optionName+'></select></div></div>');
-					var name = this.optionName;
+							'<label class="col-sm-3 control-label">'+this.name+'</label>'+
+							'<select class="selectpicker col-sm-9" id='+this.name+' name ='+this.name+'></select></div></div>');
+					var name = this.name;
 					$.each(this.subOptionList, function(index){
-						$('#'+name).append('<option value=' + this.subOptionId + '>' + this.subOptionName + '</option>');
+						$('#'+name).append('<option value=' + this.productSuboptionId + '>' + this.name + '</option>');
 					});
 					$('#'+name).selectpicker('val', "");
   	  	  	  	});
@@ -115,8 +115,8 @@
     	var productName = $("#name").val();
     	var productId = $("#productId").val();
     	var productData = {
-    	    productid  : productId,
-    		productname : productName
+    	    productId  : productId,
+    		productName : productName
     	}
     	var qty = $("#quantity").val();
     	var unitprice = $("#unitPrice").val();
@@ -129,7 +129,7 @@
 				var subOptionId = $(this).val();
 				var subOptionData = {
 					optionName : optionName,
-					subOptionId : subOptionId
+					productSuboptionId : subOptionId
 				}
 				subOptionList.push(subOptionData);
 			});
@@ -176,8 +176,8 @@
     	var productName = $("#editName").val();
     	var productId = $("#editProductId").val();
     	var productData = {
-    	    productid  : productId,
-    		productname : productName
+    	    productId  : productId,
+    		productName : productName
     	}
     	var qty = $("#editQuantity").val();
     	var unitprice = $("#editUnitPrice").val();
@@ -190,7 +190,7 @@
 				var subOptionId = $(this).val();
 				var subOptionData = {
 					optionName : optionName,
-					subOptionId : subOptionId
+					productSuboptionId : subOptionId
 				}
 				subOptionList.push(subOptionData);
 			});
@@ -238,7 +238,7 @@
                     	<h3 class="box-title">Batch Information</h3>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <form:input path="batchid" type="hidden" class="form-control" id="batchid" />
+                    <form:input path="batchId" type="hidden" class="form-control" id="batchid" />
 			              <div class="box-body">
 				              	<div class="row">
 								  	<div class="form-group ${status.error ? 'has-error' : ''}">
@@ -266,8 +266,8 @@
 											<div class="col-sm-10" id="addLocationNameDiv">
 						                  		<form:input type="text" class="form-control typeahead" 
 						                  			  path="storageLocationName" id="storagelocationname" />
-						                  		<form:input path="storagelocation" id="storagelocation" type="hidden"/>
-						                  		<form:errors path="storagelocation" class="text-danger" />
+						                  		<form:input path="storageLocation" id="storagelocation" type="hidden"/>
+						                  		<form:errors path="storageLocation" class="text-danger" />
 						                	</div>
 						              </div>
 					            </div>

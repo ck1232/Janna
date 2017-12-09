@@ -27,9 +27,9 @@ $(function () {
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           var rowId = data[0];
-          $(row).find('input[type="checkbox"]').prop('value', data.productid);
-          $(row).find('button[name="editBtn"]').prop('value', data.productid);
-          $(row).find('button[name="viewBtn"]').prop('value', data.productid);
+          $(row).find('input[type="checkbox"]').prop('value', data.productId);
+          $(row).find('button[name="editBtn"]').prop('value', data.productId);
+          $(row).find('button[name="viewBtn"]').prop('value', data.productId);
        }
     });
 
@@ -55,9 +55,9 @@ $(function () {
 
 function format ( data ) {
     // `d` is the original data object for the row
-    var s1 = data.suboption1id == null ? "0": data.suboption1id.toString();
-    var s2 = data.suboption2id == null ? "0": data.suboption2id.toString();
-    var s3 = data.suboption3id == null ? "0": data.suboption3id.toString();
+    var s1 = data.suboption1Id == null ? "0": data.suboption1Id.toString();
+    var s2 = data.suboption2Id == null ? "0": data.suboption2Id.toString();
+    var s3 = data.suboption3Id == null ? "0": data.suboption3Id.toString();
     
     selectSubOptionIds =  s1 +"_"+ s2 +"_"+ s3;
     console.log(selectSubOptionIds);

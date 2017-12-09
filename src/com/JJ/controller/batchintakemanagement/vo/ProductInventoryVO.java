@@ -62,7 +62,7 @@ public class ProductInventoryVO extends Base implements Serializable {
 
 	public ProductInventoryVO(Integer productSuboptionRsId,
 			Integer transferFrom, Integer transferTo, Boolean plusOrMinus,
-			Integer qty, String remarks) {
+			Integer qty, String remarks, Date date) {
 		super();
 		this.productSuboptionRsId = productSuboptionRsId;
 		this.transferFrom = transferFrom;
@@ -70,6 +70,7 @@ public class ProductInventoryVO extends Base implements Serializable {
 		this.plusOrMinus = plusOrMinus;
 		this.qty = qty;
 		this.remarks = remarks;
+		this.date = date;
 	}
 
     public ProductInventoryVO(Integer productSuboptionRsId,
@@ -84,6 +85,21 @@ public class ProductInventoryVO extends Base implements Serializable {
 		this.remarks = remarks;
 		this.mode = mode;
 		this.referenceId = referenceId;
+	}
+    
+    public ProductInventoryVO(Integer productSuboptionRsId,
+			Integer transferFrom, Integer transferTo, Boolean plusOrMinus,
+			Integer qty, String remarks, String mode, Integer referenceId, Date date) {
+		super();
+		this.productSuboptionRsId = productSuboptionRsId;
+		this.transferFrom = transferFrom;
+		this.transferTo = transferTo;
+		this.plusOrMinus = plusOrMinus;
+		this.qty = qty;
+		this.remarks = remarks;
+		this.mode = mode;
+		this.referenceId = referenceId;
+		this.date = date;
 	}
 
 
