@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -155,14 +158,39 @@ public class ExcelFileHelper {
         return cell[1];
 	}
 	
+	private HSSFCellStyle createTextStyle(HSSFWorkbook workbook){
+		HSSFCellStyle style = workbook.createCellStyle();
+		HSSFFont font = workbook.createFont();
+		font.setFontHeightInPoints((short) 12);
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setFontName("Arial");
+		style.setFont(font);
+		return style;
+	}
+	
+	private HSSFCellStyle createTextStyleMoney(HSSFWorkbook workbook){
+		HSSFCellStyle style = workbook.createCellStyle();
+		HSSFFont font = workbook.createFont();
+		font.setFontHeightInPoints((short) 12);
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setFontName("Arial");
+		style.setFont(font);
+		HSSFDataFormat format = workbook.createDataFormat();
+		style.setDataFormat(format.getFormat("0.00"));
+		return style;
+	}
+	
 	public HSSFWorkbook writeToFile(File inputfile, List<InvoiceVO> invoiceList, String statementPeriod){
 		try {
 			FileInputStream file = new FileInputStream(inputfile);
 			HSSFWorkbook workbook = new HSSFWorkbook(file);
+			HSSFCellStyle cellStyle = createTextStyle(workbook);
+			HSSFCellStyle cellStyleMoney = createTextStyleMoney(workbook);
+			workbook.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK);
 			HSSFSheet sheet = workbook.getSheet("Sheet1");
 			Cell cell = null;
 			cell = sheet.getRow(5).getCell(2);
-			cell.setCellValue("Company name");;
+			cell.setCellValue("Company name");
 			/* Writing Messenger */
 			int[] messengerIndex = findIndex(sheet, "Messrs");
             int messengerContent = getLastCell(sheet, messengerIndex);
@@ -182,19 +210,21 @@ public class ExcelFileHelper {
             int row = dateHeaderIndex[0] + 1;
             Double totalAmount = 0.0;
             for(InvoiceVO invoice : invoiceList) {
-            	logger.debug("row:"+row);
-            	if(row >= 49){
-            		break;
+//            	logger.debug("row:"+row);
+            	if(sheet.getRow(row) == null){
+            		sheet.createRow(row);
             	}
             	cell = sheet.getRow(row).getCell(dateHeaderIndex[1]);
+            	cell.setCellStyle(cellStyle);
             	cell.setCellValue(formatter.format(invoice.getInvoiceDate()));
             	
             	cell = sheet.getRow(row).getCell(invoiceNoHeaderIndex[1]);
             	cell.setCellValue(invoice.getInvoiceId());
+            	cell.setCellStyle(cellStyle);
             	
             	cell = sheet.getRow(row).getCell(statusHeaderIndex[1]);
             	cell.setCellValue(invoice.getStatus());
-            	
+            	cell.setCellStyle(cellStyle);
             	/*if(invoice.getChequeid() != null) {
             		cell = sheet.getRow(row).getCell(chequeNoHeaderIndex[1]);
             		cell.setCellValue(invoice.getChequeid());
@@ -202,14 +232,22 @@ public class ExcelFileHelper {
             	
             	cell = sheet.getRow(row).getCell(amountHeaderIndex[1]);
             	cell.setCellValue(invoice.getTotalAmt().doubleValue());
-            	
+            	cell.setCellStyle(cellStyleMoney);
             	totalAmount += invoice.getTotalAmt().doubleValue();
             	row++;
             }
             /* Writing Invoice Total Price */
-            int[] totalPriceIndex = findIndex(sheet, "TOTAL");
-            cell = sheet.getRow(totalPriceIndex[0]).getCell(totalPriceIndex[1]+1);
+//            int[] totalPriceIndex = findIndex(sheet, "TOTAL");
+            if(sheet.getRow(row) == null){
+            	sheet.createRow(row);
+            }
+            cell = sheet.getRow(row).getCell(9);
+            cell.setCellValue("TOTAL");
+            cell.setCellStyle(cellStyle);
+            
+            cell = sheet.getRow(row++).getCell(10);
             cell.setCellValue(totalAmount);
+            cell.setCellStyle(cellStyleMoney);
 			return workbook;
 		} catch (Exception e) {
 			logger.error("error",e);
