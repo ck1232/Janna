@@ -225,6 +225,9 @@ public class SalaryBonusManagementService {
 			grossamount = grossamount.add(salary.getAllowance());
 		if(salary.getMedical() != null)
 			grossamount = grossamount.add(salary.getMedical());
+		if(salary.getUnpaidLeaveAmt() != null){
+			grossamount = grossamount.subtract(salary.getUnpaidLeaveAmt());
+		}
 		return grossamount;
 	}
 	
