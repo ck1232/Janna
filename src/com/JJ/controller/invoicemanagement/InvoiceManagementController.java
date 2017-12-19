@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -536,6 +537,13 @@ public class InvoiceManagementController {
 		}
 		try{
 			Date invoiceDate = GeneralUtils.convertStringToDate(invoiceDateString, "dd/MM/yyyy");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(invoiceDate);
+			int year = cal.get(Calendar.YEAR);
+			if(year < 2000){
+				cal.add(Calendar.YEAR, 2000);
+			}
+			invoiceDate = cal.getTime();
 			InvoiceVO invoiceVO = new InvoiceVO();
 			invoiceVO.setInvoiceId(invoiceId);
 			invoiceVO.setDeleteInd(GeneralUtils.NOT_DELETED);
