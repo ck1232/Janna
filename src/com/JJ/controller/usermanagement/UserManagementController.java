@@ -100,7 +100,7 @@ public class UserManagementController {
 			return "redirect:listUser";
 		}
 		for (String id : ids) {
-			userManagementService.deleteUser(new Integer(id));
+			userManagementService.deleteUser(Long.parseLong(id));
 			logger.debug("deleted "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
@@ -111,7 +111,7 @@ public class UserManagementController {
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	public String getUserToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		UserVO userVO = userManagementService.findById(new Integer(id));
+		UserVO userVO = userManagementService.findById(Long.parseLong(id));
 		logger.debug("Loading update user page for " + userVO.toString());
 		
 		model.addAttribute("userForm", userVO);
@@ -143,6 +143,11 @@ public class UserManagementController {
 		if (result.hasErrors()) {
 			return "updateUser";
 		} else {
+			if(userVO.getEnabledBoolean()){
+				userVO.setEnabled("Y");
+			}else{
+				userVO.setEnabled("N");
+			}
 			userManagementService.updateUser(userVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "User updated successfully!");
@@ -154,7 +159,7 @@ public class UserManagementController {
 	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
 	public String viewUser(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		UserVO userVO = userManagementService.findById(new Integer(id));
+		UserVO userVO = userManagementService.findById(Long.parseLong(id));
 		if (userVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "User not found");

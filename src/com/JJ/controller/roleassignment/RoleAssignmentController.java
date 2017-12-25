@@ -50,48 +50,34 @@ public class RoleAssignmentController {
 	
 	@RequestMapping(value = "/assignRole", method = RequestMethod.POST)
 	public String getUserToAssignRole(@RequestParam("assignRoleBtn") Integer id, Model model) {
-		UserVO user = userManagementService.findById(new Integer(id));
-		List<RolesToAssignVO> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
-		Map<String, List<Integer>> input = new HashMap<String, List<Integer>>();
-		List<Integer> rIdList = new ArrayList<Integer>();
-		if(rolesToAssign != null && rolesToAssign.size() > 0){
-			for(RolesToAssignVO role : rolesToAssign) {
-				if(role.getChecked().equals("Y")) {
-					rIdList.add(role.getRoleId());
+		if(id != null){
+			UserVO user = userManagementService.findById(id.longValue());
+			List<RolesToAssignVO> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
+			Map<String, List<Integer>> input = new HashMap<String, List<Integer>>();
+			List<Integer> rIdList = new ArrayList<Integer>();
+			if(rolesToAssign != null && rolesToAssign.size() > 0){
+				for(RolesToAssignVO role : rolesToAssign) {
+					if(role.getChecked().equals("Y")) {
+						rIdList.add(role.getRoleId());
+					}
 				}
 			}
-		}
-		input.put("list", rIdList);
-		List<SubModulePermissionVO> smpList = null;
-		if(rIdList != null && !rIdList.isEmpty()) {
-			smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(rIdList);
-		}
-		/*List<Submodulepermission> smpList = permissionManagementService.getSubmoduleByRole(rIdList);
-		List<Submodule> subModuleList = subModuleManagementService.getAllSubmodules();
-		Map<Integer, Submodule> submoduleMap = new HashMap<Integer, Submodule>();
-		if(subModuleList != null && subModuleList.size() > 0){
-			for(Submodule subModule : subModuleList){
-				submoduleMap.put(subModule.getId(), subModule);
+			input.put("list", rIdList);
+			List<SubModulePermissionVO> smpList = null;
+			if(rIdList != null && !rIdList.isEmpty()) {
+				smpList = permissionManagementService.getSubmodulePermissionByRoleIdList(rIdList);
 			}
+			
+			model.addAttribute("user", user);
+			model.addAttribute("roleList", rolesToAssign);
+			model.addAttribute("submoduleList", smpList);
 		}
-		if(smpList != null && smpList.size() > 0){
-			for(Submodulepermission smp : smpList){
-				Submodule submodule = submoduleMap.get(smp.getSubmoduleid());
-				if(submodule != null){
-					smp.setSubmodulename(submodule.getName());
-				}
-			}
-		}*/
-		
-		model.addAttribute("user", user);
-		model.addAttribute("roleList", rolesToAssign);
-		model.addAttribute("submoduleList", smpList);
 		return "assignRole";
 	}
 	
 	@RequestMapping(value = "/assignRole/{id}", method = RequestMethod.GET)
 	public String getUserToAssignRoleForRedirect(@PathVariable Integer id, Model model) {
-		UserVO user = userManagementService.findById(id);
+		UserVO user = userManagementService.findById(id.longValue());
 		List<RolesToAssignVO> rolesToAssign = roleAssignmentService.getRolesToAssign(id);
 		Map<String, List<Integer>> input = new HashMap<String, List<Integer>>();
 		List<Integer> rIdList = new ArrayList<Integer>();

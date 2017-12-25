@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.TO.UserTO;
 import com.JJ.controller.common.vo.UserVO;
 import com.JJ.dao.UserDbObjectMapper;
+import com.JJ.dao.jpa.UserDAO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.model.UserDbObject;
-import com.JJ.model.UserDbObjectExample;
 import com.JJ.service.roleassignment.RoleAssignmentService;
 
 @Service
@@ -25,17 +26,20 @@ public class UserManagementService {
 	
 	private UserDbObjectMapper userDbObjectMapper;
 	private RoleAssignmentService roleAssignmentService;
-	
+	private UserDAO userDAO;
 	@Autowired
 	public UserManagementService(UserDbObjectMapper userMapper,
-			RoleAssignmentService roleAssignmentService) {
+			RoleAssignmentService roleAssignmentService,
+			UserDAO userDAO) {
 		this.userDbObjectMapper = userMapper;
 		this.roleAssignmentService = roleAssignmentService;
+		this.userDAO = userDAO;
 	}
 	
-	public UserVO findById(Integer id) {
-		UserDbObject user = userDbObjectMapper.selectByPrimaryKey(id);
-		List<UserVO> userVOList = convertToUserVOList(Arrays.asList(user));
+	public UserVO findById(Long id) {
+		/*UserDbObject user = userDbObjectMapper.selectByPrimaryKey(id);*/
+		UserTO user = userDAO.findByUserId(id);
+		List<UserVO> userVOList = convertUserTOToUserVOList(Arrays.asList(user));
 		if(userVOList != null && userVOList.size() > 0){
 			return userVOList.get(0);
 		}
@@ -43,10 +47,11 @@ public class UserManagementService {
 	}
 	
 	public UserVO findByUserName(String userName) {
-		UserDbObjectExample example = new UserDbObjectExample();
+		/*UserDbObjectExample example = new UserDbObjectExample();
 		example.createCriteria().andUserNameEqualTo(userName).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
-		List<UserDbObject> dbObjList = userDbObjectMapper.selectByExample(example);
-		List<UserVO> voList = convertToUserVOList(dbObjList);
+		List<UserDbObject> dbObjList = userDbObjectMapper.selectByExample(example);*/
+		List<UserTO> dbObjList = userDAO.findByUserNameAndDeleteInd(userName, GeneralUtils.NOT_DELETED);
+		List<UserVO> voList = convertUserTOToUserVOList(dbObjList);
 		if(voList != null && voList.size() > 0){
 			UserVO user = voList.get(0);
 			return user;
@@ -57,51 +62,75 @@ public class UserManagementService {
 	
 
 	public List<UserVO> getAllUsers() {
-		UserDbObjectExample userExample = new UserDbObjectExample();
+		/*UserDbObjectExample userExample = new UserDbObjectExample();
 		userExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
-		List<UserDbObject> userList = userDbObjectMapper.selectByExample(userExample);
-		return convertToUserVOList(userList);
+		List<UserDbObject> userList = userDbObjectMapper.selectByExample(userExample);*/
+		List<UserTO> userList = userDAO.findByDeleteInd(GeneralUtils.NOT_DELETED);
+		return convertUserTOToUserVOList(userList);
 	}
 	
 	public void saveUser(UserVO user) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(hashedPassword);
-		List<UserDbObject> dbObjList = convertToUserDbObjectList(Arrays.asList(user));
+		/*List<UserDbObject> dbObjList = convertToUserDbObjectList(Arrays.asList(user));
 		if(dbObjList != null && dbObjList.size() > 0){
 			userDbObjectMapper.insert(dbObjList.get(0));
-		}
-		
+		}*/
+		List<UserTO> userTOList = convertToUserTOList(Arrays.asList(user));
+		userDAO.save(userTOList);
 	}
 	
 	public void resetPassword(String userName, String password){
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
-		UserDbObjectExample example = new UserDbObjectExample();
+		/*UserDbObjectExample example = new UserDbObjectExample();
 		UserDbObject user = new UserDbObject();
 		user.setPassword(hashedPassword);
 		example.createCriteria().andUserNameEqualTo(userName);
-		userDbObjectMapper.updateByExampleSelective(user, example);
+		userDbObjectMapper.updateByExampleSelective(user, example);*/
+		List<UserTO> userList = userDAO.findByUserNameAndDeleteInd(userName, GeneralUtils.NOT_DELETED);
+		if(userList != null && !userList.isEmpty()){
+			for(UserTO userTO : userList){
+				userTO.setPassword(hashedPassword);
+			}
+			userDAO.save(userList);
+		}
 	}
 	
-	public void deleteUser(Integer id) {
+	public void deleteUser(Long id) {
 		deleteUser(Arrays.asList(id));
-		roleAssignmentService.deleteRoleListByUserId(id);
+		roleAssignmentService.deleteRoleListByUserId(id.intValue());
 	}
 	
-	public void deleteUser(List<Integer> idList) {
-		UserDbObjectExample userDbObjectExample = new UserDbObjectExample();
+	public void deleteUser(List<Long> idList) {
+		/*UserDbObjectExample userDbObjectExample = new UserDbObjectExample();
 		userDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andUserIdIn(idList);
 		UserDbObject dbObj = new UserDbObject();
 		dbObj.setDeleteInd(GeneralUtils.DELETED);
-		userDbObjectMapper.updateByExampleSelective(dbObj, userDbObjectExample);
+		userDbObjectMapper.updateByExampleSelective(dbObj, userDbObjectExample);*/
+		
+		List<UserTO> userToList = userDAO.findByUserIdIn(idList);
+		if(userToList != null && !userToList.isEmpty()){
+			for(UserTO userTo : userToList){
+				userTo.setDeleteInd(GeneralUtils.DELETED);
+			}
+			userDAO.save(userToList);
+		}
 	}
 	
 	public void updateUser(UserVO userVO) {
-		userVO.setPassword(null);
+//		userVO.setPassword(null);
 		if(userVO != null && userVO.getUserId() != null){
-			UserDbObject dbObj = convertToUserDbObjectList(Arrays.asList(userVO)).get(0);
-			userDbObjectMapper.updateByPrimaryKeySelective(dbObj);
+			/*UserDbObject dbObj = convertToUserDbObjectList(Arrays.asList(userVO)).get(0);
+			userDbObjectMapper.updateByPrimaryKeySelective(dbObj);*/
+			UserTO dbObj = userDAO.findByUserId(userVO.getUserId().longValue());
+			dbObj.setUserName(userVO.getUserName());
+			dbObj.setName(userVO.getName());
+			dbObj.setEmailAddress(userVO.getEmailAddress());
+			dbObj.setEnabled(userVO.getEnabled() == null ? "N": userVO.getEnabled());
+//			UserTO dbObj = convertToUserTOList(Arrays.asList(userDbVO)).get(0);
+			userDAO.save(dbObj);
 		}
 	}
 	
@@ -125,6 +154,32 @@ public class UserManagementService {
 		return list;
 	}
 	
+	private List<UserVO> convertUserTOToUserVOList(List<UserTO> dbObjList) {
+		List<UserVO> list = new ArrayList<UserVO>();
+		if(dbObjList != null && dbObjList.size() > 0){
+			for(UserTO dbObj : dbObjList){
+				UserVO vo = new UserVO();
+				vo.setEmailAddress(dbObj.getEmailAddress());
+				vo.setEnabled(dbObj.getEnabled());
+				vo.setEnabledBoolean(dbObj.getEnabled().equals("Y")? Boolean.TRUE : Boolean.FALSE);
+				vo.setLastLogin(dbObj.getLastLogin());
+				vo.setName(dbObj.getName());
+				vo.setPassword(dbObj.getPassword());
+				vo.setStatus(dbObj.getStatus());
+				vo.setUserId(dbObj.getUserId().intValue());
+				vo.setUserName(dbObj.getUserName());
+				vo.setCreatedBy(dbObj.getCreatedBy());
+				vo.setCreatedOn(dbObj.getCreatedOn());
+				vo.setUpdatedBy(dbObj.getUpdatedBy());
+				vo.setUpdatedOn(dbObj.getUpdatedOn());
+				vo.setDeleteInd(dbObj.getDeleteInd());
+				vo.setVersion(dbObj.getVersion());
+				list.add(vo);
+			}
+		}
+		return list;
+	}
+	
 	private List<UserDbObject> convertToUserDbObjectList(List<UserVO> voList) {
 		List<UserDbObject> list = new ArrayList<UserDbObject>();
 		if(voList != null && voList.size() > 0){
@@ -137,6 +192,25 @@ public class UserManagementService {
 				dbObj.setPassword(obj.getPassword());
 				dbObj.setStatus(obj.getStatus());
 				dbObj.setUserId(obj.getUserId());
+				dbObj.setUserName(obj.getUserName());
+				list.add(dbObj);
+			}
+		}
+		return list;
+	}
+	
+	private List<UserTO> convertToUserTOList(List<UserVO> voList) {
+		List<UserTO> list = new ArrayList<UserTO>();
+		if(voList != null && voList.size() > 0){
+			for(UserVO obj : voList){
+				UserTO dbObj = new UserTO();
+				dbObj.setEmailAddress(obj.getEmailAddress());
+				dbObj.setEnabled(obj.getEnabledBoolean() == Boolean.TRUE ? "Y" : "N");
+				dbObj.setLastLogin(obj.getLastLogin());
+				dbObj.setName(obj.getName());
+				dbObj.setPassword(obj.getPassword());
+				dbObj.setStatus(obj.getStatus());
+				dbObj.setUserId(obj.getUserId()==null?null:obj.getUserId().longValue());
 				dbObj.setUserName(obj.getUserName());
 				list.add(dbObj);
 			}
