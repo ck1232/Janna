@@ -142,7 +142,7 @@ public class BatchIntakeManagementController {
 				for(BatchIntakeProductVO product: batchIntakeProductList){
 					//find if exist in db
 					List<Integer> suboptionIdList = this.getSubOptionIdsFromProduct(product.getSubOptionList());
-					ProductSubOptionRsVO rs = productService.findProductSubOptionRs(product.getProduct().getProductId(), suboptionIdList);
+					ProductSubOptionRsVO rs = productService.findProductSubOptionRs(product.getProduct().getProductId().intValue(), suboptionIdList);
 					//if exist, get id
 					if(rs.getProductId() != null) {
 						BatchProductRsVO batchProductRs = new BatchProductRsVO();
@@ -227,7 +227,7 @@ public class BatchIntakeManagementController {
 	public @ResponseBody ProductVO getBatchProductVo(@RequestBody ProductVO product) {
 		logger.debug(product.getProductId());
 		
-		List<ProductVO> productVoList = productService.getAllProductVo(product.getProductId());
+		List<ProductVO> productVoList = productService.getAllProductVo(product.getProductId().intValue());
 		if(productVoList != null && productVoList.size() > 0){
 			productVo = productVoList.get(0);
 			if(productVo != null){
@@ -301,7 +301,7 @@ public class BatchIntakeManagementController {
 		Iterator<ProductSubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
 			ProductSubOptionVO subOptionVo = i.next();
-			ProductSubOptionVO generatedSubOptionVo = productSubOptionManagementService.getSubOptionVo(subOptionVo.getProductSuboptionId());
+			ProductSubOptionVO generatedSubOptionVo = productSubOptionManagementService.getSubOptionVo(subOptionVo.getProductSuboptionId().intValue());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 			subOptionVo.setName(generatedSubOptionVo.getName());
 		}
@@ -492,7 +492,7 @@ public class BatchIntakeManagementController {
 		List<Integer> suboptionIdList = new ArrayList<Integer>();
 		if(suboptionList != null && !suboptionList.isEmpty()) {
 			for(ProductSubOptionVO suboption: suboptionList) {
-				suboptionIdList.add(suboption.getProductSuboptionId());
+				suboptionIdList.add(suboption.getProductSuboptionId().intValue());
 			}
 		}
 		return suboptionIdList;
@@ -539,7 +539,7 @@ public class BatchIntakeManagementController {
 					BatchProductRsVO batchProductRs = batchProductRSManagementService.findById(product.getBatchProductId());
 					if(batchProductRs.getBatchProductRsId() == null){ //new
 						List<Integer> suboptionIdList = getSubOptionIdsFromProduct(product.getSubOptionList());
-						ProductSubOptionRsVO rs = productService.findProductSubOptionRs(product.getProduct().getProductId(), suboptionIdList);
+						ProductSubOptionRsVO rs = productService.findProductSubOptionRs(product.getProduct().getProductId().intValue(), suboptionIdList);
 						if(rs.getProductSuboptionRsId() == null){
 							redirectAttributes.addFlashAttribute("css", "danger");
 							redirectAttributes.addFlashAttribute("msg", "Invalid Product(s)!");

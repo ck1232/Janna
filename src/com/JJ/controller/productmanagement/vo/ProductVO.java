@@ -11,7 +11,7 @@ import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.model.Base;
 
 public class ProductVO extends Base implements Serializable {
-    private Integer productId;
+    private Long productId;
 
     private String productName;
 
@@ -25,7 +25,7 @@ public class ProductVO extends Base implements Serializable {
 
     private String productCode;
 
-    private String paypayId;
+    private String paypalId;
 
     private List<ProductOptionVO> optionList;
     
@@ -35,19 +35,21 @@ public class ProductVO extends Base implements Serializable {
     
     private List<FileMetaVO> removeImagesLink;
     
-    private List<String> tags;
+    private List<ProductTagsVO> tags;
     
     private ProductSubCategoryVO subCategory;
     
     private String productInfo;
     
+    private List<ProductAttributeVO> productAttributeVOList; 
+    
     private static final long serialVersionUID = 1L;
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
@@ -99,12 +101,12 @@ public class ProductVO extends Base implements Serializable {
         this.productCode = productCode == null ? null : productCode.trim();
     }
 
-    public String getPaypayId() {
-        return paypayId;
+    public String getPaypalId() {
+        return paypalId;
     }
 
-    public void setPaypayId(String paypayId) {
-        this.paypayId = paypayId == null ? null : paypayId.trim();
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId == null ? null : paypalId.trim();
     }
 
     public List<ProductOptionVO> getOptionList() {
@@ -123,11 +125,11 @@ public class ProductVO extends Base implements Serializable {
 		this.images = images;
 	}
 
-	public List<String> getTags() {
+	public List<ProductTagsVO> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(List<ProductTagsVO> tags) {
 		this.tags = tags;
 	}
 
@@ -170,6 +172,14 @@ public class ProductVO extends Base implements Serializable {
 		removeImagesLink.add(fileMetaVO);
 	}
 
+	public List<ProductAttributeVO> getProductAttributeVOList() {
+		return productAttributeVOList;
+	}
+
+	public void setProductAttributeVOList(List<ProductAttributeVO> productAttributeVOList) {
+		this.productAttributeVOList = productAttributeVOList;
+	}
+
 	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -183,7 +193,7 @@ public class ProductVO extends Base implements Serializable {
         sb.append(", subCategoryId=").append(subCategoryId);
         sb.append(", description=").append(description);
         sb.append(", productCode=").append(productCode);
-        sb.append(", paypayId=").append(paypayId);
+        sb.append(", paypalId=").append(paypalId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");

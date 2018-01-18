@@ -93,7 +93,7 @@ public class ProductSubCategoryManagementController {
     	}
     	ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
     	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
-    	productSubCategoryVO.setCategoryId(new Integer(id));
+    	productSubCategoryVO.setCategoryId(Long.parseLong(id));
     	productSubCategoryVO.setDisplayInd("1");
     	model.addAttribute("subcategoryForm", productSubCategoryVO);
         return "createSubCategory";  
@@ -113,7 +113,7 @@ public class ProductSubCategoryManagementController {
 			return "createSubCategory";
 		} else {
 			boolean pass = true;
-			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productSubCategoryVO.getCategoryId());
+			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productSubCategoryVO.getCategoryId().intValue());
 			for(ProductSubCategoryVO psc: subcategoryList){
 				if(productSubCategoryVO.getName().equals(psc.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.submoduleform.name");;
@@ -172,8 +172,8 @@ public class ProductSubCategoryManagementController {
 			return "updateSubCategory";
 		} else {
 			boolean pass = true;
-			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productSubCategoryVO.getCategoryId());
-			ProductSubCategoryVO currentpsc = productSubCategoryManagementService.findById(productSubCategoryVO.getSubCategoryId());
+			List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productSubCategoryVO.getCategoryId().intValue());
+			ProductSubCategoryVO currentpsc = productSubCategoryManagementService.findById(productSubCategoryVO.getSubCategoryId().intValue());
 			for(ProductSubCategoryVO psc: subcategoryList){
 				if(!currentpsc.getName().equals(psc.getName()) && productSubCategoryVO.getName().equals(psc.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.submoduleform.name");;

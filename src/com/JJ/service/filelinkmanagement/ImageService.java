@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,7 +100,7 @@ public class ImageService {
 		}else{ //new
 			FileLinkDbObject fileLinkDbObj = convertToFileLinkDbObject(imageVO);
 			fileLinkDbObjectMapper.insert(fileLinkDbObj);
-			imageVO.setImageLinkId(fileLinkDbObj.getFileLinkId());
+			imageVO.setImageLinkId(fileLinkDbObj.getFileLinkId().longValue());
 			ImageLinkRsDbObject imageLinkRsDbObj = convertToNewImageLinkRsDbObject(imageVO);
 			imageLinkRsDbObjectMapper.insert(imageLinkRsDbObj);
 		}
@@ -108,12 +109,12 @@ public class ImageService {
 	public ImageLinkVO convertFileMetaVOToImageLinkVO(FileMetaVO fileVO, int refId, String type) {
 		ImageLinkVO imageVO = new ImageLinkVO();
 		imageVO.setRefType(type);
-		imageVO.setRefId(refId);
+		imageVO.setRefId(new Long(refId));
 		imageVO.setImagePath(imageFolderSource+type+"\\"+fileVO.getFileName());
 		imageVO.setSequence(fileVO.getSequence());
 		imageVO.setFileName(fileVO.getFileName());
 		imageVO.setBytes(fileVO.getBytes());
-		imageVO.setImageLinkRsId(fileVO.getImageId());
+		imageVO.setImageLinkRsId(fileVO.getImageId().longValue());
 		return imageVO;
 	}
 	
@@ -137,14 +138,14 @@ public class ImageService {
 		}
 		
 		FileLinkDbObjectExample fileLinkExample = new FileLinkDbObjectExample();
-		fileLinkExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andFileLinkIdEqualTo(imageVO.getImageLinkId());
+		fileLinkExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andFileLinkIdEqualTo(imageVO.getImageLinkId().intValue());
 		FileLinkDbObject dbObj = new FileLinkDbObject();
 		dbObj.setDeleteInd(GeneralUtils.DELETED);
 		fileLinkDbObjectMapper.updateByExampleSelective(dbObj, fileLinkExample);
 		
 		ImageLinkRsDbObjectExample imageLinkExample = new ImageLinkRsDbObjectExample();
 		imageLinkExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andRefTypeEqualTo(imageVO.getRefType())
-					.andRefIdEqualTo(imageVO.getRefId()).andImageLinkIdEqualTo(imageVO.getImageLinkId());
+					.andRefIdEqualTo(imageVO.getRefId().intValue()).andImageLinkIdEqualTo(imageVO.getImageLinkId().intValue());
 		ImageLinkRsDbObject imageLinkRs = new ImageLinkRsDbObject();
 		imageLinkRs.setDeleteInd(GeneralUtils.DELETED);
 		imageLinkRs.setSequence(0);
@@ -158,7 +159,7 @@ public class ImageService {
 		
 		ImageLinkRsDbObjectExample imageLinkExample = new ImageLinkRsDbObjectExample();
 		imageLinkExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andRefTypeEqualTo(imageVO.getRefType())
-					.andRefIdEqualTo(imageVO.getRefId()).andImageLinkRsIdEqualTo(imageVO.getImageLinkRsId());
+					.andRefIdEqualTo(imageVO.getRefId().intValue()).andImageLinkRsIdEqualTo(imageVO.getImageLinkRsId().intValue());
 		ImageLinkRsDbObject imageLinkRs = new ImageLinkRsDbObject();
 		
 		List<ImageLinkRsDbObject> imageLinkList = imageLinkRsDbObjectMapper.selectByExample(imageLinkExample);
@@ -185,11 +186,11 @@ public class ImageService {
 	private ImageLinkRsDbObject convertToNewImageLinkRsDbObject(ImageLinkVO imageVO) {
 		ImageLinkRsDbObject dbObj = new ImageLinkRsDbObject();
 		if(imageVO != null && imageVO.getImageLinkId() != null) {
-			dbObj.setImageLinkRsId(imageVO.getImageLinkRsId());
+			dbObj.setImageLinkRsId(imageVO.getImageLinkRsId().intValue());
 			dbObj.setSequence(imageVO.getSequence());
-			dbObj.setImageLinkId(imageVO.getImageLinkId());
+			dbObj.setImageLinkId(imageVO.getImageLinkId().intValue());
 			dbObj.setRefType(imageVO.getRefType());
-			dbObj.setRefId(imageVO.getRefId());
+			dbObj.setRefId(imageVO.getRefId().intValue());
 		}
 		return dbObj;
 	}
@@ -203,7 +204,7 @@ public class ImageService {
 	private ImageLinkRsDbObject convertToExistingImageLinkRsDbObject(ImageLinkVO imageVO) {
 		ImageLinkRsDbObject dbObj = new ImageLinkRsDbObject();
 		if(imageVO != null && imageVO.getImageLinkRsId() != null) {
-			dbObj.setImageLinkRsId(imageVO.getImageLinkRsId());
+			dbObj.setImageLinkRsId(imageVO.getImageLinkRsId().intValue());
 			dbObj.setSequence(imageVO.getSequence());
 		}
 		return dbObj;
@@ -238,7 +239,7 @@ public class ImageService {
 						FileLinkDbObject dbObj = fileLinkMap.get(rsDbObj.getImageLinkId());
 						if(dbObj!=null){
 							ImageLinkVO vo = new ImageLinkVO();
-							vo.setImageLinkId(dbObj.getFileLinkId());
+							vo.setImageLinkId(dbObj.getFileLinkId().longValue());
 							vo.setImagePath(dbObj.getFilePath());
 							if(dbObj.getFilePath() != null && !dbObj.getFilePath().trim().isEmpty()){
 								int index = dbObj.getFilePath().lastIndexOf("\\");
@@ -249,9 +250,9 @@ public class ImageService {
 							}
 							vo.setDisplayPath(vo.getDisplayPath());
 							vo.setSequence(rsDbObj.getSequence());
-							vo.setImageLinkRsId(rsDbObj.getImageLinkRsId());
+							vo.setImageLinkRsId(rsDbObj.getImageLinkRsId().longValue());
 							vo.setRefType(rsDbObj.getRefType());
-							vo.setRefId(refId);
+							vo.setRefId(refId.longValue());
 							//TODO set bytes here
 							if(!imageLinkMap.containsKey(refId)){
 								imageLinkMap.put(refId, new LinkedList<ImageLinkVO>());
@@ -274,13 +275,13 @@ public class ImageService {
 						FileLinkDbObject dbObj = fileLinkMap.get(rsDbObj.getImageLinkId());
 						if(dbObj!=null){
 							ImageLinkVO vo = new ImageLinkVO();
-							vo.setImageLinkId(dbObj.getFileLinkId());
+							vo.setImageLinkId(dbObj.getFileLinkId().longValue());
 							vo.setImagePath(dbObj.getFilePath());
 							vo.setDisplayPath(vo.getDisplayPath());
 							vo.setSequence(rsDbObj.getSequence());
-							vo.setImageLinkRsId(rsDbObj.getImageLinkRsId());
+							vo.setImageLinkRsId(rsDbObj.getImageLinkRsId().longValue());
 							vo.setRefType(rsDbObj.getRefType());
-							vo.setRefId(refId);
+							vo.setRefId(refId.longValue());
 							//TODO set bytes
 							if(!imageLinkMap.containsKey(refId)){
 								imageLinkMap.put(refId, new ArrayList<ImageLinkVO>());
@@ -338,7 +339,8 @@ public class ImageService {
 		URL url = new URL("http://localhost:8080/JJ/images/product/"+imageLinkVO.getFileName());
         BufferedImage image = ImageIO.read(url);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
+        String fileFormat = FilenameUtils.getExtension(url.getPath());
+        ImageIO.write(image, fileFormat, baos);
 		imageLinkVO.setBytes(baos.toByteArray());
 		}catch(Exception ex){
 			

@@ -2,8 +2,10 @@ package com.JJ.service.productmanagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.TO.ProductTagsTO;
+import com.JJ.controller.productmanagement.vo.ProductTagsVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.dao.ProductTagsDbObjectMapper;
 import com.JJ.helper.GeneralUtils;
@@ -34,7 +38,7 @@ public class ProductTagsService {
 		ProductTagsDbObjectExample.Criteria criteria = deleteExample.createCriteria();
 		criteria.andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andProductIdEqualTo(productid);
 		if(productVo.getTags() != null && !productVo.getTags().isEmpty()){
-			criteria.andNameNotIn(productVo.getTags());
+			criteria.andNameNotIn(GeneralUtils.convertListToStringList(productVo.getTags(), "name", true));
 		}
 		ProductTagsDbObject tags = new ProductTagsDbObject();
 		tags.setDeleteInd(GeneralUtils.DELETED);
@@ -42,7 +46,7 @@ public class ProductTagsService {
 		if(productVo.getTags() != null && !productVo.getTags().isEmpty()){
 			//get all active tags
 			ProductTagsDbObjectExample selectExample = new ProductTagsDbObjectExample();
-			selectExample.createCriteria().andNameIn(productVo.getTags()).andProductIdEqualTo(productid).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
+			selectExample.createCriteria().andNameIn(GeneralUtils.convertListToStringList(productVo.getTags(), "name", true)).andProductIdEqualTo(productid).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 			List<ProductTagsDbObject> productTagsList = productTagsDbObjectMapper.selectByExample(selectExample);
 			if(productTagsList != null && !productTagsList.isEmpty()){
 				//remove exists tags from list
@@ -59,12 +63,12 @@ public class ProductTagsService {
 		
 	}
 	
-	private List<ProductTagsDbObject> convertToProductTags(List<String> tagsList, Integer productId){
+	private List<ProductTagsDbObject> convertToProductTags(List<ProductTagsVO> list, Integer productId){
 		List<ProductTagsDbObject> dbList = new ArrayList<ProductTagsDbObject>();
-		if(tagsList != null && !tagsList.isEmpty()){
-			for(String tag: tagsList){
+		if(list != null && !list.isEmpty()){
+			for(ProductTagsVO tag: list){
 				ProductTagsDbObject dbTag = new ProductTagsDbObject();
-				dbTag.setName(tag);
+				dbTag.setName(tag.getName());
 				dbTag.setProductId(productId);
 				dbTag.setDeleteInd(GeneralUtils.NOT_DELETED);
 				dbList.add(dbTag);
@@ -73,10 +77,10 @@ public class ProductTagsService {
 		return dbList;
 	}
 	
-	public List<String> getProductTags(Integer productid) {
+	public List<String> getProductTags(Long productid) {
 		List<String> tagsList = new ArrayList<String>();
 		ProductTagsDbObjectExample example = new ProductTagsDbObjectExample();
-		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andProductIdEqualTo(productid);
+		example.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andProductIdEqualTo(productid.intValue());
 		List<ProductTagsDbObject> dbList = productTagsDbObjectMapper.selectByExample(example);
 		if(dbList != null && dbList.size() > 0){
 			for(ProductTagsDbObject tags : dbList){
@@ -106,7 +110,7 @@ public class ProductTagsService {
 		if(voList != null && voList.size() > 0){
 			List<Integer> productIdList = new ArrayList<Integer>();
 			for(ProductVO vo : voList){
-				productIdList.add(vo.getProductId());
+				productIdList.add(vo.getProductId().intValue());
 			}
 			
 			if(productIdList.size() > 0){
@@ -115,12 +119,44 @@ public class ProductTagsService {
 					for(ProductVO vo : voList){
 						List<String> tagsList = map.get(vo.getProductId());
 						if(tagsList != null && tagsList.size() > 0){
-							vo.setTags(tagsList);
+//							vo.setTags(tagsList);
 						}
 					}
 				}
 			}
 		}
 		return voList;
+	}
+	
+	public static List<ProductTagsVO> convertToProductTagsVOList(List<ProductTagsTO> toList, Long productId){
+		List<ProductTagsVO> voList = new ArrayList<ProductTagsVO>();
+		if(toList != null && !toList.isEmpty()){
+			for(ProductTagsTO to : toList){
+				ProductTagsVO vo = new ProductTagsVO();
+				vo.setTagsId(to.getTagsId());
+				vo.setName(to.getName());
+				vo.setProductId(productId);
+				GeneralUtils.copyFromTO(vo, to);
+				voList.add(vo);
+			}
+		}
+		return voList;
+	}
+	
+	public static List<ProductTagsVO> convertToProductTagsVOList(List<String> tagsList){
+		List<ProductTagsVO> productTagsVOList = new ArrayList<ProductTagsVO>();
+		if(tagsList != null && !tagsList.isEmpty()){
+			//remvoe duplicates
+			Set<String> set = new HashSet<String>(tagsList);
+			tagsList = new ArrayList<String>(set);
+			for(String tagsString : tagsList){
+				if(tagsString != null && !tagsString.trim().isEmpty()){
+					ProductTagsVO vo = new ProductTagsVO();
+					vo.setName(tagsString);
+					productTagsVOList.add(vo);
+				}
+			}
+		}
+		return productTagsVOList;
 	}
 }

@@ -40,7 +40,7 @@
 		  <!-- bootstrap wysihtml5 - text editor -->
 		  <link rel="stylesheet" href="<c:url context="/JJ" value="/development/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"/>">
 		  <!-- datatable -->
-		  <link rel="stylesheet" href="<c:url context="/JJ" value="/development/datatable/css/jquery.dataTables.min.css" />">
+		  <%-- <link rel="stylesheet" href="<c:url context="/JJ" value="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />"> --%>
 		  
 		  <link rel="stylesheet" href="<c:url context="/JJ" value="/development/css/custom.css"/>">
 		  <!-- typeahead -->
@@ -64,7 +64,7 @@
 		<script src="<c:url context="/JJ" value="/development/dist/js/app.min.js"/>"></script>
 		<!-- Bootstrap select -->
 		<link rel="stylesheet" href="<c:url context="/JJ" value="/development/bootstrap-select/css/bootstrap-select.min.css" />">
-		<script src="<c:url context="/JJ" value="/development/bootstrap-select/js/bootstrap-select.min.js" />"></script>
+		<script src="<c:url context="/JJ" value="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.js" />"></script>
 		<!-- bootstrap datepicker -->
 		<script src="<c:url context="/JJ" value="/development/plugins/datepicker/bootstrap-datepicker.js"/>"></script>
 		<!-- Select2 -->

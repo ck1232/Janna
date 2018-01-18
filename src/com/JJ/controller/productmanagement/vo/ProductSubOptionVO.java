@@ -5,11 +5,11 @@ import java.io.Serializable;
 import com.JJ.model.Base;
 
 public class ProductSubOptionVO extends Base implements Serializable {
-    private Integer productSuboptionId;
+    private Long productSuboptionId;
 
-    private Integer productId;
+    private Long productId;
 
-    private Integer productOptionId;
+    private Long productOptionId;
 
     private String name;
 
@@ -20,30 +20,30 @@ public class ProductSubOptionVO extends Base implements Serializable {
     private String optionName;
     
     private int seq;
-
+    
     private static final long serialVersionUID = 1L;
 
-    public Integer getProductSuboptionId() {
+    public Long getProductSuboptionId() {
         return productSuboptionId;
     }
 
-    public void setProductSuboptionId(Integer productSuboptionId) {
+    public void setProductSuboptionId(Long productSuboptionId) {
         this.productSuboptionId = productSuboptionId;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
-    public Integer getProductOptionId() {
+    public Long getProductOptionId() {
         return productOptionId;
     }
 
-    public void setProductOptionId(Integer productOptionId) {
+    public void setProductOptionId(Long productOptionId) {
         this.productOptionId = productOptionId;
     }
 
@@ -87,7 +87,7 @@ public class ProductSubOptionVO extends Base implements Serializable {
 		this.seq = seq;
 	}
 	
-    @Override
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
@@ -105,4 +105,75 @@ public class ProductSubOptionVO extends Base implements Serializable {
         sb.append(super.toString());
         return sb.toString();
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result
+				+ ((displayInd == null) ? 0 : displayInd.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((optionName == null) ? 0 : optionName.hashCode());
+		result = prime * result
+				+ ((productId == null) ? 0 : productId.hashCode());
+		result = prime * result
+				+ ((productOptionId == null) ? 0 : productOptionId.hashCode());
+		result = prime
+				* result
+				+ ((productSuboptionId == null) ? 0 : productSuboptionId
+						.hashCode());
+		result = prime * result + seq;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSubOptionVO other = (ProductSubOptionVO) obj;
+		if (code == null) {
+			if (other.code != null)
+				return false;
+		} else if (!code.equals(other.code))
+			return false;
+		if (displayInd == null) {
+			if (other.displayInd != null)
+				return false;
+		} else if (!displayInd.equals(other.displayInd))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (optionName == null) {
+			if (other.optionName != null)
+				return false;
+		} else if (!optionName.equals(other.optionName))
+			return false;
+		if (productId == null) {
+			if (other.productId != null)
+				return false;
+		} else if (!productId.equals(other.productId))
+			return false;
+		if (productOptionId == null) {
+			if (other.productOptionId != null)
+				return false;
+		} else if (!productOptionId.equals(other.productOptionId))
+			return false;
+		if (productSuboptionId == null) {
+			if (other.productSuboptionId != null)
+				return false;
+		} else if (!productSuboptionId.equals(other.productSuboptionId))
+			return false;
+		if (seq != other.seq)
+			return false;
+		return true;
+	}
 }

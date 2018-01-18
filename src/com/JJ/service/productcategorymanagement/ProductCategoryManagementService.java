@@ -88,7 +88,7 @@ public class ProductCategoryManagementService {
 		if(ProductCategoryVO != null){
 			ProductCategoryDbObject dbObj = convertToProductCategoryDbObjectList(Arrays.asList(ProductCategoryVO)).get(0);
 			productCategoryDbObjectMapper.insert(dbObj);
-			ProductCategoryVO.setCategoryId(dbObj.getCategoryId());
+			ProductCategoryVO.setCategoryId(dbObj.getCategoryId().longValue());
 		}
 	}
 	
@@ -108,11 +108,11 @@ public class ProductCategoryManagementService {
 		updateProductcategory(productCategoryVO);
 		//if category is parent, auto add in sub-category
 		if(productCategoryVO.getIsParentBoolean()) {
-			subCategoryService.deleteProductSubCategoryByCategory(productCategoryVO.getCategoryId());
+			subCategoryService.deleteProductSubCategoryByCategory(productCategoryVO.getCategoryId().intValue());
 			ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
 			productSubCategoryVO.setName(productCategoryVO.getCategoryName());
 	    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
-	    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
+	    	productSubCategoryVO.setCategoryId(productCategoryVO.getCategoryId());
 	    	productSubCategoryVO.setDisplayIndBoolean(productCategoryVO.getDisplayIndBoolean());
 	    	subCategoryService.saveProductSubCategory(productSubCategoryVO);
 		}
@@ -137,11 +137,10 @@ public class ProductCategoryManagementService {
 		if(productCategoryDbObjectList != null && !productCategoryDbObjectList.isEmpty()) {
 			for(ProductCategoryDbObject dbObj : productCategoryDbObjectList) {
 				ProductCategoryVO vo = new ProductCategoryVO();
-				vo.setCategoryId(dbObj.getCategoryId());
+				vo.setCategoryId(dbObj.getCategoryId().longValue());
 				vo.setCategoryName(dbObj.getCategoryName());
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
-				vo.setDisplayIndString(dbObj.getDisplayInd());
 				vo.setDisplayIndBoolean(GeneralUtils.ALLOW_DISPLAY.equals(dbObj.getDisplayInd())? Boolean.TRUE : Boolean.FALSE);
 				vo.setIsParent(dbObj.getIsParent());
 				vo.setIsParentString(dbObj.getIsParent());
@@ -158,7 +157,7 @@ public class ProductCategoryManagementService {
 		if(productCategoryVOList != null && !productCategoryVOList.isEmpty()) {
 			for(ProductCategoryVO vo : productCategoryVOList) {
 				ProductCategoryDbObject dbObj = new ProductCategoryDbObject();
-				dbObj.setCategoryId(vo.getCategoryId());
+				dbObj.setCategoryId(vo.getCategoryId().intValue());
 				dbObj.setCategoryName(vo.getCategoryName());
 				dbObj.setDeleteInd(vo.getDeleteInd());
 				dbObj.setDisplayInd(vo.getDisplayIndBoolean() == Boolean.TRUE ? "1" : "0");

@@ -11,19 +11,19 @@ public class FileMetaVO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer imageId;
+	private Long imageId;
 	private String fileName;
     private String fileSize;
     private String fileType;
     private Integer sequence;
     private byte[] bytes;
     private byte[] thumbnail;
-    private Integer productId;
-	public Integer getImageId() {
+    private Long productId;
+	public Long getImageId() {
 		return imageId;
 	}
 
-	public void setImageId(Integer imageId) {
+	public void setImageId(Long imageId) {
 		this.imageId = imageId;
 	}
 
@@ -75,11 +75,11 @@ public class FileMetaVO implements Serializable {
 		this.thumbnail = thumbnail;
 	}
 
-	public Integer getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Integer productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
     

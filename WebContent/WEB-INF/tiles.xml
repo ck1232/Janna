@@ -929,7 +929,7 @@
         			<definition template="/WEB-INF/jsp/productmanagement/listProduct.jsp">
 		        		<put-attribute name="datatable">
 		        			<definition template = "/WEB-INF/jsp/template/datatable.jsp">
-		        				<put-attribute name="table-title" value="All Product Categories" />
+		        				<put-attribute name="table-title" value="All Product" />
 		        				<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/options.jsp" />
 		        				<put-attribute name="datatable-options" value="" />
 		        				<put-attribute name="datatable-script">
@@ -960,17 +960,30 @@
         			<definition template="/WEB-INF/jsp/productmanagement/createProduct.jsp">
         				<put-attribute name="options">
         					<definition template="/WEB-INF/jsp/productmanagement/productOptions/productOptions.jsp">
-        						<put-attribute name="table-title" value="Options" />
-		        					<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/productOptions/options.jsp" />
-		        					<put-attribute name="datatable-options" value="" />
-		        					<put-attribute name="datatable-script">
-		        					<definition template="/WEB-INF/jsp/productmanagement/productOptions/datatable-script.jsp" >
-		        						<put-attribute name="data-list" value="/JJ/product/product/getProductOptionsList" />
-		        						<put-attribute name="datatable-data" value="" />
-		        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productmanagement/productOptions/column-mapping.jsp" />
-		        					</definition>
-		        				</put-attribute>
+	        					<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/productOptions/options.jsp" />
+	        					<put-attribute name="datatable-options" value="" />
+	        					<put-attribute name="datatable-script">
+	        					<definition template="/WEB-INF/jsp/productmanagement/productOptions/datatable-script.jsp" >
+	        						<put-attribute name="data-list" value="/JJ/product/product/getProductOptionsList" />
+	        						<put-attribute name="datatable-data" value="" />
+	        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productmanagement/productOptions/column-mapping.jsp" />
+	        					</definition>
+	        					</put-attribute>
 		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productmanagement/productOptions/column-header.jsp"></put-attribute>
+        					</definition>
+        				</put-attribute>
+        				
+        				<put-attribute name="attribute">
+        					<definition template="/WEB-INF/jsp/productmanagement/productAttribute/productAttribute.jsp">
+	        					<put-attribute name="datatable-options" value="" />
+	        					<put-attribute name="datatable-script">
+	        					<definition template="/WEB-INF/jsp/productmanagement/productAttribute/datatable-script.jsp" >
+	        						<put-attribute name="data-list" value="/JJ/product/product/getProductAttributeList" />
+	        						<put-attribute name="datatable-data" value="" />
+	        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productmanagement/productAttribute/column-mapping.jsp" />
+	        					</definition>
+	        					</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productmanagement/productAttribute/column-header.jsp"></put-attribute>
         					</definition>
         				</put-attribute>
         				<put-attribute name="button" value="/WEB-INF/jsp/productmanagement/createProductBtn.jsp" />
@@ -991,7 +1004,6 @@
         			<definition template="/WEB-INF/jsp/productmanagement/createProduct.jsp">
         				<put-attribute name="options">
         					<definition template="/WEB-INF/jsp/productmanagement/productOptions/productOptions.jsp">
-        						<put-attribute name="table-title" value="Options" />
 		        					<put-attribute name="options" value="/WEB-INF/jsp/productmanagement/productOptions/options.jsp" />
 		        					<put-attribute name="datatable-options" value="" />
 		        					<put-attribute name="datatable-script">
@@ -1002,6 +1014,20 @@
 		        					</definition>
 		        				</put-attribute>
 		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productmanagement/productOptions/column-header.jsp"></put-attribute>
+        					</definition>
+        				</put-attribute>
+        				
+        				<put-attribute name="attribute">
+        					<definition template="/WEB-INF/jsp/productmanagement/productAttribute/productAttribute.jsp">
+	        					<put-attribute name="datatable-options" value="" />
+	        					<put-attribute name="datatable-script">
+	        					<definition template="/WEB-INF/jsp/productmanagement/productAttribute/datatable-script.jsp" >
+	        						<put-attribute name="data-list" value="/JJ/product/product/getProductAttributeList" />
+	        						<put-attribute name="datatable-data" value="" />
+	        						<put-attribute name="column-mapping" value="/WEB-INF/jsp/productmanagement/productAttribute/column-mapping.jsp" />
+	        					</definition>
+	        					</put-attribute>
+		        				<put-attribute name="column-header" value="/WEB-INF/jsp/productmanagement/productAttribute/column-header.jsp"></put-attribute>
         					</definition>
         				</put-attribute>
         				<put-attribute name="button" value="/WEB-INF/jsp/productmanagement/editProductBtn.jsp" />

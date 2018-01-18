@@ -11,6 +11,7 @@
 	
 	function addOption(){
 		$("#name").val("");
+		$("#name").prop( "disabled", false );
 		$("#subOptionDiv").empty();
 		$('#saveEditOptionBtn').css("display","none");
 		$('#saveAddOptionBtn').css("display","");
@@ -36,6 +37,7 @@
 	  		}).done(function(optionVo) {
 		  		if(optionVo.name == selectedOptionName){
 					$("#name").val(optionVo.name);
+					$("#name").prop( "disabled", true );
 					$("#optionId").val(optionVo.productOptionId);
 					$("#subOptionDiv").empty();
 					$.each(optionVo.subOptionList, function(index, element){
@@ -55,6 +57,7 @@
 					$("#optionModal").show();	
 			  	}else{
 			  		optionTable.ajax.reload();
+			  		attributeTable.ajax.reload();
 				}
 			});
 	}
@@ -121,6 +124,7 @@
 				$("#name").val("");
 				$("#subOptionDiv").children().remove();
 				optionTable.ajax.reload();
+				attributeTable.ajax.reload();
 	    		closeOption();
   	  	  	}
 		});
@@ -173,6 +177,7 @@
 				$("#name").val("");
 				$("#subOptionDiv").children().remove();
 				optionTable.ajax.reload();
+				attributeTable.ajax.reload();
 	    		closeOption();
   	  	  	}
 			    
@@ -217,7 +222,7 @@
 	
 </script>
 <div class="margin">
-	<div class="btn-grp">
+	<div class="btn-grp" id="optionBtnDiv">
 		<button class="btn btn-primary pull-right" type="button" onclick="deleteOption();"><i class="fa fa-user-times"></i> Delete Option</button>
 		<button class="btn btn-primary pull-right" type="button" onclick="addOption();"><i class="fa fa-user-plus"></i> Add Option</button>
 	</div>
@@ -229,7 +234,7 @@
 			<div class="modal-header">
 				<h3 class="modal-title">Manage Option</h3>
 			</div>
-			<form id="addOptionForm" method="post" action="<c:url value="/product/product/addOption" />">
+			<form id="addOptionForm" method="post" action="<c:url value="/product/product/addOption" />" accept-charset="UTF-8">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<input type="hidden" id="optionId"/>
 			<div class="modal-body">

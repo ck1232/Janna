@@ -7,17 +7,19 @@ import com.JJ.model.Base;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageLinkVO extends Base implements Serializable {
-	private Integer imageLinkRsId;
+	private Long imageLinkRsId;
 
     private String refType;
 
-    private Integer refId;
+    private Long refId;
 
-    private Integer imageLinkId;
+    private Long imageLinkId;
     
     private String imagePath;
 
     private Integer sequence;
+    
+    private String contentType;
     
     //non db fields
     private long size;
@@ -29,14 +31,14 @@ public class ImageLinkVO extends Base implements Serializable {
     private boolean removeInd;
     
     private String displayPath;
-
+    
     private static final long serialVersionUID = 1L;
 
-    public Integer getImageLinkRsId() {
+    public Long getImageLinkRsId() {
         return imageLinkRsId;
     }
 
-    public void setImageLinkRsId(Integer imageLinkRsId) {
+    public void setImageLinkRsId(Long imageLinkRsId) {
         this.imageLinkRsId = imageLinkRsId;
     }
 
@@ -48,19 +50,19 @@ public class ImageLinkVO extends Base implements Serializable {
         this.refType = refType == null ? null : refType.trim();
     }
 
-    public Integer getRefId() {
+    public Long getRefId() {
         return refId;
     }
 
-    public void setRefId(Integer refId) {
+    public void setRefId(Long refId) {
         this.refId = refId;
     }
 
-    public Integer getImageLinkId() {
+    public Long getImageLinkId() {
         return imageLinkId;
     }
 
-    public void setImageLinkId(Integer imageLinkId) {
+    public void setImageLinkId(Long imageLinkId) {
         this.imageLinkId = imageLinkId;
     }
     
@@ -123,6 +125,14 @@ public class ImageLinkVO extends Base implements Serializable {
 
 	public void setDisplayPath(String displayPath) {
 		this.displayPath = displayPath;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override

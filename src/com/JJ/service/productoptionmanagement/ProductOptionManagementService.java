@@ -53,7 +53,7 @@ public class ProductOptionManagementService {
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
 				vo.setName(dbObj.getName());
-				vo.setProductOptionId(dbObj.getProductOptionId());
+				vo.setProductOptionId(dbObj.getProductOptionId().longValue());
 				vo.setVersion(dbObj.getVersion());
 				list.add(vo);
 			}
@@ -92,7 +92,7 @@ public class ProductOptionManagementService {
 				obj.setDeleteInd(vo.getDeleteInd());
 				obj.setDisplayInd(vo.getDisplayInd());
 				obj.setName(vo.getName());
-				obj.setProductOptionId(vo.getProductOptionId());
+				obj.setProductOptionId(vo.getProductOptionId().intValue());
 				obj.setVersion(vo.getVersion());
 				objList.add(obj);
 			}
@@ -115,7 +115,7 @@ public class ProductOptionManagementService {
 		if(productoption != null && productoption.getDeleteInd() != null 
 				&& productoption.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
 			ProductOptionDbObject obj = new ProductOptionDbObject();
-			obj.setProductOptionId(productoption.getProductOptionId());
+			obj.setProductOptionId(productoption.getProductOptionId().intValue());
 			obj.setDeleteInd(GeneralUtils.DELETED);
 			productOptionDbObjectMapper.updateByPrimaryKeySelective(obj);
 		}
@@ -137,7 +137,7 @@ public class ProductOptionManagementService {
 			Map<Integer, List<ProductSubOptionVO>> suboptionMap = new HashMap<Integer, List<ProductSubOptionVO>>();
 			if(productOption != null && productOption.size() > 0){
 				for(ProductOptionVO option : productOption){
-					optionMap.put(option.getProductOptionId(), option);
+					optionMap.put(option.getProductOptionId().intValue(), option);
 				}
 			}
 			List<ProductSubOptionVO> voList = productSubOptionManagementService.getAllProductsuboptionsByProductId(productId);
@@ -145,7 +145,7 @@ public class ProductOptionManagementService {
 			if(voList != null && voList.size() > 0){
 				for(ProductSubOptionVO vo : voList){
 					if(!suboptionMap.containsKey(vo.getProductOptionId())){
-						suboptionMap.put(vo.getProductOptionId(), new ArrayList<ProductSubOptionVO>());
+						suboptionMap.put(vo.getProductOptionId().intValue(), new ArrayList<ProductSubOptionVO>());
 					}
 					suboptionMap.get(vo.getProductOptionId()).add(vo);
 				}
@@ -169,7 +169,7 @@ public class ProductOptionManagementService {
 	public List<ProductVO> getProductOption(List<ProductVO> voList) {
 		if(voList != null && voList.size() > 0){
 			for(ProductVO vo : voList){
-				List<ProductOptionVO> optionList = getOptionVoList(vo.getProductId());
+				List<ProductOptionVO> optionList = getOptionVoList(vo.getProductId().intValue());
 				if(optionList != null && optionList.size() > 0){
 					vo.setOptionList(optionList);
 				}

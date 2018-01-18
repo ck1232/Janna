@@ -1,6 +1,5 @@
 package com.JJ.helper;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -31,6 +30,8 @@ import org.json.simple.JSONObject;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import com.JJ.TO.BaseTO;
+import com.JJ.model.Base;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -95,10 +96,8 @@ public class GeneralUtils {
 	public static <T> Map<String, T> convertListToStringMap(Collection<T> list, String attribute) {
 	   Map<String, T> map = new HashMap<String, T>();
 	   for (T obj : list) {
-		   Class<?> clazz = obj.getClass();
 		   try{
-			   Field field = clazz.getField(attribute);
-			   String fieldValue = (String)field.get(obj);
+			   String fieldValue = (String) getObjectProprty(obj, attribute);
 			   map.put(fieldValue.toString(), obj);
 		   }catch(Exception ex){
 			   logger.error(ex.getStackTrace());
@@ -108,37 +107,73 @@ public class GeneralUtils {
 	   return map;
 	}
 	
-	public static <T> Map<Integer, T> convertListToIntegerMap(List<T> list, String attribute) {
-		   Map<Integer, T> map = new HashMap<Integer, T>();
+	public static <T> Map<String, List<T>> convertListToStringListMap(Collection<T> list, String attribute) {
+	   Map<String, List<T>> map = new HashMap<String, List<T>>();
+	   if(list != null){
 		   for (T obj : list) {
 			   try{
-				   Integer fieldValue = (Integer)getObjectProprty(obj, attribute);
+				   String fieldValue = (String) getObjectProprty(obj, attribute);
+				   if(!map.containsKey(fieldValue.toString())){
+					   map.put(fieldValue.toString(), new ArrayList<T>());
+				   }
+				   map.get(fieldValue.toString()).add(obj);
+			   }catch(Exception ex){
+				   logger.error(ex.getMessage(),ex);
+			   }
+		       
+		   }
+	   }
+	   return map;
+	}
+	
+	public static <T> Map<Long, T> convertListToLongMap(List<T> list, String attribute) {
+	   Map<Long, T> map = new HashMap<Long, T>();
+	   if(list != null){
+		   for (T obj : list) {
+			   try{
+				   Long fieldValue = (Long)getObjectProprty(obj, attribute);
 				   map.put(fieldValue, obj);
 			   }catch(Exception ex){
 				   ex.printStackTrace();
 				   logger.error(ex.getMessage());
 			   }
 		       
-		   }   
-		   return map;
+		   }  
+	   }
+	   return map;
+	}
+	
+	public static <T> Map<Integer, T> convertListToIntegerMap(List<T> list, String attribute) {
+	   Map<Integer, T> map = new HashMap<Integer, T>();
+	   for (T obj : list) {
+		   try{
+			   Integer fieldValue = (Integer)getObjectProprty(obj, attribute);
+			   map.put(fieldValue, obj);
+		   }catch(Exception ex){
+			   ex.printStackTrace();
+			   logger.error(ex.getMessage());
+		   }
+	       
+	   }   
+	   return map;
 	}
 	
 	public static <T> Map<Integer, List<T>> convertListToIntegerListMap(List<T> list, String attribute) {
-		   Map<Integer, List<T>> map = new HashMap<Integer, List<T>>();
-		   for (T obj : list) {
-			   try{
-				   Integer fieldValue = (Integer)getObjectProprty(obj, attribute);
-				   if(!map.containsKey(fieldValue)){
-					   map.put(fieldValue, new ArrayList<T>());
-				   }
-				   map.get(fieldValue).add(obj);
-			   }catch(Exception ex){
-				   ex.printStackTrace();
-				   logger.error(ex.getMessage());
+	   Map<Integer, List<T>> map = new HashMap<Integer, List<T>>();
+	   for (T obj : list) {
+		   try{
+			   Integer fieldValue = (Integer)getObjectProprty(obj, attribute);
+			   if(!map.containsKey(fieldValue)){
+				   map.put(fieldValue, new ArrayList<T>());
 			   }
-		       
-		   }   
-		   return map;
+			   map.get(fieldValue).add(obj);
+		   }catch(Exception ex){
+			   ex.printStackTrace();
+			   logger.error(ex.getMessage());
+		   }
+	       
+	   }   
+	   return map;
 	}
 	
 	
@@ -348,5 +383,32 @@ public class GeneralUtils {
 			
 		});
 		return list;
+	}
+	
+	public static void copyFromVO(Base vo ,BaseTO baseTO){
+		baseTO.setVersion(vo.getVersion());
+		baseTO.setCreatedBy(vo.getCreatedBy());
+		baseTO.setCreatedOn(vo.getCreatedOn());
+		baseTO.setUpdatedBy(vo.getUpdatedBy());
+		baseTO.setUpdatedOn(vo.getUpdatedOn());
+		baseTO.setDeleteInd(vo.getDeleteInd());
+	}
+	
+	public static void copyFromTO(Base vo ,BaseTO baseTO){
+		vo.setVersion(baseTO.getVersion());
+		vo.setCreatedBy(baseTO.getCreatedBy());
+		vo.setCreatedOn(baseTO.getCreatedOn());
+		vo.setUpdatedBy(baseTO.getUpdatedBy());
+		vo.setUpdatedOn(baseTO.getUpdatedOn());
+		vo.setDeleteInd(baseTO.getDeleteInd());
+	}
+	
+	public static void copyFromTO(BaseTO to ,BaseTO baseTO){
+		to.setVersion(baseTO.getVersion());
+		to.setCreatedBy(baseTO.getCreatedBy());
+		to.setCreatedOn(baseTO.getCreatedOn());
+		to.setUpdatedBy(baseTO.getUpdatedBy());
+		to.setUpdatedOn(baseTO.getUpdatedOn());
+		to.setDeleteInd(baseTO.getDeleteInd());
 	}
 }

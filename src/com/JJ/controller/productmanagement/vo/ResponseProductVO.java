@@ -27,6 +27,8 @@ public class ResponseProductVO implements Serializable{
     private List<String> tags;
     
     private String productInfo;
+    
+    private List<String> productAttributeList;
 
 	public Integer getProductId() {
 		return productId;
@@ -99,4 +101,13 @@ public class ResponseProductVO implements Serializable{
 	public void setProductInfo(String productInfo) {
 		this.productInfo = productInfo;
 	}
+
+	public List<String> getProductAttributeList() {
+		return productAttributeList;
+	}
+
+	public void setProductAttributeList(List<String> productAttributeList) {
+		this.productAttributeList = productAttributeList;
+	}
+	
 }

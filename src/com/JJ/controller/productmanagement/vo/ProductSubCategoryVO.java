@@ -5,25 +5,23 @@ import java.io.Serializable;
 import com.JJ.model.Base;
 
 public class ProductSubCategoryVO extends Base implements Serializable {
-    private Integer subCategoryId;
+    private Long subCategoryId;
 
     private String name;
 
-    private Integer categoryId;
+    private Long categoryId;
 
     private String displayInd;
-    
-    private String displayIndString;
     
     private Boolean displayIndBoolean;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getSubCategoryId() {
+    public Long getSubCategoryId() {
         return subCategoryId;
     }
 
-    public void setSubCategoryId(Integer subCategoryId) {
+    public void setSubCategoryId(Long subCategoryId) {
         this.subCategoryId = subCategoryId;
     }
 
@@ -35,11 +33,11 @@ public class ProductSubCategoryVO extends Base implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -50,14 +48,6 @@ public class ProductSubCategoryVO extends Base implements Serializable {
     public void setDisplayInd(String displayInd) {
         this.displayInd = displayInd == null ? null : displayInd.trim();
     }
-
-    public String getDisplayIndString() {
-		return displayIndString;
-	}
-
-	public void setDisplayIndString(String displayIndString) {
-		this.displayIndString = displayIndString;
-	}
 
     public Boolean getDisplayIndBoolean() {
 		return displayIndBoolean;

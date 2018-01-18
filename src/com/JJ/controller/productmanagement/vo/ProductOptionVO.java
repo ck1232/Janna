@@ -6,7 +6,7 @@ import java.util.List;
 import com.JJ.model.Base;
 
 public class ProductOptionVO extends Base implements Serializable {
-    private Integer productOptionId;
+    private Long productOptionId;
 
     private String name;
 
@@ -15,14 +15,14 @@ public class ProductOptionVO extends Base implements Serializable {
     private List<ProductSubOptionVO> subOptionList;
     
 	private Integer sequence;
-
+	
     private static final long serialVersionUID = 1L;
 
-    public Integer getProductOptionId() {
+    public Long getProductOptionId() {
         return productOptionId;
     }
 
-    public void setProductOptionId(Integer productOptionId) {
+    public void setProductOptionId(Long productOptionId) {
         this.productOptionId = productOptionId;
     }
 
@@ -83,4 +83,30 @@ public class ProductOptionVO extends Base implements Serializable {
         sb.append(super.toString());
         return sb.toString();
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((productOptionId == null) ? 0 : productOptionId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductOptionVO other = (ProductOptionVO) obj;
+		if (productOptionId == null) {
+			if (other.productOptionId != null)
+				return false;
+		} else if (!productOptionId.equals(other.productOptionId))
+			return false;
+		return true;
+	}
 }

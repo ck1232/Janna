@@ -122,7 +122,7 @@ public class ProductCategoryManagementController {
 				ProductSubCategoryVO productSubCategoryVO = new ProductSubCategoryVO();
 				productSubCategoryVO.setName(productCategoryVO.getCategoryName());
 		    	productSubCategoryVO.setDeleteInd(GeneralUtils.NOT_DELETED);
-		    	productSubCategoryVO.setCategoryId(new Integer(productCategoryVO.getCategoryId()));
+		    	productSubCategoryVO.setCategoryId(productCategoryVO.getCategoryId());
 		    	productSubCategoryVO.setDisplayIndBoolean(productCategoryVO.getDisplayIndBoolean());
 				productSubCategoryManagementService.saveProductSubCategory(productSubCategoryVO);
 			}
@@ -229,12 +229,12 @@ public class ProductCategoryManagementController {
 		
 		productCategory = (ProductCategoryVO) session.getAttribute("productCategory");
 		if (!result.hasErrors()) {
-			ProductCategoryVO currentCategory = productCategoryManagementService.findById(productCategoryVO.getCategoryId());
+			ProductCategoryVO currentCategory = productCategoryManagementService.findById(productCategoryVO.getCategoryId().intValue());
 			if(productCategoryVO.getIsParentBoolean() != currentCategory.getIsParentBoolean()){ // to parent
 				//check if category contains products
-				List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productCategoryVO.getCategoryId());
+				List<ProductSubCategoryVO> subcategoryList = productSubCategoryManagementService.getAllProductSubCategoryByCategory(productCategoryVO.getCategoryId().intValue());
 				for(ProductSubCategoryVO psc: subcategoryList) {
-					List<ProductVO> productList = productService.getAllProductsBySubCategory(psc.getSubCategoryId());
+					List<ProductVO> productList = productService.getAllProductsBySubCategory(psc.getSubCategoryId().intValue());
 					if(productList.size() > 0){
 						redirectAttributes.addFlashAttribute("css", "danger");
 						redirectAttributes.addFlashAttribute("msg", "Please remove products from the category!");
@@ -249,7 +249,7 @@ public class ProductCategoryManagementController {
 			while(i.hasNext()){
 				FileMetaVO fileVo = i.next();
 				if(fileVo.getImageId() != null){ //already exist
-					imageHM.put(fileVo.getImageId(), fileVo);
+					imageHM.put(fileVo.getImageId().intValue(), fileVo);
 				}else{ //newly uploaded
 					ImageLinkVO imageVO = convertFileMetaVOToImageLinkVO(fileVo, productCategoryVO);
 					productCategory.getImageList().add(imageVO);
@@ -295,7 +295,7 @@ public class ProductCategoryManagementController {
 	private ImageLinkVO convertFileMetaVOToImageLinkVO(FileMetaVO fileVO, ProductCategoryVO productCategoryVO) {
 		ImageLinkVO imageVO = new ImageLinkVO();
 		imageVO.setRefType(GeneralUtils.TYPE_PRODUCT_CATEGORY);
-		imageVO.setRefId(productCategoryVO.getCategoryId());
+		imageVO.setRefId(productCategoryVO.getCategoryId().longValue());
 		imageVO.setImagePath(imageFolderSource+GeneralUtils.CATEGORY_PATH+fileVO.getFileName());
 		imageVO.setSequence(fileVO.getSequence());
 		imageVO.setFileName(fileVO.getFileName());

@@ -5,19 +5,19 @@ import java.io.Serializable;
 import com.JJ.model.Base;
 
 public class ProductTagsVO extends Base implements Serializable {
-    private Integer tagsId;
+    private Long tagsId;
 
 	private String name;
 
-	private Integer productId;
+	private Long productId;
 
 	private static final long serialVersionUID = 1L;
 
-	public Integer getTagsId() {
+	public Long getTagsId() {
 		return tagsId;
 	}
 
-	public void setTagsId(Integer tagsId) {
+	public void setTagsId(Long tagsId) {
 		this.tagsId = tagsId;
 	}
 
@@ -29,11 +29,11 @@ public class ProductTagsVO extends Base implements Serializable {
 		this.name = name == null ? null : name.trim();
 	}
 
-	public Integer getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Integer productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 

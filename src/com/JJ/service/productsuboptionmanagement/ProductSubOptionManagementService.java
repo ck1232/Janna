@@ -84,7 +84,7 @@ public class ProductSubOptionManagementService {
 	public void deleteProductsuboption(ProductSubOptionVO vo) {
 		if(vo != null && vo.getDeleteInd() != null && vo.getDeleteInd().equals(GeneralUtils.NOT_DELETED)){
 			ProductSubOptionDbObject dbObj = new ProductSubOptionDbObject();
-			dbObj.setProductSuboptionId(vo.getProductSuboptionId());
+			dbObj.setProductSuboptionId(vo.getProductSuboptionId().intValue());
 			dbObj.setDeleteInd(GeneralUtils.DELETED);
 			productSubOptionDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}
@@ -120,9 +120,9 @@ public class ProductSubOptionManagementService {
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
 				vo.setName(dbObj.getName());
-				vo.setProductId(dbObj.getProductId());
-				vo.setProductOptionId(dbObj.getProductOptionId());
-				vo.setProductSuboptionId(dbObj.getProductSuboptionId());
+				vo.setProductId(dbObj.getProductId().longValue());
+				vo.setProductOptionId(dbObj.getProductOptionId().longValue());
+				vo.setProductSuboptionId(dbObj.getProductSuboptionId().longValue());
 				vo.setVersion(dbObj.getVersion());
 				voList.add(vo);
 			}
@@ -142,7 +142,7 @@ public class ProductSubOptionManagementService {
 				dbObj.setName(vo.getName());
 				dbObj.setProductId(productId);
 				dbObj.setProductOptionId(optionId);
-				dbObj.setProductSuboptionId(vo.getProductSuboptionId());
+				dbObj.setProductSuboptionId(vo.getProductSuboptionId().intValue());
 				dbObj.setVersion(vo.getVersion());
 				dbObjList.add(dbObj);
 			}

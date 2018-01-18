@@ -49,7 +49,7 @@ public class ProductSubCategoryManagementService {
 		Map<Integer, ProductSubCategoryVO> map = new HashMap<Integer, ProductSubCategoryVO>();
 		if(subcatergoryList != null && subcatergoryList.size() > 0){
 			for(ProductSubCategoryVO subcategory : subcatergoryList){
-				map.put(subcategory.getSubCategoryId(), subcategory);
+				map.put(subcategory.getSubCategoryId().intValue(), subcategory);
 			}
 		}
 		return map;
@@ -65,7 +65,7 @@ public class ProductSubCategoryManagementService {
 		if(productSubCategoryVO != null){
 			ProductSubCategoryDbObject dbObj = convertToProductSubCategoryDbObjectList(Arrays.asList(productSubCategoryVO)).get(0);
 			productSubCategoryDbObjectMapper.insert(dbObj);
-			productSubCategoryVO.setSubCategoryId(dbObj.getSubCategoryId());
+			productSubCategoryVO.setSubCategoryId(dbObj.getSubCategoryId().longValue());
 		}
 	}
 	
@@ -105,13 +105,12 @@ public class ProductSubCategoryManagementService {
 		if(productSubCategoryDbObjectList != null && !productSubCategoryDbObjectList.isEmpty()) {
 			for(ProductSubCategoryDbObject dbObj : productSubCategoryDbObjectList) {
 				ProductSubCategoryVO vo = new ProductSubCategoryVO();
-				vo.setCategoryId(dbObj.getCategoryId());
+				vo.setCategoryId(dbObj.getCategoryId().longValue());
 				vo.setDeleteInd(dbObj.getDeleteInd());
 				vo.setDisplayInd(dbObj.getDisplayInd());
-				vo.setDisplayIndString(dbObj.getDisplayInd().equals("1") ? "Y" : "N");
 				vo.setDisplayIndBoolean(dbObj.getDisplayInd().equals("1") ? Boolean.TRUE : Boolean.FALSE);
 				vo.setName(dbObj.getName());
-				vo.setSubCategoryId(dbObj.getSubCategoryId());
+				vo.setSubCategoryId(dbObj.getSubCategoryId().longValue());
 				vo.setVersion(dbObj.getVersion());
 				productSubCategoryVOList.add(vo);
 			}
@@ -124,11 +123,11 @@ public class ProductSubCategoryManagementService {
 		if(productSubCategoryVOList != null && !productSubCategoryVOList.isEmpty()) {
 			for(ProductSubCategoryVO vo : productSubCategoryVOList) {
 				ProductSubCategoryDbObject dbObj = new ProductSubCategoryDbObject();
-				dbObj.setCategoryId(vo.getCategoryId());
+				dbObj.setCategoryId(vo.getCategoryId().intValue());
 				dbObj.setDeleteInd(vo.getDeleteInd());
 				dbObj.setDisplayInd(vo.getDisplayIndBoolean() == Boolean.TRUE ? "1" : "0");
 				dbObj.setName(vo.getName());
-				dbObj.setSubCategoryId(vo.getSubCategoryId());
+				dbObj.setSubCategoryId(vo.getSubCategoryId().intValue());
 				dbObj.setVersion(vo.getVersion());
 				productSubCategoryDbObjectList.add(dbObj);
 			}

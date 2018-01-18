@@ -4,16 +4,9 @@
 $(function () {
     $('#datatable1').DataTable({
       "paging": true,
-      "scrollY": 300,
-      "scrollCollapse": true,
       "responsive" : true,
-      "lengthChange": false,
-      "searching": false,
       "ordering": true,
       "info": true,
-      "autoWidth": false,
-      "sScrollX": "100%",
-      "sScrollXInner": "110%",
       "ajax":{
           "url":'<tiles:getAsString name="data-list" />',
           "data":{
@@ -29,7 +22,7 @@ $(function () {
           var rowId = data[0];
           $(row).find('input[type="checkbox"]').prop('value', data.productId);
           $(row).find('button[name="editBtn"]').prop('value', data.productId);
-          $(row).find('img[name="img"]').prop('src', "./getProductImage/"+data.productId);
+          $(row).find('img[name="img"]').prop('src', "./getProductImage/"+data.productCode);
        }
     });
 });

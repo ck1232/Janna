@@ -55,7 +55,7 @@ import com.JJ.service.productsubcategorymanagement.ProductSubCategoryManagementS
 @Controller  
 @EnableWebMvc
 @Scope("request")
-@RequestMapping(value = "/product/product")
+@RequestMapping(value = "/product/product_old")
 public class ProductManagementController {
 	private static final Logger logger = Logger.getLogger(ProductManagementController.class);
 	private ProductService productService;
@@ -90,7 +90,7 @@ public class ProductManagementController {
 				Map<Integer, List<ProductSubCategoryVO>> subcategoryMap = new HashMap<Integer, List<ProductSubCategoryVO>>();
 				for(ProductSubCategoryVO subcategory : subcategoryList){
 					if(!subcategoryMap.containsKey(subcategory.getCategoryId())){
-						subcategoryMap.put(subcategory.getCategoryId(), new ArrayList<ProductSubCategoryVO>());
+						subcategoryMap.put(subcategory.getCategoryId().intValue(), new ArrayList<ProductSubCategoryVO>());
 					}
 					subcategoryMap.get(subcategory.getCategoryId()).add(subcategory);
 				}
@@ -330,7 +330,7 @@ public class ProductManagementController {
 			
 		}
 		//TODO check for duplicate, add running number if duplicate
-		List<String> productCodeList = productService.getExisitingProductCode(product.getProductId());
+		List<String> productCodeList = productService.getExisitingProductCode(product.getProductId().intValue());
 		int counter = 1;
 		String productCode = product.getProductCode();
 		while(productCodeList.contains(productCode)){
@@ -439,7 +439,7 @@ public class ProductManagementController {
 		product.setWeight(responseProduct.getWeight());
 		product.setSubCategoryId(responseProduct.getSubCategoryId());
 		product.setUnitAmt(responseProduct.getUnitAmt());
-		product.setTags(responseProduct.getTags());
+//		product.setTags(responseProduct.getTags());
 		product.setOptionList(newProduct.getOptionList());
 		product = generateProductCode(product);
 		reshuffleImage(newProduct.getImages());
@@ -492,7 +492,7 @@ public class ProductManagementController {
 		newProduct = (ProductVO) session.getAttribute("product");
 		if(this.newProduct != null && this.newProduct.getImages() != null && this.newProduct.getImages().size() > 0){
 			for(FileMetaVO image : newProduct.getImages()){
-				if(image.getImageId() == imageId){
+				if(image.getImageId().intValue() == imageId){
 					  response.setContentType(image.getFileType());
 					  try {
 						response.getOutputStream().write(image.getBytes(),0,image.getBytes().length);

@@ -10,7 +10,7 @@ import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.model.Base;
 
 public class ProductCategoryVO extends Base implements Serializable {
-    private Integer categoryId;
+    private Long categoryId;
 
     private String categoryName;
 
@@ -21,8 +21,6 @@ public class ProductCategoryVO extends Base implements Serializable {
     private Boolean isParentBoolean;
 
     private String displayInd;
-    
-    private String displayIndString;
     
     private Boolean displayIndBoolean;
 
@@ -38,11 +36,11 @@ public class ProductCategoryVO extends Base implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -86,14 +84,6 @@ public class ProductCategoryVO extends Base implements Serializable {
         this.displayInd = displayInd == null ? null : displayInd.trim();
     }
 
-    public String getDisplayIndString() {
-		return displayIndString;
-	}
-
-	public void setDisplayIndString(String displayIndString) {
-		this.displayIndString = displayIndString;
-	}
-	
     public Boolean getDisplayIndBoolean() {
 		return displayIndBoolean;
 	}

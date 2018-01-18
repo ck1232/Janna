@@ -57,6 +57,10 @@
   			}
 	    };
 	$(function(){
+		$productId = $('#productId').val().trim();
+		if($productId.trim() != ""){
+			$('#optionBtnDiv').addClass("hidden");
+		}
 		$(window).keydown(function(event){
 		    if(event.keyCode == 13 && $(event.target).is("input")) {
 		      event.preventDefault();
@@ -163,30 +167,29 @@
     	<div class="row">
     		<div class="col-md-12">
     			<!--BOX-->
-                <div class="box">
-                	<!--BOX HEADER-->
-                    <div class="box-header with-border">
-                    	<h3 class="box-title">Product Information</h3>
-                    </div>
                     <!--FORM-->
-                    <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />"></form>
+                    <form id="backToListButton" method="get" action="<c:url value="/product/product/listProduct" />" accept-charset="UTF-8"></form>
                     <c:url var="post_url" value="/product/product/saveProduct" />
-                    <form:form id="productForm" method="post"  modelAttribute="productForm" action="${post_url}">
+                    <form:form id="productForm" method="post"  modelAttribute="productForm" action="${post_url}" acceptCharset="UTF-8" >
                     	<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     	<form:input path="productId" type="hidden" class="form-control" id="productId"/>
-			              <div class="box-body">
-			              	<!-- upper row -->
-				              <div class="row form-group">
-				              	<!-- image panel -->
-				              	
-				              	<!-- main content -->
-				              	<div class="col-sm-7">
+				              	<!-- basic info -->
+				              	<div class="form-group box">
+				              		<div class="box-header with-border">
+				              			<h3 class="box-title">Basic Info</h3>
+								        <div class="box-tools pull-right">
+								            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+								              <i class="fa fa-minus"></i></button>
+								        </div>
+				              		</div>
+				              		<div class="box-body">
+							          <div class="col-sm-12 col-md-12 col-lg-7">
 				              		<div class="row">
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Name:</label>
 											<div class="col-sm-10 input-group">
 												<form:input path="productName" type="text" class="form-control"
-								                                id="productName" placeholder="Enter product name" />
+								                                id="productName" placeholder="Enter product name" cssStyle="width:100%;"/>
 												<form:errors path="productName" class="text-danger" />
 											</div>
 									  	</div>
@@ -196,8 +199,8 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Code:</label>
 											<div class="col-sm-10 input-group">
-												<form:input path="productCode" type="text" class="form-control" maxlength="6"
-								                                id="productCode" placeholder="Enter product code" />
+												<form:input readonly="true" path="productCode" class="form-control" 
+								                                id="productCode"/>
 												<form:errors path="productCode" class="text-danger" />
 											</div>
 									  	</div>
@@ -207,17 +210,17 @@
 					              		<div class="form-group ${status.error ? 'has-error' : ''}">
 											<label class="col-sm-2 control-label">Category:</label>
 											<div class="col-sm-10 input-group">
-												<form:select path="subCategoryId" type="text" class="form-control" id="subcategory" >
+												<form:select path="subCategoryId" type="text" class="form-control col-sm-12" id="subcategory" >
 													<form:option value="0">No Category</form:option>
 								                	<c:forEach items="${categoryList}" var="category">
-								                		<c:if test="${category.isParent == true}">
-								                			<optgroup label="${category.name}">
+								                		<c:if test="${category.isParentBoolean == true}">
+								                			<optgroup label="${category.categoryName}">
 								                				<c:forEach items="${category.subcategoryList}" var="sub">
 								                					<form:option value="${sub.subCategoryId}">${sub.name}</form:option>
 								                				</c:forEach>
 								                			</optgroup>
 								                		</c:if>
-								                		<c:if test="${category.isParent == false}">
+								                		<c:if test="${category.isParentBoolean == false}">
 								                			<form:option value="${category.subcategoryList.get(0).subCategoryId}">${category.subcategoryList.get(0).name}</form:option>
 								                		</c:if>
 								                	</c:forEach>
@@ -260,7 +263,7 @@
 								                                id="tags" placeholder="Enter tags" multiple="true">
 								                                
 								                 	<c:forEach items="${productForm.tags}" var="tag">
-								                		<form:option value="${tag}">${tag}</form:option>
+								                		<form:option value="${tag.name}">${tag.name}</form:option>
 								                	</c:forEach>               
 								                </form:select>
 												<form:errors path="tags" class="text-danger" />
@@ -268,54 +271,63 @@
 									  	</div>
 				              		</div>
 				              	</div>
-				              	<div class="col-sm-5">
-					              	
+							        </div>
 				              	</div>
+				              
+				              <!-- product description -->
+				              <div class="form-group box">
+				              	<div class="box-header with-border">
+						        	<h3 class="box-title">Product Description</h3>
+						          	<div class="box-tools pull-right">
+						            	<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+						              		<i class="fa fa-minus"></i>
+						              	</button>
+						          	</div>
+						      	</div>
+						      	<div class="box-body">
+						      		<form:textarea path="productInfo" id="productInfoEditor" name="productInfo" rows="10" cols="80" />
+				              		<form:errors path="productInfo" class="text-danger" />
+						      	</div>
 				              </div>
 				              
-				              <!-- lower row -->
-				              <div class="row form-group col-sm-12" >
-				              	<!-- tabs -->
-				              	<div class="nav-tabs-custom">
-				              		<!-- tab header -->
-				              		<ul class="nav nav-tabs">
-				              			<!-- product info tab header -->
-				              			<li class="active">
-				              				<a href="#product_info_tab" data-toggle="tab" aria-expanded="false">Product Info</a>
-				              			</li>
-				              			<li>
-				              				<a href="#image_tab" data-toggle="tab" aria-expanded="false">Image</a>
-				              			</li>
-				              			<li>
-				              				<a href="#option_tab" data-toggle="tab" aria-expanded="false">Option</a>
-				              			</li>
-				              		</ul>
-				              		<div class="tab-content">
-				              			<div id="product_info_tab" class="tab-pane active">
-				              				<form:textarea path="productInfo" id="productInfoEditor" name="productInfo" rows="10" cols="80" />
-				              				<form:errors path="productInfo" class="text-danger" />
-				              			</div>
-				              			<div id="image_tab" class="tab-pane">
-									      	<div id="dZUpload" class="dropzone">
-											      <div class="dz-default dz-message"></div>
-											</div>
-				              			</div>
-				              			<div id="option_tab" class="tab-pane">
-				              				<tiles:insertAttribute name = "options" />
-				              			</div>
-				              		</div>
-				              	</div>
-				              	<div class="row">
+				              <!-- product images -->
+				              <div class="form-group box">
+				              	<div class="box-header with-border">
+						        	<h3 class="box-title">Product Images</h3>
+						          	<div class="box-tools pull-right">
+						            	<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+						              		<i class="fa fa-minus"></i>
+						              	</button>
+						          	</div>
+						      	</div>
+						      	<div class="box-body">
+						      		<div id="dZUpload" class="dropzone">
+										<div class="dz-default dz-message"></div>
+									</div>
+						      	</div>
+				              </div>
+				              
+				              <!-- product images -->
+				              <div class="form-group box">
+				              	<div class="box-header with-border">
+						        	<h3 class="box-title">Product Option</h3>
+						          	<div class="box-tools pull-right">
+						            	<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+						              		<i class="fa fa-minus"></i>
+						              	</button>
+						          	</div>
+						      	</div>
+						      	<div class="box-body">
+						      		<tiles:insertAttribute name = "options" />
+						      		<tiles:insertAttribute name = "attribute" />
+						      	</div>
+				              </div>
+				             <div class="row">
 				              		<button type="submit" class="btn btn-default pull-right" form="backToListButton"><i class="fa fa-remove"></i> Cancel</button>
 									<tiles:insertAttribute name = "button" />
-				              </div>
-				              </div>
-				              
-				            </div>
-			              <!-- /.box-body -->
+				             </div>
 		            </form:form>
 		            <!--/.FORM-->
-                </div>
     		</div>
     	</div>
     </section>

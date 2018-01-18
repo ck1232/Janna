@@ -137,7 +137,7 @@ public class InventoryManagementController {
 	public @ResponseBody ProductVO getBatchProductVo(@RequestBody ProductVO product) {
 		logger.debug(product.getProductId());
 		
-		List<ProductVO> productVoList = productService.getAllProductVo(product.getProductId());
+		List<ProductVO> productVoList = productService.getAllProductVo(product.getProductId().intValue());
 		if(productVoList != null && productVoList.size() > 0){
 			productVo = productVoList.get(0);
 			if(productVo != null){
@@ -194,7 +194,7 @@ public class InventoryManagementController {
 		Iterator<ProductSubOptionVO> i = product.getSubOptionList().iterator();
 		while(i.hasNext()){
 			ProductSubOptionVO subOptionVo = i.next();
-			ProductSubOptionVO generatedSubOptionVo = productSubOptionManagementService.getSubOptionVo(subOptionVo.getProductSuboptionId());
+			ProductSubOptionVO generatedSubOptionVo = productSubOptionManagementService.getSubOptionVo(subOptionVo.getProductSuboptionId().intValue());
 			subOptionVo.setSeq(generatedSubOptionVo.getSeq());
 			subOptionVo.setName(generatedSubOptionVo.getName());
 		}

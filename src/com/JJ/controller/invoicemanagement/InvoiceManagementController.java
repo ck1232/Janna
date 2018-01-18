@@ -23,6 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -58,7 +61,10 @@ import com.JJ.service.paymentmanagement.PaymentRSManagementService;
 import com.JJ.validator.GrantFormValidator;
 import com.JJ.validator.InvoiceSearchValidator;
 
-
+@PropertySources({
+	@PropertySource(value = "classpath:admin-dev-config.properties", ignoreResourceNotFound = false),
+	@PropertySource(value = "file:C:\\Inetpub\\vhosts\\ziumlight.com\\Configuration\\application-${spring.profiles.active}.properties", ignoreResourceNotFound=true)
+})
 @Controller  
 @EnableWebMvc
 @Scope("request")
@@ -75,6 +81,8 @@ public class InvoiceManagementController {
 	private InvoiceSearchValidator invoiceSearchValidator;
 	private GrantFormValidator grantFormValidator;
 	private ServletContext context;
+	@Value("${file.fileTemplatePath}")
+	private String fileTemplatePath;
 	private static final String uploadPassword = "uploadExcelFile1232";
 	@Autowired
 	public InvoiceManagementController(PaymentManagementController paymentManagementController,
@@ -506,7 +514,8 @@ public class InvoiceManagementController {
 			HttpServletRequest request, HttpServletResponse response) {
 		String dataDirectory = context.getRealPath("/WEB-INF/template/");
 		if(dataDirectory == null){
-			dataDirectory = "C:/Inetpub/vhosts/ziumlight.com/template";
+//			dataDirectory = "C:/Inetpub/vhosts/ziumlight.com/template";
+			dataDirectory = fileTemplatePath;
 		}
         File file = new File(dataDirectory+"/invoice_summary_template.xls");
         logger.debug(file.getPath());

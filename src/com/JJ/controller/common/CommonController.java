@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -68,7 +69,9 @@ import com.JJ.service.usermanagement.UserManagementService;
 })
 @Scope("session")
 @RequestMapping(value = "/")
-public class CommonController {
+public class CommonController implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(CommonController.class);
 	private SubModuleManagementService subModuleManagementService;
 	private ModuleManagementService moduleManagementService;

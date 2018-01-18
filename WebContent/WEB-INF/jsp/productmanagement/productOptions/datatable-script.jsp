@@ -1,22 +1,14 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 var optionTable= null;
-
 $(function () {
 	
     optionTable = $('#datatable1').DataTable({
-    	"rowReorder": true,
-      "paging": true,
-      "responsive" : true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "order": [1, 'asc'],
-      "info": true,
-      "autoWidth": false,
-      "sScrollX": "100%",
-      "sScrollXInner": "110%",
-      "ajax":{
+    	"paging": false,
+        "responsive" : true,
+        "ordering": true,
+        "info": true,
+      	"ajax":{
           "url":'<tiles:getAsString name="data-list" />',
           "data":{
 				<tiles:insertAttribute name="datatable-data" />
@@ -25,12 +17,28 @@ $(function () {
 	  "columns": [
 	              <tiles:insertAttribute name="column-mapping" />
 	            ],
-      
-      
       'rowCallback': function(row, data, dataIndex){
           // Get row ID
           $(row).find('input[type="checkbox"]').prop('value', data.name);
           $(row).find('button[name="editBtn"]').prop('value', data.name);
+       },
+       "createdRow": function ( row, data, index ) {
+           $str = "";
+           $subOptionList = data.subOptionList;
+           
+           $.each($subOptionList, function(index, value){
+        	   if(value.displayInd == 'N'){
+        		   $str = $str+"<strike>"+value.name+"</strike>";
+        	   }else{
+        		   $str = $str+value.name;
+        	   }
+        	   $str = $str + ",";
+           });
+           
+           if($str.length > 0){
+        	   $str = $str.substr(0,$str.length-1);
+           }
+           $('td', row).eq(2).html($str);
        }
     });
     

@@ -218,7 +218,7 @@ public class InventoryProductManagementService {
 	private HashMap<Integer, ProductVO> convertToHashMapForProduct(List<ProductVO> productList) {
 		HashMap<Integer, ProductVO> productHash = new HashMap<Integer, ProductVO>();
 		for(ProductVO product : productList) {
-			productHash.put(product.getProductId(), product);
+			productHash.put(product.getProductId().intValue(), product);
 		}
 		return productHash;
 	}
@@ -322,9 +322,9 @@ public class InventoryProductManagementService {
 			for(BatchIntakeProductVO batchProduct:inventoryVo.getProductItems()){
 				List<Integer> suboptionIdList = new ArrayList<Integer>();
 				for(ProductSubOptionVO suboption: batchProduct.getSubOptionList()) {
-					suboptionIdList.add(suboption.getProductSuboptionId());
+					suboptionIdList.add(suboption.getProductSuboptionId().intValue());
 				}
-				ProductSubOptionRsVO rs = productService.findProductSubOptionRs(batchProduct.getProduct().getProductId(), suboptionIdList);
+				ProductSubOptionRsVO rs = productService.findProductSubOptionRs(batchProduct.getProduct().getProductId().intValue(), suboptionIdList);
 				if(rs == null || rs.getProductSuboptionRsId() == null){
 					continue;
 				}

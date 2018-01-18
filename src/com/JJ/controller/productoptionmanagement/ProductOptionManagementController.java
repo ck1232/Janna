@@ -143,7 +143,7 @@ public class ProductOptionManagementController {
 				productOptionVO.setDisplayInd(GeneralUtils.NOT_ALLOW_DISPLAY);
 			}
 			List<ProductOptionVO> optionList = productOptionManagementService.getAllProductoptions();
-			ProductOptionVO currentOption = productOptionManagementService.findById(productOptionVO.getProductOptionId());
+			ProductOptionVO currentOption = productOptionManagementService.findById(productOptionVO.getProductOptionId().intValue());
 			for(ProductOptionVO o: optionList){
 				if(!currentOption.getName().equals(o.getName()) && productOptionVO.getName().equals(o.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.productoptionform.name");

@@ -1,5 +1,6 @@
 package com.JJ.service.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,9 @@ import com.JJ.model.SubModulePermissionTypeDbObjectExample;
 @Service
 @Scope("prototype")
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
-public class CommonService {
+public class CommonService implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	private RoleDbObjectMapper roleDbObjectMapper;
 	private SubModulePermissionTypeDbObjectMapper subModulePermissionTypeDbObjectMapper;
 	private SubModulePermissionDbObjectMapper subModulePermissionDbObjectMapper;

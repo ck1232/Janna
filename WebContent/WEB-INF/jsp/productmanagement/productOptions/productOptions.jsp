@@ -15,14 +15,13 @@
 
 <div class="row">
       <div class="box-header">
-        <h3 class="box-title"><tiles:insertAttribute name = "table-title" /></h3>
         <tiles:insertAttribute name = "options" />
       </div>
       <!-- /.box-header -->
       <div class="box-body">
       <form:form id="datatableForm" method="post">
       	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <table id="datatable1" class="table table-bordered table-hover">
+        <table id="datatable1" style="width:100%" class="table table-bordered table-hover">
           <thead>
           	<tiles:insertAttribute name="column-header" />
           </thead>

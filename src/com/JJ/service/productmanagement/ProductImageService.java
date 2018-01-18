@@ -72,7 +72,7 @@ public class ProductImageService {
 		List<FileMetaVO> fileMetaVOs = productVo.getRemoveImagesLink();
 		if(fileMetaVOs != null && !fileMetaVOs.isEmpty()){
 			for(FileMetaVO removeImage : fileMetaVOs){
-				ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(removeImage, productVo.getProductId(), GeneralUtils.TYPE_PRODUCT);
+				ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(removeImage, productVo.getProductId().intValue(), GeneralUtils.TYPE_PRODUCT);
 				if(imageVO != null && imageVO.getImageLinkRsId() != null){
 					imageService.deleteImageLinkByImageLinkRsId(imageVO);
 				}
@@ -82,7 +82,7 @@ public class ProductImageService {
 		//table image
 		LinkedList<FileMetaVO> images = productVo.getImages();
 		for(FileMetaVO image : images){
-			ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(image, productVo.getProductId(), GeneralUtils.TYPE_PRODUCT);
+			ImageLinkVO imageVO = imageService.convertFileMetaVOToImageLinkVO(image, productVo.getProductId().intValue(), GeneralUtils.TYPE_PRODUCT);
 			if(imageVO.getImageLinkRsId() == null){
 				boolean uploadSuccess = imageService.uploadFileToDisk(imageVO);
 				if(!uploadSuccess){
@@ -99,7 +99,7 @@ public class ProductImageService {
 		if(images != null && images.size() > 0 && productId != null){
 			for(FileMetaVO image : images){
 				ProductImageDbObjectWithBLOBs productImage = new ProductImageDbObjectWithBLOBs();
-				productImage.setProductImageId(image.getImageId());
+				productImage.setProductImageId(image.getImageId().intValue());
 				productImage.setProductId(productId);
 				productImage.setImageName(image.getFileName());
 				productImage.setSequence(image.getSequence());
@@ -146,7 +146,7 @@ public class ProductImageService {
 		if(voList != null && voList.size() > 0){
 			List<Integer> productIdList = new ArrayList<Integer>();
 			for(ProductVO vo : voList){
-				productIdList.add(vo.getProductId());
+				productIdList.add(vo.getProductId().intValue());
 			}
 			
 			if(productIdList != null && productIdList.size() > 0){
@@ -156,7 +156,7 @@ public class ProductImageService {
 				if(imageList != null && imageList.size() > 0){
 					for(FileMetaVO vo : fileMetaList){
 						if(!imageMap.containsKey(vo.getProductId())){
-							imageMap.put(vo.getProductId(), new LinkedList<FileMetaVO>());
+							imageMap.put(vo.getProductId().intValue(), new LinkedList<FileMetaVO>());
 						}
 						imageMap.get(vo.getProductId()).add(vo);
 					}
@@ -181,10 +181,10 @@ public class ProductImageService {
 				vo.setBytes(image.getImage());
 				vo.setFileName(image.getImageName());
 				vo.setFileSize(image.getImage().length+"");
-				vo.setImageId(image.getProductImageId());
+				vo.setImageId(image.getProductImageId().longValue());
 				vo.setThumbnail(image.getThumbNailImage());
 				vo.setSequence(image.getSequence());
-				vo.setProductId(image.getProductId());
+				vo.setProductId(image.getProductId().longValue());
 				fileMetaList.add(vo);
 			}
 		}
