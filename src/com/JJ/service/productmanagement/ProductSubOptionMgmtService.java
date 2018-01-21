@@ -29,12 +29,12 @@ public class ProductSubOptionMgmtService {
 		this.productOptionDAO = productOptionDAO;
 	}
 
-	public void setProductSubOption(List<ProductOptionVO> list, ProductTO newProductTO, Map<ProductSubOptionVO, ProductSubOptionTO> subOptionMap){
-		List<ProductSubOptionTO> subOptionTOList = convertToProductSubOptionTOList(list, newProductTO, subOptionMap);
+	public void setProductSubOption(List<ProductOptionVO> list, ProductTO newProductTO){
+		List<ProductSubOptionTO> subOptionTOList = convertToProductSubOptionTOList(list, newProductTO);
 		newProductTO.setProductionSubOptionTOList(subOptionTOList);
 	}
 	
-	public List<ProductSubOptionTO> convertToProductSubOptionTOList(List<ProductOptionVO> optionList, ProductTO productTO, Map<ProductSubOptionVO, ProductSubOptionTO> subOptionMap){
+	public List<ProductSubOptionTO> convertToProductSubOptionTOList(List<ProductOptionVO> optionList, ProductTO productTO){
 		List<ProductSubOptionTO> subOptionList = new ArrayList<ProductSubOptionTO>();
 		Map<Long, ProductSubOptionTO> map = GeneralUtils.convertListToLongMap(productTO.getProductionSubOptionTOList(), "productSuboptionId");
 		if(optionList != null && !optionList.isEmpty()){
@@ -63,7 +63,6 @@ public class ProductSubOptionMgmtService {
 							GeneralUtils.copyFromTO(to, map.get(to.getProductSuboptionId()));
 							
 						}
-						subOptionMap.put(subOptionVO, to);
 						subOptionList.add(to);
 					}
 				}

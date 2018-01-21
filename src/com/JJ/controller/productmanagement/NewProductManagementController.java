@@ -243,7 +243,7 @@ public class NewProductManagementController {
 	}
 	
 	@RequestMapping(value = "/saveEditOption", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonResponseVO saveEditOption(HttpSession session, @RequestBody ProductOptionVO option) {
+	public @ResponseBody JsonResponseVO saveEditOption(HttpSession session, @RequestBody ProductOptionVO option ) {
 		newProduct = (ProductVO) session.getAttribute("product");
 		selectedOption = (ProductOptionVO) session.getAttribute("selectedOption");
 		if(selectedOption != null){
@@ -267,6 +267,17 @@ public class NewProductManagementController {
 			}
 		}
 		newProduct.setProductAttributeVOList(generateProductAttributeVOList(newProduct.getProductCode(),newProduct.getOptionList()));
+		if(newProduct.getProductAttributeVOList() != null){
+			for(ProductAttributeVO vo : newProduct.getProductAttributeVOList()){
+				if(option.getCurrentDisplayProductAttributeList() != null){
+					if(option.getCurrentDisplayProductAttributeList().contains(vo.getSku())){
+						vo.setDisplayInd(GeneralUtils.ALLOW_DISPLAY);
+						continue;
+					}
+				}
+				vo.setDisplayInd(GeneralUtils.NOT_ALLOW_DISPLAY);
+			}
+		}
 		return new JsonResponseVO("success");
 	}
 	
@@ -441,7 +452,7 @@ public class NewProductManagementController {
 		newProduct.setProductName(responseProduct.getProductName());
 		newProduct.setSubCategoryId(responseProduct.getSubCategoryId());
 		newProduct.setUnitAmt(responseProduct.getUnitAmt());
-		newProduct.setWeight(responseProduct.getWeight());
+		newProduct.setWeight(responseProduct.getWeight() == null ? 0 : responseProduct.getWeight());
 		newProduct.setTags(ProductTagsService.convertToProductTagsVOList(responseProduct.getTags()));
 		newProduct.setProductInfo(responseProduct.getProductInfo());
 		
@@ -539,6 +550,20 @@ public class NewProductManagementController {
 				images.get(i).setSequence(i+1);
 			}
 		}
+	}
+	
+	@RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
+	public String deleteProduct(@RequestParam(value = "checkboxId", required=false) List<Long> ids,
+			final RedirectAttributes redirectAttributes) {
+		if(ids == null || ids.size() < 1){
+			redirectAttributes.addFlashAttribute("css", "danger");
+			redirectAttributes.addFlashAttribute("msg", "Please select at least one record!");
+			return "redirect:listProduct";
+		}
+		productMgmtService.deleteProduct(ids);
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Product(s) deleted successfully!");
+		return "redirect:listProduct";
 	}
 	
 	class ImageCompare implements Comparator<FileMetaVO>{

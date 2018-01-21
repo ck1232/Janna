@@ -8,15 +8,16 @@ import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
 @Embeddable
-public class ProductAttributePK implements Serializable {
-
+public class ProductAttributePK implements Serializable{
+	@Transient
 	private static final long serialVersionUID = 1L;
+
 	
-	public ProductAttributePK() {
-	}
+
 	@Column(name="sku", nullable=false)
 	private String sku;
 	
@@ -24,6 +25,15 @@ public class ProductAttributePK implements Serializable {
 	@JoinColumn(name="product_suboption_id", nullable=false)
 	@ForeignKey( name = "none" )
 	private ProductSubOptionTO productSubOptionTO;
+	
+	public ProductAttributePK() {
+	}
+
+	public ProductAttributePK(String sku,
+			ProductSubOptionTO productSubOptionTO) {
+		this.sku = sku;
+		this.productSubOptionTO = productSubOptionTO;
+	}
 
 	public String getSku() {
 		return sku;
@@ -40,7 +50,7 @@ public class ProductAttributePK implements Serializable {
 	public void setProductSubOptionTO(ProductSubOptionTO productSubOptionTO) {
 		this.productSubOptionTO = productSubOptionTO;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

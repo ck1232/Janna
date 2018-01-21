@@ -35,7 +35,7 @@ $(function () {
            $str = "";
            $subOptionList = data.subOptionList;
            $.each($subOptionList, function(index, value){
-        	   console.log(value.name);
+        	   /* console.log(value.name); */
         	   if(value.displayInd == 'N'){
         		   $str = $str+"<strike>"+value.name+"</strike>";
         	   }else{

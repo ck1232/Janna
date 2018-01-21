@@ -27,12 +27,13 @@ public class ProductAttributeTO extends BaseTO {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="product_attribute_id", nullable=false)
 	private Long productAttributeId;
-	
+
 	@Column(name="sku", nullable=false)
 	private String sku;
 	
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductSubOptionTO.class)
-	@JoinColumn(name="product_suboption_id", nullable=false)
+	@JoinColumn(name="product_suboption_id", nullable=true)
 	@ForeignKey( name = "none" )
 	private ProductSubOptionTO productSubOptionTO;
 	
@@ -60,7 +61,7 @@ public class ProductAttributeTO extends BaseTO {
 	}
 
 	public String getSku() {
-		return sku;
+		return this.sku;
 	}
 
 	public void setSku(String sku) {
@@ -68,7 +69,7 @@ public class ProductAttributeTO extends BaseTO {
 	}
 
 	public ProductSubOptionTO getProductSubOptionTO() {
-		return productSubOptionTO;
+		return this.productSubOptionTO;
 	}
 
 	public void setProductSubOptionTO(ProductSubOptionTO productSubOptionTO) {
@@ -98,5 +99,4 @@ public class ProductAttributeTO extends BaseTO {
 	public void setDisplayInd(String displayInd) {
 		this.displayInd = displayInd;
 	}
-	
 }

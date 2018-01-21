@@ -134,7 +134,18 @@
 		var optionName = $("#name").val();
 		var optionInputId = $("#optionId").val();
 		var subOptionList = [];
+		var currentDisplayProductAttributeList = [];
 		var subOptionDivList = $("#subOptionDiv").find("div.subOptionDiv");
+		var currentProductAttributeList = $("input[name='productAttributeList']");
+		if(currentProductAttributeList != null){
+			for(var i = 0; i<currentProductAttributeList.length;i++){
+				if($(currentProductAttributeList[i]).is(':checked')){
+					currentDisplayProductAttributeList.push($(currentProductAttributeList[i]).val());
+					console.log($(currentProductAttributeList[i]).val());
+				}
+			}
+		}
+		/* console.log(currentProductAttributeList); */
 		if(subOptionDivList != null && subOptionDivList.length > 0){
 			for(var i=0; i< subOptionDivList.length;i++){
 				var item = subOptionDivList.get(i);
@@ -157,7 +168,8 @@
 		var data = {
 			productOptionId : optionInputId,
 			name : optionName,
-			subOptionList : subOptionList
+			subOptionList : subOptionList,
+			currentDisplayProductAttributeList : currentDisplayProductAttributeList
 		}
 
 		var saveAjax = $.ajax({

@@ -16,6 +16,8 @@ public class ProductOptionVO extends Base implements Serializable {
     
 	private Integer sequence;
 	
+	private List<String> currentDisplayProductAttributeList;
+	
     private static final long serialVersionUID = 1L;
 
     public Long getProductOptionId() {
@@ -68,7 +70,16 @@ public class ProductOptionVO extends Base implements Serializable {
 		}
 	}
 
-    @Override
+    public List<String> getCurrentDisplayProductAttributeList() {
+		return currentDisplayProductAttributeList;
+	}
+
+	public void setCurrentDisplayProductAttributeList(
+			List<String> currentDisplayProductAttributeList) {
+		this.currentDisplayProductAttributeList = currentDisplayProductAttributeList;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());

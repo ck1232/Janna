@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ import com.JJ.service.productoptionmanagement.ProductOptionMgmtService;
 
 @Service
 @Scope("prototype")
-@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
+@Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_UNCOMMITTED)
 public class ProductMgmtService {
 	private static final Logger logger = Logger.getLogger(ProductMgmtService.class);
 	private ProductDAO productDAO;
@@ -188,11 +189,20 @@ public class ProductMgmtService {
 		imageService.setProductImage(newProductVO.getImagesLink(), newProductTO);
 		
 		//proudct suboption
-		Map<ProductSubOptionVO, ProductSubOptionTO> subOptionMap = new HashMap<ProductSubOptionVO, ProductSubOptionTO>();
-		productSubOptionMgmtService.setProductSubOption(newProductVO.getOptionList(), newProductTO, subOptionMap);
+		productSubOptionMgmtService.setProductSubOption(newProductVO.getOptionList(), newProductTO);
 		
 		//product attribute
-		productAttributeMgmtService.setProductAttribute(newProductVO.getProductAttributeVOList(), newProductTO ,subOptionMap);
+		productAttributeMgmtService.setProductAttribute(newProductVO.getProductAttributeVOList(), newProductTO);
 		productDAO.save(newProductTO);
+	}
+
+	public void deleteProduct(List<Long> ids) {
+		List<ProductTO> list = productDAO.findByProductIdInAndDeleteInd(ids, GeneralUtils.NOT_DELETED);
+		if(list != null && !list.isEmpty()){
+			for(ProductTO product : list){
+				product.setDeleteInd(GeneralUtils.DELETED);
+			}
+			productDAO.save(list);
+		}
 	}
 }
