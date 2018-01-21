@@ -45,7 +45,11 @@
 						if(element.displayInd == 'N'){
 							view = "-slash";
 						}
-						$( "#subOptionDiv" ).append( '<div class="subOptionDiv" style="padding:0px 5%;"><label>'+ element.name +'</label><a class="pull-right icon" onclick="removeSubOption(this)">x</a><a class="pull-right icon display" onclick="toggleView(this);"><i class="fa fa-eye'+view+'"></i></a><input type="hidden" value="'+element.productSuboptionId+'"/></div>' );
+						if(element.productSuboptionId != null){
+							$( "#subOptionDiv" ).append( '<div class="subOptionDiv" style="padding:0px 5%;"><label>'+ element.name +'</label><a class="pull-right icon display" onclick="toggleView(this);"><i class="fa fa-eye'+view+'"></i></a><input type="hidden" value="'+element.productSuboptionId+'"/></div>' );
+						}else{
+							$( "#subOptionDiv" ).append( '<div class="subOptionDiv" style="padding:0px 5%;"><label>'+ element.name +'</label><a class="pull-right icon" onclick="removeSubOption(this)">x</a><a class="pull-right icon display" onclick="toggleView(this);"><i class="fa fa-eye'+view+'"></i></a><input type="hidden" value="'+element.productSuboptionId+'"/></div>' );
+						}
 					});
 					
 					/* if(data.subOption != ""){
@@ -77,6 +81,7 @@
 				}
 	  		}).done(function() {
 				optionTable.ajax.reload();
+				attributeTable.ajax.reload();
 			});
 		
 	}

@@ -296,7 +296,7 @@ public class NewProductManagementController {
 				}
 			}
 		}
-		
+		newProduct.setProductAttributeVOList(generateProductAttributeVOList(newProduct.getProductCode(), newProduct.getOptionList()));
 		return new JsonResponseVO("success");
 	}
 	
