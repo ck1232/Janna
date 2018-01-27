@@ -109,7 +109,7 @@ public class InventoryProductManagementService {
 	public List<ViewProductInventoryLocationVO> getAllInventoryProductLocations(int suboption1Id, int suboption2Id, int suboption3Id) {
 		ViewProductInventoryLocationDbObjectExample productInventoryLocationExample = new ViewProductInventoryLocationDbObjectExample();
 		ViewProductInventoryLocationDbObjectExample.Criteria criteria = productInventoryLocationExample.createCriteria();
-		criteria.andQtyGreaterThan(BigDecimal.ZERO);
+		criteria.andQtyGreaterThanOrEqualTo(BigDecimal.ZERO);
 		productInventoryLocationExample.setOrderByClause("location");
 		if(suboption1Id != 0){
 			criteria.andSuboption1IdEqualTo(suboption1Id);
@@ -210,6 +210,8 @@ public class InventoryProductManagementService {
 			productInventory.getProductSuboption().setProduct(productvo);
 			productInventory.setFromLocation(locationHash.get(productInventory.getTransferFrom()));
 			productInventory.setToLocation(locationHash.get(productInventory.getTransferTo()));
+			productInventory.setLocation();
+			productInventory.setProduct();
 		}
 		
 		return productInventoryList;
@@ -343,7 +345,7 @@ public class InventoryProductManagementService {
 					ProductInventoryVO deleteInventory = new ProductInventoryVO();
 					deleteInventory.setDate(inventoryVo.getDate());
 					deleteInventory.setDeleteRemarks(inventoryVo.getRemarks());
-					deleteInventory.setTransferFrom(inventoryVo.getTransferTo());
+					deleteInventory.setTransferTo(inventoryVo.getTransferTo());
 					deleteInventory.setPlusOrMinus(false);
 					deleteInventory.setUnitAmt(batchProduct.getUnitcost());
 					deleteInventory.setRemarks(inventoryVo.getRemarks());
@@ -399,6 +401,8 @@ public class InventoryProductManagementService {
 				vo.setTransferFrom(dbObj.getTransferFrom());
 				vo.setTransferTo(dbObj.getTransferTo());
 				vo.setUnitAmt(dbObj.getUnitAmt());
+				vo.setCreatedBy(dbObj.getCreatedBy());
+				vo.setCreatedOn(dbObj.getCreatedOn());
 				list.add(vo);
 			}
 		}

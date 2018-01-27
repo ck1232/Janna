@@ -12,8 +12,8 @@
 {"data": "qty"},
 {"data": "remarks"},
 {"data": "mode"},
-{"data": "createdby"},
-{"data": "createdon"},
+{"data": "createdBy"},
+{"data": "createdOn"},
 {
     "className":      '',
     "orderable":      false,

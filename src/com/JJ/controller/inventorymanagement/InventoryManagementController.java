@@ -17,6 +17,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +43,7 @@ import com.JJ.helper.GeneralUtils;
 import com.JJ.service.inventorymanagement.InventoryProductManagementService;
 import com.JJ.service.productmanagement.ProductService;
 import com.JJ.service.productsuboptionmanagement.ProductSubOptionManagementService;
+import com.JJ.validator.InventoryProductValidator;
 import com.mysql.jdbc.StringUtils;
 
 
@@ -52,16 +57,19 @@ public class InventoryManagementController {
 	private InventoryProductManagementService inventoryProductManagementService;
 	private ProductService productService;
 	private ProductSubOptionManagementService productSubOptionManagementService;
+	private InventoryProductValidator inventoryProductValidator;
 	private ProductInventoryVO inventoryVO;
 	private ProductVO productVo;
 	
 	private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	@Autowired
 	public InventoryManagementController(InventoryProductManagementService inventoryProductManagementService,
-			ProductService productService, ProductSubOptionManagementService productSubOptionManagementService) {
+			ProductService productService, ProductSubOptionManagementService productSubOptionManagementService,
+			InventoryProductValidator inventoryProductValidator) {
 		this.inventoryProductManagementService = inventoryProductManagementService;
 		this.productService = productService;
 		this.productSubOptionManagementService = productSubOptionManagementService;
+		this.inventoryProductValidator = inventoryProductValidator;
 	}
 	
 	
@@ -255,42 +263,52 @@ public class InventoryManagementController {
 		session.setAttribute("inventory", inventoryVO);
 		return new JsonResponseVO("success");
 	}
+	
+	@InitBinder("inventoryProductForm")
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(inventoryProductValidator);
+	}
+	
+	//add Inventory save to db
 	@RequestMapping(value = "/createInventoryProduct", method = RequestMethod.POST)
-	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") ProductInventoryVO inventoryVO, 
-			final RedirectAttributes redirectAttributes, HttpSession session) {
-		inventoryVO = (ProductInventoryVO) session.getAttribute("inventory");
+	public String saveInventoryProduct(@ModelAttribute("inventoryProductForm") @Validated ProductInventoryVO inventoryVO, 
+			BindingResult result, final RedirectAttributes redirectAttributes, HttpSession session) {
+		inventoryVO.setProductItems(((ProductInventoryVO) session.getAttribute("inventory")).getProductItems());
 		//inventoryVO.setProductItems(this.inventoryVO.getProductItems());
-		try{
-			List<StorageLocationVO> locationList = inventoryProductManagementService.getAllStorageLocation();
-			Map<String, StorageLocationVO> locationMap = new HashMap<String, StorageLocationVO>();
-			if(locationList != null && locationList.size() > 0){
-				for(StorageLocationVO location:locationList){
-					locationMap.put(location.getName(), location);
+		if (!result.hasErrors()) {
+			try{
+				List<StorageLocationVO> locationList = inventoryProductManagementService.getAllStorageLocation();
+				Map<String, StorageLocationVO> locationMap = new HashMap<String, StorageLocationVO>();
+				if(locationList != null && locationList.size() > 0){
+					for(StorageLocationVO location:locationList){
+						locationMap.put(location.getName(), location);
+					}
 				}
+				Date date = df.parse(inventoryVO.getDateString());
+				inventoryVO.setDate(date);
+				StorageLocationVO locationTo = locationMap.get(inventoryVO.getTransferFromName());
+				StorageLocationVO locationFrom = locationMap.get(inventoryVO.getTransferToName());
+				if(locationTo != null){
+					inventoryVO.setTransferTo(locationTo.getLocationId());
+				}
+				
+				if(locationFrom != null){
+					inventoryVO.setTransferFrom(locationFrom.getLocationId());
+				}
+				
+				
+				inventoryProductManagementService.saveInventoryRecord(inventoryVO);
+				
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");
+			}catch(Exception ex){
+				ex.printStackTrace();
+				redirectAttributes.addFlashAttribute("css", "danger");
+				redirectAttributes.addFlashAttribute("msg", "Invalid date input.");
 			}
-			Date date = df.parse(inventoryVO.getDateString());
-			inventoryVO.setDate(date);
-			StorageLocationVO locationTo = locationMap.get(inventoryVO.getTransferFromName());
-			StorageLocationVO locationFrom = locationMap.get(inventoryVO.getTransferToName());
-			if(locationTo != null){
-				inventoryVO.setTransferTo(locationTo.getLocationId());
-			}
-			
-			if(locationFrom != null){
-				inventoryVO.setTransferFrom(locationFrom.getLocationId());
-			}
-			
-			
-			inventoryProductManagementService.saveInventoryRecord(inventoryVO);
-			
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Batch intake added successfully!");
-		}catch(Exception ex){
-			ex.printStackTrace();
-			redirectAttributes.addFlashAttribute("css", "danger");
-			redirectAttributes.addFlashAttribute("msg", "Invalid date input.");
+			return "redirect:listInventoryProduct";
 		}
-		return "redirect:listInventoryProduct";
+		return "createInventoryProduct";
 	}
 	
 }

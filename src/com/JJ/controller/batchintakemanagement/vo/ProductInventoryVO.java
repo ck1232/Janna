@@ -304,4 +304,39 @@ public class ProductInventoryVO extends Base implements Serializable {
         sb.append(super.toString());
         return sb.toString();
     }
+
+	public void setLocation() {
+		if(transferFrom == null && transferTo != null) 
+			this.location = "Added to " + toLocation.getName();
+    	
+		else if(transferFrom != null && transferTo == null) 
+    		this.location = "Deleted from " + fromLocation.getName();
+    	
+		else if(transferFrom != null && transferTo != null)
+    		this.location = "From " + fromLocation.getName() + " to " + toLocation.getName();
+		
+		else
+			this.location = "";
+	}
+
+	public void setProduct() {
+    	this.product = this.productSuboption.getProduct().getProductName();
+    	if(this.productSuboption.getSuboption1Id() != null) 
+    		this.product = this.product + ", " + this.productSuboption.getSubOption1().getSubOptionList().get(0).getName();	
+    	else
+    		return;
+    	
+    	
+    	if(this.productSuboption.getSuboption2Id() != null) 
+    		this.product = this.product + ", " + this.productSuboption.getSubOption2().getSubOptionList().get(0).getName();	
+    	else
+    		return;
+    	
+    	
+    	if(this.productSuboption.getSuboption3Id() != null) 
+    		this.product = this.product + ", " + this.productSuboption.getSubOption3().getSubOptionList().get(0).getName();	
+    	else
+    		return;
+    	
+	}
 }

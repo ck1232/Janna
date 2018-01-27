@@ -87,7 +87,7 @@ public class InventoryHistoryManagementController {
 	@RequestMapping(value = "/getInventoryHistoryList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getInventoryProductList() {
 		logger.debug("getting inventory history list");
-		if(productInventoryList.isEmpty() && !searchBefore) {
+		if((productInventoryList == null || productInventoryList.isEmpty()) && !searchBefore) {
 			productInventoryList = inventoryProductManagementService.getAllProductInventory();
 		}
 		return GeneralUtils.convertListToJSONString(productInventoryList);
