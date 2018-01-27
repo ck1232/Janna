@@ -57,7 +57,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller  
 @EnableWebMvc
 @Scope("request")
-@RequestMapping(value = "/product/category")
+@RequestMapping(value = "/product/category_old")
 public class ProductCategoryManagementController {
 	private static final Logger logger = Logger.getLogger(ProductCategoryManagementController.class);
 	

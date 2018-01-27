@@ -40,6 +40,8 @@ public class ProductCategoryTO extends BaseTO {
 	@OneToMany(mappedBy="productCategoryTO", cascade=CascadeType.ALL)
 	@ForeignKey( name = "none" )
 	private List<ProductSubCategoryTO> productSubCategoryTOList;
+	
+	
 
 	public Long getCategoryId() {
 		return categoryId;

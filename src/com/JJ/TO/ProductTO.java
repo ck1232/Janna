@@ -64,19 +64,19 @@ public class ProductTO extends BaseTO {
 	@ForeignKey( name = "none" )
 	private List<ProductSubOptionTO> productionSubOptionTOList;
 	
-	@OneToMany(mappedBy="productTO", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="productTO", cascade = CascadeType.ALL)//FetchType.EAGER is default
 	@Where(clause="delete_ind='N'")
 	@ForeignKey( name = "none")
 	private List<ProductAttributeTO> productAttributeTOList;
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(
 		      name="product_tags_rs", 
-		      joinColumns=@JoinColumn(name="product_id", referencedColumnName="product_id"),
+		      joinColumns=@JoinColumn(name="product_id"),
 		      inverseJoinColumns=@JoinColumn(name="product_tags_id", referencedColumnName="tags_id"))
 	@ForeignKey( name = "none")
 	private List<ProductTagsTO> productTagsTOList;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="productTO", cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="productTO", cascade=CascadeType.ALL)
 	@Where(clause="delete_ind='N'")
 	@ForeignKey( name = "none")
 	private List<ImageLinkRsTO> imageLinkRsTOList;

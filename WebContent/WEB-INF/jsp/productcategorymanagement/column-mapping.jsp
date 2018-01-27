@@ -14,7 +14,7 @@
 },
 {"data": "categoryName"},
 {"data": "isParentString"},
-{"data": "displayIndString"},
+{"data": "displayInd"},
 {
     "className":      '',
     "orderable":      false,
