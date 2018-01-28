@@ -14,7 +14,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Where;
 @Entity
 @DynamicUpdate
 @Table(name = "image_link_rs")
@@ -30,12 +29,6 @@ public class ImageLinkRsTO extends BaseTO {
 	
 	@Column(name = "ref_type", nullable=false)
     private String refType;
-	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name = "ref_id", nullable=false)
-	@Where(clause="ref_type='product'")
-	@ForeignKey( name = "none" )
-    private ProductTO productTO;
 
 	@Column(name = "sequence", nullable=false)
     private Integer sequence;
@@ -59,14 +52,6 @@ public class ImageLinkRsTO extends BaseTO {
 
 	public void setRefType(String refType) {
 		this.refType = refType;
-	}
-
-	public ProductTO getProductTO() {
-		return productTO;
-	}
-
-	public void setProductTO(ProductTO productTO) {
-		this.productTO = productTO;
 	}
 
 	public Integer getSequence() {

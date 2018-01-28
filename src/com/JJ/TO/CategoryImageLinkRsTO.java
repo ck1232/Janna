@@ -13,7 +13,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @DynamicUpdate
 @Table(name = "image_link_rs")
-public class CategoryImageLinkRsTO extends NewImageLinkRsTO {
+public class CategoryImageLinkRsTO extends ImageLinkRsTO {
 	
 	@Transient
 	private static final long serialVersionUID = 1L;
