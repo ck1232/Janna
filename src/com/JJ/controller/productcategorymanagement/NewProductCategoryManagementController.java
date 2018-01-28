@@ -2,6 +2,8 @@ package com.JJ.controller.productcategorymanagement;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -10,11 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
 import com.JJ.helper.GeneralUtils;
 import com.JJ.service.productcategorymanagement.ProductCategoryMgmtService;
@@ -48,4 +52,20 @@ public class NewProductCategoryManagementController {
 		return GeneralUtils.convertListToJSONString(productCategoryList);
 	}
 	
+	/*@RequestMapping(value="/getImage/{name}", method = RequestMethod.GET)
+	public void getProductImage(@PathVariable String productCode, HttpServletRequest request, HttpServletResponse response){
+		ImageLinkVO image = productMgmtService.getCoverImageByProductCode(productCode);
+		if(image != null && image.getBytes() != null){
+			 try {
+				response.setContentType(image.getContentType());
+				response.getOutputStream().write(image.getBytes(),0,image.getBytes().length);
+				response.getOutputStream().flush();  
+				return;
+			} catch (Exception e) {
+				logger.error("getProductImage-1: Exception", e);
+			}
+		}else{
+			imageService.getNoFileFoundImage(response);
+		}
+	}*/
 }

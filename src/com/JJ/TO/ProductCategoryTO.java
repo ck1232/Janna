@@ -41,7 +41,9 @@ public class ProductCategoryTO extends BaseTO {
 	@ForeignKey( name = "none" )
 	private List<ProductSubCategoryTO> productSubCategoryTOList;
 	
-	
+	@OneToMany(mappedBy="productCategoryTO", cascade=CascadeType.ALL)
+	@ForeignKey( name = "none" )
+	private List<CategoryImageLinkRsTO> categoryImageLinkRsTOList;
 
 	public Long getCategoryId() {
 		return categoryId;
@@ -82,5 +84,13 @@ public class ProductCategoryTO extends BaseTO {
 	public void setProductSubCategoryTOList(
 			List<ProductSubCategoryTO> productSubCategoryTOList) {
 		this.productSubCategoryTOList = productSubCategoryTOList;
+	}
+
+	public List<CategoryImageLinkRsTO> getCategoryImageLinkRsTOList() {
+		return categoryImageLinkRsTOList;
+	}
+
+	public void setCategoryImageLinkRsTOList(List<CategoryImageLinkRsTO> categoryImageLinkRsTOList) {
+		this.categoryImageLinkRsTOList = categoryImageLinkRsTOList;
 	}
 }

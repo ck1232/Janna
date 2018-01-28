@@ -1,8 +1,8 @@
 package com.JJ.service.productcategorymanagement;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.JJ.TO.ProductCategoryTO;
 import com.JJ.TO.ProductSubCategoryTO;
 import com.JJ.controller.common.vo.ImageLinkVO;
-import com.JJ.controller.productcategorymanagement.ImageLinkRefTypeEnum;
 import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.dao.jpa.ProductCategoryDAO;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.service.filelinkmanagement.NewImageService;
 
 @Service
 @Scope("prototype")
@@ -35,11 +35,10 @@ public class ProductCategoryMgmtService {
 		return convertToProductCategoryVOList(productCategoryTOList);
 	}
 	
-	private List<ProductCategoryVO> getImageForCategory(List<ProductCategoryVO> categoryList) {
+	/*private List<ProductCategoryVO> getImageForCategory(List<ProductCategoryVO> categoryList) {
 		if(!categoryList.isEmpty()){
-			List<Integer> refIdList = GeneralUtils.convertListToIntegerList(categoryList, "categoryId");
-			Map<Integer, List<ImageLinkVO>> imageLinkMap = imageService.getAllImageLinkByRefTypeAndIdList(ImageLinkRefTypeEnum.PRODUCT_CATEGORY.getType(), refIdList);
 			for(ProductCategoryVO vo : categoryList) {
+				vo.get
 				List<ImageLinkVO> imageList = imageLinkMap.get(vo.getCategoryId());
 				vo.setImageList(new ArrayList<ImageLinkVO>());
 				if(imageList != null && !imageList.isEmpty()) {
@@ -57,7 +56,7 @@ public class ProductCategoryMgmtService {
 			}
 		}
 		return categoryList;
-	}
+	}*/
 
 	private List<ProductCategoryVO> convertToProductCategoryVOList(List<ProductCategoryTO> productCategoryTOList) {
 		List<ProductCategoryVO> categoryList = new ArrayList<ProductCategoryVO>();
@@ -78,6 +77,13 @@ public class ProductCategoryMgmtService {
 				vo.setDeleteInd(to.getDeleteInd());
 				vo.setVersion(to.getVersion());
 				vo.setSubcategoryList(convertToProductSubCategoryVOList(to.getProductSubCategoryTOList()));
+				LinkedList<ImageLinkVO> imageList = NewImageService.convertToNewImageLinkVOMapOrderedForCategory(to.getCategoryImageLinkRsTOList());
+				if(!imageList.isEmpty())
+					vo.setFirstImageLink(imageList.getFirst());
+				else{
+					ImageLinkVO imageLink = new ImageLinkVO();
+					vo.setFirstImageLink(imageLink);
+				}
 				if(vo.getSubcategoryList().isEmpty()){continue;}
 				categoryList.add(vo);
 			}

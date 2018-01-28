@@ -28,8 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.JJ.TO.CategoryImageLinkRsTO;
 import com.JJ.TO.FileLinkTO;
 import com.JJ.TO.ImageLinkRsTO;
+import com.JJ.TO.NewImageLinkRsTO;
+import com.JJ.TO.ProductImageLinkRsTO;
 import com.JJ.TO.ProductTO;
 import com.JJ.controller.common.vo.FileMetaVO;
 import com.JJ.controller.common.vo.ImageLinkVO;
@@ -53,6 +56,53 @@ public class NewImageService {
 	@Value("${image.folder}")
     private String imageFolderSource;
 
+	
+	public static LinkedList<ImageLinkVO> convertToNewImageLinkVOMapOrderedForCategory(List<CategoryImageLinkRsTO> imageLinkRsTOList) {
+		LinkedList<ImageLinkVO> imageLinkedList = new LinkedList<ImageLinkVO>();
+		if(imageLinkRsTOList != null && !imageLinkRsTOList.isEmpty()){
+			IntegerComparator comparator = new IntegerComparator("sequence");
+			Collections.sort(imageLinkRsTOList, comparator);
+			for(NewImageLinkRsTO rsTO : imageLinkRsTOList) {
+				ImageLinkVO vo = convertToImageLinkVO(rsTO);
+				if(vo != null) imageLinkedList.add(vo);
+			}
+		}
+		return imageLinkedList;
+	}
+	
+	public static LinkedList<ImageLinkVO> convertToNewImageLinkVOMapOrderedForProduct(List<ProductImageLinkRsTO> imageLinkRsTOList) {
+		LinkedList<ImageLinkVO> imageLinkedList = new LinkedList<ImageLinkVO>();
+		if(imageLinkRsTOList != null && !imageLinkRsTOList.isEmpty()){
+			IntegerComparator comparator = new IntegerComparator("sequence");
+			Collections.sort(imageLinkRsTOList, comparator);
+			for(NewImageLinkRsTO rsTO : imageLinkRsTOList) {
+				ImageLinkVO vo = convertToImageLinkVO(rsTO);
+				if(vo != null) imageLinkedList.add(vo);
+			}
+		}
+		return imageLinkedList;
+	}
+	
+	private static ImageLinkVO convertToImageLinkVO(NewImageLinkRsTO newImageLinkRsTO){
+		FileLinkTO fileLinkTO = newImageLinkRsTO.getFileLinkTO();
+		if(fileLinkTO!=null){
+			ImageLinkVO vo = new ImageLinkVO();
+			vo.setImageLinkId(fileLinkTO.getFileLinkId());
+			vo.setImagePath(fileLinkTO.getFilePath());
+			vo.setContentType(fileLinkTO.getContentType());
+			if(fileLinkTO.getFilePath() != null && !fileLinkTO.getFilePath().trim().isEmpty()){
+				String fileName = FilenameUtils.getName(fileLinkTO.getFilePath());
+				vo.setFileName(fileName);
+			}
+			vo.setDisplayPath(vo.getDisplayPath());
+			vo.setSequence(newImageLinkRsTO.getSequence());
+			vo.setImageLinkRsId(newImageLinkRsTO.getImageLinkRsId());
+			vo.setRefType(newImageLinkRsTO.getRefType());
+			return vo;
+		}
+		return null;
+	}
+	
 	public static LinkedList<ImageLinkVO> convertToImageLinkVOMapOrdered(List<ImageLinkRsTO> imageLinkRsTOList) {
 		LinkedList<ImageLinkVO> imageLinkedList = new LinkedList<ImageLinkVO>();
 		if(imageLinkRsTOList != null && !imageLinkRsTOList.isEmpty()){
