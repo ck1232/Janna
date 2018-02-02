@@ -39,33 +39,10 @@ public class ProductCategoryMgmtService {
 		return convertToProductCategoryVOList(productCategoryTOList);
 	}
 	
-	/*private List<ProductCategoryVO> getImageForCategory(List<ProductCategoryVO> categoryList) {
-		if(!categoryList.isEmpty()){
-			for(ProductCategoryVO vo : categoryList) {
-				vo.get
-				List<ImageLinkVO> imageList = imageLinkMap.get(vo.getCategoryId());
-				vo.setImageList(new ArrayList<ImageLinkVO>());
-				if(imageList != null && !imageList.isEmpty()) {
-					for(ImageLinkVO imageLinkVO : imageList) {
-						if(imageLinkVO.getSequence() == 1) {
-							vo.setFirstImageLink(imageLinkVO);
-						}
-						vo.getImageList().add(imageLinkVO);
-					}
-				}else{
-					ImageLinkVO imageLink = new ImageLinkVO();
-					imageLink.setDisplayPath(imageLink.getDisplayPath());
-					vo.setFirstImageLink(imageLink);
-				}
-			}
-		}
-		return categoryList;
-	}*/
-	
-	public ImageLinkVO getCoverImageByProductCode(Long categoryId) {
+	public ImageLinkVO getCoverImageByCategoryId(Long categoryId) {
 		ProductCategoryTO productCategoryTO = productCategoryDAO.findByCategoryIdAndDeleteInd(categoryId, GeneralUtils.NOT_DELETED);
 		if(productCategoryTO != null){
-			LinkedList<ImageLinkVO> list = NewImageService.convertToImageLinkVOMapOrdered(productCategoryTO.getCategoryImageLinkRsTOList());
+			LinkedList<ImageLinkVO> list = NewImageService.convertToNewImageLinkVOMapOrdered(productCategoryTO.getCategoryImageLinkRsTOList());
 			if(list != null && !list.isEmpty()){
 				ImageLinkVO imageLinkVO = list.get(0);
 				imageLinkVO = imageService.readImageFromURL(imageLinkVO);
@@ -94,7 +71,7 @@ public class ProductCategoryMgmtService {
 				vo.setDeleteInd(to.getDeleteInd());
 				vo.setVersion(to.getVersion());
 				vo.setSubcategoryList(convertToProductSubCategoryVOList(to.getProductSubCategoryTOList()));
-				LinkedList<ImageLinkVO> imageList = NewImageService.convertToNewImageLinkVOMapOrderedForCategory(to.getCategoryImageLinkRsTOList());
+				LinkedList<ImageLinkVO> imageList = NewImageService.convertToNewImageLinkVOMapOrdered(to.getCategoryImageLinkRsTOList());
 				if(!imageList.isEmpty())
 					vo.setFirstImageLink(imageList.getFirst());
 				else{

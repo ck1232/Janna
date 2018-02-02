@@ -84,7 +84,7 @@ public class ProductMgmtService {
 				vo.setTags(ProductTagsService.convertToProductTagsVOList(to.getProductTagsTOList(), vo.getProductId()));
 				
 				//set image
-				LinkedList<ImageLinkVO> imageList = NewImageService.convertToImageLinkVOMapOrdered(to.getImageLinkRsTOList());
+				LinkedList<ImageLinkVO> imageList = NewImageService.convertToNewImageLinkVOMapOrdered(to.getImageLinkRsTOList());
 				vo.setImagesLink(imageList);
 				
 				//set specification
@@ -122,7 +122,7 @@ public class ProductMgmtService {
 	public ImageLinkVO getCoverImageByProductCode(String productCode) {
 		ProductTO productTO = productDAO.findByProductCodeAndDeleteInd(productCode, GeneralUtils.NOT_DELETED);
 		if(productTO != null){
-			LinkedList<ImageLinkVO> list = NewImageService.convertToImageLinkVOMapOrdered(productTO.getImageLinkRsTOList());
+			LinkedList<ImageLinkVO> list = NewImageService.convertToNewImageLinkVOMapOrdered(productTO.getImageLinkRsTOList());
 			if(list != null && !list.isEmpty()){
 				ImageLinkVO imageLinkVO = list.get(0);
 				imageLinkVO = imageService.readImageFromURL(imageLinkVO);

@@ -79,7 +79,7 @@ public class ProductTO extends BaseTO {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="productTO", cascade=CascadeType.ALL)
 	@Where(clause="delete_ind='N'")
 	@ForeignKey( name = "none")
-	private List<ImageLinkRsTO> imageLinkRsTOList;
+	private List<ProductImageLinkRsTO> imageLinkRsTOList;
 	
 	public Long getProductId() {
 		return productId;
@@ -179,11 +179,11 @@ public class ProductTO extends BaseTO {
 		this.productTagsTOList = productTagsTOList;
 	}
 
-	public List<ImageLinkRsTO> getImageLinkRsTOList() {
+	public List<ProductImageLinkRsTO> getImageLinkRsTOList() {
 		return imageLinkRsTOList;
 	}
 
-	public void setImageLinkRsTOList(List<ImageLinkRsTO> imageLinkRsTOList) {
+	public void setImageLinkRsTOList(List<ProductImageLinkRsTO> imageLinkRsTOList) {
 		this.imageLinkRsTOList = imageLinkRsTOList;
 	}
 

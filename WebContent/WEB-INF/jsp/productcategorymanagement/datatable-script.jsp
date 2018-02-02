@@ -26,8 +26,8 @@ $(function () {
           var rowId = data[0];
           $(row).find('input[type="checkbox"]').prop('value', data.categoryId);
           $(row).find('button[name="editBtn"]').prop('value', data.categoryId);
-          $(row).find('img[name="img"]').prop('src', data.firstImageLink.displayPath);
-          
+          //$(row).find('img[name="img"]').prop('src', data.firstImageLink.displayPath);
+          $(row).find('img[name="img"]').prop('src', "./getImage/"+data.categoryId);
           if(data.isParentBoolean == false){
          	$(row).find('button[name="manageSubCategoryBtn"]').prop('style', 'display:none');
           }else{

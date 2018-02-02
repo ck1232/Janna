@@ -1,12 +1,7 @@
 package com.JJ.TO;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -18,7 +13,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @DynamicUpdate
 @Table(name = "image_link_rs")
-public class ProductImageLinkRsTO extends NewImageLinkRsTO {
+public class ProductImageLinkRsTO extends ImageLinkRsTO {
 	
 	@Transient
 	private static final long serialVersionUID = 1L;

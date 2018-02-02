@@ -28,10 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.JJ.TO.CategoryImageLinkRsTO;
 import com.JJ.TO.FileLinkTO;
 import com.JJ.TO.ImageLinkRsTO;
-import com.JJ.TO.NewImageLinkRsTO;
 import com.JJ.TO.ProductImageLinkRsTO;
 import com.JJ.TO.ProductTO;
 import com.JJ.controller.common.vo.FileMetaVO;
@@ -57,12 +55,12 @@ public class NewImageService {
     private String imageFolderSource;
 
 	
-	public static LinkedList<ImageLinkVO> convertToNewImageLinkVOMapOrderedForCategory(List<CategoryImageLinkRsTO> imageLinkRsTOList) {
+	public static LinkedList<ImageLinkVO> convertToNewImageLinkVOMapOrdered(List<? extends ImageLinkRsTO> imageLinkRsTOList) {
 		LinkedList<ImageLinkVO> imageLinkedList = new LinkedList<ImageLinkVO>();
 		if(imageLinkRsTOList != null && !imageLinkRsTOList.isEmpty()){
 			IntegerComparator comparator = new IntegerComparator("sequence");
 			Collections.sort(imageLinkRsTOList, comparator);
-			for(NewImageLinkRsTO rsTO : imageLinkRsTOList) {
+			for(ImageLinkRsTO rsTO : imageLinkRsTOList) {
 				ImageLinkVO vo = convertToImageLinkVO(rsTO);
 				if(vo != null) imageLinkedList.add(vo);
 			}
@@ -70,20 +68,7 @@ public class NewImageService {
 		return imageLinkedList;
 	}
 	
-	public static LinkedList<ImageLinkVO> convertToNewImageLinkVOMapOrderedForProduct(List<ProductImageLinkRsTO> imageLinkRsTOList) {
-		LinkedList<ImageLinkVO> imageLinkedList = new LinkedList<ImageLinkVO>();
-		if(imageLinkRsTOList != null && !imageLinkRsTOList.isEmpty()){
-			IntegerComparator comparator = new IntegerComparator("sequence");
-			Collections.sort(imageLinkRsTOList, comparator);
-			for(NewImageLinkRsTO rsTO : imageLinkRsTOList) {
-				ImageLinkVO vo = convertToImageLinkVO(rsTO);
-				if(vo != null) imageLinkedList.add(vo);
-			}
-		}
-		return imageLinkedList;
-	}
-	
-	private static ImageLinkVO convertToImageLinkVO(NewImageLinkRsTO newImageLinkRsTO){
+	private static ImageLinkVO convertToImageLinkVO(ImageLinkRsTO newImageLinkRsTO){
 		FileLinkTO fileLinkTO = newImageLinkRsTO.getFileLinkTO();
 		if(fileLinkTO!=null){
 			ImageLinkVO vo = new ImageLinkVO();
@@ -101,33 +86,6 @@ public class NewImageService {
 			return vo;
 		}
 		return null;
-	}
-	
-	public static LinkedList<ImageLinkVO> convertToImageLinkVOMapOrdered(List<ImageLinkRsTO> imageLinkRsTOList) {
-		LinkedList<ImageLinkVO> imageLinkedList = new LinkedList<ImageLinkVO>();
-		if(imageLinkRsTOList != null && !imageLinkRsTOList.isEmpty()){
-			IntegerComparator comparator = new IntegerComparator("sequence");
-			Collections.sort(imageLinkRsTOList, comparator);
-			for(ImageLinkRsTO rsTO : imageLinkRsTOList) {
-				FileLinkTO fileLinkTO = rsTO.getFileLinkTO();
-				if(fileLinkTO!=null){
-					ImageLinkVO vo = new ImageLinkVO();
-					vo.setImageLinkId(fileLinkTO.getFileLinkId());
-					vo.setImagePath(fileLinkTO.getFilePath());
-					vo.setContentType(fileLinkTO.getContentType());
-					if(fileLinkTO.getFilePath() != null && !fileLinkTO.getFilePath().trim().isEmpty()){
-						String fileName = FilenameUtils.getName(fileLinkTO.getFilePath());
-						vo.setFileName(fileName);
-					}
-					vo.setDisplayPath(vo.getDisplayPath());
-					vo.setSequence(rsTO.getSequence());
-					vo.setImageLinkRsId(rsTO.getImageLinkRsId());
-					vo.setRefType(rsTO.getRefType());
-					imageLinkedList.add(vo);
-				}
-			}
-		}
-		return imageLinkedList;
 	}
 	
 	public ImageLinkVO readImageFromURL(ImageLinkVO imageLinkVO) {
@@ -205,25 +163,25 @@ public class NewImageService {
 	
 	public void setProductImage(List<ImageLinkVO> imageLinkRsVOList, ProductTO productTO){
 		//delete all current image
-		Map<Long, ImageLinkRsTO> toMap = GeneralUtils.convertListToLongMap(productTO.getImageLinkRsTOList(), "imageLinkRsId");
+		Map<Long, ProductImageLinkRsTO> toMap = GeneralUtils.convertListToLongMap(productTO.getImageLinkRsTOList(), "imageLinkRsId");
 		if(productTO.getImageLinkRsTOList() != null && !productTO.getImageLinkRsTOList().isEmpty()){
-			for(ImageLinkRsTO to : productTO.getImageLinkRsTOList()){
+			for(ProductImageLinkRsTO to : productTO.getImageLinkRsTOList()){
 				to.setDeleteInd(GeneralUtils.DELETED);
 			}
 		}else{
-			productTO.setImageLinkRsTOList(new ArrayList<ImageLinkRsTO>());
+			productTO.setImageLinkRsTOList(new ArrayList<ProductImageLinkRsTO>());
 		}
 		//change those inside VOList to NOT_DELTED, and set new sequence, if new VO then insert into List
 		if(imageLinkRsVOList != null && !imageLinkRsVOList.isEmpty()){
 			for(ImageLinkVO vo : imageLinkRsVOList){
-				ImageLinkRsTO to = toMap.get(vo.getImageLinkRsId());
+				ProductImageLinkRsTO to = toMap.get(vo.getImageLinkRsId());
 				if(to != null){
 					to.setDeleteInd(GeneralUtils.NOT_DELETED);
 					to.setSequence(vo.getSequence());
 				}else{
 					boolean success = uploadFileToDisk(vo);
 					if(!success)continue;
-					ImageLinkRsTO newTO = convertToProductImageLinkRsTOList(vo, productTO);
+					ProductImageLinkRsTO newTO = convertToProductImageLinkRsTOList(vo, productTO);
 					if(newTO != null){
 						productTO.getImageLinkRsTOList().add(newTO);
 					}
@@ -232,9 +190,9 @@ public class NewImageService {
 		}
 	}
 	
-	public static ImageLinkRsTO convertToProductImageLinkRsTOList(ImageLinkVO imageLinkRsVO, ProductTO productTO){
+	public static ProductImageLinkRsTO convertToProductImageLinkRsTOList(ImageLinkVO imageLinkRsVO, ProductTO productTO){
 		if(imageLinkRsVO != null){
-			ImageLinkRsTO rsTO = new ImageLinkRsTO();
+			ProductImageLinkRsTO rsTO = new ProductImageLinkRsTO();
 			rsTO.setImageLinkRsId(imageLinkRsVO.getImageLinkRsId());
 			rsTO.setRefType(GeneralUtils.TYPE_PRODUCT);
 			rsTO.setProductTO(productTO);

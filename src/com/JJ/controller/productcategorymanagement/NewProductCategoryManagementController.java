@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
 import com.JJ.helper.GeneralUtils;
+import com.JJ.service.filelinkmanagement.NewImageService;
 import com.JJ.service.productcategorymanagement.ProductCategoryMgmtService;
 
 @Controller  
@@ -31,12 +32,15 @@ public class NewProductCategoryManagementController {
 	private static final Logger logger = Logger.getLogger(NewProductCategoryManagementController.class);
 	
 	private ProductCategoryMgmtService productCategoryMgmtService;
+	private NewImageService imageService;
 	@Value("${image.folder}")
     private String imageFolderSource;
 
 	@Autowired
-	public NewProductCategoryManagementController(ProductCategoryMgmtService productCategoryMgmtService){
+	public NewProductCategoryManagementController(ProductCategoryMgmtService productCategoryMgmtService,
+			NewImageService imageService){
 		this.productCategoryMgmtService = productCategoryMgmtService;
+		this.imageService = imageService;
 	}
 	
 	@RequestMapping("/listProductCategory")  
@@ -52,9 +56,9 @@ public class NewProductCategoryManagementController {
 		return GeneralUtils.convertListToJSONString(productCategoryList);
 	}
 	
-	@RequestMapping(value="/getImage/{name}", method = RequestMethod.GET)
-	public void getProductImage(@PathVariable String productCode, HttpServletRequest request, HttpServletResponse response){
-		ImageLinkVO image = productCategoryMgmtService.getCoverImageByProductCode(productCode);
+	@RequestMapping(value="/getImage/{id}", method = RequestMethod.GET)
+	public void getProductImage(@PathVariable String id, HttpServletRequest request, HttpServletResponse response){
+		ImageLinkVO image = productCategoryMgmtService.getCoverImageByCategoryId(Long.parseLong(id));
 		if(image != null && image.getBytes() != null){
 			 try {
 				response.setContentType(image.getContentType());
