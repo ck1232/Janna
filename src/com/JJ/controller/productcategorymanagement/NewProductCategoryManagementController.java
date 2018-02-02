@@ -52,9 +52,9 @@ public class NewProductCategoryManagementController {
 		return GeneralUtils.convertListToJSONString(productCategoryList);
 	}
 	
-	/*@RequestMapping(value="/getImage/{name}", method = RequestMethod.GET)
+	@RequestMapping(value="/getImage/{name}", method = RequestMethod.GET)
 	public void getProductImage(@PathVariable String productCode, HttpServletRequest request, HttpServletResponse response){
-		ImageLinkVO image = productMgmtService.getCoverImageByProductCode(productCode);
+		ImageLinkVO image = productCategoryMgmtService.getCoverImageByProductCode(productCode);
 		if(image != null && image.getBytes() != null){
 			 try {
 				response.setContentType(image.getContentType());
@@ -67,5 +67,5 @@ public class NewProductCategoryManagementController {
 		}else{
 			imageService.getNoFileFoundImage(response);
 		}
-	}*/
+	}
 }
