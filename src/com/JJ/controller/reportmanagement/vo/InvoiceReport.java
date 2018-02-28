@@ -106,7 +106,7 @@ public class InvoiceReport implements ReportInterface {
 			}
 			
 			Collections.sort(allInvoiceReportList, new InvoiceReportComparator());	
-			generateSummaryHashMap(allInvoiceReportList);
+			generateSummaryHashMap(allInvoiceReportList, dateAsOf, endDate);
 			summaryList.addAll(summaryHashMap.values());
 			summaryList = GeneralUtils.sortAccordingToSortList(summaryList, invoiceSummaryHeaders, "title");
 		}
@@ -121,15 +121,15 @@ public class InvoiceReport implements ReportInterface {
 	
 	
 
-	private void generateSummaryHashMap(List<InvoiceReportVO> allInvoiceReportList) {
+	private void generateSummaryHashMap(List<InvoiceReportVO> allInvoiceReportList, Date startDate, Date endDate) {
 		for(InvoiceReportVO invoice : allInvoiceReportList) {
 			Integer invoiceId = invoice.getInvoice().getInvoiceId();
 			if(invoiceId != null && invoiceId > 0) {
-				addCurrentInvoice(summaryHashMap.get("SALES"), invoice);
+				addCurrentInvoice(summaryHashMap.get("SALES"), invoice, startDate, endDate);
 			}else{
-				addCurrentInvoice(summaryHashMap.get("GRANT"), invoice);
+				addCurrentInvoice(summaryHashMap.get("GRANT"), invoice, startDate, endDate);
 			}
-			addCurrentInvoice(summaryHashMap.get("TOTAL"), invoice);
+			addCurrentInvoice(summaryHashMap.get("TOTAL"), invoice, startDate, endDate);
 		}
 		
 		for(String key : summaryHashMap.keySet()) {
@@ -166,10 +166,13 @@ public class InvoiceReport implements ReportInterface {
 		return reportMapping;
 	}
 	
-	private void addCurrentInvoice(TotalIncomeSummaryVO vo, InvoiceReportVO invoice){
+	private void addCurrentInvoice(TotalIncomeSummaryVO vo, InvoiceReportVO invoice, Date startDate, Date endDate){
 		vo.setIncome(vo.getIncome().add(invoice.getInvoice().getTotalAmt())); //set income
 		if(invoice.getPaymentDetailList() != null && !invoice.getPaymentDetailList().isEmpty()){
-			vo.setMoneyReceived(vo.getMoneyReceived().add(invoice.getInvoice().getTotalAmt())); //set money received
+			Date paymentDate = invoice.getChequeDate();
+			if((startDate.before(paymentDate) || startDate.equals(paymentDate)) && (endDate.after(paymentDate) || endDate.equals(paymentDate))){
+				vo.setMoneyReceived(vo.getMoneyReceived().add(invoice.getInvoice().getTotalAmt())); //set money received
+			}
 		}else if (invoice.getInvoice() != null && invoice.getInvoice().getStatus().compareToIgnoreCase(InvoiceManagementService.BAD_DEBT) == 0){
 			vo.setBadDebt(vo.getBadDebt().add(invoice.getInvoice().getTotalAmt()));
 		}
