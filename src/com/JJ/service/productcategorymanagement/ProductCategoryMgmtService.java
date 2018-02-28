@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.TO.ProductCategoryTO;
 import com.JJ.TO.ProductSubCategoryTO;
+import com.JJ.TO.ProductTO;
 import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
@@ -24,15 +25,31 @@ import com.JJ.service.filelinkmanagement.NewImageService;
 @Transactional(rollbackFor=Exception.class, propagation = Propagation.REQUIRED)
 public class ProductCategoryMgmtService {
 	private ProductCategoryDAO productCategoryDAO;
+	private NewImageService imageService;
 	
 	@Autowired
-	public ProductCategoryMgmtService(ProductCategoryDAO productCategoryDAO) {
+	public ProductCategoryMgmtService(ProductCategoryDAO productCategoryDAO,
+			NewImageService imageService) {
 		this.productCategoryDAO = productCategoryDAO;
+		this.imageService = imageService;
 	}
 
 	public List<ProductCategoryVO> getAllProductCategoryList() {
 		List<ProductCategoryTO> productCategoryTOList = productCategoryDAO.findByDeleteIndAndDisplayInd(GeneralUtils.NOT_DELETED, GeneralUtils.ALLOW_DISPLAY);
 		return convertToProductCategoryVOList(productCategoryTOList);
+	}
+	
+	public ImageLinkVO getCoverImageByCategoryId(Long categoryId) {
+		ProductCategoryTO productCategoryTO = productCategoryDAO.findByCategoryIdAndDeleteInd(categoryId, GeneralUtils.NOT_DELETED);
+		if(productCategoryTO != null){
+			LinkedList<ImageLinkVO> list = NewImageService.convertToNewImageLinkVOMapOrdered(productCategoryTO.getCategoryImageLinkRsTOList());
+			if(list != null && !list.isEmpty()){
+				ImageLinkVO imageLinkVO = list.get(0);
+				imageLinkVO = imageService.readImageFromURL(imageLinkVO);
+				return imageLinkVO;
+			}
+		}
+		return null;
 	}
 
 	private List<ProductCategoryVO> convertToProductCategoryVOList(List<ProductCategoryTO> productCategoryTOList) {
