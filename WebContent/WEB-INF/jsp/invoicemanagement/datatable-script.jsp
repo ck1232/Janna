@@ -51,7 +51,7 @@ $(function () {
 
 	initTableSearch();
 	
-	$('#datatableForm').submit(function(){
+	/* $('#datatableForm').submit(function(){
 		$.each(table.rows('.selected').data(), function(index,value){
 			var value1 = value.invoiceId+"-"+value.type;
 			//console.log(value1);
@@ -62,7 +62,7 @@ $(function () {
 		});
 		
 		return true;
-	});
+	}); */
 });
 function checkboxClicked(checkbox){
 	$(checkbox).closest("tr").toggleClass("selected");

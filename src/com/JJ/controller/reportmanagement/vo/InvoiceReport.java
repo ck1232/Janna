@@ -35,7 +35,7 @@ public class InvoiceReport implements ReportInterface {
 	
 	List<TotalIncomeSummaryVO> summaryList;
 	HashMap<String, TotalIncomeSummaryVO> summaryHashMap;
-	public static final List<String> invoiceSummaryHeaders = Arrays.asList("CPF BOARD","IRAS","SALES","TOTAL");
+	public static final List<String> invoiceSummaryHeaders = Arrays.asList("GRANT","SALES","TOTAL");
 	
 	@Autowired
 	public InvoiceReport(InvoiceManagementService invoiceService,
@@ -53,8 +53,9 @@ public class InvoiceReport implements ReportInterface {
 			Map<String, Object> additionalMap) {
 		summaryList = new ArrayList<TotalIncomeSummaryVO>();
 		summaryHashMap = new HashMap<String, TotalIncomeSummaryVO>();
-		summaryHashMap.put("CPF", new TotalIncomeSummaryVO("CPF BOARD", "(credits for older worker)"));
-		summaryHashMap.put("IRAS", new TotalIncomeSummaryVO("IRAS", "(WAGE CREDIT SCHEME)"));
+		/*summaryHashMap.put("CPF", new TotalIncomeSummaryVO("CPF BOARD", "(credits for older worker)"));
+		summaryHashMap.put("IRAS", new TotalIncomeSummaryVO("IRAS", "(WAGE CREDIT SCHEME)"));*/
+		summaryHashMap.put("GRANT", new TotalIncomeSummaryVO("GRANT", ""));
 		summaryHashMap.put("SALES", new TotalIncomeSummaryVO("SALES", ""));
 		summaryHashMap.put("TOTAL", new TotalIncomeSummaryVO("TOTAL", ""));
 		
@@ -90,8 +91,8 @@ public class InvoiceReport implements ReportInterface {
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					String paymentMode = "";
 					for(PaymentDetailVO vo : paymentDetailList){
+						report.setChequeDate(vo.getPaymentDate());
 						if(vo.getPaymentMode() != null && vo.getPaymentMode() == chequeModeVo.getPaymentModeId()) { // payment mode is cheque
-							report.setChequeDate(vo.getPaymentDate());
 							report.setChequeNo(vo.getChequeNum());
 							report.setDebitDate(vo.getDebitDate());
 						}
@@ -122,11 +123,11 @@ public class InvoiceReport implements ReportInterface {
 
 	private void generateSummaryHashMap(List<InvoiceReportVO> allInvoiceReportList) {
 		for(InvoiceReportVO invoice : allInvoiceReportList) {
-			String messenger = invoice.getInvoice().getMessenger();
-			if(messenger != null && summaryHashMap.containsKey(messenger)) {
-				addCurrentInvoice(summaryHashMap.get(messenger), invoice);
-			}else{
+			Integer invoiceId = invoice.getInvoice().getInvoiceId();
+			if(invoiceId != null && invoiceId > 0) {
 				addCurrentInvoice(summaryHashMap.get("SALES"), invoice);
+			}else{
+				addCurrentInvoice(summaryHashMap.get("GRANT"), invoice);
 			}
 			addCurrentInvoice(summaryHashMap.get("TOTAL"), invoice);
 		}
@@ -146,7 +147,7 @@ public class InvoiceReport implements ReportInterface {
 		reportMapping.addDateMapping("Date of Invoice", "invoice.invoiceDate");
 		reportMapping.addMoneyMapping("Amount", "invoice.totalAmt");
 		reportMapping.addTextMapping("Payment Mode", "paymentMode");
-		reportMapping.addDateMapping("Cheque Date", "chequeDate");
+		reportMapping.addDateMapping("Payment Date", "chequeDate");
 		reportMapping.addTextMapping("Cheque No", "chequeNo");
 		reportMapping.addMoneyMapping("Payment amount", "paymentAmt");
 		reportMapping.addDateMapping("Date debited (per Bank)", "debitDate");;
@@ -154,7 +155,7 @@ public class InvoiceReport implements ReportInterface {
 	}
 	
 	private ReportMapping initInvoiceSummaryReportMapping(Date date) {
-		String dateAsOfString = GeneralUtils.convertDateToString(date, "dd MMM YYYY");
+		String dateAsOfString = GeneralUtils.convertDateToString(date, "dd MMM yyyy");
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addTextMapping("", "title");
 		reportMapping.addTextMapping("Description", "description");
