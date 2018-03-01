@@ -279,6 +279,8 @@ public class SummaryReport implements ReportInterface {
 		reportMapping.addMoneyMapping("Meal Expenses", "mealExpenseAmt");
 		reportMapping.addMoneyMapping("Entertainment", "entertainmentAmt");
 		reportMapping.addMoneyMapping("Fees and Taxes", "feeTaxesAmt");
+		reportMapping.addMoneyMapping("Commission", "commissionAmt");
+		reportMapping.addMoneyMapping("Worker insurance", "workerInsuranceAmt");
 		reportMapping.addMoneyMapping("Total", "totalAmt");
 		return reportMapping;
 	}

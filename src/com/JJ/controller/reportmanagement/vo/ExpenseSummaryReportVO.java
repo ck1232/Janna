@@ -20,6 +20,8 @@ public class ExpenseSummaryReportVO {
 	private BigDecimal mealExpenseAmt;
 	private BigDecimal entertainmentAmt;
 	private BigDecimal feeTaxesAmt;
+	private BigDecimal commissionAmt;
+	private BigDecimal workerInsuranceAmt;
 	private BigDecimal totalAmt;
 	
 	public ExpenseSummaryReportVO(String expMonth) {
@@ -40,6 +42,8 @@ public class ExpenseSummaryReportVO {
 		setMealExpenseAmt(BigDecimal.ZERO);
 		setEntertainmentAmt(BigDecimal.ZERO);
 		setFeeTaxesAmt(BigDecimal.ZERO);
+		setWorkerInsuranceAmt(BigDecimal.ZERO);
+		setCommissionAmt(BigDecimal.ZERO);
 		setTotalAmt(BigDecimal.ZERO);
 	}
 	public String getMonth() {
@@ -143,6 +147,18 @@ public class ExpenseSummaryReportVO {
 	}
 	public void setFeeTaxesAmt(BigDecimal feeTaxesAmt) {
 		this.feeTaxesAmt = feeTaxesAmt;
+	}
+	public BigDecimal getCommissionAmt() {
+		return commissionAmt;
+	}
+	public void setCommissionAmt(BigDecimal commissionAmt) {
+		this.commissionAmt = commissionAmt;
+	}
+	public BigDecimal getWorkerInsuranceAmt() {
+		return workerInsuranceAmt;
+	}
+	public void setWorkerInsuranceAmt(BigDecimal workerInsuranceAmt) {
+		this.workerInsuranceAmt = workerInsuranceAmt;
 	}
 	public BigDecimal getTotalAmt() {
 		return totalAmt;

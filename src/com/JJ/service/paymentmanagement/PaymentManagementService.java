@@ -85,10 +85,8 @@ public class PaymentManagementService {
 				paymentRsVO.setReferenceId(expense.getExpenseId());
 				paymentRsVO.setPaymentDetailId(paymentdetail.getPaymentDetailId());
 				paymentRSManagementService.savePaymentRs(paymentRsVO);
-				if(expense.getexpensetype().toLowerCase().contains(GeneralUtils.KEYWORD_STOCK_CHINA))
-					expense.setStatus(ExpenseStatusEnum.UNPAID.toString());
-				else
-					expense.setStatus(ExpenseStatusEnum.PAID.toString());
+				
+				expense.setStatus(ExpenseStatusEnum.PAID.toString());
 				expenseManagementService.updateExpense(expense);
 			}
 		}

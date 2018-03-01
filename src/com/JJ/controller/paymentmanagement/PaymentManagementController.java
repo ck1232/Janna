@@ -138,7 +138,7 @@ public class PaymentManagementController {
 		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;
-			if(!expenseList.get(0).getexpensetype().toLowerCase().contains("china")&& !validateInputAmount(totalamount, paymentVo)){
+			if(!validateInputAmount(totalamount, paymentVo)){
 				hasErrors = true;
 				result.rejectValue("cashamount", "error.notequal.paymentform.expensetotalamount");
 				result.rejectValue("chequeamount", "error.notequal.paymentform.expensetotalamount");

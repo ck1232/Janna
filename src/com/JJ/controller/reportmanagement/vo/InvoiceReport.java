@@ -135,6 +135,7 @@ public class InvoiceReport implements ReportInterface {
 		for(String key : summaryHashMap.keySet()) {
 			TotalIncomeSummaryVO vo = summaryHashMap.get(key);
 			vo.setOutstanding(vo.getIncome().subtract(vo.getMoneyReceived()));
+			vo.setOutstanding(vo.getOutstanding().subtract(vo.getBadDebt()));
 		}
 		
 	}
