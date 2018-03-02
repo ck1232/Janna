@@ -2,6 +2,7 @@
 <script>
 $(function () {
 	var rows_selected = [];
+	$.fn.dataTable.moment( 'D MMMM YYYY' );
 	table = $('#datatable1').DataTable({
 	  "dom": '<"top"<f><ip>>rt<"bottom"ip><"clear">',
       "paging": true,

@@ -10,7 +10,6 @@
 		
         <link type="text/css" href="<c:url context="/JJ" value="/development/font-awesome/css/font-awesome.min.css"/>" rel="stylesheet"/>        
 		<link type="text/css" href="<c:url context="/JJ" value="/development/themes/cruze/theme.css" />" rel="stylesheet" >
-		
 			<!-- Admin LTE -->
 			<!-- Tell the browser to be responsive to screen width -->
 		  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -89,6 +88,7 @@
         <!-- tags -->
         <script src="<c:url context="/JJ" value="/development/tags/bootstrap-tagsinput.js" />"></script>
 		<!-- REQUIRED JS SCRIPTS -->
+		<!-- datatable plugin for date sorting -->
 		
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");

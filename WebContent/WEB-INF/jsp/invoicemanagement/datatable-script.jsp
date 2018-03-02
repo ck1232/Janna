@@ -1,7 +1,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
 $(function () {
-	
+	$.fn.dataTable.moment( 'D MMMM YYYY' );
 	table = $('#datatable1').DataTable({
 	  "dom": '<"top"<f><ip>>rt<"bottom"ip><"clear">',
       "paging": true,
