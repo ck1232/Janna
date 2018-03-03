@@ -134,7 +134,7 @@ public class PaymentManagementController {
 		List<ExpenseVO> expenseList = expenseManagementService.getAllExpenseByIdList(expenseIdList);
 		for(ExpenseVO expense : expenseList) {
 			expense.setExpensedateString(new SimpleDateFormat(GeneralUtils.STANDARD_DATE_FORMAT).format(expense.getExpenseDate()));
-			expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
+			expense.setExpenseType(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
 		}
 		if (!result.hasErrors()) {
 			boolean hasErrors = false;

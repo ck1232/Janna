@@ -119,12 +119,12 @@ public class ExpenseVO extends Base implements Serializable {
         this.status = status == null ? null : status.trim();
     }
     
-    public String getexpensetype() {
+    public String getExpenseType() {
 		return expensetype;
 	}
 
-	public void setexpensetype(String expensetype) {
-		this.expensetype = expensetype;
+	public void setExpenseType(String expenseType) {
+		this.expensetype = expenseType;
 	}
 
     public String getExpensedateString() {

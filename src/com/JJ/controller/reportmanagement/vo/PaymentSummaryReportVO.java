@@ -10,6 +10,7 @@ public class PaymentSummaryReportVO {
 	private BigDecimal transferAmt;
 	private BigDecimal paidByDirectorAmt;
 	private BigDecimal notPaidAmt;
+	private BigDecimal badDebtAmt;
 	private BigDecimal totalAmt;
 	
 	public PaymentSummaryReportVO(String month) {
@@ -20,6 +21,7 @@ public class PaymentSummaryReportVO {
 		setTransferAmt(BigDecimal.ZERO);
 		setPaidByDirectorAmt(BigDecimal.ZERO);
 		setNotPaidAmt(BigDecimal.ZERO);
+		setBadDebtAmt(BigDecimal.ZERO);
 		setTotalAmt(BigDecimal.ZERO);
 	}
 	public String getMonth() {
@@ -69,6 +71,12 @@ public class PaymentSummaryReportVO {
 	}
 	public void setTotalAmt(BigDecimal totalAmt) {
 		this.totalAmt = totalAmt;
+	}
+	public BigDecimal getBadDebtAmt() {
+		return badDebtAmt;
+	}
+	public void setBadDebtAmt(BigDecimal badDebtAmt) {
+		this.badDebtAmt = badDebtAmt;
 	}
 	
 	

@@ -79,7 +79,7 @@ public class PaymentManagementService {
 		
 		for(PaymentDetailVO paymentdetail : paymentDetailList) {
 			for(ExpenseVO expense : expenseList) {
-				expense.setexpensetype(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
+				expense.setExpenseType(expenseTypeLookup.getExpenseTypeById(expense.getExpenseTypeId()));
 				PaymentRsVO paymentRsVO = new PaymentRsVO();
 				paymentRsVO.setReferenceType(GeneralUtils.MODULE_EXPENSE);
 				paymentRsVO.setReferenceId(expense.getExpenseId());

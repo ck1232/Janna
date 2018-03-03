@@ -86,7 +86,7 @@ public class ExpenseManagementService {
 				vo.setExpenseTypeId(999);
 				vo.setExpenseId(0);
 				vo.setTotalAmt(dbObj.getTotalAmt());
-				vo.setexpensetype(InvoiceManagementService.BAD_DEBT);
+				vo.setExpenseType(InvoiceManagementService.BAD_DEBT);
 				vo.setExpenseDate(dbObj.getInvoiceDate());
 				expenseList.add(vo);
 			}
@@ -189,7 +189,7 @@ public class ExpenseManagementService {
 				vo.setExpenseDate(dbObj.getExpenseDate());
 				vo.setExpensedateString(GeneralUtils.convertDateToString(dbObj.getExpenseDate(), "dd/MM/yyyy"));
 				vo.setExpenseId(dbObj.getExpenseId());
-				vo.setexpensetype(expenseTypeLookup.getExpenseTypeById(dbObj.getExpenseTypeId()));
+				vo.setExpenseType(expenseTypeLookup.getExpenseTypeById(dbObj.getExpenseTypeId()));
 				vo.setExpenseTypeId(dbObj.getExpenseTypeId());
 				vo.setInvoiceNo(dbObj.getInvoiceNo());
 				vo.setRemarks(dbObj.getRemarks());
@@ -197,7 +197,7 @@ public class ExpenseManagementService {
 				vo.setSupplier(dbObj.getSupplier());
 				vo.setTotalAmt(dbObj.getTotalAmt());
 				String currency = "$";
-				if(vo.getexpensetype().equals("Stock(China)"))
+				if(vo.getExpenseType().equals("Stock(China)"))
 					currency = "¥";
 				vo.setTotalAmtString(currency+vo.getTotalAmt());
 				expenseVOList.add(vo);

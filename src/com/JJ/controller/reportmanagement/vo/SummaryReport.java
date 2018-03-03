@@ -24,6 +24,7 @@ import com.JJ.lookup.ExpenseTypeLookup;
 import com.JJ.lookup.vo.ExpenseTypeVO;
 import com.JJ.helper.vo.ReportMapping;
 import com.JJ.service.expensemanagement.ExpenseManagementService;
+import com.JJ.service.invoicemanagement.InvoiceManagementService;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 @Component
@@ -37,6 +38,7 @@ public class SummaryReport implements ReportInterface {
 	
 	private Sheet sheet;
 	private List<ExpenseSummaryReportVO> expenseSummaryList;
+	private List<ExpenseSummaryReportVO> chinaExpenseSummaryList;
 	private List<PaymentSummaryReportVO> paymentSummaryList;
 	private List<SalarySummaryReportVO> salarybonusSummaryList;
 	private List<AcctPayableSummaryReportVO> accPayableSummaryList;
@@ -51,8 +53,9 @@ public class SummaryReport implements ReportInterface {
 	private final static String Total = "Total";
 	private final static String Salary = "Salary";
 	private final static String Bonus = "Bonus";
-	private final static String RMBPurchase = "RMB Purchases";
-	private final static String RMBPayment = "Payment for RMB purchases";
+//	private final static String RMBPurchase = "RMB Purchases";
+//	private final static String Commission = "Commission";
+	private final static String RMBPayment = "Payment for RMB purchases(including commission)";
 	public static final List<String> accPayableSummaryHeaders = Arrays.asList("Salary","Bonus","Total");
 	
 	@Autowired
@@ -82,6 +85,7 @@ public class SummaryReport implements ReportInterface {
 	
 	private void initReport(Workbook workbook){
 		expenseSummaryList = new ArrayList<ExpenseSummaryReportVO>();
+		chinaExpenseSummaryList = new ArrayList<ExpenseSummaryReportVO>();
 		paymentSummaryList = new ArrayList<PaymentSummaryReportVO>();
 		salarybonusSummaryList = new ArrayList<SalarySummaryReportVO>();
 		accPayableSummaryList = new ArrayList<AcctPayableSummaryReportVO>();
@@ -94,7 +98,7 @@ public class SummaryReport implements ReportInterface {
 		accPayableSummaryHashMap = new HashMap<String, AcctPayableSummaryReportVO>();
 		
 		expenseSummaryHashMap.put(Total, new ExpenseSummaryReportVO(Total));
-		chinaExpenseSummaryHashMap.put(RMBPurchase, new ExpenseSummaryReportVO(RMBPurchase));
+		chinaExpenseSummaryHashMap.put(Total, new ExpenseSummaryReportVO(Total));
 		paymentSummaryHashMap.put(Total, new PaymentSummaryReportVO(Total));
 		chinaPaymentSummaryHashMap.put(RMBPayment, new PaymentSummaryReportVO(RMBPayment));
 		
@@ -117,17 +121,19 @@ public class SummaryReport implements ReportInterface {
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			for(ExpenseVO vo : dbVoList) {
 				String expMonth = GeneralUtils.convertDateToString(vo.getExpenseDate(), monthFormat);
-				if(!vo.getexpensetype().equals("Stock(China)")){ // if not china stock expense
+				if(!vo.getExpenseType().equals("Stock(China)") && !vo.getExpenseType().equals("Commission")){ // if not china stock expense
 					if(!expenseSummaryHashMap.containsKey(expMonth)){
 						expenseSummaryHashMap.put(expMonth, new ExpenseSummaryReportVO(expMonth));
 					}
 					addCurrentExpenseVO(expenseSummaryHashMap.get(expMonth),vo);
 					addCurrentExpenseVO(expenseSummaryHashMap.get(Total),vo);
-					
 					List<PaymentDetailVO> paymentVOList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId());
-					
 					if(!paymentVOList.isEmpty()){ //if paid
 						for(PaymentDetailVO payment : paymentVOList){
+							if(payment.getPaymentDate().before(dateAsOf) || payment.getPaymentDate().after(endDate)){
+//								payment.setPaymentModeString(""); //set to empty = unpaid
+								continue;
+							}
 							String payMonth = GeneralUtils.convertDateToString(payment.getPaymentDate(), monthFormat);
 							if(!paymentSummaryHashMap.containsKey(payMonth)){
 								paymentSummaryHashMap.put(payMonth, new PaymentSummaryReportVO(payMonth));
@@ -138,7 +144,12 @@ public class SummaryReport implements ReportInterface {
 					}else{ //if unpaid
 						PaymentDetailVO payment = new PaymentDetailVO();
 						payment.setPaymentAmt(vo.getTotalAmt());
-						payment.setPaymentMode(0); //0 = unpaid
+						if(vo.getExpenseType() !=  null && vo.getExpenseType().compareTo(InvoiceManagementService.BAD_DEBT) == 0){
+							payment.setPaymentModeString(InvoiceManagementService.BAD_DEBT);
+						}else{
+							payment.setPaymentModeString(""); //0 = unpaid
+							continue;
+						}
 						if(!paymentSummaryHashMap.containsKey(expMonth)){
 							paymentSummaryHashMap.put(expMonth, new PaymentSummaryReportVO(expMonth));
 						}
@@ -146,13 +157,18 @@ public class SummaryReport implements ReportInterface {
 						addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(Total), payment);
 					}
 					
-					
-				}else{ // if china stock expense
-					addCurrentExpenseVO(chinaExpenseSummaryHashMap.get(RMBPurchase),vo);
+				}else if (vo.getExpenseType().equals("Stock(China)") || vo.getExpenseType().equals("Commission")){ // if china stock expense
+					if(!chinaExpenseSummaryHashMap.containsKey(expMonth)){
+						chinaExpenseSummaryHashMap.put(expMonth, new ExpenseSummaryReportVO(expMonth));
+					}
+					addCurrentExpenseVO(chinaExpenseSummaryHashMap.get(expMonth),vo);
+					addCurrentExpenseVO(chinaExpenseSummaryHashMap.get(Total),vo);
 				}
 			}
 			expenseSummaryList.addAll(expenseSummaryHashMap.values());
 			expenseSummaryList = GeneralUtils.sortByMonth(expenseSummaryList);
+			chinaExpenseSummaryList.addAll(chinaExpenseSummaryHashMap.values());
+			chinaExpenseSummaryList = GeneralUtils.sortByMonth(chinaExpenseSummaryList);
 			paymentSummaryList.addAll(paymentSummaryHashMap.values());
 			paymentSummaryList = GeneralUtils.sortByMonth(paymentSummaryList);
 		}
@@ -172,16 +188,19 @@ public class SummaryReport implements ReportInterface {
 		
 		//Expense ReportMapping
 		ReportUtils.writeBlankRows(sheet, 2);
-		ReportUtils.writeRow(sheet, "Expenses by Type (exclude Salary)", 0, ColumnStyle.Bold);
+		ReportUtils.writeRow(sheet, "Expenses by Type (exclude Salary, China Stock)", 0, ColumnStyle.Bold);
 		ReportUtils.writeData(sheet, expenseSummaryList, initExpenseReportMapping(), "month");	
 		expenseSummaryList.clear();
 		expenseSummaryList.addAll(chinaExpenseSummaryHashMap.values());
-		ReportUtils.writeBlankRows(sheet, 1);
-		ReportUtils.writeData(sheet, expenseSummaryList, initChinaExpenseReportMapping(), "month");
+		
+		//China Expense ReportMapping
+		ReportUtils.writeBlankRows(sheet, 2);
+		ReportUtils.writeRow(sheet, "RMB Purchases", 0, ColumnStyle.Bold);
+		ReportUtils.writeData(sheet, chinaExpenseSummaryList, initChinaExpenseReportMapping(), "month");
 		
 		//Payment ReportMapping
 		ReportUtils.writeBlankRows(sheet, 2);
-		ReportUtils.writeRow(sheet, "Payment records (exclude salary)", 0, ColumnStyle.Bold);
+		ReportUtils.writeRow(sheet, "Payment records (exclude salary, China Stock payment)", 0, ColumnStyle.Bold);
 		ReportUtils.writeData(sheet, paymentSummaryList, initPaymentReportMapping(), "month");
 		paymentSummaryList.clear();
 		paymentSummaryList.addAll(chinaPaymentSummaryHashMap.values());
@@ -215,22 +234,24 @@ public class SummaryReport implements ReportInterface {
 	private void generateAccPayableReport(Date dateAsOf, Date endDate) {
 		ExpenseTypeVO chinaExpenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Stock(China)");
 		ExpenseTypeVO chinaStockPaymentExpenseTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("China Stock Payment");
+		ExpenseTypeVO commissionTypeVO = expenseTypeLookup.getExpenseTypeByValueMap().get("Commission");
 		List<Integer> typeList = new ArrayList<Integer>();
 		typeList.add(chinaExpenseTypeVO.getExpenseTypeId());
 		typeList.add(chinaStockPaymentExpenseTypeVO.getExpenseTypeId());
+		typeList.add(commissionTypeVO.getExpenseTypeId());
 		List<ExpenseVO> dbVoList = expenseService.getAllExpenseExcludeParamType(dateAsOf, endDate, typeList);
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			for(ExpenseVO vo : dbVoList) {
 				String expMonth = GeneralUtils.convertDateToString(vo.getExpenseDate(), monthFormat);
-				List<PaymentDetailVO> paymentVOList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId());
+				List<PaymentDetailVO> paymentVOList = paymentService.getAllPaymentByRefTypeAndRefId("expense", vo.getExpenseId(), dateAsOf, endDate);
 				if(paymentVOList.isEmpty()){ //if unpaid
 					if(!paymentSummaryHashMap.containsKey(expMonth)){
 						paymentSummaryHashMap.put(expMonth, new PaymentSummaryReportVO(expMonth));
 					}
-					logger.info("Id:"+vo.getExpenseId()+", Type = " + vo.getexpensetype() + ", Amount = " + vo.getTotalAmt());
+					logger.info("Id:"+vo.getExpenseId()+", Type = " + vo.getExpenseType() + ", Amount = " + vo.getTotalAmt());
 					PaymentDetailVO payment = new PaymentDetailVO();
 					payment.setPaymentAmt(vo.getTotalAmt());
-					payment.setPaymentMode(0);
+					payment.setPaymentModeString("");
 					addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(expMonth), payment);
 					addPaymentForCurrentExpenseVO(paymentSummaryHashMap.get(Total), payment);
 				}
@@ -279,7 +300,6 @@ public class SummaryReport implements ReportInterface {
 		reportMapping.addMoneyMapping("Meal Expenses", "mealExpenseAmt");
 		reportMapping.addMoneyMapping("Entertainment", "entertainmentAmt");
 		reportMapping.addMoneyMapping("Fees and Taxes", "feeTaxesAmt");
-		reportMapping.addMoneyMapping("Commission", "commissionAmt");
 		reportMapping.addMoneyMapping("Worker insurance", "workerInsuranceAmt");
 		reportMapping.addMoneyMapping("Total", "totalAmt");
 		return reportMapping;
@@ -288,8 +308,8 @@ public class SummaryReport implements ReportInterface {
 	private ReportMapping initChinaExpenseReportMapping() {
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addTextMapping("", "month");
-		reportMapping.addChinaMoneyMapping("Stock", "stockAmt");
-		reportMapping.addChinaMoneyMapping("Total", "totalAmt");
+		reportMapping.addChinaMoneyMapping("Stock(China)", "stockAmt");
+		reportMapping.addMoneyMapping("Commission", "commissionAmt");
 		return reportMapping;
 	}
 	
@@ -300,7 +320,8 @@ public class SummaryReport implements ReportInterface {
 		reportMapping.addMoneyMapping("Cheque", "chequeAmt");
 		reportMapping.addMoneyMapping("Giro", "giroAmt");
 		reportMapping.addMoneyMapping("Paid by Director", "paidByDirectorAmt");
-		reportMapping.addMoneyMapping("Not Paid", "notPaidAmt");
+		reportMapping.addMoneyMapping("Bad Debt", "badDebtAmt");
+//		reportMapping.addMoneyMapping("Not Paid", "notPaidAmt");
 		reportMapping.addMoneyMapping("Total", "totalAmt");
 		return reportMapping;
 	}
@@ -326,60 +347,66 @@ public class SummaryReport implements ReportInterface {
 	private ReportMapping initAccPayableReportMapping() {
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addTextMapping("", "month");
-		reportMapping.addMoneyMapping("From expenses other than RMB purchases", "expensePurchaseAmt");
+		reportMapping.addMoneyMapping("From expenses other than RMB purchases and commission", "expensePurchaseAmt");
 		return reportMapping;
 	}
 
 
 	private void addCurrentExpenseVO(ExpenseSummaryReportVO expenseSummary, ExpenseVO vo) {
 		expenseSummary.setTotalAmt(expenseSummary.getTotalAmt().add(vo.getTotalAmt()));
-		switch (vo.getExpenseTypeId()) {
-		case 1: //Stock
+		switch (vo.getExpenseType()) {
+		case "Stock": //Stock
 			expenseSummary.setStockAmt(expenseSummary.getStockAmt().add(vo.getTotalAmt()));
 			return;
-		case 2: //Sub-Con
+		case "Sub-Con": //Sub-Con
 			expenseSummary.setSubConAmt(expenseSummary.getSubConAmt().add(vo.getTotalAmt()));
 			return;
-		case 3: //Vehicle-Fuel
+		case "Vehicle-Fuel": //Vehicle-Fuel
 			expenseSummary.setVehicleFuelAmt(expenseSummary.getVehicleFuelAmt().add(vo.getTotalAmt()));
 			return;
-		case 4: //Vehicle-Road Tax
+		case "Vehicle-Road Tax": //Vehicle-Road Tax
 			expenseSummary.setVehicleRoadTaxAmt(expenseSummary.getVehicleRoadTaxAmt().add(vo.getTotalAmt()));
 			return;
-		case 5: //Vehicle-Repair
+		case "Vehicle-Repair": //Vehicle-Repair
 			expenseSummary.setVehicleRepairAmt(expenseSummary.getVehicleRepairAmt().add(vo.getTotalAmt()));
 			return;
-		case 6: //Vehicle-Car Parking and ERP
+		case "Vehicle-Car Parking and ERP": //Vehicle-Car Parking and ERP
 			expenseSummary.setVehicleParkingERPAmt(expenseSummary.getVehicleParkingERPAmt().add(vo.getTotalAmt()));
 			return;
-		case 7: //Vehicle-Insurance
+		case "Vehicle-Insurance": //Vehicle-Insurance
 			expenseSummary.setVehicleInsuranceAmt(expenseSummary.getVehicleInsuranceAmt().add(vo.getTotalAmt()));
 			return;
-		case 8: //Office Expenses
+		case "Office Expenses": //Office Expenses
 			expenseSummary.setOfficeExpenseAmt(expenseSummary.getOfficeExpenseAmt().add(vo.getTotalAmt()));
 			return;
-		case 9: //Asset-Equipment
+		case "Asset-Equipment": //Asset-Equipment
 			expenseSummary.setAssetEquipmentAmt(expenseSummary.getAssetEquipmentAmt().add(vo.getTotalAmt()));
 			return;
-		case 10: //Asset-Vehicle
+		case "Asset-Vehicle": //Asset-Vehicle
 			expenseSummary.setAssetVehicleAmt(expenseSummary.getAssetVehicleAmt().add(vo.getTotalAmt()));
 			return;
-		case 11: //Rent Expenses
+		case "Rent Expenses": //Rent Expenses
 			expenseSummary.setRentExpenseAmt(expenseSummary.getRentExpenseAmt().add(vo.getTotalAmt()));
 			return;
-		case 12: //Meal Expenses
+		case "Meal Expenses": //Meal Expenses
 			expenseSummary.setMealExpenseAmt(expenseSummary.getMealExpenseAmt().add(vo.getTotalAmt()));
 			return;
-		case 13: //Entertainment
+		case "Entertainment": //Entertainment
 			expenseSummary.setEntertainmentAmt(expenseSummary.getEntertainmentAmt().add(vo.getTotalAmt()));
 			return;
-		case 14: //Fees and Taxes
+		case "Fees and Taxes": //Fees and Taxes
 			expenseSummary.setFeeTaxesAmt(expenseSummary.getFeeTaxesAmt().add(vo.getTotalAmt()));
 			return;
-		case 15: //China Stock
+		case "Worker Insurance": //Worker Insurance
+			expenseSummary.setWorkerInsuranceAmt(expenseSummary.getWorkerInsuranceAmt().add(vo.getTotalAmt()));
+			return;
+		case "Stock(China)": //China Stock
 			expenseSummary.setStockAmt(expenseSummary.getStockAmt().add(vo.getTotalAmt()));
 			return;
-		case 999: //bad debt
+		case "Commission":
+			expenseSummary.setCommissionAmt(expenseSummary.getCommissionAmt().add(vo.getTotalAmt()));
+			return;
+		case InvoiceManagementService.BAD_DEBT: //bad debt
 			expenseSummary.setBadDebtAmt(expenseSummary.getBadDebtAmt().add(vo.getTotalAmt()));
 		default:
 			return;
@@ -388,20 +415,28 @@ public class SummaryReport implements ReportInterface {
 	
 	private void addPaymentForCurrentExpenseVO(PaymentSummaryReportVO paymentSummaryReportVO, PaymentDetailVO vo) {
 		paymentSummaryReportVO.setTotalAmt(paymentSummaryReportVO.getTotalAmt().add(vo.getPaymentAmt()));
-		switch (vo.getPaymentMode()) {
-		case 1: //Cash
-			paymentSummaryReportVO.setCashAmt(paymentSummaryReportVO.getCashAmt().add(vo.getPaymentAmt()));
-			return;
-		case 2: //Cheque
-			paymentSummaryReportVO.setChequeAmt(paymentSummaryReportVO.getChequeAmt().add(vo.getPaymentAmt()));
-			return;
-		case 3: //Pay By Director
-			paymentSummaryReportVO.setPaidByDirectorAmt(paymentSummaryReportVO.getPaidByDirectorAmt().add(vo.getPaymentAmt()));
-			return;
-		case 5: //GIRO
-			paymentSummaryReportVO.setGiroAmt(paymentSummaryReportVO.getGiroAmt().add(vo.getPaymentAmt()));
-			return;	
-		default:
+		if(vo.getPaymentModeString() != null){
+			switch (vo.getPaymentModeString()) {
+				case "Cash": //Cash
+					paymentSummaryReportVO.setCashAmt(paymentSummaryReportVO.getCashAmt().add(vo.getPaymentAmt()));
+					return;
+				case "Cheque": //Cheque
+					paymentSummaryReportVO.setChequeAmt(paymentSummaryReportVO.getChequeAmt().add(vo.getPaymentAmt()));
+					return;
+				case "Pay By Director": //Pay By Director
+					paymentSummaryReportVO.setPaidByDirectorAmt(paymentSummaryReportVO.getPaidByDirectorAmt().add(vo.getPaymentAmt()));
+					return;
+				case "GIRO": //GIRO
+					paymentSummaryReportVO.setGiroAmt(paymentSummaryReportVO.getGiroAmt().add(vo.getPaymentAmt()));
+					return;	
+				case InvoiceManagementService.BAD_DEBT: //BAD DEBT
+					paymentSummaryReportVO.setBadDebtAmt(paymentSummaryReportVO.getBadDebtAmt().add(vo.getPaymentAmt()));
+					return;
+				default:
+					paymentSummaryReportVO.setNotPaidAmt(paymentSummaryReportVO.getNotPaidAmt().add(vo.getPaymentAmt()));
+					return;
+			}
+		}else{
 			paymentSummaryReportVO.setNotPaidAmt(paymentSummaryReportVO.getNotPaidAmt().add(vo.getPaymentAmt()));
 			return;
 		}
