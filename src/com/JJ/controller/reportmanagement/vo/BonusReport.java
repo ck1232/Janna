@@ -66,7 +66,7 @@ public class BonusReport implements ReportInterface {
 						}
 					}
 				}else{
-					if(dateAsOf.before(vo.getDate()) && endDate.after(vo.getDate())) {
+					if((dateAsOf.before(vo.getDate()) || dateAsOf.equals(vo.getDate())) && (endDate.after(vo.getDate()) || endDate.equals(vo.getDate()))) {
 						salaryReportVo = new SalaryBonusReportVO();
 						salaryReportVo.setSalarybonus(vo);
 						unpaidBonusReportList.add(salaryReportVo);
