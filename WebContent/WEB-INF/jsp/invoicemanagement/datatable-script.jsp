@@ -51,9 +51,15 @@ $(function () {
 
 	initTableSearch();
 	
-	/* $('#datatableForm').submit(function(){
+	$('#datatableForm').submit(function(){
 		$.each(table.rows('.selected').data(), function(index,value){
-			var value1 = value.invoiceId+"-"+value.type;
+			var value1="";
+			if(value.invoiceId != null){
+				value1 = value.invoiceId+"-"+value.type;
+			}else{
+				value1= value.grantId+"-"+value.type;
+			}
+			
 			//console.log(value1);
 			$('<input />').attr('type', 'hidden')
 	          .attr('name', "checkboxId")
@@ -62,7 +68,7 @@ $(function () {
 		});
 		
 		return true;
-	}); */
+	});
 });
 function checkboxClicked(checkbox){
 	$(checkbox).closest("tr").toggleClass("selected");

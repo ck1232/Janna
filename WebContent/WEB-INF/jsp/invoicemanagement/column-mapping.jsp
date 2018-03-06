@@ -4,7 +4,7 @@
     "className":      '',
     "orderable":      false,
     "data":           "",
-    "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId" onchange="checkboxClicked(this);"/></div>'
+    "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId1" onchange="checkboxClicked(this);"/></div>'
 },
 {"data": "invoiceId"},
 {"data": "messenger"},

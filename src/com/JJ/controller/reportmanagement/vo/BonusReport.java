@@ -11,14 +11,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.JJ.controller.expensemanagement.ExpenseStatusEnum;
 import com.JJ.controller.paymentmanagement.vo.PaymentDetailVO;
 import com.JJ.controller.salarybonusmanagement.vo.SalaryBonusVO;
 import com.JJ.helper.ReportUtils;
 import com.JJ.helper.vo.ExcelColumn.ColumnStyle;
+import com.JJ.helper.vo.ReportMapping;
 import com.JJ.lookup.PaymentModeLookup;
 import com.JJ.lookup.vo.PaymentModeVO;
-import com.JJ.helper.vo.ReportMapping;
 import com.JJ.service.paymentmanagement.PaymentManagementService;
 import com.JJ.service.salarybonusmanagement.SalaryBonusManagementService;
 @Component
@@ -44,15 +43,16 @@ public class BonusReport implements ReportInterface {
 	    Calendar cal = Calendar.getInstance();
 	    cal.setTime(dateAsOf);
 	    int year = cal.get(Calendar.YEAR);
+	    SalaryBonusReportVO salaryReportVo;
 	    
 	    List<SalaryBonusReportVO> paidBonusReportList = new ArrayList<SalaryBonusReportVO>();
 		List<SalaryBonusReportVO> unpaidBonusReportList = new ArrayList<SalaryBonusReportVO>();
 	    PaymentModeVO chequeModeVo = paymentModeLookup.getPaymentModeByValueMap().get("Cheque");
-		List<SalaryBonusVO> dbVoList = bonusService.getAllBonusVo(dateAsOf, endDate);
+		List<SalaryBonusVO> dbVoList = bonusService.getAllBonusVo();
 		if(dbVoList != null && !dbVoList.isEmpty()) {
 			for(SalaryBonusVO vo : dbVoList) {
 				List<PaymentDetailVO> paymentDetailList = paymentService.getAllPaymentByRefTypeAndRefId("bonus", vo.getId());
-				SalaryBonusReportVO salaryReportVo;
+				
 				if(paymentDetailList != null && !paymentDetailList.isEmpty()) {
 					for(PaymentDetailVO paymentVO : paymentDetailList) {
 						salaryReportVo = new SalaryBonusReportVO();
@@ -60,11 +60,13 @@ public class BonusReport implements ReportInterface {
 						if(paymentVO.getPaymentMode() == chequeModeVo.getPaymentModeId() && 
 								(paymentVO.getBounceChequeInd() != null && paymentVO.getBounceChequeInd().equals("Y")))
 							continue;
-						salaryReportVo.setPaymentDetail(paymentVO);
-						paidBonusReportList.add(salaryReportVo);
+						if(dateAsOf.before(paymentVO.getPaymentDate()) && endDate.after(paymentVO.getPaymentDate())){
+							salaryReportVo.setPaymentDetail(paymentVO);
+							paidBonusReportList.add(salaryReportVo);
+						}
 					}
 				}else{
-					if(vo.getStatus().equals(ExpenseStatusEnum.UNPAID.toString())) {
+					if(dateAsOf.before(vo.getDate()) && endDate.after(vo.getDate())) {
 						salaryReportVo = new SalaryBonusReportVO();
 						salaryReportVo.setSalarybonus(vo);
 						unpaidBonusReportList.add(salaryReportVo);
