@@ -103,7 +103,7 @@ public class ExpenseReport implements ReportInterface {
 	private ReportMapping initReportMapping(){
 		ReportMapping reportMapping = new ReportMapping();
 		reportMapping.addDateMapping("Date", "expense.expenseDate");
-		reportMapping.addTextMapping("Expense Type", "expense.expensetype");
+		reportMapping.addTextMapping("Expense Type", "expense.expenseType");
 		reportMapping.addTextMapping("Invoice No", "expense.invoiceNo");
 		reportMapping.addTextMapping("Description", "expense.description");
 		reportMapping.addTextMapping("Mode of Payment", "paymentDetail.paymentModeString");

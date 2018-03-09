@@ -22,6 +22,10 @@ public class ExpenseSummaryReportVO {
 	private BigDecimal feeTaxesAmt;
 	private BigDecimal commissionAmt;
 	private BigDecimal workerInsuranceAmt;
+	private BigDecimal dividendsAmt;
+	private BigDecimal payToDirectorAmt;
+	private BigDecimal telephoneAmt;
+	private BigDecimal transportAmt;
 	private BigDecimal totalAmt;
 	
 	public ExpenseSummaryReportVO(String expMonth) {
@@ -45,6 +49,10 @@ public class ExpenseSummaryReportVO {
 		setWorkerInsuranceAmt(BigDecimal.ZERO);
 		setCommissionAmt(BigDecimal.ZERO);
 		setTotalAmt(BigDecimal.ZERO);
+		setDividendsAmt(BigDecimal.ZERO);
+		setTelephoneAmt(BigDecimal.ZERO);
+		setTransportAmt(BigDecimal.ZERO);
+		setPayToDirectorAmt(BigDecimal.ZERO);
 	}
 	public String getMonth() {
 		return month;
@@ -166,6 +174,28 @@ public class ExpenseSummaryReportVO {
 	public void setTotalAmt(BigDecimal totalAmt) {
 		this.totalAmt = totalAmt;
 	}
-	
-	
+	public BigDecimal getDividendsAmt() {
+		return dividendsAmt;
+	}
+	public void setDividendsAmt(BigDecimal dividendsAmt) {
+		this.dividendsAmt = dividendsAmt;
+	}
+	public BigDecimal getPayToDirectorAmt() {
+		return payToDirectorAmt;
+	}
+	public void setPayToDirectorAmt(BigDecimal payToDirectorAmt) {
+		this.payToDirectorAmt = payToDirectorAmt;
+	}
+	public BigDecimal getTelephoneAmt() {
+		return telephoneAmt;
+	}
+	public void setTelephoneAmt(BigDecimal telephoneAmt) {
+		this.telephoneAmt = telephoneAmt;
+	}
+	public BigDecimal getTransportAmt() {
+		return transportAmt;
+	}
+	public void setTransportAmt(BigDecimal transportAmt) {
+		this.transportAmt = transportAmt;
+	}
 }

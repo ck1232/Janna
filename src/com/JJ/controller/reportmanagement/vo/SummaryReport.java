@@ -301,6 +301,10 @@ public class SummaryReport implements ReportInterface {
 		reportMapping.addMoneyMapping("Entertainment", "entertainmentAmt");
 		reportMapping.addMoneyMapping("Fees and Taxes", "feeTaxesAmt");
 		reportMapping.addMoneyMapping("Worker insurance", "workerInsuranceAmt");
+		reportMapping.addMoneyMapping("Dividends", "dividendsAmt");
+		reportMapping.addMoneyMapping("Telephone", "telephoneAmt");
+		reportMapping.addMoneyMapping("Pay To Director", "payToDirectorAmt");
+		reportMapping.addMoneyMapping("Transport", "transportAmt");
 		reportMapping.addMoneyMapping("Total", "totalAmt");
 		return reportMapping;
 	}
@@ -408,6 +412,19 @@ public class SummaryReport implements ReportInterface {
 			return;
 		case InvoiceManagementService.BAD_DEBT: //bad debt
 			expenseSummary.setBadDebtAmt(expenseSummary.getBadDebtAmt().add(vo.getTotalAmt()));
+			return;
+		case "Dividends":
+			expenseSummary.setDividendsAmt(expenseSummary.getDividendsAmt().add(vo.getTotalAmt()));
+			return;
+		case "Pay To Director":
+			expenseSummary.setPayToDirectorAmt(expenseSummary.getPayToDirectorAmt().add(vo.getTotalAmt()));
+			return;
+		case "Telephone":
+			expenseSummary.setTelephoneAmt(expenseSummary.getTelephoneAmt().add(vo.getTotalAmt()));
+			return;
+		case "Transport":
+			expenseSummary.setTransportAmt(expenseSummary.getTransportAmt().add(vo.getTotalAmt()));
+			return;
 		default:
 			return;
 		}
