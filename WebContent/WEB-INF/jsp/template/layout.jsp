@@ -100,6 +100,12 @@
 	    	        	$(this).append( '<br><input style="width:98%" type="text" placeholder="" />' );
 	    	        }
 	    	    } );
+
+	    		$("#signoutId").on('click', function() {
+					  console.log("clear");
+						table.state.clear();
+						table.destroy();
+					});
 		    });
 			function initTableSearch(){
 				// Apply the search

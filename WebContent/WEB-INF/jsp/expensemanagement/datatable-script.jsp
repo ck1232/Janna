@@ -5,6 +5,16 @@ $(function () {
 	table = $('#datatable1').DataTable({
 	  "dom": '<"top"<f><ip>>rt<"bottom"ip><"clear">',
       "paging": true,
+      "bStateSave": true,
+      "fnInitComplete": function(oSettings, json) {
+          var cols = oSettings.aoPreSearchCols;
+          for (var i = 0; i < cols.length; i++) {
+              var value = cols[i].sSearch;
+              if (value.length > 0) {
+                  $("thead input")[i-1].value = value;
+              }
+          }
+      },
       "pageLength": 30,
       "responsive" : true,
       "lengthChange": false,

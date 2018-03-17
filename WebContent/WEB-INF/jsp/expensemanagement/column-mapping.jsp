@@ -7,16 +7,9 @@
     "defaultContent": '<div name="statusDiv" style="text-align:center;"><input type="checkbox" name="checkboxId" onchange="checkboxClicked(this);"/></div>'
 },
 {	"data": "expenseDate",
+	"targets": 1,
 	"render": function (data) {
-                 var date = new Date(data);
-        		var month = date.getMonth();
-        		var monthNames = [
-							    "January", "February", "March",
-							    "April", "May", "June", "July",
-							    "August", "September", "October",
-							    "November", "December"
-							  ];
-        		return date.getDate() + " " + monthNames[month] + " " + date.getFullYear();
+                 return (moment(data).format("D MMMM YYYY"));
              }
 },
 {"data": "expensetype"},
