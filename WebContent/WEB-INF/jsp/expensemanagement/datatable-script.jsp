@@ -15,6 +15,7 @@ $(function () {
               }
           }
       },
+      "stateDuration": -1,
       "pageLength": 30,
       "responsive" : true,
       "lengthChange": false,

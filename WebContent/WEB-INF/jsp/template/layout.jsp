@@ -102,9 +102,10 @@
 	    	    } );
 
 	    		$("#signoutId").on('click', function() {
-					  console.log("clear");
-						table.state.clear();
-						table.destroy();
+					  //console.log("clear");
+						//table.state.clear();
+						//table.destroy();
+	    				sessionStorage.clear();
 					});
 		    });
 			function initTableSearch(){
@@ -119,6 +120,7 @@
 			        } );
 			    } );
 			}
+			
 		</script>
 </head>  
 <body class="hold-transition skin-blue sidebar-mini" style="height: auto;">

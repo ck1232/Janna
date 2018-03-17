@@ -33,7 +33,7 @@
   <div class="login-box-body">
     <p class="login-box-msg">Sign in</p>
 
-    <form action="<c:url value="/login" />" method="post" accept-charset="UTF-8">
+    <form action="<c:url value="/login" />" method="post" accept-charset="UTF-8" onsubmit="sessionStorage.clear();">
       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       <div class="form-group has-feedback">
         <input type="text" name="username" class="form-control" placeholder="Username">
