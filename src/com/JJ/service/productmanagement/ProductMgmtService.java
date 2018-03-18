@@ -19,6 +19,7 @@ import com.JJ.TO.ProductSubOptionTO;
 import com.JJ.TO.ProductTO;
 import com.JJ.controller.common.vo.ImageLinkVO;
 import com.JJ.controller.productmanagement.vo.ProductOptionVO;
+import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.controller.productmanagement.vo.ProductSubOptionVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.dao.jpa.ProductDAO;
@@ -204,5 +205,11 @@ public class ProductMgmtService {
 			}
 			productDAO.save(list);
 		}
+	}
+	
+	public List<ProductVO> getProductVOBySubCategory(List<ProductSubCategoryVO> subCategoryList){
+		List<Long> subCategoryIdList = GeneralUtils.convertListToLongList(subCategoryList, "subCategoryId");
+		List<ProductTO> toList = productDAO.findBySubCategoryIdInAndDeleteInd(subCategoryIdList,GeneralUtils.NOT_DELETED);
+		return convertToProductVOList(toList);
 	}
 }

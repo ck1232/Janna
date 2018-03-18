@@ -83,6 +83,7 @@ public class NewImageService {
 			vo.setSequence(newImageLinkRsTO.getSequence());
 			vo.setImageLinkRsId(newImageLinkRsTO.getImageLinkRsId());
 			vo.setRefType(newImageLinkRsTO.getRefType());
+			GeneralUtils.copyFromTO(vo, newImageLinkRsTO);
 			return vo;
 		}
 		return null;

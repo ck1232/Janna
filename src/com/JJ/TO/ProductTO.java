@@ -43,7 +43,7 @@ public class ProductTO extends BaseTO {
     private Integer weight;
 
 	@Column(name = "sub_category_id", nullable=true)
-    private Integer subCategoryId;
+    private Long subCategoryId;
 
 	@Column(name = "description", nullable=true)
     private String description;
@@ -113,11 +113,11 @@ public class ProductTO extends BaseTO {
 		this.weight = weight;
 	}
 
-	public Integer getSubCategoryId() {
+	public Long getSubCategoryId() {
 		return subCategoryId;
 	}
 
-	public void setSubCategoryId(Integer subCategoryId) {
+	public void setSubCategoryId(Long subCategoryId) {
 		this.subCategoryId = subCategoryId;
 	}
 

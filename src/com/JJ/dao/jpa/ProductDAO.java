@@ -11,4 +11,5 @@ public interface ProductDAO extends BaseDAO<ProductTO> {
 	List<ProductTO> findByProductIdNotAndDeleteInd(Long productId, String deleteInd);
 	List<ProductTO> findByProductIdInAndDeleteInd(List<Long> productIdList, String deleteInd);
 	ProductTO findByProductCodeAndDeleteInd(String productCode, String deleteInd);
+	List<ProductTO> findBySubCategoryIdInAndDeleteInd(List<Long> subCategoryIdList, String deleteInd);
 }

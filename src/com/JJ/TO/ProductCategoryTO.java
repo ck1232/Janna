@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Where;
 
 @Entity
 @DynamicUpdate
@@ -37,12 +38,14 @@ public class ProductCategoryTO extends BaseTO {
 	@Column(name = "display_ind", nullable=false)
     private String displayInd;
 	
-	@OneToMany(mappedBy="productCategoryTO", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="productCategoryTO", cascade = CascadeType.ALL)
 	@ForeignKey( name = "none" )
+	@Where(clause="delete_ind='N'")
 	private List<ProductSubCategoryTO> productSubCategoryTOList;
 	
 	@OneToMany(mappedBy="productCategoryTO", cascade=CascadeType.ALL)
 	@ForeignKey( name = "none" )
+	@Where(clause="delete_ind='N'")
 	private List<CategoryImageLinkRsTO> categoryImageLinkRsTOList;
 
 	public Long getCategoryId() {

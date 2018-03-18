@@ -13,7 +13,7 @@
 	    
 		<div class="box-body">
 			<form id="backToListButton" method="get" action="<c:url value="/product/category/listProductCategory" />"></form>
-			<c:url var="post_url" value="/product/category/updateProductCategoryToDb" />
+			<c:url var="post_url" value="/product/category/updateProductCategory" />
 			<form:form id="updateProductCategoryToDbForm" method="post" modelAttribute="categoryForm" action="${post_url }">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<form:input path="categoryId" type="hidden" id="categoryId"/>
