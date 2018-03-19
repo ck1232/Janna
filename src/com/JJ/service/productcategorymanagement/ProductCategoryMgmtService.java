@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -89,7 +90,7 @@ public class ProductCategoryMgmtService {
 					ImageLinkVO imageLink = new ImageLinkVO();
 					vo.setFirstImageLink(imageLink);
 				}
-				if(vo.getSubcategoryList().isEmpty()){continue;}
+				/*if(vo.getSubcategoryList().isEmpty()){continue;}*/
 				categoryList.add(vo);
 			}
 		}
@@ -139,31 +140,46 @@ public class ProductCategoryMgmtService {
 				to.setDeleteInd(vo.getDeleteInd());
 				to.setVersion(vo.getVersion());
 				to.setProductSubCategoryTOList(convertToProductSubCategoryTOList(to, vo.getSubcategoryList()));
-				to.setCategoryImageLinkRsTOList(convertToProductCategoryImageTOList(to, vo.getImageList()));
+				List<CategoryImageLinkRsTO> exisitingImageList = new ArrayList<CategoryImageLinkRsTO>();
+				if(vo.getCategoryId() != null){
+					ProductCategoryTO exisitingTO = productCategoryDAO.findByCategoryIdAndDeleteInd(vo.getCategoryId(), GeneralUtils.NOT_DELETED);
+					if(exisitingTO != null){
+						exisitingImageList = exisitingTO.getCategoryImageLinkRsTOList();
+					}
+				}
+				to.setCategoryImageLinkRsTOList(convertToProductCategoryImageTOList(to, vo.getImageList(), exisitingImageList));
 				categoryList.add(to);
 			}
 		}
 		return categoryList;
 	}
 	
-	private List<CategoryImageLinkRsTO> convertToProductCategoryImageTOList(ProductCategoryTO categoryTO, List<ImageLinkVO> imageList) {
+	private List<CategoryImageLinkRsTO> convertToProductCategoryImageTOList(ProductCategoryTO categoryTO, List<ImageLinkVO> imageList, List<CategoryImageLinkRsTO> exisitingImageTOList) {
 		List<CategoryImageLinkRsTO> list = new ArrayList<CategoryImageLinkRsTO>();
+		Map<Long, CategoryImageLinkRsTO> existingImageMap = GeneralUtils.convertListToLongMap(exisitingImageTOList, "imageLinkRsId");
 		if(imageList != null){
 			for(ImageLinkVO vo : imageList){
-				CategoryImageLinkRsTO to = new CategoryImageLinkRsTO();
-				to.setProductCategoryTO(categoryTO);
-				to.setRefType(GeneralUtils.TYPE_PRODUCT_CATEGORY);
-				FileLinkTO fileLinkTO = new FileLinkTO();
-				fileLinkTO.setContentType(vo.getContentType());
-				fileLinkTO.setFileLinkId(vo.getImageLinkId());
-				fileLinkTO.setFilePath(vo.getImagePath());
-				to.setFileLinkTO(fileLinkTO);
-				to.setSequence(vo.getSequence());
-				to.setImageLinkRsId(vo.getImageLinkRsId());
-				GeneralUtils.copyFromVO(vo, to);
-				list.add(to);
+				CategoryImageLinkRsTO existingTO = existingImageMap.get(vo.getImageLinkRsId());
+				if(vo.getImageLinkRsId() == null || existingTO == null){
+					CategoryImageLinkRsTO to = new CategoryImageLinkRsTO();
+					to.setProductCategoryTO(categoryTO);
+					to.setRefType(GeneralUtils.TYPE_PRODUCT_CATEGORY);
+					FileLinkTO fileLinkTO = new FileLinkTO();
+					fileLinkTO.setContentType(vo.getContentType());
+					fileLinkTO.setFileLinkId(vo.getImageLinkId());
+					fileLinkTO.setFilePath(vo.getImagePath());
+					to.setFileLinkTO(fileLinkTO);
+					to.setSequence(vo.getSequence());
+					to.setImageLinkRsId(vo.getImageLinkRsId());
+					GeneralUtils.copyFromVO(vo, to);
+					list.add(to);
+				}else{
+					existingTO.setSequence(vo.getSequence());
+					existingTO.setDeleteInd(vo.getDeleteInd());
+				}
 			}
 		}
+		list.addAll(exisitingImageTOList);
 		return list;
 	}
 

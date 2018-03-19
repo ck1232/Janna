@@ -31,6 +31,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +48,6 @@ import com.JJ.controller.productcategorymanagement.VO.ProductCategoryVO;
 import com.JJ.controller.productmanagement.vo.ProductSubCategoryVO;
 import com.JJ.controller.productmanagement.vo.ProductVO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.service.filelinkmanagement.ImageService;
 import com.JJ.service.filelinkmanagement.NewImageService;
 import com.JJ.service.productcategorymanagement.ProductCategoryMgmtService;
 import com.JJ.service.productmanagement.ProductMgmtService;
@@ -186,12 +186,12 @@ public class NewProductCategoryManagementController {
 			}
 			
 			//process image files
-			HashMap<Integer, FileMetaVO> imageHM = new HashMap<Integer, FileMetaVO>();
+			HashMap<Long, FileMetaVO> imageHM = new HashMap<Long, FileMetaVO>();
 			Iterator<FileMetaVO> i  = productCategory.getImageMetaList().iterator();
 			while(i.hasNext()){
 				FileMetaVO fileVo = i.next();
 				if(fileVo.getImageId() != null){ //already exist
-					imageHM.put(fileVo.getImageId().intValue(), fileVo);
+					imageHM.put(fileVo.getImageId(), fileVo);
 				}else{ //newly uploaded
 					LinkedList<ImageLinkVO> imageVO = NewImageService.convertFileMetaVOListToImageLinkVOList(Arrays.asList(fileVo), "Category");
 					if(productCategory.getImageList() == null){
@@ -272,20 +272,12 @@ public class NewProductCategoryManagementController {
 			HttpServletResponse response) {
 		ProductCategoryVO productCategory = (ProductCategoryVO) session.getAttribute("productCategory");
 		if(productCategory != null && productCategory.getImageMetaList() != null && productCategory.getImageMetaList().size() > 0 && fileName != null && !fileName.trim().isEmpty()){
-			Iterator<FileMetaVO> iterator = productCategory.getImageMetaList().iterator();
-			while(iterator.hasNext()){
-				FileMetaVO file = iterator.next();
-				if(file.getFileName().compareToIgnoreCase(fileName) == 0){
-					for(ImageLinkVO imageVO : productCategory.getImageList()) {
-						if(imageVO.getImageLinkId() != null && imageVO.getImageLinkId().equals(file.getImageId())){
-							imageVO.setRemoveInd(true);
-							imageVO.setDeleteInd(GeneralUtils.DELETED);
-						}
+				for(ImageLinkVO imageVO : productCategory.getImageList()) {
+					if(imageVO.getFileName().compareToIgnoreCase(fileName) == 0){
+						imageVO.setRemoveInd(true);
+						imageVO.setDeleteInd(GeneralUtils.DELETED);
 					}
-					iterator.remove();
-					break;
 				}
-			}
 			reshuffleFiles(productCategory.getImageMetaList());
 		}
 		session.setAttribute("productCategory", productCategory);
@@ -318,6 +310,24 @@ public class NewProductCategoryManagementController {
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("msg", "Product Category(s) deleted successfully!");
 		return "redirect:listProductCategory";
+	}
+	
+	@RequestMapping(value = "/sortImage", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonResponseVO saveOption(HttpSession session, @RequestBody List<String> orderList) {
+		ProductCategoryVO vo = (ProductCategoryVO) session.getAttribute("productCategory");
+		if(vo.getImageMetaList() != null && vo.getImageMetaList().size() > 0){
+			for(FileMetaVO image : vo.getImageMetaList()){
+				int index = orderList.indexOf(image.getFileName());
+				if(index < 0){
+					image.setSequence(0);
+				}
+				else{
+					image.setSequence(index + 1);
+				}
+			}
+			reshuffleFiles(vo.getImageMetaList());
+		}
+		return new JsonResponseVO("success");
 	}
 	
 	private void initImages(HttpSession session, Model model, ProductCategoryVO productCategory){
