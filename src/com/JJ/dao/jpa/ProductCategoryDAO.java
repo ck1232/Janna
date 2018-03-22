@@ -8,6 +8,7 @@ import com.JJ.TO.ProductCategoryTO;
 
 @Transactional(readOnly = true)
 public interface ProductCategoryDAO extends BaseDAO<ProductCategoryTO>{
+	List<ProductCategoryTO> findByDeleteInd(String deleteInd);
 	List<ProductCategoryTO> findByDeleteIndAndDisplayInd(String deleteInd, String displayInd);
 	ProductCategoryTO findByCategoryIdAndDeleteInd(Long categoryId, String deleteInd);
 }

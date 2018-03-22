@@ -377,7 +377,7 @@ public class ProductService {
 				vo.setProductCode(dbObj.getProductCode());
 				vo.setProductId(dbObj.getProductId().longValue());
 				vo.setProductName(dbObj.getProductName());
-				vo.setSubCategoryId(dbObj.getSubCategoryId());
+//				vo.setSubCategoryId(dbObj.getSubCategoryId());
 				vo.setUnitAmt(dbObj.getUnitAmt());
 				vo.setVersion(dbObj.getVersion());
 				vo.setWeight(dbObj.getWeight());
@@ -418,7 +418,7 @@ public class ProductService {
 				dbObj.setProductCode(vo.getProductCode());
 				dbObj.setProductId(vo.getProductId().intValue());
 				dbObj.setProductName(vo.getProductName());
-				dbObj.setSubCategoryId(vo.getSubCategoryId());
+//				dbObj.setSubCategoryId(vo.getSubCategoryId());
 				dbObj.setUnitAmt(vo.getUnitAmt());
 				dbObj.setVersion(vo.getVersion());
 				dbObj.setWeight(vo.getWeight());

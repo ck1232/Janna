@@ -19,7 +19,7 @@ public class ProductVO extends Base implements Serializable {
 
     private Integer weight;
 
-    private Integer subCategoryId;
+    private Long subCategoryId;
 
     private String description;
 
@@ -77,11 +77,11 @@ public class ProductVO extends Base implements Serializable {
         this.weight = weight;
     }
 
-    public Integer getSubCategoryId() {
+    public Long getSubCategoryId() {
         return subCategoryId;
     }
 
-    public void setSubCategoryId(Integer subCategoryId) {
+    public void setSubCategoryId(Long subCategoryId) {
         this.subCategoryId = subCategoryId;
     }
 

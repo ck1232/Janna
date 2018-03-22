@@ -83,6 +83,7 @@ public class NewImageService {
 			vo.setSequence(newImageLinkRsTO.getSequence());
 			vo.setImageLinkRsId(newImageLinkRsTO.getImageLinkRsId());
 			vo.setRefType(newImageLinkRsTO.getRefType());
+			GeneralUtils.copyFromTO(vo, newImageLinkRsTO);
 			return vo;
 		}
 		return null;
@@ -223,15 +224,16 @@ public class NewImageService {
 			int periodIndex = fileLoc.lastIndexOf(".");
 			int slashIndex = fileLoc.lastIndexOf("\\");
 			String fileName = fileLoc.substring(slashIndex+1, periodIndex);
-			
+			String newFileName = fileName;
 			while(checkFileExist(fileLoc)){
-				fileLoc = fileLoc.substring(0,slashIndex+1) + fileName + "_" + i + fileLoc.substring(periodIndex);
+				newFileName = fileName + "_" + i;
+				fileLoc = fileLoc.substring(0,slashIndex+1) + newFileName + fileLoc.substring(periodIndex);
 				periodIndex = fileLoc.lastIndexOf(".");
 				slashIndex = fileLoc.lastIndexOf("\\");
 				img.setFileName(fileLoc.substring(slashIndex+1));
 				i++;
 			}
-//			img.setImagePath(fileLoc);
+			img.setImagePath(img.getImagePath().replace(fileName, newFileName));
 			FileOutputStream fos = new FileOutputStream(fileLoc);
 			fos.write(img.getBytes());
 			fos.close();
