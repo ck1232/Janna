@@ -63,7 +63,7 @@ public class SubmoduleManagementController {
 		List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parent_id, name");
 		Iterator<SubModuleVO> i = submoduleList.iterator();
 		List<ModuleVO> allModuleList = moduleManagementService.getAllModules();
-		Map<Integer, ModuleVO> moduleMap = new HashMap<Integer, ModuleVO>();
+		Map<Long, ModuleVO> moduleMap = new HashMap<Long, ModuleVO>();
 		for(ModuleVO module : allModuleList){
 			moduleMap.put(module.getModuleId(), module);
 		}
@@ -71,7 +71,7 @@ public class SubmoduleManagementController {
 		
 		while (i.hasNext()){
 			SubModuleVO submodule = i.next();
-			ModuleVO module = moduleMap.get(submodule.getParentId());
+			ModuleVO module = moduleMap.get(submodule.getParentId().longValue());
 			if(module == null){
 				i.remove();
 			}
@@ -89,7 +89,7 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/listSubmodule", method = RequestMethod.POST)
 	public String listSubmodule(@RequestParam("editBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		ModuleVO module = moduleManagementService.findById(new Integer(id));
+		ModuleVO module = moduleManagementService.findById(new Long(id));
 		if (module == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Module not found");
@@ -101,7 +101,7 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/listSubmodule/{id}", method = RequestMethod.GET)
 	public String listSubmoduleForRedirect(@PathVariable String id, Model model) {
 		logger.debug("id = " + id);
-		ModuleVO module = moduleManagementService.findById(new Integer(id));
+		ModuleVO module = moduleManagementService.findById(new Long(id));
 		if (module == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Module not found");
@@ -242,7 +242,7 @@ public class SubmoduleManagementController {
 			model.addAttribute("msg", "Submodule not found");
 		}
 		
-		ModuleVO module = moduleManagementService.findById(submodule.getParentId());
+		ModuleVO module = moduleManagementService.findById(submodule.getParentId().longValue());
 		submodule.setParentModuleName(module.getModuleName());
 		model.addAttribute("submodule", submodule);
 

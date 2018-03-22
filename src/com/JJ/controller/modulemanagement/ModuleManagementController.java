@@ -98,7 +98,7 @@ public class ModuleManagementController {
 			return "redirect:listModule";
 		}
 		for (String id : ids) {
-			moduleManagementService.deleteModule(new Integer(id));
+			moduleManagementService.deleteModule(new Long(id));
 			logger.debug("deleted "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
@@ -109,7 +109,7 @@ public class ModuleManagementController {
 	@RequestMapping(value = "/updateModule", method = RequestMethod.POST)
 	public String getModuleToUpdate(@RequestParam("editBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		ModuleVO moduleVO = moduleManagementService.findById(new Integer(id));
+		ModuleVO moduleVO = moduleManagementService.findById(new Long(id));
 		if (moduleVO == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Module not found");

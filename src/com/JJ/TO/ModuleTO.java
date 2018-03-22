@@ -1,22 +1,34 @@
-package com.JJ.controller.common.vo;
+package com.JJ.TO;
 
-import java.io.Serializable;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.JJ.model.Base;
+import org.hibernate.annotations.DynamicUpdate;
 
-public class ModuleVO extends Base implements Serializable {
-    private Long moduleId;
+@Entity
+@DynamicUpdate
+@Table(name = "module")
+public class ModuleTO extends BaseTO  {
+	@Transient
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "module_id", nullable=false)
+	private Long moduleId;
 
-    private String moduleName;
-
-    private String icon;
+	@Column(name = "module_name", nullable=false)
+	private String moduleName;
     
-    private List<SubModuleVO> subModuleList;
-    
-    private static final long serialVersionUID = 1L;
-
-    public Long getModuleId() {
+	@Column(name = "icon", nullable=true)
+	private String icon;
+	
+	public Long getModuleId() {
         return moduleId;
     }
 
@@ -39,16 +51,8 @@ public class ModuleVO extends Base implements Serializable {
     public void setIcon(String icon) {
         this.icon = icon == null ? null : icon.trim();
     }
-
-    public List<SubModuleVO> getSubModuleList() {
-		return subModuleList;
-	}
-
-	public void setSubModuleList(List<SubModuleVO> subModuleList) {
-		this.subModuleList = subModuleList;
-	}
-
-	@Override
+    
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
@@ -63,4 +67,5 @@ public class ModuleVO extends Base implements Serializable {
         sb.append(super.toString());
         return sb.toString();
     }
+	
 }

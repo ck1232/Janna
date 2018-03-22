@@ -179,7 +179,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 			for(ModuleDbObject dbObj : dbObjList){
 				ModuleVO vo = new ModuleVO();
 				vo.setIcon(dbObj.getIcon());
-				vo.setModuleId(dbObj.getModuleId());
+				vo.setModuleId(dbObj.getModuleId().longValue());
 				vo.setModuleName(dbObj.getModuleName());
 				voList.add(vo);
 			}

@@ -161,12 +161,12 @@ public class CommonController implements Serializable{
 //		List<Submodule> submoduleList = subModuleManagementService.getAllSubmodules();
 		
 		if(subModuleList != null && subModuleList.size() > 0){
-			Map<Integer, List<SubModuleVO>> subModuleMap = new HashMap<Integer, List<SubModuleVO>>();
+			Map<Long, List<SubModuleVO>> subModuleMap = new HashMap<Long, List<SubModuleVO>>();
 			for(SubModuleVO subModule : subModuleList){
-				if(subModuleMap.get(subModule.getParentId()) == null){
-					subModuleMap.put(subModule.getParentId(), new ArrayList<SubModuleVO>());
+				if(subModuleMap.get(subModule.getParentId().longValue()) == null){
+					subModuleMap.put(subModule.getParentId().longValue(), new ArrayList<SubModuleVO>());
 				}
-				subModuleMap.get(subModule.getParentId()).add(subModule);
+				subModuleMap.get(subModule.getParentId().longValue()).add(subModule);
 			}
 			for(ModuleVO module : moduleList){
 				module.setSubModuleList(subModuleMap.get(module.getModuleId()));
