@@ -39,8 +39,8 @@ public class UserManagementService {
 	public UserVO findById(Long id) {
 		/*UserDbObject user = userDbObjectMapper.selectByPrimaryKey(id);*/
 		UserTO user = userDAO.findByUserId(id);
-		List<UserVO> userVOList = convertUserTOToUserVOList(Arrays.asList(user));
-		if(userVOList != null && userVOList.size() > 0){
+		List<UserVO> userVOList = convertToUserVOList(Arrays.asList(user));
+		if(userVOList != null && !userVOList.isEmpty()){
 			return userVOList.get(0);
 		}
 		return new UserVO();
@@ -51,7 +51,7 @@ public class UserManagementService {
 		example.createCriteria().andUserNameEqualTo(userName).andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<UserDbObject> dbObjList = userDbObjectMapper.selectByExample(example);*/
 		List<UserTO> dbObjList = userDAO.findByUserNameAndDeleteInd(userName, GeneralUtils.NOT_DELETED);
-		List<UserVO> voList = convertUserTOToUserVOList(dbObjList);
+		List<UserVO> voList = convertToUserVOList(dbObjList);
 		if(voList != null && voList.size() > 0){
 			UserVO user = voList.get(0);
 			return user;
@@ -66,7 +66,7 @@ public class UserManagementService {
 		userExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED);
 		List<UserDbObject> userList = userDbObjectMapper.selectByExample(userExample);*/
 		List<UserTO> userList = userDAO.findByDeleteInd(GeneralUtils.NOT_DELETED);
-		return convertUserTOToUserVOList(userList);
+		return convertToUserVOList(userList);
 	}
 	
 	public void saveUser(UserVO user) {
@@ -119,22 +119,22 @@ public class UserManagementService {
 		}
 	}
 	
-	public void updateUser(UserVO userVO) {
+	public void updateUser(UserVO vo) {
 //		userVO.setPassword(null);
-		if(userVO != null && userVO.getUserId() != null){
+		if(vo != null && vo.getUserId() != null){
 			/*UserDbObject dbObj = convertToUserDbObjectList(Arrays.asList(userVO)).get(0);
 			userDbObjectMapper.updateByPrimaryKeySelective(dbObj);*/
-			UserTO dbObj = userDAO.findByUserId(userVO.getUserId().longValue());
-			dbObj.setUserName(userVO.getUserName());
-			dbObj.setName(userVO.getName());
-			dbObj.setEmailAddress(userVO.getEmailAddress());
-			dbObj.setEnabled(userVO.getEnabled() == null ? "N": userVO.getEnabled());
+			UserTO userTO = userDAO.findByUserId(vo.getUserId().longValue());
+			userTO.setUserName(vo.getUserName());
+			userTO.setName(vo.getName());
+			userTO.setEmailAddress(vo.getEmailAddress());
+			userTO.setEnabled(vo.getEnabled() == null ? "N": vo.getEnabled());
 //			UserTO dbObj = convertToUserTOList(Arrays.asList(userDbVO)).get(0);
-			userDAO.save(dbObj);
+			userDAO.save(userTO);
 		}
 	}
 	
-	private List<UserVO> convertToUserVOList(List<UserDbObject> dbObjList) {
+	private List<UserVO> convertToUserVOListOld(List<UserDbObject> dbObjList) {
 		List<UserVO> list = new ArrayList<UserVO>();
 		if(dbObjList != null && dbObjList.size() > 0){
 			for(UserDbObject dbObj : dbObjList){
@@ -154,7 +154,7 @@ public class UserManagementService {
 		return list;
 	}
 	
-	private List<UserVO> convertUserTOToUserVOList(List<UserTO> dbObjList) {
+	private List<UserVO> convertToUserVOList(List<UserTO> dbObjList) {
 		List<UserVO> list = new ArrayList<UserVO>();
 		if(dbObjList != null && dbObjList.size() > 0){
 			for(UserTO dbObj : dbObjList){
@@ -200,22 +200,22 @@ public class UserManagementService {
 	}
 	
 	private List<UserTO> convertToUserTOList(List<UserVO> voList) {
-		List<UserTO> list = new ArrayList<UserTO>();
+		List<UserTO> userTOlist = new ArrayList<UserTO>();
 		if(voList != null && voList.size() > 0){
-			for(UserVO obj : voList){
-				UserTO dbObj = new UserTO();
-				dbObj.setEmailAddress(obj.getEmailAddress());
-				dbObj.setEnabled(obj.getEnabledBoolean() == Boolean.TRUE ? "Y" : "N");
-				dbObj.setLastLogin(obj.getLastLogin());
-				dbObj.setName(obj.getName());
-				dbObj.setPassword(obj.getPassword());
-				dbObj.setStatus(obj.getStatus());
-				dbObj.setUserId(obj.getUserId()==null?null:obj.getUserId().longValue());
-				dbObj.setUserName(obj.getUserName());
-				list.add(dbObj);
+			for(UserVO vo : voList){
+				UserTO to = new UserTO();
+				to.setEmailAddress(vo.getEmailAddress());
+				to.setEnabled(vo.getEnabledBoolean() == Boolean.TRUE ? "Y" : "N");
+				to.setLastLogin(vo.getLastLogin());
+				to.setName(vo.getName());
+				to.setPassword(vo.getPassword());
+				to.setStatus(vo.getStatus());
+				to.setUserId(vo.getUserId()==null?null:vo.getUserId().longValue());
+				to.setUserName(vo.getUserName());
+				userTOlist.add(to);
 			}
 		}
-		return list;
+		return userTOlist;
 	}
 	
 	/*public List<User> getAllUsersById(List<Integer> idList) {
