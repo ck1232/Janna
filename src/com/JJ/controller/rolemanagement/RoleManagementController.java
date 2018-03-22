@@ -102,7 +102,7 @@ public class RoleManagementController {
 			return "redirect:listRole";
 		}
 		for (String id : ids) {
-			roleManagementService.deleteRole(new Integer(id));
+			roleManagementService.deleteRole(new Long(id));
 			logger.debug("deleted "+ id);
 			
 		}
@@ -114,7 +114,7 @@ public class RoleManagementController {
 	@RequestMapping(value = "/updateRole", method = RequestMethod.POST)
 	public String getRoleToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		RoleVO role = roleManagementService.findById(new Integer(id));
+		RoleVO role = roleManagementService.findById(new Long(id));
 		logger.debug("Loading update role page for " + role.toString());
 		
 		model.addAttribute("roleForm", role);
@@ -132,7 +132,7 @@ public class RoleManagementController {
 			return "updateRole";
 		} else {
 			List<RoleVO> roleList = roleManagementService.getAllRoles();
-			RoleVO currentRole = roleManagementService.findById(role.getRoleId());
+			RoleVO currentRole = roleManagementService.findById(role.getRoleId().longValue());
 			for(RoleVO r: roleList){
 				if(!currentRole.getName().equals(r.getName()) && role.getName().equals(r.getName())) { //if exist name
 					result.rejectValue("name", "error.exist.roleform.name");

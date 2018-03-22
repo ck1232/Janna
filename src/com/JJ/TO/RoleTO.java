@@ -20,16 +20,16 @@ public class RoleTO extends BaseTO  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "role_id", nullable=false)
-	private Integer roleId;
+	private Long roleId;
 
 	@Column(name = "name", nullable=false)
 	private String name;
 
-	public Integer getRoleId() {
+	public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 

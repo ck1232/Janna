@@ -39,7 +39,7 @@ public class RoleManagementService {
 		this.permissionManagementService = permissionManagementService;
 	}
 	
-	public RoleVO findById(Integer id) {
+	public RoleVO findById(Long id) {
 		/*RoleDbObject roleDbObject = roleDbObjectMapper.selectByPrimaryKey(id);
 		if(roleDbObject != null && roleDbObject.getRoleId() != null){
 			return convertToRoleVOList(Arrays.asList(roleDbObject)).get(0);
@@ -71,13 +71,13 @@ public class RoleManagementService {
 		roleDAO.save(roleTOList);
 	}
 	
-	public void deleteRole(Integer id) {
+	public void deleteRole(Long id) {
 		deleteRole(Arrays.asList(id));
-		roleAssignmentService.deleteUserRolebyRoleId(id);
-		permissionManagementService.deleteSubmodulepermissionByRoleId(id);
+		roleAssignmentService.deleteUserRolebyRoleId(id.intValue());
+		permissionManagementService.deleteSubmodulepermissionByRoleId(id.intValue());
 	}
 	
-	private void deleteRole(List<Integer> idList) {
+	private void deleteRole(List<Long> idList) {
 		/*RoleDbObjectExample roleDbObjectExample = new RoleDbObjectExample();
 		roleDbObjectExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andRoleIdIn(idList);
 		RoleDbObject dbObj = new RoleDbObject();
@@ -99,7 +99,7 @@ public class RoleManagementService {
 			roleDbObjectMapper.updateByPrimaryKeySelective(dbObj);
 		}*/
 		if(vo != null && vo.getRoleId() != null){
-			RoleTO roleTO = roleDAO.findByRoleId(vo.getRoleId());
+			RoleTO roleTO = roleDAO.findByRoleId(vo.getRoleId().longValue());
 			roleTO.setName(vo.getName());
 			roleDAO.save(roleTO);
 		}
@@ -124,7 +124,7 @@ public class RoleManagementService {
 			for(RoleTO obj : toList){
 				RoleVO vo = new RoleVO();
 				vo.setName(obj.getName());
-				vo.setRoleId(obj.getRoleId());
+				vo.setRoleId(obj.getRoleId().intValue());
 				voList.add(vo);
 			}
 		}
@@ -150,7 +150,7 @@ public class RoleManagementService {
 			for(RoleVO vo : voList) {
 				RoleTO to = new RoleTO();
 				to.setName(vo.getName());
-				to.setRoleId(vo.getRoleId());
+				to.setRoleId(vo.getRoleId().longValue());
 				roleTOList.add(to);
 			}
 		}
