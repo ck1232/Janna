@@ -132,7 +132,7 @@ public class CommonController implements Serializable{
 	
 	private List<SubModuleVO> getAllSubModuleByUserId(String userId){
 		List<Integer> roleIdList = new ArrayList<Integer>();
-		List<Integer> subModuleIdList = new ArrayList<Integer>();
+		List<Long> subModuleIdList = new ArrayList<Long>();
 		UserVO dbUser = userManagementService.findByUserName(userId);
 		if(dbUser == null){
 			return null;
@@ -146,7 +146,7 @@ public class CommonController implements Serializable{
 		}
 		List<SubModulePermissionVO> submodulepermissionList = permissionManagementService.getSubmoduleByRole(roleIdList);
 		for(SubModulePermissionVO obj : submodulepermissionList){
-			subModuleIdList.add(obj.getSubmoduleId());
+			subModuleIdList.add(obj.getSubmoduleId().longValue());
 		}
 		if(subModuleIdList.size() == 0){
 			return null;
@@ -163,10 +163,10 @@ public class CommonController implements Serializable{
 		if(subModuleList != null && subModuleList.size() > 0){
 			Map<Long, List<SubModuleVO>> subModuleMap = new HashMap<Long, List<SubModuleVO>>();
 			for(SubModuleVO subModule : subModuleList){
-				if(subModuleMap.get(subModule.getParentId().longValue()) == null){
-					subModuleMap.put(subModule.getParentId().longValue(), new ArrayList<SubModuleVO>());
+				if(subModuleMap.get(subModule.getParentId()) == null){
+					subModuleMap.put(subModule.getParentId(), new ArrayList<SubModuleVO>());
 				}
-				subModuleMap.get(subModule.getParentId().longValue()).add(subModule);
+				subModuleMap.get(subModule.getParentId()).add(subModule);
 			}
 			for(ModuleVO module : moduleList){
 				module.setSubModuleList(subModuleMap.get(module.getModuleId()));

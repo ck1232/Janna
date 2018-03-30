@@ -2,7 +2,9 @@ package com.JJ.service.modulemanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -11,14 +13,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.JJ.TO.ModuleTO;
-import com.JJ.TO.RoleTO;
+import com.JJ.TO.SubModuleTO;
 import com.JJ.controller.common.vo.ModuleVO;
-import com.JJ.controller.common.vo.SubModuleVO;
 import com.JJ.dao.ModuleDbObjectMapper;
 import com.JJ.dao.jpa.ModuleDAO;
 import com.JJ.helper.GeneralUtils;
-import com.JJ.model.ModuleDbObject;
-import com.JJ.model.ModuleDbObjectExample;
 import com.JJ.service.submodulemanagement.SubModuleManagementService;
 
 @Service
@@ -74,10 +73,11 @@ public class ModuleManagementService {
 	
 	public void deleteModule(Long id) {
 		deleteModule(Arrays.asList(id));
-		List<SubModuleVO> submoduleVoList = subModuleManagementService.getAllSubmodulesByModule(id.intValue());
+		/*List<SubModuleVO> submoduleVoList = subModuleManagementService.getAllSubmodulesByModule(id.intValue());
 		for(SubModuleVO vo : submoduleVoList) {
 			subModuleManagementService.deleteSubmodule(vo.getSubmoduleId());
-		}
+		}*/
+		
 	}
 	
 	public void deleteModule(List<Long> idList) {
@@ -89,7 +89,13 @@ public class ModuleManagementService {
 		List<ModuleTO> moduleTOList = moduleDAO.findByModuleIdIn(idList);
 		if(moduleTOList != null && !moduleTOList.isEmpty()){
 			for(ModuleTO moduleTO : moduleTOList){
-				moduleTO.setDeleteInd(GeneralUtils.DELETED);
+				moduleTO.setDeleteInd(GeneralUtils.DELETED); // module set to delete
+				List<SubModuleTO> submoduleTOList = moduleTO.getSubmoduleTOList();
+				if(submoduleTOList != null && !submoduleTOList.isEmpty()){
+					for(SubModuleTO to: submoduleTOList){
+						to.setDeleteInd(GeneralUtils.DELETED); // submodule list set to delete
+					}
+				}
 			}
 			moduleDAO.save(moduleTOList);
 		}
@@ -122,7 +128,7 @@ public class ModuleManagementService {
 		return voList;
 	}*/
 	
-	private List<ModuleVO> convertToModuleVOList(List<ModuleTO> toList) {
+	public List<ModuleVO> convertToModuleVOList(List<ModuleTO> toList) {
 		List<ModuleVO> voList = new ArrayList<ModuleVO>();
 		if(toList != null && !toList.isEmpty()){
 			for(ModuleTO to : toList){
@@ -130,6 +136,7 @@ public class ModuleManagementService {
 				vo.setIcon(to.getIcon());
 				vo.setModuleId(to.getModuleId());
 				vo.setModuleName(to.getModuleName());
+				vo.setSubModuleList(subModuleManagementService.convertToSubModuleVOList(to.getSubmoduleTOList()));
 				voList.add(vo);
 			}
 		}
@@ -150,14 +157,31 @@ public class ModuleManagementService {
 		return dbObjList;
 	}*/
 	
-	private List<ModuleTO> convertToModuleTOList(List<ModuleVO> voList) {
+	public List<ModuleTO> convertToModuleTOList(List<ModuleVO> voList) {
 		List<ModuleTO> toList = new ArrayList<ModuleTO>();
 		if(voList != null && !voList.isEmpty()){
+			List<Long> idList = GeneralUtils.convertListToLongList(voList, "moduleId");
+			Map<Long, ModuleTO> moduleTOMap = new HashMap<Long, ModuleTO>();
+			if(!idList.isEmpty()){
+				List<ModuleTO> moduleTOList = moduleDAO.findByModuleIdIn(idList);
+				moduleTOMap = GeneralUtils.convertListToLongMap(moduleTOList, "moduleId");
+			}
+			
 			for(ModuleVO vo : voList){
 				ModuleTO to = new ModuleTO();
+				ModuleTO dbTO = moduleTOMap.get(vo.getModuleId());
+				if(dbTO != null){ //update
+					to = dbTO;
+				}
 				to.setIcon(vo.getIcon());
 				to.setModuleId(vo.getModuleId());
 				to.setModuleName(vo.getModuleName());
+				to.setSubmoduleTOList(subModuleManagementService.convertToSubModuleTOList(vo.getSubModuleList(), to));
+				
+				
+				
+				
+				
 				toList.add(to);
 			}
 		}

@@ -62,7 +62,7 @@ public class PermissionManagementController {
 	@RequestMapping(value = "/updateSubmodulePermission", method = RequestMethod.POST)
 	public String getRoleToUpdatePermission(@RequestParam("editBtn") String id, Model model) {
 		logger.debug("Loading grant role permission page");
-		SubModuleVO submodule = subModuleManagementService.findById(new Integer(id));
+		SubModuleVO submodule = subModuleManagementService.findById(Long.parseLong(id));
 		List<SubModulePermissionTypeVO> submodulepermissiontypeList = permissionManagementService.getSubmodulepermissiontype(Integer.valueOf(id));
 		model.addAttribute("submodule", submodule);
 		model.addAttribute("permissionList", submodulepermissiontypeList);
@@ -72,7 +72,7 @@ public class PermissionManagementController {
 	@RequestMapping(value = "/updateSubmodulePermission/{id}", method = RequestMethod.GET)
 	public String getRoleToUpdatePermissionForRedirect(@PathVariable String id, Model model) {
 		logger.debug("Loading grant role permission page");
-		SubModuleVO submodule = subModuleManagementService.findById(new Integer(id));
+		SubModuleVO submodule = subModuleManagementService.findById(Long.parseLong(id));
 		List<SubModulePermissionTypeVO> submodulepermissiontypeList = permissionManagementService.getSubmodulepermissiontype(Integer.valueOf(id));
 		model.addAttribute("submodule", submodule);
 		model.addAttribute("permissionList", submodulepermissiontypeList);
@@ -136,7 +136,7 @@ public class PermissionManagementController {
 	@RequestMapping(value = "/updatePermissionType", method = RequestMethod.POST)
 	public String loadupdatePermissionTypeForm(@RequestParam("loadEditPermissionTypeBtn") String id, Model model) {
 		logger.debug("Loading update permission type page");
-		SubModuleVO subModuleVO = subModuleManagementService.findById(new Integer(id));
+		SubModuleVO subModuleVO = subModuleManagementService.findById(Long.parseLong(id));
 		model.addAttribute("submodule", subModuleVO);
 		return "updatePermissionType";
 	}
@@ -144,7 +144,7 @@ public class PermissionManagementController {
 	@RequestMapping(value = "/updatePermissionType/{id}", method = RequestMethod.GET)
 	public String loadupdatePermissionTypeFormForRedirect(@PathVariable("id") String id, Model model) {
 		logger.debug("Loading update permission type page");
-		SubModuleVO subModuleVO = subModuleManagementService.findById(new Integer(id));
+		SubModuleVO subModuleVO = subModuleManagementService.findById(Long.parseLong(id));
 		model.addAttribute("submodule", subModuleVO);
 		return "updatePermissionType";
 	}
@@ -162,7 +162,7 @@ public class PermissionManagementController {
     	logger.debug("loading add permission type form");
     	SubModulePermissionTypeVO submodulepermissiontype = new SubModulePermissionTypeVO();
     	submodulepermissiontype.setSubmoduleId(Integer.valueOf(submoduleid));
-    	SubModuleVO subModuleVO = subModuleManagementService.findById(new Integer(submoduleid));
+    	SubModuleVO subModuleVO = subModuleManagementService.findById(Long.parseLong(submoduleid));
     	model.addAttribute("submodulepermissiontypeForm", submodulepermissiontype);
     	model.addAttribute("submodule", subModuleVO);
         return "createPermissionType";  
@@ -181,7 +181,7 @@ public class PermissionManagementController {
 		logger.debug("savePermissionTypeToDb() : " + subModulePermissionTypeVO.getPermissionType());
 		
 		if (result.hasErrors()) {
-			SubModuleVO subModuleVO = subModuleManagementService.findById(new Integer(subModulePermissionTypeVO.getSubmoduleId()));
+			SubModuleVO subModuleVO = subModuleManagementService.findById(subModulePermissionTypeVO.getSubmoduleId().longValue());
 			model.addAttribute("submodule", subModuleVO);
 			return "createPermissionType";
 		} else {
@@ -206,7 +206,7 @@ public class PermissionManagementController {
 				pass = false;
 			}
 			if(!pass){
-				SubModuleVO subModuleVO = subModuleManagementService.findById(new Integer(subModulePermissionTypeVO.getSubmoduleId()));
+				SubModuleVO subModuleVO = subModuleManagementService.findById(subModulePermissionTypeVO.getSubmoduleId().longValue());
 				model.addAttribute("submodule", subModuleVO);
 				return "createPermissionType";
 			}

@@ -43,6 +43,7 @@ import com.JJ.model.UserDbObject;
 import com.JJ.model.UserDbObjectExample;
 import com.JJ.model.UserRoleDbObject;
 import com.JJ.model.UserRoleDbObjectExample;
+import com.JJ.service.submodulemanagement.SubModuleManagementService;
 @Component
 public class MenuInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
@@ -57,6 +58,10 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 	private SubModulePermissionDbObjectMapper subModulePermissionDbObjectMapper;
 	@Autowired
 	private SubModuleDbObjectMapper subModuleDbObjectMapper;
+	
+	@Autowired
+	private SubModuleManagementService submoduleManagementService;
+	
 	public MenuInterceptor() {
 		super();
 	}
@@ -117,7 +122,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 //		List<Submodule> submoduleList = subModuleManagementService.getAllSubmodules();
 		
 		if(subModuleList != null && subModuleList.size() > 0){
-			Map<Integer, List<SubModuleVO>> subModuleMap = new HashMap<Integer, List<SubModuleVO>>();
+			Map<Long, List<SubModuleVO>> subModuleMap = new HashMap<Long, List<SubModuleVO>>();
 			for(SubModuleVO subModule : subModuleList){
 				if(subModuleMap.get(subModule.getParentId()) == null){
 					subModuleMap.put(subModule.getParentId(), new ArrayList<SubModuleVO>());
@@ -136,7 +141,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 	
 	private List<SubModuleVO> getAllSubModuleByUserId(String userId){
 		List<Integer> roleIdList = new ArrayList<Integer>();
-		List<Integer> subModuleIdList = new ArrayList<Integer>();
+		List<Long> subModuleIdList = new ArrayList<Long>();
 		UserVO dbUser = findByUserName(userId);
 		if(dbUser == null){
 			return null;
@@ -150,12 +155,12 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 		}
 		List<SubModulePermissionVO> submodulepermissionList = getSubmoduleByRole(roleIdList);
 		for(SubModulePermissionVO obj : submodulepermissionList){
-			subModuleIdList.add(obj.getSubmoduleId());
+			subModuleIdList.add(obj.getSubmoduleId().longValue());
 		}
 		if(subModuleIdList.size() == 0){
 			return null;
 		}
-		return getSubmodulesById(subModuleIdList);
+		return submoduleManagementService.getSubmodulesById(subModuleIdList);
 	}
 	
 	public List<SubModulePermissionTypeVO> getSubmodulepermissiontypeByUrl(){
@@ -282,7 +287,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 		return voList;
 	}
 	
-	public List<SubModuleVO> getSubmodulesById(List<Integer> subModuleList) {
+	/*public List<SubModuleVO> getSubmodulesById(List<Integer> subModuleList) {
 		if(subModuleList != null && !subModuleList.isEmpty()){
 			SubModuleDbObjectExample submoduleExample = new SubModuleDbObjectExample();
 			submoduleExample.createCriteria().andDeleteIndEqualTo(GeneralUtils.NOT_DELETED).andSubmoduleIdIn(subModuleList);
@@ -290,9 +295,9 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 			return convertToSubModuleVOList(submoduleList);
 		}
 		return new ArrayList<SubModuleVO>();
-	}
+	}*/
 	
-	private List<SubModuleVO> convertToSubModuleVOList(List<SubModuleDbObject> dbObjList) {
+	/*private List<SubModuleVO> convertToSubModuleVOList(List<SubModuleDbObject> dbObjList) {
 		List<SubModuleVO> voList = new ArrayList<SubModuleVO>();
 		if(dbObjList != null && !dbObjList.isEmpty()){
 			for(SubModuleDbObject dbObj : dbObjList){
@@ -306,5 +311,5 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		return voList;
-	}
+	}*/
 }

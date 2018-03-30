@@ -5,9 +5,7 @@ import java.io.Serializable;
 import com.JJ.model.Base;
 
 public class SubModuleVO extends Base implements Serializable {
-    private Integer submoduleId;
-
-    private Integer parentId;
+    private Long submoduleId;
 
     private String name;
 
@@ -15,24 +13,20 @@ public class SubModuleVO extends Base implements Serializable {
 
     private String url;
     
+    /*private ModuleVO moduleVO;*/
+    
+    private Long parentId;
+    
     private String parentModuleName;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getSubmoduleId() {
+    public Long getSubmoduleId() {
         return submoduleId;
     }
 
-    public void setSubmoduleId(Integer submoduleId) {
+    public void setSubmoduleId(Long submoduleId) {
         this.submoduleId = submoduleId;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
     }
 
     public String getName() {
@@ -59,7 +53,23 @@ public class SubModuleVO extends Base implements Serializable {
         this.url = url == null ? null : url.trim();
     }
 
-    public String getParentModuleName() {
+	/*public ModuleVO getModuleVO() {
+		return moduleVO;
+	}
+
+	public void setModuleVO(ModuleVO moduleVO) {
+		this.moduleVO = moduleVO;
+	}*/
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getParentModuleName() {
 		return parentModuleName;
 	}
 
@@ -74,7 +84,6 @@ public class SubModuleVO extends Base implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", submoduleId=").append(submoduleId);
-        sb.append(", parentId=").append(parentId);
         sb.append(", name=").append(name);
         sb.append(", icon=").append(icon);
         sb.append(", url=").append(url);

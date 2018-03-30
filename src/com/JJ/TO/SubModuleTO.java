@@ -1,58 +1,59 @@
 package com.JJ.TO;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Where;
 
 @Entity
 @DynamicUpdate
-@Table(name = "module")
-public class ModuleTO extends BaseTO  {
+@Table(name = "submodule")
+public class SubModuleTO extends BaseTO  {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "module_id", nullable=false)
-	private Long moduleId;
-
-	@Column(name = "module_name", nullable=false)
-	private String moduleName;
+	@Column(name = "submodule_id", nullable=false)
+	private Long submoduleId;
     
+	@Column(name = "name", nullable=false)
+	private String name;
+	
 	@Column(name = "icon", nullable=true)
 	private String icon;
 	
-	@OneToMany(mappedBy="moduleTO", cascade=CascadeType.ALL)
-	@Where(clause="delete_ind='N'")
-	@ForeignKey( name = "none" )
-	private List<SubModuleTO> submoduleTOList;
+	@Column(name = "url", nullable=true)
+	private String url;
 	
-	public Long getModuleId() {
-        return moduleId;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent_id", nullable=false)
+	@ForeignKey( name = "none" )
+	private ModuleTO moduleTO;
+	
+	public Long getSubmoduleId() {
+        return submoduleId;
     }
 
-    public void setModuleId(Long moduleId) {
-        this.moduleId = moduleId;
+    public void setSubmoduleId(Long submoduleId) {
+        this.submoduleId = submoduleId;
     }
 
-    public String getModuleName() {
-        return moduleName;
+    public String getName() {
+        return name;
     }
 
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName == null ? null : moduleName.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getIcon() {
@@ -62,13 +63,21 @@ public class ModuleTO extends BaseTO  {
     public void setIcon(String icon) {
         this.icon = icon == null ? null : icon.trim();
     }
-    
-    public List<SubModuleTO> getSubmoduleTOList() {
-		return submoduleTOList;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
+	
+    public ModuleTO getModuleTO() {
+		return moduleTO;
 	}
 
-	public void setSubmoduleTOList(List<SubModuleTO> submoduleTOList) {
-		this.submoduleTOList = submoduleTOList;
+	public void setModuleTO(ModuleTO moduleTO) {
+		this.moduleTO = moduleTO;
 	}
 
 	@Override
@@ -77,14 +86,14 @@ public class ModuleTO extends BaseTO  {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", moduleId=").append(moduleId);
-        sb.append(", moduleName=").append(moduleName);
+        sb.append(", submoduleId=").append(submoduleId);
+        sb.append(", name=").append(name);
         sb.append(", icon=").append(icon);
+        sb.append(", url=").append(url);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         sb.append(", from super class ");
         sb.append(super.toString());
         return sb.toString();
     }
-	
 }

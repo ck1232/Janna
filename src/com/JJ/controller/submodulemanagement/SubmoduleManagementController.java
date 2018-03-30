@@ -1,9 +1,7 @@
 package com.JJ.controller.submodulemanagement;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,23 +51,33 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/getSubmoduleListByModule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getSubmoduleListByModule(@RequestParam("moduleid") String id, Model model) {
 		logger.debug("getting submodules list by module");
-		List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
+		/*List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Long(id));*/
+		List<SubModuleVO> submoduleList = moduleManagementService.findById(Long.parseLong(id)).getSubModuleList();
 		return GeneralUtils.convertListToJSONString(submoduleList);
 	}
 	
 	@RequestMapping(value = "/getSubmoduleListOrderByModule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String getSubmoduleListOrderByParentId() {
 		logger.debug("getting all submodules list order by module");
-		List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parent_id, name");
+		List<ModuleVO> moduleList = moduleManagementService.getAllModules();
+		List<SubModuleVO> submoduleList = new ArrayList<SubModuleVO>();
+		if(moduleList != null && !moduleList.isEmpty()){
+			for(ModuleVO moduleVO : moduleList){
+				if(moduleVO.getSubModuleList() != null && !moduleVO.getSubModuleList().isEmpty())
+					submoduleList.addAll(moduleVO.getSubModuleList());
+			}
+		}
+		
+		/*List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesOrderByClause("parent_id, name");
 		Iterator<SubModuleVO> i = submoduleList.iterator();
 		List<ModuleVO> allModuleList = moduleManagementService.getAllModules();
 		Map<Long, ModuleVO> moduleMap = new HashMap<Long, ModuleVO>();
 		for(ModuleVO module : allModuleList){
 			moduleMap.put(module.getModuleId(), module);
-		}
+		}*/
 //		moduleMap = GeneralUtils.convertListToIntegerMap(allModuleList, "id");
 		
-		while (i.hasNext()){
+		/*while (i.hasNext()){
 			SubModuleVO submodule = i.next();
 			ModuleVO module = moduleMap.get(submodule.getParentId().longValue());
 			if(module == null){
@@ -78,7 +86,7 @@ public class SubmoduleManagementController {
 			else{
 				submodule.setParentModuleName(module.getModuleName());
 			}
-		}
+		}*/
 //		for(Submodule submodule: submoduleList){
 //			Module module = moduleManagementService.findById(submodule.getParentid());
 //			submodule.setParentModuleName(module.getName());
@@ -89,7 +97,7 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/listSubmodule", method = RequestMethod.POST)
 	public String listSubmodule(@RequestParam("editBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		ModuleVO module = moduleManagementService.findById(new Long(id));
+		ModuleVO module = moduleManagementService.findById(Long.parseLong(id));
 		if (module == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Module not found");
@@ -101,7 +109,7 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/listSubmodule/{id}", method = RequestMethod.GET)
 	public String listSubmoduleForRedirect(@PathVariable String id, Model model) {
 		logger.debug("id = " + id);
-		ModuleVO module = moduleManagementService.findById(new Long(id));
+		ModuleVO module = moduleManagementService.findById(Long.parseLong(id));
 		if (module == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Module not found");
@@ -114,14 +122,15 @@ public class SubmoduleManagementController {
     public String showAddSubmoduleForm(@RequestParam("moduleid") String id, Model model, final RedirectAttributes redirectAttributes) {  
     	logger.debug("loading showAddSubmoduleForm");
     	
-    	List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));
-    	if(submoduleList.size() >= 10){
+    	/*List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(new Integer(id));*/
+    	ModuleVO moduleVO = moduleManagementService.findById(new Long(id));
+    	if(moduleVO != null && moduleVO.getSubModuleList() != null && moduleVO.getSubModuleList().size() >= 10){
     		redirectAttributes.addFlashAttribute("css", "danger");
 			redirectAttributes.addFlashAttribute("msg", "Only 10 submodules are allowed in each module!");
 			return "redirect:listSubmodule/"+id;
     	}
     	SubModuleVO submodule = new SubModuleVO();
-    	submodule.setParentId(new Integer(id));
+    	submodule.setParentId(Long.parseLong(id));
     	model.addAttribute("submodule", submodule);
         return "createSubmodule";  
     }  
@@ -140,25 +149,31 @@ public class SubmoduleManagementController {
 			return "createSubmodule";
 		} else {
 			boolean pass = true;
-			List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(submodule.getParentId());
-			for(SubModuleVO sm: submoduleList){
-				if(submodule.getName().equals(sm.getName())) { //if exist name
-					result.rejectValue("name", "error.exist.submoduleform.name");;
-					pass = false;
-					break;
+			ModuleVO moduleVO = moduleManagementService.findById(submodule.getParentId());
+			/*List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(submodule.getParentId());*/
+			List<SubModuleVO> submoduleList = moduleVO.getSubModuleList();
+			if(submoduleList != null && !submoduleList.isEmpty()){
+				for(SubModuleVO sm: submoduleList){
+					if(submodule.getName().equals(sm.getName())) { //if exist name
+						result.rejectValue("name", "error.exist.submoduleform.name");;
+						pass = false;
+						break;
+					}
 				}
-			}
-			for(SubModuleVO sm: submoduleList){
-				if(submodule.getUrl().equals(sm.getUrl())) { //if exist url
-					result.rejectValue("url", "error.exist.submoduleform.url");;
-					pass = false;
-					break;
+				
+				for(SubModuleVO sm: moduleVO.getSubModuleList()){
+					if(submodule.getUrl().equals(sm.getUrl())) { //if exist url
+						result.rejectValue("url", "error.exist.submoduleform.url");;
+						pass = false;
+						break;
+					}
 				}
 			}
 			if(!pass){
 				return "createSubmodule";
 			}
-			submoduleManagementService.saveSubmodule(submodule);
+			moduleVO.getSubModuleList().add(submodule);
+			moduleManagementService.saveModule(moduleVO);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Submodule added successfully!");
 			
@@ -177,7 +192,7 @@ public class SubmoduleManagementController {
 		}
 		
 		for (String id : ids) {
-			submoduleManagementService.deleteSubmodule(new Integer(id));
+			submoduleManagementService.deleteSubmodule(new Long(id));
 			logger.debug("deleted "+ id);
 		}
 		redirectAttributes.addFlashAttribute("css", "success");
@@ -188,7 +203,7 @@ public class SubmoduleManagementController {
 	@RequestMapping(value = "/updateSubmodule", method = RequestMethod.POST)
 	public String getSubmoduleToUpdate(@RequestParam("editBtn") String id, Model model) {
 		
-		SubModuleVO submodule = submoduleManagementService.findById(new Integer(id));
+		SubModuleVO submodule = submoduleManagementService.findById(Long.parseLong(id));
 		logger.debug("Loading update submodule page for " + submodule.toString());
 		
 		model.addAttribute("submodule", submodule);
@@ -204,46 +219,51 @@ public class SubmoduleManagementController {
 		
 		if (result.hasErrors()) {
 			return "updateSubmodule";
-		} else {
-			boolean pass = true;
-			List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(submodule.getParentId());
-			SubModuleVO currentSm = submoduleManagementService.findById(submodule.getSubmoduleId());
-			for(SubModuleVO sm: submoduleList){
-				if(!currentSm.getName().equals(sm.getName()) && submodule.getName().equals(sm.getName())) { //if exist name
-					result.rejectValue("name", "error.exist.submoduleform.name");;
-					pass = false;
-					break;
-				}
+		} 
+		
+		boolean pass = true;
+		ModuleVO moduleVO = moduleManagementService.findById(submodule.getParentId());
+		/*List<SubModuleVO> submoduleList = submoduleManagementService.getAllSubmodulesByModule(submodule.getParentId());*/
+		List<SubModuleVO> submoduleList = moduleVO.getSubModuleList();
+//			SubModuleVO currentSm = submoduleManagementService.findById(submodule.getSubmoduleId());
+		for(SubModuleVO sm: submoduleList){
+			if(!submodule.getSubmoduleId().equals(sm.getSubmoduleId()) && submodule.getName().equals(sm.getName())) { //if exist name
+				result.rejectValue("name", "error.exist.submoduleform.name");;
+				pass = false;
+				break;
 			}
-			for(SubModuleVO sm: submoduleList){
-				if(!currentSm.getUrl().equals(sm.getUrl()) && submodule.getUrl().equals(sm.getUrl())) { //if exist url
-					result.rejectValue("url", "error.exist.submoduleform.url");;
-					pass = false;
-					break;
-				}
-			}
-			if(!pass){
-				return "updateSubmodule";
-			}
-			
-			redirectAttributes.addFlashAttribute("css", "success");
-			redirectAttributes.addFlashAttribute("msg", "Submodule updated successfully!");
 		}
-		submoduleManagementService.updateSubmodule(submodule);
+		for(SubModuleVO sm: submoduleList){
+			if(!submodule.getSubmoduleId().equals(sm.getSubmoduleId()) && submodule.getUrl().equals(sm.getUrl())) { //if exist url
+				result.rejectValue("url", "error.exist.submoduleform.url");;
+				pass = false;
+				break;
+			}
+		}
+		if(!pass){
+			return "updateSubmodule";
+		}
+		
+		redirectAttributes.addFlashAttribute("css", "success");
+		redirectAttributes.addFlashAttribute("msg", "Submodule updated successfully!");
+		
+		/*submoduleManagementService.updateSubmodule(submodule);*/
+		moduleVO.getSubModuleList().add(submodule);
+		moduleManagementService.saveModule(moduleVO);
 		return "redirect:listSubmodule/"+submodule.getParentId();
 	}
 	
 	@RequestMapping(value = "/viewSubmodule", method = RequestMethod.POST)
 	public String viewSubmodule(@RequestParam("viewBtn") String id, Model model) {
 		logger.debug("id = " + id);
-		SubModuleVO submodule = submoduleManagementService.findById(new Integer(id));
+		SubModuleVO submodule = submoduleManagementService.findById(Long.parseLong(id));
 		if (submodule == null) {
 			model.addAttribute("css", "danger");
 			model.addAttribute("msg", "Submodule not found");
 		}
 		
-		ModuleVO module = moduleManagementService.findById(submodule.getParentId().longValue());
-		submodule.setParentModuleName(module.getModuleName());
+		/*ModuleVO module = moduleManagementService.findById(submodule.getParentId().longValue());
+		submodule.setParentModuleName(module.getModuleName());*/
 		model.addAttribute("submodule", submodule);
 
 		return "viewSubmodule";
